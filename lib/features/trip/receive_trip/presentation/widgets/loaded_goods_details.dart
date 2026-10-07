@@ -17,8 +17,32 @@ class LoadedGoodsDetails extends StatelessWidget {
         Row(
           spacing: 8,
           children: [
-            CustomTripContainer(
-              child: Column(spacing: 6, children: [],)
+            Expanded(
+              child: CustomTripContainer(
+                child: Column(
+                  spacing: 6,
+                  children: [
+                    Text('6', style: Styles.textStyle24),
+                    Text(context.strings.total_items),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: CustomTripContainer(
+                child: Column(
+                  spacing: 6,
+                  children: [
+                    Text(
+                      '79',
+                      style: Styles.textStyle24.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    Text(context.strings.total_quantities),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

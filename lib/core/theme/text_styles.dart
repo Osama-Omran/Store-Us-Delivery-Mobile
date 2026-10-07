@@ -34,4 +34,9 @@ class Styles {
     fontSize: 20,
     fontWeight: FontWeight.w900,
   );
+
+  static TextStyle textStyle24 = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w900,
+  );
 }

@@ -79,4 +79,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loaded_goods_details => 'تفاصيل البضاعة المحملة';
+
+  @override
+  String get total_items => 'إجمالي الأصناف';
+
+  @override
+  String get total_quantities => 'إجمالي الكميات';
+
+  @override
+  String get search_for_a_product => 'بحث عن منتج';
 }

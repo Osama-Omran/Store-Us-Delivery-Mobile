@@ -231,6 +231,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تفاصيل البضاعة المحملة'**
   String get loaded_goods_details;
+
+  /// No description provided for @total_items.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الأصناف'**
+  String get total_items;
+
+  /// No description provided for @total_quantities.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الكميات'**
+  String get total_quantities;
+
+  /// No description provided for @search_for_a_product.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث عن منتج'**
+  String get search_for_a_product;
 }
 
 class _AppLocalizationsDelegate

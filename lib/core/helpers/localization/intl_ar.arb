@@ -21,5 +21,8 @@
   "van": "الشاحنة",
   "driver": "السائق",
   "loading_time": "وقت التحميل",
-  "loaded_goods_details": "تفاصيل البضاعة المحملة"
+  "loaded_goods_details": "تفاصيل البضاعة المحملة",
+  "total_items": "إجمالي الأصناف",
+  "total_quantities": "إجمالي الكميات",
+  "search_for_a_product": "بحث عن منتج"
 }
