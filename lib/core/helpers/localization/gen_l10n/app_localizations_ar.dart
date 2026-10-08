@@ -88,4 +88,171 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get search_for_a_product => 'بحث عن منتج';
+
+  @override
+  String get confirm_receiving => 'تأكيد الاستلام';
+
+  @override
+  String get confirm_receiving_description =>
+      'أؤكد أنني راجعت الشاحنة والبضاعة الموضحة أعلاه واستلمتها.';
+
+  @override
+  String get confirm_receiving_warning =>
+      'التقط صورة الإثبات أولاً لتفعيل التأكيد';
+
+  @override
+  String get loaded_quantity => 'الكمية المحملة';
+
+  @override
+  String get from_trip_orders => 'من طلبات الرحلة';
+
+  @override
+  String get unit => 'الوحدة';
+
+  @override
+  String get receiving_proof_photo => 'صورة إثبات استلام العربية والبضاعة';
+
+  @override
+  String get open_camera_and_capture => 'فتح الكاميرا والتقاط صورة';
+
+  @override
+  String get proof_photo_auto_details =>
+      'يُضاف التاريخ والوقت ورقم الرحلة تلقائياً';
+
+  @override
+  String get retake_photo => 'إعادة التقاط الصورة';
+
+  @override
+  String get proof_photo_error => 'تعذر التقاط الصورة، يرجى المحاولة مرة أخرى';
+
+  @override
+  String get use_photo => 'استخدام الصورة';
+
+  @override
+  String get photo_approved => 'تم اعتماد الصورة';
+
+  @override
+  String get confirm_receiving_dialog_title => 'تأكيد الاستلام؟';
+
+  @override
+  String get confirm_receiving_dialog_description =>
+      'أنت تؤكد أنك راجعت واستلمت العربية والبضاعة الموضحة في الرحلة';
+
+  @override
+  String get yes_confirm_receiving => 'نعم، تأكيد الاستلام';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get trip_receiving_success_title => 'تم تأكيد استلام العربية بنجاح';
+
+  @override
+  String get trip_receiving_success_description =>
+      'تم تسجيل استلامك للعربية والبضاعة.';
+
+  @override
+  String get receiving_time => 'وقت الاستلام';
+
+  @override
+  String get show_trip_orders => 'عرض طلبات الرحلة';
+
+  @override
+  String get welcome => 'مرحبا،';
+
+  @override
+  String get currently_on_trip => 'في رحلة حاليا';
+
+  @override
+  String get your_current_trip => 'رحلتك الحالية';
+
+  @override
+  String get started_at => 'بدأت';
+
+  @override
+  String get order => 'طلب';
+
+  @override
+  String get delivered_orders => 'تم تسليمهم';
+
+  @override
+  String get remaining_orders => 'متبقي';
+
+  @override
+  String get collected_amount => 'المحصل';
+
+  @override
+  String get egp_currency => 'ج.م';
+
+  @override
+  String get continue_trip => 'متابعة الرحلة';
+
+  @override
+  String get previous_today_trips => 'رحلات اليوم السابقة';
+
+  @override
+  String get trip_label => 'رحلة';
+
+  @override
+  String get orders_plural => 'طلبات';
+
+  @override
+  String get completed_at => 'اكتملت';
+
+  @override
+  String get settled => 'تمت التسوية';
+
+  @override
+  String get unread_notifications => 'غير مقروءة';
+
+  @override
+  String get no_notifications => 'لا توجد إشعارات حالياً';
+
+  @override
+  String get notification_new_trip_title => 'تم إسناد رحلة جديدة إليك';
+
+  @override
+  String get notification_new_trip_description =>
+      'رحلة 12 — TRIP-0025 طلب من مخزن 6 أكتوبر';
+
+  @override
+  String get notification_route_updated_title => 'تم تعديل ترتيب الرحلة';
+
+  @override
+  String get notification_route_updated_description =>
+      'تم تقديم محطة سوبر ماركت النور قبل ماركت الأمل';
+
+  @override
+  String get notification_order_updated_title => 'تم تحديث الطلب SO-00254';
+
+  @override
+  String get notification_order_updated_description =>
+      'تم تعديل كمية كوكاكولا 330 مل إلى 10 علب';
+
+  @override
+  String get notification_payment_received_title =>
+      'تم استلام المبلغ بواسطة المخزن';
+
+  @override
+  String get notification_payment_received_description =>
+      'تم تسوية رحلة TRIP-0024 — 6,200 ج.م';
+
+  @override
+  String get notification_trip_completed_title => 'تم إنهاء الرحلة';
+
+  @override
+  String get notification_trip_completed_description =>
+      'رحلة TRIP-0024 اكتملت بنجاح';
+
+  @override
+  String get two_hours_ago => 'منذ ساعتين';
+
+  @override
+  String get one_hour_ago => 'منذ ساعة';
+
+  @override
+  String get forty_five_minutes_ago => 'منذ 45 دقيقة';
+
+  @override
+  String get yesterday => 'أمس';
 }
