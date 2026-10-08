@@ -57,6 +57,10 @@ dependencies:
   google_mlkit_face_detection: ^0.15.1
   image: ^4.10.1
   typed_data: ^1.4.0
+  google_maps_flutter: ^2.18.2
+  geolocator: ^14.1.1
+  url_launcher: ^6.3.3
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

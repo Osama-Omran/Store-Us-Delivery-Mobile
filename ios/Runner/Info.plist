@@ -68,5 +68,16 @@
 	</array>
 <key>NSCameraUsageDescription</key>
 <string>Camera access is required to capture proof of receiving the van and goods.</string>
+
+<!-- Location permission -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>نحتاج إلى الوصول إلى موقعك لتحديد مكانك الحالي وعرض محطات الرحلة وتوجيهك إلى العملاء.</string>
+
+<!-- Google Maps app URL scheme -->
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>comgooglemaps</string>
+    <string>googlechromes</string>
+</array>
 </dict>
 </plist>

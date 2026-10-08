@@ -705,6 +705,258 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.'**
   String get selfie_check_failed_error;
+
+  /// No description provided for @face_not_detected.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نتمكن من التعرف على وجه في الصورة. التقط صورة شخصية واضحة لوجهك.'**
+  String get face_not_detected;
+
+  /// No description provided for @face_multiple_detected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم اكتشاف أكثر من وجه. يجب أن تظهر أنت فقط في الصورة.'**
+  String get face_multiple_detected;
+
+  /// No description provided for @face_too_small.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجهك بعيد عن الكاميرا. قرّب الهاتف وحاول مرة أخرى.'**
+  String get face_too_small;
+
+  /// No description provided for @face_not_frontal.
+  ///
+  /// In ar, this message translates to:
+  /// **'انظر مباشرة إلى الكاميرا وحافظ على وجهك مستقيماً.'**
+  String get face_not_frontal;
+
+  /// No description provided for @face_eyes_closed.
+  ///
+  /// In ar, this message translates to:
+  /// **'عيناك مغمضتان. افتح عينيك والتقط الصورة مرة أخرى.'**
+  String get face_eyes_closed;
+
+  /// No description provided for @my_current_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتي الحالية'**
+  String get my_current_trip;
+
+  /// No description provided for @trip_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الرحلة'**
+  String get trip_orders;
+
+  /// No description provided for @handled_orders_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التعامل معهم'**
+  String get handled_orders_label;
+
+  /// No description provided for @collected_so_far.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحصل حتى الآن'**
+  String get collected_so_far;
+
+  /// No description provided for @of_total.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get of_total;
+
+  /// No description provided for @orders_handled.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تم التعامل معهم'**
+  String get orders_handled;
+
+  /// No description provided for @all_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get all_orders;
+
+  /// No description provided for @awaiting_delivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار التسليم'**
+  String get awaiting_delivery;
+
+  /// No description provided for @delivered_fully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم بالكامل'**
+  String get delivered_fully;
+
+  /// No description provided for @delivered_partially.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم جزئياً'**
+  String get delivered_partially;
+
+  /// No description provided for @delivery_rescheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة الجدولة'**
+  String get delivery_rescheduled;
+
+  /// No description provided for @delivery_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء التسليم'**
+  String get delivery_cancelled;
+
+  /// No description provided for @order_value.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الأوردر'**
+  String get order_value;
+
+  /// No description provided for @payment_collected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التحصيل'**
+  String get payment_collected;
+
+  /// No description provided for @amount_collected.
+  ///
+  /// In ar, this message translates to:
+  /// **'محصل'**
+  String get amount_collected;
+
+  /// No description provided for @view_delivery_details.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض تفاصيل التسليم'**
+  String get view_delivery_details;
+
+  /// No description provided for @open_order.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الأوردر'**
+  String get open_order;
+
+  /// No description provided for @open_directions.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الاتجاهات'**
+  String get open_directions;
+
+  /// No description provided for @call_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال بالعميل'**
+  String get call_customer;
+
+  /// No description provided for @no_orders_in_filter.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات بهذا التصنيف'**
+  String get no_orders_in_filter;
+
+  /// No description provided for @trip_map_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة رحلة'**
+  String get trip_map_title;
+
+  /// No description provided for @trip_map_next_stop.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحطة التالية'**
+  String get trip_map_next_stop;
+
+  /// No description provided for @trip_map_selected_stop.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحطة المختارة'**
+  String get trip_map_selected_stop;
+
+  /// No description provided for @trip_map_out_of.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get trip_map_out_of;
+
+  /// No description provided for @trip_map_arrival_in.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول خلال'**
+  String get trip_map_arrival_in;
+
+  /// No description provided for @trip_map_minutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقائق'**
+  String get trip_map_minutes;
+
+  /// No description provided for @trip_map_km.
+  ///
+  /// In ar, this message translates to:
+  /// **'كم'**
+  String get trip_map_km;
+
+  /// No description provided for @trip_map_meters.
+  ///
+  /// In ar, this message translates to:
+  /// **'متر'**
+  String get trip_map_meters;
+
+  /// No description provided for @trip_map_start_navigation.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء الملاحة'**
+  String get trip_map_start_navigation;
+
+  /// No description provided for @trip_map_show_order.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الطلب'**
+  String get trip_map_show_order;
+
+  /// No description provided for @trip_map_calculating_route.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ حساب الطريق ووقت الوصول...'**
+  String get trip_map_calculating_route;
+
+  /// No description provided for @trip_map_location_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل إذن الموقع لعرض المسافة ووقت الوصول'**
+  String get trip_map_location_unavailable;
+
+  /// No description provided for @trip_map_route_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حساب الطريق حالياً. يمكنك بدء الملاحة.'**
+  String get trip_map_route_unavailable;
+
+  /// No description provided for @trip_map_route_not_connected.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الوصول والمسافة متاحان بعد ربط خدمة المسارات'**
+  String get trip_map_route_not_connected;
+
+  /// No description provided for @trip_map_navigation_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح خرائط Google. حاول مرة أخرى.'**
+  String get trip_map_navigation_failed;
+
+  /// No description provided for @trip_map_no_stops.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد محطات بإحداثيات لعرضها على الخريطة'**
+  String get trip_map_no_stops;
+
+  /// No description provided for @trip_map_refresh_location.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث موقع المندوب'**
+  String get trip_map_refresh_location;
 }
 
 class _AppLocalizationsDelegate

@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/custom_trip_container.dart';
+import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/face_check_result.dart';
 
 class ReceivingProofPhoto extends StatefulWidget {
   const ReceivingProofPhoto({
@@ -17,54 +19,100 @@ class ReceivingProofPhoto extends StatefulWidget {
   final ValueChanged<ReceivingProofModel?> onPhotoApprovalChanged;
 
   @override
-  State<ReceivingProofPhoto> createState() =>
-      _ReceivingProofPhotoState();
+  State<ReceivingProofPhoto> createState() => _ReceivingProofPhotoState();
 }
 
 class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
   final ImagePicker _picker = ImagePicker();
+  final FaceValidator _faceValidator = FaceValidator();
 
   ReceivingProofModel? _proof;
   bool _isApproved = false;
   bool _isCapturing = false;
+  bool _isValidating = false;
+  String? _errorMessage;
+
+  @override
+  void dispose() {
+    _faceValidator.dispose();
+    super.dispose();
+  }
+
+  String _messageFor(FaceCheckResult result) {
+    final s = context.strings;
+    switch (result) {
+      case FaceCheckResult.noFace:
+        return s.face_not_detected;
+      case FaceCheckResult.multipleFaces:
+        return s.face_multiple_detected;
+      case FaceCheckResult.tooSmall:
+        return s.face_too_small;
+      case FaceCheckResult.notFrontal:
+        return s.face_not_frontal;
+      case FaceCheckResult.eyesClosed:
+        return s.face_eyes_closed;
+      case FaceCheckResult.failed:
+      case FaceCheckResult.ok:
+        return s.proof_photo_error;
+    }
+  }
 
   Future<void> _capturePhoto() async {
-    if (_isCapturing) return;
+    if (_isCapturing || _isValidating) return;
 
-    setState(() => _isCapturing = true);
+    setState(() {
+      _isCapturing = true;
+      _errorMessage = null;
+    });
 
     try {
       final image = await _picker.pickImage(
         source: ImageSource.camera,
         imageQuality: 85,
-        preferredCameraDevice: CameraDevice.rear,
+        maxWidth: 1280,
+        preferredCameraDevice: CameraDevice.front,
       );
 
       if (!mounted || image == null) return;
 
-      final proof = ReceivingProofModel(
-        image: image,
-        tripNumber: widget.tripNumber,
-        capturedAt: DateTime.now(),
-      );
-
       setState(() {
-        _proof = proof;
-        _isApproved = false;
+        _isCapturing = false;
+        _isValidating = true;
       });
 
+      if (kReleaseMode) {
+        final result = await _faceValidator.validate(image.path);
+        if (!mounted) return;
+
+        if (result != FaceCheckResult.ok) {
+          setState(() {
+            _proof = null;
+            _isApproved = false;
+            _errorMessage = _messageFor(result);
+          });
+          widget.onPhotoApprovalChanged(null);
+          return;
+        }
+      }
+
+      setState(() {
+        _proof = ReceivingProofModel(
+          image: image,
+          tripNumber: widget.tripNumber,
+          capturedAt: DateTime.now(),
+        );
+        _isApproved = false;
+      });
       widget.onPhotoApprovalChanged(null);
     } catch (_) {
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.strings.proof_photo_error),
-        ),
-      );
+      setState(() => _errorMessage = context.strings.proof_photo_error);
     } finally {
       if (mounted) {
-        setState(() => _isCapturing = false);
+        setState(() {
+          _isCapturing = false;
+          _isValidating = false;
+        });
       }
     }
   }
@@ -97,15 +145,29 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
               ],
             ),
             textAlign: TextAlign.start,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
 
-          if (_proof == null)
-            _buildCameraPlaceholder(context)
-          else ...[
+          if (_proof == null) ...[
+            _buildCameraPlaceholder(context),
+            if (_errorMessage != null)
+              Row(
+                spacing: 6,
+                children: [
+                  Icon(Icons.error_outline, color: AppColors.red0, size: 18),
+                  Expanded(
+                    child: Text(
+                      _errorMessage!,
+                      style: TextStyle(
+                        color: AppColors.red0,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ] else ...[
             _buildPhotoPreview(context),
             if (_isApproved)
               _buildApprovedActions(context)
@@ -119,52 +181,48 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
 
   Widget _buildCameraPlaceholder(BuildContext context) {
     return CustomPaint(
-      foregroundPainter: _DashedBorderPainter(
-        color: AppColors.blue0,
-      ),
+      foregroundPainter: _DashedBorderPainter(color: AppColors.blue0),
       child: Material(
         color: AppColors.lightPrimary,
         borderRadius: BorderRadius.circular(20),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: _isCapturing ? null : _capturePhoto,
+          onTap: (_isCapturing || _isValidating) ? null : _capturePhoto,
           child: SizedBox(
             width: double.infinity,
             height: 198,
-            child: _isCapturing
+            child: (_isCapturing || _isValidating)
                 ? Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ),
-            )
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  )
                 : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 12,
-              children: [
-                Icon(
-                  Icons.photo_camera_outlined,
-                  color: AppColors.primary,
-                  size: 44,
-                ),
-                Text(
-                  context.strings.open_camera_and_capture,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 12,
+                    children: [
+                      Icon(
+                        Icons.photo_camera_outlined,
+                        color: AppColors.primary,
+                        size: 44,
+                      ),
+                      Text(
+                        context.strings.open_camera_and_capture,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      Text(
+                        context.strings.proof_photo_auto_details,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Text(
-                  context.strings.proof_photo_auto_details,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
@@ -181,8 +239,7 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
         '${date.month.toString().padLeft(2, '0')}/'
         '${date.year}';
 
-    final formattedTime =
-    TimeOfDay.fromDateTime(date).format(context);
+    final formattedTime = TimeOfDay.fromDateTime(date).format(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -191,10 +248,7 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.file(
-              File(proof.image.path),
-              fit: BoxFit.cover,
-            ),
+            Image.file(File(proof.image.path), fit: BoxFit.cover),
 
             Positioned(
               bottom: 0,
@@ -205,9 +259,7 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
                   horizontal: 14,
                   vertical: 10,
                 ),
-                color: AppColors.black0.withValues(
-                  alpha: 0.58,
-                ),
+                color: AppColors.black0.withValues(alpha: 0.58),
                 child: Directionality(
                   textDirection: TextDirection.ltr,
                   child: Column(
@@ -261,11 +313,7 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Icon(
-                        Icons.check,
-                        color: AppColors.white0,
-                        size: 17,
-                      ),
+                      Icon(Icons.check, color: AppColors.white0, size: 17),
                     ],
                   ),
                 ),
@@ -288,10 +336,7 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.black1,
                 backgroundColor: AppColors.white0,
-                side: BorderSide(
-                  color: AppColors.grey3,
-                  width: 2,
-                ),
+                side: BorderSide(color: AppColors.grey3, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(22),
                 ),
@@ -339,17 +384,11 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
         onPressed: _isCapturing ? null : _capturePhoto,
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 2,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         ),
         child: Text(
           context.strings.retake_photo,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -369,9 +408,7 @@ class ReceivingProofModel {
 }
 
 class _DashedBorderPainter extends CustomPainter {
-  const _DashedBorderPainter({
-    required this.color,
-  });
+  const _DashedBorderPainter({required this.color});
 
   final Color color;
 
@@ -385,12 +422,7 @@ class _DashedBorderPainter extends CustomPainter {
     final path = Path()
       ..addRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            1,
-            1,
-            size.width - 2,
-            size.height - 2,
-          ),
+          Rect.fromLTWH(1, 1, size.width - 2, size.height - 2),
           const Radius.circular(20),
         ),
       );
@@ -400,10 +432,7 @@ class _DashedBorderPainter extends CustomPainter {
 
       while (distance < metric.length) {
         canvas.drawPath(
-          metric.extractPath(
-            distance,
-            math.min(distance + 7, metric.length),
-          ),
+          metric.extractPath(distance, math.min(distance + 7, metric.length)),
           paint,
         );
         distance += 12;
@@ -412,9 +441,7 @@ class _DashedBorderPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(
-      covariant _DashedBorderPainter oldDelegate,
-      ) {
+  bool shouldRepaint(covariant _DashedBorderPainter oldDelegate) {
     return oldDelegate.color != color;
   }
 }

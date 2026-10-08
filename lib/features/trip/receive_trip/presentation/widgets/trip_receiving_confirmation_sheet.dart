@@ -1,7 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 Future<bool?> showTripReceivingConfirmationSheet({
@@ -16,23 +17,16 @@ Future<bool?> showTripReceivingConfirmationSheet({
     backgroundColor: AppColors.white0,
     barrierColor: AppColors.black0.withValues(alpha: 0.40),
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(30),
-      ),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
     ),
     builder: (context) {
-      return TripReceivingConfirmationSheet(
-        tripNumber: tripNumber,
-      );
+      return TripReceivingConfirmationSheet(tripNumber: tripNumber);
     },
   );
 }
 
 class TripReceivingConfirmationSheet extends StatelessWidget {
-  const TripReceivingConfirmationSheet({
-    super.key,
-    required this.tripNumber,
-  });
+  const TripReceivingConfirmationSheet({super.key, required this.tripNumber});
 
   final String tripNumber;
 
@@ -58,7 +52,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
             const Gap(12),
             Text(
               '${context.strings.confirm_receiving_dialog_description} '
-                  '\u2066$tripNumber\u2069.',
+              '\u2066$tripNumber\u2069.',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 16,
@@ -80,10 +74,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppColors.white0,
                         foregroundColor: AppColors.black1,
-                        side: BorderSide(
-                          color: AppColors.grey3,
-                          width: 2,
-                        ),
+                        side: BorderSide(color: AppColors.grey3, width: 2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
@@ -104,7 +95,9 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                     height: 70,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop(true);
+                        GoRouter.of(context).pop();
+                        GoRouter.of(context)
+                            .pushReplacement(RoutesNames.receiveTripSuccess);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.green0,

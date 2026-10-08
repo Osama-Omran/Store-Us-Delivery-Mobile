@@ -339,4 +339,139 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get selfie_check_failed_error =>
       'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.';
+
+  @override
+  String get face_not_detected =>
+      'لم نتمكن من التعرف على وجه في الصورة. التقط صورة شخصية واضحة لوجهك.';
+
+  @override
+  String get face_multiple_detected =>
+      'تم اكتشاف أكثر من وجه. يجب أن تظهر أنت فقط في الصورة.';
+
+  @override
+  String get face_too_small =>
+      'وجهك بعيد عن الكاميرا. قرّب الهاتف وحاول مرة أخرى.';
+
+  @override
+  String get face_not_frontal =>
+      'انظر مباشرة إلى الكاميرا وحافظ على وجهك مستقيماً.';
+
+  @override
+  String get face_eyes_closed =>
+      'عيناك مغمضتان. افتح عينيك والتقط الصورة مرة أخرى.';
+
+  @override
+  String get my_current_trip => 'رحلتي الحالية';
+
+  @override
+  String get trip_orders => 'طلبات الرحلة';
+
+  @override
+  String get handled_orders_label => 'تم التعامل معهم';
+
+  @override
+  String get collected_so_far => 'المحصل حتى الآن';
+
+  @override
+  String get of_total => 'من';
+
+  @override
+  String get orders_handled => 'طلب تم التعامل معهم';
+
+  @override
+  String get all_orders => 'الكل';
+
+  @override
+  String get awaiting_delivery => 'في انتظار التسليم';
+
+  @override
+  String get delivered_fully => 'تم التسليم بالكامل';
+
+  @override
+  String get delivered_partially => 'تم التسليم جزئياً';
+
+  @override
+  String get delivery_rescheduled => 'تمت إعادة الجدولة';
+
+  @override
+  String get delivery_cancelled => 'تم إلغاء التسليم';
+
+  @override
+  String get order_value => 'قيمة الأوردر';
+
+  @override
+  String get payment_collected => 'تم التحصيل';
+
+  @override
+  String get amount_collected => 'محصل';
+
+  @override
+  String get view_delivery_details => 'عرض تفاصيل التسليم';
+
+  @override
+  String get open_order => 'فتح الأوردر';
+
+  @override
+  String get open_directions => 'فتح الاتجاهات';
+
+  @override
+  String get call_customer => 'اتصال بالعميل';
+
+  @override
+  String get no_orders_in_filter => 'لا توجد طلبات بهذا التصنيف';
+
+  @override
+  String get trip_map_title => 'خريطة رحلة';
+
+  @override
+  String get trip_map_next_stop => 'المحطة التالية';
+
+  @override
+  String get trip_map_selected_stop => 'المحطة المختارة';
+
+  @override
+  String get trip_map_out_of => 'من';
+
+  @override
+  String get trip_map_arrival_in => 'الوصول خلال';
+
+  @override
+  String get trip_map_minutes => 'دقائق';
+
+  @override
+  String get trip_map_km => 'كم';
+
+  @override
+  String get trip_map_meters => 'متر';
+
+  @override
+  String get trip_map_start_navigation => 'بدء الملاحة';
+
+  @override
+  String get trip_map_show_order => 'عرض الطلب';
+
+  @override
+  String get trip_map_calculating_route => 'جارٍ حساب الطريق ووقت الوصول...';
+
+  @override
+  String get trip_map_location_unavailable =>
+      'فعّل إذن الموقع لعرض المسافة ووقت الوصول';
+
+  @override
+  String get trip_map_route_unavailable =>
+      'تعذر حساب الطريق حالياً. يمكنك بدء الملاحة.';
+
+  @override
+  String get trip_map_route_not_connected =>
+      'وقت الوصول والمسافة متاحان بعد ربط خدمة المسارات';
+
+  @override
+  String get trip_map_navigation_failed =>
+      'تعذر فتح خرائط Google. حاول مرة أخرى.';
+
+  @override
+  String get trip_map_no_stops => 'لا توجد محطات بإحداثيات لعرضها على الخريطة';
+
+  @override
+  String get trip_map_refresh_location => 'تحديث موقع المندوب';
 }
