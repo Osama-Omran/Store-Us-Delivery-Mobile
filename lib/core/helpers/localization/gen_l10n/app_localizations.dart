@@ -265,7 +265,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirm_receiving_warning.
   ///
   /// In ar, this message translates to:
-  /// **'التقط صورة الإثبات أولاً لتفعيل التأكيد'**
+  /// **'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد'**
   String get confirm_receiving_warning;
 
   /// No description provided for @loaded_quantity.
@@ -307,7 +307,7 @@ abstract class AppLocalizations {
   /// No description provided for @retake_photo.
   ///
   /// In ar, this message translates to:
-  /// **'إعادة التقاط الصورة'**
+  /// **'إعادة التصوير'**
   String get retake_photo;
 
   /// No description provided for @proof_photo_error.
@@ -561,6 +561,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أمس'**
   String get yesterday;
+
+  /// No description provided for @account.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get account;
+
+  /// No description provided for @treasury.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخزينة'**
+  String get treasury;
+
+  /// No description provided for @deliveries.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسليمات'**
+  String get deliveries;
+
+  /// No description provided for @customers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العملاء'**
+  String get customers;
+
+  /// No description provided for @areas.
+  ///
+  /// In ar, this message translates to:
+  /// **'المناطق'**
+  String get areas;
+
+  /// No description provided for @reports.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقارير'**
+  String get reports;
+
+  /// No description provided for @contact_us.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل معنا'**
+  String get contact_us;
+
+  /// No description provided for @receive_custody.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام العهدة'**
+  String get receive_custody;
+
+  /// No description provided for @logout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get logout;
+
+  /// No description provided for @driver_selfie_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة المندوب لتأكيد الاستلام'**
+  String get driver_selfie_title;
+
+  /// No description provided for @selfie_capture_action.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الكاميرا والتقاط سيلفي'**
+  String get selfie_capture_action;
+
+  /// No description provided for @selfie_capture_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعل وجهك واضحًا داخل الصورة وفي إضاءة جيدة'**
+  String get selfie_capture_hint;
+
+  /// No description provided for @selfie_checking_photo.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ فحص وضوح الصورة والوجه...'**
+  String get selfie_checking_photo;
+
+  /// No description provided for @selfie_no_face_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم العثور على وجه. صوّر وجهك بوضوح باستخدام الكاميرا الأمامية.'**
+  String get selfie_no_face_error;
+
+  /// No description provided for @selfie_many_faces_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظهر أكثر من وجه في الصورة. يجب أن تكون وحدك داخل الصورة.'**
+  String get selfie_many_faces_error;
+
+  /// No description provided for @selfie_too_small_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجهك بعيد أو حجم الصورة صغير. اقترب من الكاميرا وحاول مرة أخرى.'**
+  String get selfie_too_small_error;
+
+  /// No description provided for @selfie_not_centered_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعل وجهك في منتصف الصورة ثم أعد التصوير.'**
+  String get selfie_not_centered_error;
+
+  /// No description provided for @selfie_not_frontal_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'انظر إلى الكاميرا مباشرةً دون إمالة الرأس.'**
+  String get selfie_not_frontal_error;
+
+  /// No description provided for @selfie_eyes_not_visible_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكد من ظهور العينين بوضوح وعدم تغطية الوجه.'**
+  String get selfie_eyes_not_visible_error;
+
+  /// No description provided for @selfie_too_dark_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة مظلمة. انتقل لمكان أكثر إضاءة وأعد التصوير.'**
+  String get selfie_too_dark_error;
+
+  /// No description provided for @selfie_too_bright_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضاءة قوية جدًا. تجنب الضوء المباشر وأعد التصوير.'**
+  String get selfie_too_bright_error;
+
+  /// No description provided for @selfie_blurry_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة غير واضحة أو مهزوزة. ثبّت الهاتف وأعد التصوير.'**
+  String get selfie_blurry_error;
+
+  /// No description provided for @selfie_invalid_image_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر قراءة الصورة. التقط صورة جديدة من الكاميرا.'**
+  String get selfie_invalid_image_error;
+
+  /// No description provided for @selfie_check_failed_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.'**
+  String get selfie_check_failed_error;
 }
 
 class _AppLocalizationsDelegate

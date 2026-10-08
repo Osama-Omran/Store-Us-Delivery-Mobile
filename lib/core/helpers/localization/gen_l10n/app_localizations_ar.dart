@@ -98,7 +98,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confirm_receiving_warning =>
-      'التقط صورة الإثبات أولاً لتفعيل التأكيد';
+      'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد';
 
   @override
   String get loaded_quantity => 'الكمية المحملة';
@@ -120,7 +120,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'يُضاف التاريخ والوقت ورقم الرحلة تلقائياً';
 
   @override
-  String get retake_photo => 'إعادة التقاط الصورة';
+  String get retake_photo => 'إعادة التصوير';
 
   @override
   String get proof_photo_error => 'تعذر التقاط الصورة، يرجى المحاولة مرة أخرى';
@@ -255,4 +255,88 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get yesterday => 'أمس';
+
+  @override
+  String get account => 'حسابي';
+
+  @override
+  String get treasury => 'الخزينة';
+
+  @override
+  String get deliveries => 'التسليمات';
+
+  @override
+  String get customers => 'العملاء';
+
+  @override
+  String get areas => 'المناطق';
+
+  @override
+  String get reports => 'التقارير';
+
+  @override
+  String get contact_us => 'تواصل معنا';
+
+  @override
+  String get receive_custody => 'استلام العهدة';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get driver_selfie_title => 'صورة المندوب لتأكيد الاستلام';
+
+  @override
+  String get selfie_capture_action => 'فتح الكاميرا والتقاط سيلفي';
+
+  @override
+  String get selfie_capture_hint =>
+      'اجعل وجهك واضحًا داخل الصورة وفي إضاءة جيدة';
+
+  @override
+  String get selfie_checking_photo => 'جارٍ فحص وضوح الصورة والوجه...';
+
+  @override
+  String get selfie_no_face_error =>
+      'لم يتم العثور على وجه. صوّر وجهك بوضوح باستخدام الكاميرا الأمامية.';
+
+  @override
+  String get selfie_many_faces_error =>
+      'ظهر أكثر من وجه في الصورة. يجب أن تكون وحدك داخل الصورة.';
+
+  @override
+  String get selfie_too_small_error =>
+      'وجهك بعيد أو حجم الصورة صغير. اقترب من الكاميرا وحاول مرة أخرى.';
+
+  @override
+  String get selfie_not_centered_error =>
+      'اجعل وجهك في منتصف الصورة ثم أعد التصوير.';
+
+  @override
+  String get selfie_not_frontal_error =>
+      'انظر إلى الكاميرا مباشرةً دون إمالة الرأس.';
+
+  @override
+  String get selfie_eyes_not_visible_error =>
+      'تأكد من ظهور العينين بوضوح وعدم تغطية الوجه.';
+
+  @override
+  String get selfie_too_dark_error =>
+      'الصورة مظلمة. انتقل لمكان أكثر إضاءة وأعد التصوير.';
+
+  @override
+  String get selfie_too_bright_error =>
+      'الإضاءة قوية جدًا. تجنب الضوء المباشر وأعد التصوير.';
+
+  @override
+  String get selfie_blurry_error =>
+      'الصورة غير واضحة أو مهزوزة. ثبّت الهاتف وأعد التصوير.';
+
+  @override
+  String get selfie_invalid_image_error =>
+      'تعذر قراءة الصورة. التقط صورة جديدة من الكاميرا.';
+
+  @override
+  String get selfie_check_failed_error =>
+      'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.';
 }

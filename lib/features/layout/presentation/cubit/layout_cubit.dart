@@ -33,9 +33,6 @@ class LayoutCubit extends Cubit<LayoutState> {
         completedAt: DateTime(2026, 10, 8, 16, 30),
         isSettled: true,
       ),
-      onNotificationsTap: () {
-        // TODO: Navigate to notifications
-      },
       onContinueTrip: () {
         // TODO: Navigate to active trip orders
       },
@@ -67,7 +64,6 @@ class LayoutCubit extends Cubit<LayoutState> {
         }
       },
     ),
-    const Scaffold(backgroundColor: Colors.pink),
   ];
 
   // Select Tap

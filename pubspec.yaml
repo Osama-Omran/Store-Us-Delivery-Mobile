@@ -54,6 +54,9 @@ dependencies:
   vibration: ^3.2.1
   gap: ^3.0.1
   image_picker: ^1.2.4
+  google_mlkit_face_detection: ^0.15.1
+  image: ^4.10.1
+  typed_data: ^1.4.0
 
 dev_dependencies:
   flutter_test:

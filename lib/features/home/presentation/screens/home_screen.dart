@@ -1,16 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/widgets/custom_svg.dart';
+import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
     required this.userName,
     required this.currentTrip,
-    required this.onNotificationsTap,
     required this.onContinueTrip,
     this.previousTrip,
     this.onPreviousTripTap,
@@ -22,7 +23,6 @@ class HomeScreen extends StatelessWidget {
   final HomePreviousTrip? previousTrip;
   final int unreadNotifications;
 
-  final VoidCallback onNotificationsTap;
   final VoidCallback onContinueTrip;
   final VoidCallback? onPreviousTripTap;
 
@@ -37,13 +37,9 @@ class HomeScreen extends StatelessWidget {
             _HomeHeader(
               userName: userName,
               unreadNotifications: unreadNotifications,
-              onNotificationsTap: onNotificationsTap,
             ),
             const Gap(24),
-            _CurrentTripCard(
-              trip: currentTrip,
-              onContinueTrip: onContinueTrip,
-            ),
+            _CurrentTripCard(trip: currentTrip),
             if (previousTrip != null) ...[
               const Gap(24),
               Text(
@@ -55,10 +51,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Gap(12),
-              _PreviousTripCard(
-                trip: previousTrip!,
-                onTap: onPreviousTripTap,
-              ),
+              _PreviousTripCard(trip: previousTrip!, onTap: onPreviousTripTap),
             ],
           ],
         ),
@@ -71,12 +64,10 @@ class _HomeHeader extends StatelessWidget {
   const _HomeHeader({
     required this.userName,
     required this.unreadNotifications,
-    required this.onNotificationsTap,
   });
 
   final String userName;
   final int unreadNotifications;
-  final VoidCallback onNotificationsTap;
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +81,7 @@ class _HomeHeader extends StatelessWidget {
             children: [
               Text(
                 context.strings.welcome,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: AppColors.grey4,
-                ),
+                style: TextStyle(fontSize: 15, color: AppColors.grey4),
               ),
               Text(
                 userName,
@@ -110,10 +98,7 @@ class _HomeHeader extends StatelessWidget {
         ),
         const Gap(8),
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: AppColors.blue4,
             borderRadius: BorderRadius.circular(24),
@@ -132,23 +117,18 @@ class _HomeHeader extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             InkWell(
-              onTap: onNotificationsTap,
+              onTap: () => LayoutCubit.get(context).selectTap(2),
               borderRadius: BorderRadius.circular(18),
               child: Container(
                 width: 54,
                 height: 54,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.white0,
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: AppColors.grey3,
-                  ),
+                  border: Border.all(color: AppColors.grey3),
                 ),
-                child: Icon(
-                  Icons.notifications_none_rounded,
-                  size: 27,
-                  color: AppColors.black1,
-                ),
+                child: CustomSVG(assetName: AppAssets.notifications),
               ),
             ),
             if (unreadNotifications > 0)
@@ -161,10 +141,7 @@ class _HomeHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.red1,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.white0,
-                      width: 1,
-                    ),
+                    border: Border.all(color: AppColors.white0, width: 1),
                   ),
                 ),
               ),
@@ -176,20 +153,14 @@ class _HomeHeader extends StatelessWidget {
 }
 
 class _CurrentTripCard extends StatelessWidget {
-  const _CurrentTripCard({
-    required this.trip,
-    required this.onContinueTrip,
-  });
+  const _CurrentTripCard({required this.trip});
 
   final HomeCurrentTrip trip;
-  final VoidCallback onContinueTrip;
 
   @override
   Widget build(BuildContext context) {
     final time = MaterialLocalizations.of(context)
-        .formatTimeOfDay(
-      TimeOfDay.fromDateTime(trip.startedAt.toLocal()),
-    );
+        .formatTimeOfDay(TimeOfDay.fromDateTime(trip.startedAt.toLocal()));
 
     final amount = NumberFormat.decimalPattern(
       Localizations.localeOf(context).toString(),
@@ -201,15 +172,10 @@ class _CurrentTripCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [
-            AppColors.blue2,
-            AppColors.blue5,
-          ],
+          colors: [AppColors.blue2, AppColors.blue5],
         ),
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.blue3,
-        ),
+        border: Border.all(color: AppColors.blue3),
         boxShadow: [
           BoxShadow(
             color: AppColors.black0.withValues(alpha: 0.04),
@@ -258,19 +224,15 @@ class _CurrentTripCard extends StatelessWidget {
           const Gap(20),
           _TripInfoRow(
             icon: Icons.local_shipping_outlined,
-            text:
-            '${context.strings.van}: ${trip.vehicleName}',
+            text: '${context.strings.van}: ${trip.vehicleName}',
           ),
           const Gap(8),
-          _TripInfoRow(
-            text:
-            '${context.strings.driver}: ${trip.driverName}',
-          ),
+          _TripInfoRow(text: '${context.strings.driver}: ${trip.driverName}'),
           const Gap(8),
           _TripInfoRow(
             icon: Icons.location_on_outlined,
             text:
-            '${trip.warehouseName} — '
+                '${trip.warehouseName} — '
                 '${context.strings.started_at} $time',
           ),
           const Gap(20),
@@ -312,10 +274,7 @@ class _CurrentTripCard extends StatelessWidget {
 
           // Collected Amount
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 17,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
             decoration: BoxDecoration(
               color: AppColors.white0,
               borderRadius: BorderRadius.circular(22),
@@ -362,14 +321,12 @@ class _CurrentTripCard extends StatelessWidget {
             height: 70,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: onContinueTrip,
+              onPressed: () => LayoutCubit.get(context).selectTap(1),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white0,
                 elevation: 5,
-                shadowColor: AppColors.primary.withValues(
-                  alpha: 0.24,
-                ),
+                shadowColor: AppColors.primary.withValues(alpha: 0.24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28),
                 ),
@@ -386,10 +343,7 @@ class _CurrentTripCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 17,
-                  ),
+                  const Icon(Icons.arrow_forward_ios, size: 17),
                 ],
               ),
             ),
@@ -401,10 +355,7 @@ class _CurrentTripCard extends StatelessWidget {
 }
 
 class _TripInfoRow extends StatelessWidget {
-  const _TripInfoRow({
-    required this.text,
-    this.icon,
-  });
+  const _TripInfoRow({required this.text, this.icon});
 
   final String text;
   final IconData? icon;
@@ -419,20 +370,12 @@ class _TripInfoRow extends StatelessWidget {
           width: 20,
           child: icon == null
               ? const SizedBox.shrink()
-              : Icon(
-            icon,
-            size: 19,
-            color: AppColors.grey4,
-          ),
+              : Icon(icon, size: 19, color: AppColors.grey4),
         ),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.4,
-              color: AppColors.grey4,
-            ),
+            style: TextStyle(fontSize: 15, height: 1.4, color: AppColors.grey4),
           ),
         ),
       ],
@@ -481,10 +424,7 @@ class _OrderStatCard extends StatelessWidget {
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 13,
-              color: labelColor,
-            ),
+            style: TextStyle(fontSize: 13, color: labelColor),
           ),
         ],
       ),
@@ -493,10 +433,7 @@ class _OrderStatCard extends StatelessWidget {
 }
 
 class _PreviousTripCard extends StatelessWidget {
-  const _PreviousTripCard({
-    required this.trip,
-    this.onTap,
-  });
+  const _PreviousTripCard({required this.trip, this.onTap});
 
   final HomePreviousTrip trip;
   final VoidCallback? onTap;
@@ -504,9 +441,7 @@ class _PreviousTripCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final time = MaterialLocalizations.of(context)
-        .formatTimeOfDay(
-      TimeOfDay.fromDateTime(trip.completedAt.toLocal()),
-    );
+        .formatTimeOfDay(TimeOfDay.fromDateTime(trip.completedAt.toLocal()));
 
     return Material(
       color: AppColors.white0,
@@ -515,10 +450,7 @@ class _PreviousTripCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(24),
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 17,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             border: Border.all(color: AppColors.grey3),
@@ -528,13 +460,12 @@ class _PreviousTripCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 4,
                   children: [
                     Text(
                       '${context.strings.trip_label} '
-                          '\u2066#${trip.id}\u2069',
+                      '\u2066#${trip.id}\u2069',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -543,13 +474,10 @@ class _PreviousTripCard extends StatelessWidget {
                     ),
                     Text(
                       '${trip.totalOrders} '
-                          '${context.strings.orders_plural} — '
-                          '${context.strings.completed_at} $time',
+                      '${context.strings.orders_plural} — '
+                      '${context.strings.completed_at} $time',
                       maxLines: 2,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.grey4,
-                      ),
+                      style: TextStyle(fontSize: 13, color: AppColors.grey4),
                     ),
                   ],
                 ),

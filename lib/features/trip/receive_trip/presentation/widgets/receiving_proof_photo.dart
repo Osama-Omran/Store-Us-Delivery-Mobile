@@ -1,7 +1,5 @@
-
 import 'dart:io';
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';

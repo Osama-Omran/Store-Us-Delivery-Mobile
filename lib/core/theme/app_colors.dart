@@ -36,8 +36,6 @@ class AppColors {
   static Color get orange0 => const Color(0xffe48112);
   static Color get orange1 => const Color(0xfffde7cb);
 
-
-
   // Green
   static Color get green0 => const Color(0xff009b66);
   static Color get green1 => const Color(0xffd3f7e2);

@@ -87,7 +87,9 @@ class NavBarItem extends StatelessWidget {
         final bool isTrip = index == 1;
         return CustomInkWell(
           withEffect: false,
-          onTap: () => cubit.selectTap(index),
+          onTap: () => index == 3
+              ? Scaffold.of(context).openDrawer()
+              : cubit.selectTap(index),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             spacing: 4,
@@ -105,7 +107,7 @@ class NavBarItem extends StatelessWidget {
                       : null,
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
-                    if (isTrip)
+                    if (isTrip && selected)
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: .4),
                         blurRadius: 3,
