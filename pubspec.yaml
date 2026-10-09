@@ -66,6 +66,7 @@ dependencies:
   retrofit: ^4.10.0
   device_info_plus: ^13.3.0
   lottie: ^3.6.1
+  uuid: ^4.6.0
 
 dev_dependencies:
   flutter_test:

@@ -9,7 +9,7 @@ class TripScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 6 == 3
+      body: 6 == 6
           ? EmptyTrips()
           : CurrentTripScreen(
               trip: sampleCurrentTrip,

@@ -9,6 +9,7 @@ import 'package:storeus_delivery/features/layout/presentation/screens/layout_scr
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
 import 'package:storeus_delivery/features/login/presentation/screens/login_screen.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/sample/sample_current_trip.dart';
+import 'package:storeus_delivery/features/trip/receive_trip/presentation/cubit/receive_trip_cubit.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/screens/receive_trip_screen.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/screens/receive_trip_success_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
@@ -56,7 +57,14 @@ class AppRouter {
         name: RoutesNames.receiveTrip,
         path: RoutesNames.receiveTrip,
         pageBuilder: (_, state) {
-          return _slidePageBuilder(const ReceiveTripScreen(), state);
+          return _slidePageBuilder(
+            BlocProvider(
+              lazy: false,
+              create: (_) => getIt<ReceiveTripCubit>()..getCurrentTrip(),
+              child: const ReceiveTripScreen(),
+            ),
+            state,
+          );
         },
       ),
 
@@ -64,10 +72,12 @@ class AppRouter {
         name: RoutesNames.receiveTripSuccess,
         path: RoutesNames.receiveTripSuccess,
         pageBuilder: (_, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+
           return _fadePageBuilder(
             ReceiveTripSuccessScreen(
-              tripNumber: 'TRIP-0025',
-              receivedAt: DateTime(2026, 10, 8, 21, 55),
+              tripNumber: extra?['tripNumber'] as String? ?? '',
+              receivedAt: extra?['receivedAt'] as DateTime? ?? DateTime.now(),
             ),
             state,
           );
@@ -79,7 +89,6 @@ class AppRouter {
         path: RoutesNames.tripMap,
         pageBuilder: (_, state) {
           return _slidePageBuilder(
-
             TripMapScreen(
               tripId: 'TRIP-0025',
               stops: [

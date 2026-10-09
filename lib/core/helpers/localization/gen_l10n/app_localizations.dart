@@ -993,6 +993,198 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'من فضلك أدخل بريد إلكتروني صحيح'**
   String get please_enter_a_valid_email;
+
+  /// No description provided for @trip_history_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل الرحلات السابقة'**
+  String get trip_history_title;
+
+  /// No description provided for @trip_history_completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get trip_history_completed;
+
+  /// No description provided for @trip_history_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get trip_history_cancelled;
+
+  /// No description provided for @trip_history_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الرحلة'**
+  String get trip_history_date;
+
+  /// No description provided for @trip_history_orders_total.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلبات'**
+  String get trip_history_orders_total;
+
+  /// No description provided for @trip_history_acceptance.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الاستلام'**
+  String get trip_history_acceptance;
+
+  /// No description provided for @trip_history_acceptance_pending.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار الاستلام'**
+  String get trip_history_acceptance_pending;
+
+  /// No description provided for @trip_history_completed_at.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت اكتمال الرحلة'**
+  String get trip_history_completed_at;
+
+  /// No description provided for @trip_history_not_available.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متاح'**
+  String get trip_history_not_available;
+
+  /// No description provided for @trip_history_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get trip_history_retry;
+
+  /// No description provided for @trip_history_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلات سابقة'**
+  String get trip_history_empty;
+
+  /// No description provided for @trip_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الرحلة'**
+  String get trip_status;
+
+  /// No description provided for @trip_status_shipped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم شحن الرحلة'**
+  String get trip_status_shipped;
+
+  /// No description provided for @trip_total_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلبات'**
+  String get trip_total_orders;
+
+  /// No description provided for @trip_acceptance_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الاستلام'**
+  String get trip_acceptance_status;
+
+  /// No description provided for @trip_acceptance_pending.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار الاستلام'**
+  String get trip_acceptance_pending;
+
+  /// No description provided for @trip_accepted_at.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الاستلام'**
+  String get trip_accepted_at;
+
+  /// No description provided for @current_trip_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الرحلة الحالية. حاول مرة أخرى.'**
+  String get current_trip_load_failed;
+
+  /// No description provided for @current_trip_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلة حالية متاحة.'**
+  String get current_trip_empty;
+
+  /// No description provided for @current_trip_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get current_trip_retry;
+
+  /// No description provided for @loaded_items_extra_source.
+  ///
+  /// In ar, this message translates to:
+  /// **'بضاعة إضافية'**
+  String get loaded_items_extra_source;
+
+  /// No description provided for @loaded_items_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل البضاعة المحملة. حاول مرة أخرى.'**
+  String get loaded_items_load_failed;
+
+  /// No description provided for @loaded_items_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف محملة لهذه الرحلة.'**
+  String get loaded_items_empty;
+
+  /// No description provided for @loaded_items_no_search_results.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف مطابقة للبحث.'**
+  String get loaded_items_no_search_results;
+
+  /// No description provided for @trip_accept_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد استلام الرحلة. حاول مرة أخرى.'**
+  String get trip_accept_failed;
+
+  /// No description provided for @trip_accept_photo_missing.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة غير متاحة. يرجى التقاط صورة شخصية جديدة.'**
+  String get trip_accept_photo_missing;
+
+  /// No description provided for @trip_accept_location_disabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى تفعيل خدمة الموقع GPS لتأكيد استلام الرحلة.'**
+  String get trip_accept_location_disabled;
+
+  /// No description provided for @trip_accept_location_permission_denied.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب السماح للتطبيق بالوصول إلى موقعك. يمكنك تفعيل الإذن من إعدادات التطبيق.'**
+  String get trip_accept_location_permission_denied;
+
+  /// No description provided for @trip_accept_location_timeout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديد موقعك في الوقت المحدد. حاول مرة أخرى.'**
+  String get trip_accept_location_timeout;
+
+  /// No description provided for @top_rank.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة الترتيب'**
+  String get top_rank;
+
+  /// No description provided for @stock_transfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقل مخزني'**
+  String get stock_transfer;
+
+  /// No description provided for @direct_sale.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع مباشر'**
+  String get direct_sale;
 }
 
 class _AppLocalizationsDelegate

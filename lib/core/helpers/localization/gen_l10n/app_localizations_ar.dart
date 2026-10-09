@@ -494,4 +494,106 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get please_enter_a_valid_email => 'من فضلك أدخل بريد إلكتروني صحيح';
+
+  @override
+  String get trip_history_title => 'سجل الرحلات السابقة';
+
+  @override
+  String get trip_history_completed => 'مكتملة';
+
+  @override
+  String get trip_history_cancelled => 'ملغاة';
+
+  @override
+  String get trip_history_date => 'تاريخ الرحلة';
+
+  @override
+  String get trip_history_orders_total => 'إجمالي الطلبات';
+
+  @override
+  String get trip_history_acceptance => 'حالة الاستلام';
+
+  @override
+  String get trip_history_acceptance_pending => 'في انتظار الاستلام';
+
+  @override
+  String get trip_history_completed_at => 'وقت اكتمال الرحلة';
+
+  @override
+  String get trip_history_not_available => 'غير متاح';
+
+  @override
+  String get trip_history_retry => 'إعادة المحاولة';
+
+  @override
+  String get trip_history_empty => 'لا توجد رحلات سابقة';
+
+  @override
+  String get trip_status => 'حالة الرحلة';
+
+  @override
+  String get trip_status_shipped => 'تم شحن الرحلة';
+
+  @override
+  String get trip_total_orders => 'إجمالي الطلبات';
+
+  @override
+  String get trip_acceptance_status => 'حالة الاستلام';
+
+  @override
+  String get trip_acceptance_pending => 'في انتظار الاستلام';
+
+  @override
+  String get trip_accepted_at => 'وقت الاستلام';
+
+  @override
+  String get current_trip_load_failed =>
+      'تعذر تحميل الرحلة الحالية. حاول مرة أخرى.';
+
+  @override
+  String get current_trip_empty => 'لا توجد رحلة حالية متاحة.';
+
+  @override
+  String get current_trip_retry => 'إعادة المحاولة';
+
+  @override
+  String get loaded_items_extra_source => 'بضاعة إضافية';
+
+  @override
+  String get loaded_items_load_failed =>
+      'تعذر تحميل البضاعة المحملة. حاول مرة أخرى.';
+
+  @override
+  String get loaded_items_empty => 'لا توجد أصناف محملة لهذه الرحلة.';
+
+  @override
+  String get loaded_items_no_search_results => 'لا توجد أصناف مطابقة للبحث.';
+
+  @override
+  String get trip_accept_failed => 'تعذر تأكيد استلام الرحلة. حاول مرة أخرى.';
+
+  @override
+  String get trip_accept_photo_missing =>
+      'الصورة غير متاحة. يرجى التقاط صورة شخصية جديدة.';
+
+  @override
+  String get trip_accept_location_disabled =>
+      'يرجى تفعيل خدمة الموقع GPS لتأكيد استلام الرحلة.';
+
+  @override
+  String get trip_accept_location_permission_denied =>
+      'يجب السماح للتطبيق بالوصول إلى موقعك. يمكنك تفعيل الإذن من إعدادات التطبيق.';
+
+  @override
+  String get trip_accept_location_timeout =>
+      'تعذر تحديد موقعك في الوقت المحدد. حاول مرة أخرى.';
+
+  @override
+  String get top_rank => 'لوحة الترتيب';
+
+  @override
+  String get stock_transfer => 'نقل مخزني';
+
+  @override
+  String get direct_sale => 'بيع مباشر';
 }

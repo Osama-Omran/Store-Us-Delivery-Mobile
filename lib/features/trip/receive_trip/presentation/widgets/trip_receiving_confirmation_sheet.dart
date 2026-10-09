@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 Future<bool?> showTripReceivingConfirmationSheet({
@@ -95,9 +93,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                     height: 70,
                     child: ElevatedButton(
                       onPressed: () {
-                        GoRouter.of(context).pop();
-                        GoRouter.of(context)
-                            .pushReplacement(RoutesNames.receiveTripSuccess);
+                        Navigator.of(context).pop(true);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.green0,

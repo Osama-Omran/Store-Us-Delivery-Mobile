@@ -18,22 +18,9 @@ class ApiConstants {
   // static const String defaultAddress = '$address/default';
   // static const String storeUsVendor = '$vendors/storeus/resolve';
 
-  //======= Wholesalers =======//
-  // static const String vendors = '/vendors';
-  // static const String products = '/search/products';
-  // static const String productDetails = '$products/{product_id}/details';
-  // static const String vendorProductDetails =
-  //     '/search/vendor-products/{vendor_product_id}/details';
-
-  //======= Carts =======//
-  // static const String carts = '/cart/active';
-  // static const String addToCart = '/cart/items';
-  // static const String activeCart = '/cart/active-cart-total';
-  // static const String cartDetails = '/cart';
-  // static const String coupon = '/coupon';
-  // static const String deleteAllCarts = '$carts/delete';
-
-  //======= Checkout =======//
-  // static const String checkoutSummary = '/checkout/summary';
-  // static const String placeOrder = '/orders/place';
+  //======= Trip =======//
+  static const String trips = '/trips';
+  static const String currentTrip = '$trips/current';
+  static const String loadedItems = '$trips/{tripId}/loaded-items';
+  static const String acceptTrip = '$trips/{tripId}/accept';
 }

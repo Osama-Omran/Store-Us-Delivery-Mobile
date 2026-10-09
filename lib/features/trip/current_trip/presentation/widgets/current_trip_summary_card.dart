@@ -5,10 +5,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
 class CurrentTripSummaryCard extends StatelessWidget {
-  const CurrentTripSummaryCard({
-    super.key,
-    required this.trip,
-  });
+  const CurrentTripSummaryCard({super.key, required this.trip});
 
   final CurrentTripModel trip;
 
@@ -34,15 +31,20 @@ class CurrentTripSummaryCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.local_shipping_outlined,
-                  color: AppColors.grey4, size: 20),
+              Icon(
+                Icons.local_shipping_outlined,
+                color: AppColors.grey4,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: '${context.strings.van}:  ',
-                          style: TextStyle(color: AppColors.grey4)),
+                      TextSpan(
+                        text: '${context.strings.van}:  ',
+                        style: TextStyle(color: AppColors.grey4),
+                      ),
                       TextSpan(
                         text: '${trip.vehicleName} - ${trip.plateNumber}',
                         style: TextStyle(
@@ -116,8 +118,11 @@ class CurrentTripSummaryCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.account_balance_wallet_outlined,
-                    color: AppColors.primary, size: 21),
+                Icon(
+                  Icons.account_balance_wallet_outlined,
+                  color: AppColors.primary,
+                  size: 21,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -189,11 +194,21 @@ class _SummaryInfoLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text.rich(
-      TextSpan(children: [
-        TextSpan(text: '$label: ', style: TextStyle(color: AppColors.grey4)),
-        TextSpan(text: value, style: TextStyle(color: AppColors.black1,
-            fontWeight: FontWeight.w700)),
-      ]),
+      TextSpan(
+        children: [
+          TextSpan(
+            text: '$label: ',
+            style: TextStyle(color: AppColors.grey4),
+          ),
+          TextSpan(
+            text: value,
+            style: TextStyle(
+              color: AppColors.black1,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
       style: const TextStyle(fontSize: 13, height: 1.45),
     );
   }
@@ -228,14 +243,18 @@ class _SummaryStat extends StatelessWidget {
         children: [
           Text(
             '$count',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800,
-                color: foreground),
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              color: foreground,
+            ),
           ),
           Text(
             label,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: labelColor, fontSize: 12),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

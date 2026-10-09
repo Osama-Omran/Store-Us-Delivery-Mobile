@@ -150,5 +150,41 @@
 "email": "البريد الإلكتروني",
 "enter_your_email": "أدخل بريدك الإلكتروني",
 "email_is_required": "البريد الإلكتروني مطلوب",
-"please_enter_a_valid_email": "من فضلك أدخل بريد إلكتروني صحيح"
+"please_enter_a_valid_email": "من فضلك أدخل بريد إلكتروني صحيح",
+
+"trip_history_title": "سجل الرحلات السابقة",
+"trip_history_completed": "مكتملة",
+"trip_history_cancelled": "ملغاة",
+"trip_history_date": "تاريخ الرحلة",
+"trip_history_orders_total": "إجمالي الطلبات",
+"trip_history_acceptance": "حالة الاستلام",
+"trip_history_acceptance_pending": "في انتظار الاستلام",
+"trip_history_completed_at": "وقت اكتمال الرحلة",
+"trip_history_not_available": "غير متاح",
+"trip_history_retry": "إعادة المحاولة",
+"trip_history_empty": "لا توجد رحلات سابقة",
+"trip_status": "حالة الرحلة",
+"trip_status_shipped": "تم شحن الرحلة",
+"trip_total_orders": "إجمالي الطلبات",
+"trip_acceptance_status": "حالة الاستلام",
+"trip_acceptance_pending": "في انتظار الاستلام",
+"trip_accepted_at": "وقت الاستلام",
+"current_trip_load_failed": "تعذر تحميل الرحلة الحالية. حاول مرة أخرى.",
+"current_trip_empty": "لا توجد رحلة حالية متاحة.",
+"current_trip_retry": "إعادة المحاولة",
+"loaded_items_extra_source": "بضاعة إضافية",
+"loaded_items_load_failed": "تعذر تحميل البضاعة المحملة. حاول مرة أخرى.",
+"loaded_items_empty": "لا توجد أصناف محملة لهذه الرحلة.",
+"loaded_items_no_search_results": "لا توجد أصناف مطابقة للبحث.",
+
+"trip_accept_failed": "تعذر تأكيد استلام الرحلة. حاول مرة أخرى.",
+
+"trip_accept_photo_missing": "الصورة غير متاحة. يرجى التقاط صورة شخصية جديدة.",
+"trip_accept_location_disabled": "يرجى تفعيل خدمة الموقع GPS لتأكيد استلام الرحلة.",
+"trip_accept_location_permission_denied": "يجب السماح للتطبيق بالوصول إلى موقعك. يمكنك تفعيل الإذن من إعدادات التطبيق.",
+"trip_accept_location_timeout": "تعذر تحديد موقعك في الوقت المحدد. حاول مرة أخرى.",
+
+"top_rank": "لوحة الترتيب",
+"stock_transfer": "نقل مخزني",
+"direct_sale": "بيع مباشر"
 }

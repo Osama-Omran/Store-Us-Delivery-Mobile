@@ -53,13 +53,15 @@ class EmptyTrips extends StatelessWidget {
                   spacing: 6,
                   children: [
                     Icon(Icons.timelapse, color: AppColors.orange0),
-                    Text(
-                      context
-                          .strings
-                          .you_have_a_new_trip_awaiting_for_receiving_confirmation,
-                      style: Styles.textStyle16.copyWith(
-                        color: AppColors.orange0,
-                        fontWeight: FontWeight.w900,
+                    Expanded(
+                      child: Text(
+                        context
+                            .strings
+                            .you_have_a_new_trip_awaiting_for_receiving_confirmation,
+                        style: Styles.textStyle16.copyWith(
+                          color: AppColors.orange0,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ),
                   ],
