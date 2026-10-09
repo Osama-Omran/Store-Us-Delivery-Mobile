@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.inputFormatters,
     this.prefixIcon,
+    this.controller,
   });
   final String? label, hint;
   final TextInputType? keyboardType;
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines, maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final Widget? prefixIcon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         if (label != null) Text(label!),
         TextFormField(
+          controller: controller,
           inputFormatters: inputFormatters,
           maxLines: maxLines,
           maxLength: maxLength,

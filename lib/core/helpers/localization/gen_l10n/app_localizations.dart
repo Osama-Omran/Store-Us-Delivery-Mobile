@@ -957,6 +957,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تحديث موقع المندوب'**
   String get trip_map_refresh_location;
+
+  /// No description provided for @an_error_occurred_try_again_later.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ، من فضلك حاول لاحقاً'**
+  String get an_error_occurred_try_again_later;
+
+  /// No description provided for @no_internet_please_try_again.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد اتصال بالإنترنت، حاول لاحقاً'**
+  String get no_internet_please_try_again;
+
+  /// No description provided for @email.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get email;
+
+  /// No description provided for @enter_your_email.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل بريدك الإلكتروني'**
+  String get enter_your_email;
+
+  /// No description provided for @email_is_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني مطلوب'**
+  String get email_is_required;
+
+  /// No description provided for @please_enter_a_valid_email.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فضلك أدخل بريد إلكتروني صحيح'**
+  String get please_enter_a_valid_email;
 }
 
 class _AppLocalizationsDelegate

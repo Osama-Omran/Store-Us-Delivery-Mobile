@@ -474,4 +474,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trip_map_refresh_location => 'تحديث موقع المندوب';
+
+  @override
+  String get an_error_occurred_try_again_later =>
+      'حدث خطأ، من فضلك حاول لاحقاً';
+
+  @override
+  String get no_internet_please_try_again =>
+      'لا يوجد اتصال بالإنترنت، حاول لاحقاً';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get enter_your_email => 'أدخل بريدك الإلكتروني';
+
+  @override
+  String get email_is_required => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get please_enter_a_valid_email => 'من فضلك أدخل بريد إلكتروني صحيح';
 }

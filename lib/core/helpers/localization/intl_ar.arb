@@ -128,7 +128,6 @@
 "open_directions": "فتح الاتجاهات",
 "call_customer": "اتصال بالعميل",
 "no_orders_in_filter": "لا توجد طلبات بهذا التصنيف",
-
 "trip_map_title": "خريطة رحلة",
 "trip_map_next_stop": "المحطة التالية",
 "trip_map_selected_stop": "المحطة المختارة",
@@ -145,5 +144,11 @@
 "trip_map_route_not_connected": "وقت الوصول والمسافة متاحان بعد ربط خدمة المسارات",
 "trip_map_navigation_failed": "تعذر فتح خرائط Google. حاول مرة أخرى.",
 "trip_map_no_stops": "لا توجد محطات بإحداثيات لعرضها على الخريطة",
-"trip_map_refresh_location": "تحديث موقع المندوب"
+"trip_map_refresh_location": "تحديث موقع المندوب",
+"an_error_occurred_try_again_later": "حدث خطأ، من فضلك حاول لاحقاً",
+"no_internet_please_try_again": "لا يوجد اتصال بالإنترنت، حاول لاحقاً",
+"email": "البريد الإلكتروني",
+"enter_your_email": "أدخل بريدك الإلكتروني",
+"email_is_required": "البريد الإلكتروني مطلوب",
+"please_enter_a_valid_email": "من فضلك أدخل بريد إلكتروني صحيح"
 }

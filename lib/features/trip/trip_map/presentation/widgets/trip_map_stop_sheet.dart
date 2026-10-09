@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_route_result.dart';
 
@@ -84,7 +85,11 @@ class TripMapStopSheet extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.location_on_outlined, color: AppColors.grey4, size: 21),
+              Icon(
+                Icons.location_on_outlined,
+                color: AppColors.grey4,
+                size: 21,
+              ),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
@@ -109,7 +114,8 @@ class TripMapStopSheet extends StatelessWidget {
                 const SizedBox(width: 9),
                 _InfoChip(
                   icon: Icons.access_time_rounded,
-                  label: '${context.strings.trip_map_arrival_in} '
+                  label:
+                      '${context.strings.trip_map_arrival_in} '
                       '${(route!.durationSeconds / 60).ceil()} '
                       '${context.strings.trip_map_minutes}',
                 ),
@@ -138,8 +144,8 @@ class TripMapStopSheet extends StatelessWidget {
               !locationAvailable
                   ? context.strings.trip_map_location_unavailable
                   : routeError
-                      ? context.strings.trip_map_route_unavailable
-                      : context.strings.trip_map_route_not_connected,
+                  ? context.strings.trip_map_route_unavailable
+                  : context.strings.trip_map_route_not_connected,
               style: TextStyle(color: AppColors.grey4, fontSize: 13),
             ),
           const SizedBox(height: 20),
@@ -184,11 +190,15 @@ class TripMapStopSheet extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
+                      padding: EdgeInsets.zero,
                     ),
                     child: Text(
                       context.strings.trip_map_show_order,
-                      maxLines: 1,
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                      style: Styles.textStyle16.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

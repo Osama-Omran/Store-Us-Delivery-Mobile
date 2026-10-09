@@ -6,13 +6,14 @@ import 'package:storeus_delivery/core/helpers/utils/bloc_observer.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/helpers/utils/remote_config_services.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
+import 'package:storeus_delivery/core/routing/app_router.dart';
 
 class Initializer {
   static Future<void> initializeServices() async {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     await PreferencesHelper.init();
-
+    token = await PreferencesHelper.getToken();
     setupLocator();
     await getIt.allReady();
     await RemoteConfigServices.init();

@@ -19,7 +19,9 @@ String? token;
 
 class AppRouter {
   static final routes = GoRouter(
-    initialLocation: RoutesNames.login,
+    initialLocation: token?.trim().isNotEmpty == true
+        ? RoutesNames.layout
+        : RoutesNames.login,
     navigatorKey: navigatorKey,
     routes: [
       GoRoute(

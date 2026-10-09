@@ -15,9 +15,8 @@ class AppAssets {
   // static const String welcome = '$audioPath/welcome.mp3';
 
   //======= Animations =======//
-  // static const String animationsPath = 'assets/animations';
-  // static const String fire = '$animationsPath/fire.json';
-  // static const String emptyLottie = '$animationsPath/empty.json';
+  static const String animationsPath = 'assets/animations';
+  static const String loading = '$animationsPath/loading.json';
 
   //======= Assets To Be Deleted =======//
   // static const String assetsToBeDeletedPath = 'assets/assets_to_be_deleted';
