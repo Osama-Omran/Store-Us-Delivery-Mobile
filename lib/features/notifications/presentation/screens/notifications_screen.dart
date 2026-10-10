@@ -1,84 +1,155 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-import 'package:storeus_delivery/features/notifications/data/models/app_notification_model.dart';
-import 'package:storeus_delivery/features/notifications/data/models/mock_notifications.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:storeus_delivery/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:storeus_delivery/features/notifications/presentation/widgets/notifications_header.dart';
 
-class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({
-    super.key,
-    this.notifications,
-    this.onNotificationTap,
-  });
 
-  final List<AppNotificationModel>? notifications;
-  final ValueChanged<AppNotificationModel>? onNotificationTap;
-
-  @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
-}
-
-class _NotificationsScreenState extends State<NotificationsScreen> {
-  final Set<String> _readNotificationIds = {};
-
-  bool _isRead(AppNotificationModel notification) {
-    return notification.isRead ||
-        _readNotificationIds.contains(notification.id);
-  }
-
-  void _onNotificationTap(AppNotificationModel notification) {
-    if (!_isRead(notification)) {
-      setState(() {
-        _readNotificationIds.add(notification.id);
-      });
-    }
-
-    widget.onNotificationTap?.call(notification);
-  }
+class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final notifications =
-        widget.notifications ?? buildMockNotifications(context);
+    return const _NotificationsScreenBody();
+  }
+}
 
-    final unreadCount = notifications
-        .where((notification) => !_isRead(notification))
-        .length;
+class _NotificationsScreenBody extends StatelessWidget {
+  const _NotificationsScreenBody();
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.grey0,
       body: SafeArea(
-        child: Column(
-          children: [
-            NotificationsHeader(unreadCount: unreadCount),
-            Expanded(
-              child: notifications.isEmpty
-                  ? Center(
-                      child: Text(
-                        context.strings.no_notifications,
-                        style: TextStyle(fontSize: 16, color: AppColors.grey4),
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
-                      itemCount: notifications.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
-                      itemBuilder: (context, index) {
-                        final notification = notifications[index];
+        bottom: false,
+        child: BlocBuilder<NotificationsCubit, NotificationsState>(
+          builder: (context, state) {
+            final unreadCount =
+            state is NotificationsSuccessState
+                ? state.unreadCount
+                : null;
 
-                        return NotificationCard(
-                          notification: notification,
-                          isRead: _isRead(notification),
-                          onTap: () {
-                            _onNotificationTap(notification);
-                          },
-                        );
-                      },
+            return Column(
+              children: [
+                // ======= Header ======= //
+                NotificationsHeader(
+                  unreadCount: unreadCount,
+                ),
+
+                // ======= Content ======= //
+                Expanded(
+                  child: switch (state) {
+                    NotificationsInitial() ||
+                    NotificationsLoadingState() =>
+                    const Center(
+                      child: CircularProgressIndicator(),
                     ),
-            ),
-          ],
+
+                    NotificationsFailureState() =>
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 16,
+                              children: [
+                                Icon(
+                                  Icons.notifications_off_outlined,
+                                  size: 45,
+                                  color: AppColors.grey4,
+                                ),
+
+                                Text(
+                                  state.errorMessage?.isNotEmpty == true
+                                      ? state.errorMessage!
+                                      : context.strings
+                                      .notifications_load_failed,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: AppColors.grey4,
+                                  ),
+                                ),
+
+                                OutlinedButton.icon(
+                                  onPressed: () {
+                                    context
+                                        .read<NotificationsCubit>()
+                                        .getNotifications();
+                                  },
+                                  icon: const Icon(Icons.refresh_rounded),
+                                  label: Text(
+                                    context.strings.current_trip_retry,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                    NotificationsSuccessState() =>
+                        RefreshIndicator(
+                          color: AppColors.primary,
+                          onRefresh: () => context
+                              .read<NotificationsCubit>()
+                              .getNotifications(),
+                          child: state.notifications.isEmpty
+                              ? ListView(
+                            physics:
+                            const AlwaysScrollableScrollPhysics(),
+                            padding: const EdgeInsets.all(24),
+                            children: [
+                              const SizedBox(height: 80),
+                              Center(
+                                child: Text(
+                                  context.strings.no_notifications,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.grey4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                              : ListView.separated(
+                            physics:
+                            const AlwaysScrollableScrollPhysics(),
+                            padding: const EdgeInsets.fromLTRB(
+                              24,
+                              20,
+                              24,
+                              145,
+                            ),
+                            itemCount: state.notifications.length,
+                            separatorBuilder: (_, _) =>
+                            const SizedBox(height: 10),
+                            itemBuilder: (context, index) {
+                              final notification =
+                              state.notifications[index];
+
+                              return NotificationCard(
+                                key: ValueKey(notification.id),
+                                notification: notification,
+                                isMarking: state.markingIds.contains(
+                                  notification.id,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                    _ => const SizedBox.shrink(),
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

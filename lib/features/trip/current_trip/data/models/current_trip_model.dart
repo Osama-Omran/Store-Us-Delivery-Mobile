@@ -13,7 +13,7 @@ class CurrentTripModel {
     required this.collectedAmount,
   });
 
-  final String id;
+  final int id;
   final String vehicleName;
   final String plateNumber;
   final String driverName;
@@ -28,7 +28,7 @@ class CurrentTripModel {
     List<TripOrderModel>? orders,
   }) {
     return CurrentTripModel(
-      id: trip.number,
+      id: trip.id,
       vehicleName: _nameOrId(trip.vehicle?.name, trip.vehicle?.id),
       plateNumber: '',
       driverName: _nameOrId(trip.driver?.name, trip.driver?.id),

@@ -32,4 +32,12 @@ class ApiConstants {
   // ======= Account ======= //
   static const String me = '/me';
   static const String logout = '/logout';
+
+  static const String notifications = '/notifications';
+  static const String markNotificationAsRead =
+      '$notifications/{notificationId}/read';
+  static const String updateOrderDeliveryLocation =
+      '/trips/{tripId}/orders/{orderId}/delivery-location';
+  static const String deliveryOutcome =
+      '$trips/{tripId}/orders/{orderId}/delivery-outcome';
 }

@@ -1,41 +1,126 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-import 'package:storeus_delivery/features/notifications/data/models/app_notification_model.dart';
+import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({
     super.key,
     required this.notification,
-    required this.isRead,
-    this.onTap,
+    this.isMarking = false,
   });
 
-  final AppNotificationModel notification;
-  final bool isRead;
-  final VoidCallback? onTap;
+  final NotificationItem notification;
+  final bool isMarking;
 
+  // ======= Notification Icon ======= //
   IconData get _icon {
-    switch (notification.type) {
-      case AppNotificationType.tripAssigned:
-        return Icons.local_shipping_outlined;
+    final type = notification.type.toLowerCase();
 
-      case AppNotificationType.tripReordered:
-        return Icons.route_outlined;
-
-      case AppNotificationType.orderUpdated:
-        return Icons.inventory_2_outlined;
-
-      case AppNotificationType.paymentReceived:
-        return Icons.account_balance_wallet_outlined;
-
-      case AppNotificationType.tripCompleted:
-        return Icons.local_shipping_outlined;
+    if (type.startsWith('warehouse_transfer.')) {
+      return Icons.swap_horiz_rounded;
     }
+
+    if (type.contains('cancelled')) {
+      return Icons.cancel_outlined;
+    }
+
+    if (type.contains('completed')) {
+      return Icons.check_circle_outline_rounded;
+    }
+
+    if (type.startsWith('trip.')) {
+      return Icons.local_shipping_outlined;
+    }
+
+    if (type.startsWith('order.')) {
+      return Icons.inventory_2_outlined;
+    }
+
+    if (type.startsWith('payment.')) {
+      return Icons.account_balance_wallet_outlined;
+    }
+
+    return Icons.notifications_none_rounded;
+  }
+
+  // ======= Notification Time ======= //
+  String _formatTime(BuildContext context) {
+    final createdAt = notification.createdAt;
+
+    if (createdAt == null) return '—';
+
+    final date = createdAt.toLocal();
+    final difference = DateTime.now().difference(date);
+
+    if (!difference.isNegative) {
+      if (difference.inMinutes < 1) {
+        return context.strings.notification_just_now;
+      }
+
+      if (difference.inMinutes < 60) {
+        return '${difference.inMinutes} '
+            '${context.strings.notification_minutes_ago}';
+      }
+
+      if (difference.inHours < 24) {
+        return '${difference.inHours} '
+            '${context.strings.notification_hours_ago}';
+      }
+
+      if (difference.inDays == 1) {
+        return context.strings.yesterday;
+      }
+    }
+
+    final localization = MaterialLocalizations.of(context);
+
+    final formattedDate = localization.formatMediumDate(date);
+
+    final formattedTime = localization.formatTimeOfDay(
+      TimeOfDay.fromDateTime(date),
+    );
+
+    return '$formattedDate - $formattedTime';
+  }
+
+  // ======= Mark As Read ======= //
+  Future<void> _markAsRead(BuildContext context) async {
+    if (notification.isRead || isMarking) return;
+
+    final error = await context
+        .read<NotificationsCubit>()
+        .markAsRead(notification.id);
+
+    if (!context.mounted || error == null) return;
+
+    final message = error == 'notifications_mark_read_failed'
+        ? context.strings.notifications_mark_read_failed
+        : error;
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AppColors.red0,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isRead = notification.isRead;
+
+    final description = notification.message.trim().isNotEmpty
+        ? notification.message
+        : notification.body;
+
     return Material(
       color: isRead ? AppColors.white0 : AppColors.blue2,
       shape: RoundedRectangleBorder(
@@ -45,12 +130,14 @@ class NotificationCard extends StatelessWidget {
         ),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: isRead || isMarking
+            ? null
+            : () async {
+          await _markAsRead(context);
+        },
         borderRadius: BorderRadius.circular(26),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: 112,
-          ),
+          constraints: const BoxConstraints(minHeight: 112),
           child: Stack(
             children: [
               Padding(
@@ -59,14 +146,16 @@ class NotificationCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 12,
                   children: [
+                    // ======= Notification Icon ======= //
                     _NotificationIcon(
                       icon: _icon,
                       isRead: isRead,
                     ),
+
+                    // ======= Notification Details ======= //
                     Expanded(
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 4,
                         children: [
                           Text(
@@ -79,8 +168,9 @@ class NotificationCard extends StatelessWidget {
                               color: AppColors.black1,
                             ),
                           ),
+
                           Text(
-                            notification.description,
+                            description,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -89,8 +179,9 @@ class NotificationCard extends StatelessWidget {
                               color: AppColors.grey4,
                             ),
                           ),
+
                           Text(
-                            notification.timeLabel,
+                            _formatTime(context),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
@@ -104,8 +195,21 @@ class NotificationCard extends StatelessWidget {
                 ),
               ),
 
-              // Unread Indicator
-              if (!isRead)
+              // ======= Unread Indicator / Loading ======= //
+              if (isMarking)
+                PositionedDirectional(
+                  end: 20,
+                  top: 25,
+                  child: SizedBox(
+                    width: 17,
+                    height: 17,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                )
+              else if (!isRead)
                 PositionedDirectional(
                   end: 20,
                   top: 27,
@@ -125,6 +229,10 @@ class NotificationCard extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// Notification Icon
+// =====================================================
 
 class _NotificationIcon extends StatelessWidget {
   const _NotificationIcon({

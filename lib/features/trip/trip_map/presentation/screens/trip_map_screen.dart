@@ -18,18 +18,17 @@ class TripMapScreen extends StatefulWidget {
   const TripMapScreen({
     super.key,
     required this.tripId,
+    required this.tripApiId,
     required this.stops,
-    required this.onShowOrder,
     this.routeRepository,
     this.locationService = const DriverLocationService(),
     this.navigationLauncher = const RouteNavigationLauncher(),
   });
 
   final String tripId;
+  final int tripApiId;
   final List<TripMapStop> stops;
-  final ValueChanged<TripMapStop> onShowOrder;
 
-  /// Null allows map markers and navigation, but hides route/ETA metrics.
   final TripRouteRepository? routeRepository;
   final DriverLocationService locationService;
   final RouteNavigationLauncher navigationLauncher;
@@ -52,16 +51,14 @@ class _TripMapScreenState extends State<TripMapScreen> {
   int _markerVersion = 0;
 
   Future<Position?> getCurrentLocation() async {
-    final serviceEnabled =
-    await Geolocator.isLocationServiceEnabled();
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
       return null;
     }
 
-    LocationPermission permission =
-    await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -76,12 +73,9 @@ class _TripMapScreenState extends State<TripMapScreen> {
     }
 
     return Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-      ),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
   }
-
 
   @override
   void initState() {
@@ -116,14 +110,16 @@ class _TripMapScreenState extends State<TripMapScreen> {
         stop,
         selected: isSelected,
       );
-      result.add(Marker(
-        markerId: MarkerId(stop.id),
-        position: stop.location,
-        icon: icon,
-        anchor: const Offset(.5, .5),
-        zIndexInt: isSelected ? 10 : 1,
-        onTap: () => _selectStop(stop),
-      ));
+      result.add(
+        Marker(
+          markerId: MarkerId(stop.id),
+          position: stop.location,
+          icon: icon,
+          anchor: const Offset(.5, .5),
+          zIndexInt: isSelected ? 10 : 1,
+          onTap: () => _selectStop(stop),
+        ),
+      );
     }
     if (mounted && version == _markerVersion) {
       setState(() => _markers = result);
@@ -222,27 +218,32 @@ class _TripMapScreenState extends State<TripMapScreen> {
 
   Set<Polyline> _buildPolylines() {
     final lines = <Polyline>{};
-    final ordered = [...widget.stops]..sort((a, b) => a.number.compareTo(b.number));
+    final ordered = [...widget.stops]
+      ..sort((a, b) => a.number.compareTo(b.number));
     if (ordered.length > 1) {
       // Visual stop sequence, not a road-accurate driving route.
-      lines.add(Polyline(
-        polylineId: const PolylineId('stops_sequence'),
-        points: ordered.map((stop) => stop.location).toList(),
-        width: 4,
-        color: AppColors.primary.withValues(alpha: .85),
-        patterns: [PatternItem.dash(11), PatternItem.gap(9)],
-      ));
+      lines.add(
+        Polyline(
+          polylineId: const PolylineId('stops_sequence'),
+          points: ordered.map((stop) => stop.location).toList(),
+          width: 4,
+          color: AppColors.primary.withValues(alpha: .85),
+          patterns: [PatternItem.dash(11), PatternItem.gap(9)],
+        ),
+      );
     }
     if (_route != null) {
-      lines.add(Polyline(
-        polylineId: const PolylineId('driving_route'),
-        points: _route!.points,
-        width: 6,
-        zIndex: 3,
-        color: AppColors.primary,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-      ));
+      lines.add(
+        Polyline(
+          polylineId: const PolylineId('driving_route'),
+          points: _route!.points,
+          width: 6,
+          zIndex: 3,
+          color: AppColors.primary,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+        ),
+      );
     }
     return lines;
   }
@@ -264,7 +265,10 @@ class _TripMapScreenState extends State<TripMapScreen> {
         body: Stack(
           children: [
             GoogleMap(
-              initialCameraPosition: CameraPosition(target: stop.location, zoom: 13.5),
+              initialCameraPosition: CameraPosition(
+                target: stop.location,
+                zoom: 13.5,
+              ),
               mapType: MapType.normal,
               style: tripMapStyle,
               markers: _markers,
@@ -298,7 +302,7 @@ class _TripMapScreenState extends State<TripMapScreen> {
                 routeError: _routeError,
                 route: _route,
                 onNavigate: _launchNavigation,
-                onShowOrder: () => widget.onShowOrder(stop),
+                tripApiId: widget.tripApiId,
               ),
             ),
           ],

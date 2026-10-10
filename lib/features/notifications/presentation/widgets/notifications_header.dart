@@ -6,24 +6,20 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 class NotificationsHeader extends StatelessWidget {
   const NotificationsHeader({
     super.key,
-    required this.unreadCount,
+    this.unreadCount,
   });
 
-  final int unreadCount;
+  final int? unreadCount;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(
-        16, 22, 16, 14,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 22, 16, 14),
       decoration: BoxDecoration(
         color: AppColors.grey0,
         border: Border(
-          bottom: BorderSide(
-            color: AppColors.grey3,
-          ),
+          bottom: BorderSide(color: AppColors.grey3),
         ),
       ),
       child: Column(
@@ -38,15 +34,16 @@ class NotificationsHeader extends StatelessWidget {
               color: AppColors.black1,
             ),
           ),
-          Text(
-            '$unreadCount '
-                '${context.strings.unread_notifications}',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.grey4,
+          if (unreadCount != null)
+            Text(
+              '$unreadCount '
+                  '${context.strings.unread_notifications}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.grey4,
+              ),
             ),
-          ),
         ],
       ),
     );

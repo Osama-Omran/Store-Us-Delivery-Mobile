@@ -409,7 +409,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get view_delivery_details => 'عرض تفاصيل التسليم';
 
   @override
-  String get open_order => 'فتح الأوردر';
+  String get open_order => 'فتح الطلب';
 
   @override
   String get open_directions => 'فتح الاتجاهات';
@@ -785,4 +785,612 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get order_details_notes_unavailable =>
       'ملاحظات المندوب غير متاحة في بيانات هذا الطلب.';
+
+  @override
+  String get notifications_load_failed =>
+      'تعذر تحميل الإشعارات. حاول مرة أخرى.';
+
+  @override
+  String get notifications_mark_read_failed =>
+      'تعذر تحديد الإشعار كمقروء. حاول مرة أخرى.';
+
+  @override
+  String get notification_just_now => 'الآن';
+
+  @override
+  String get notification_minutes_ago => 'دقيقة مضت';
+
+  @override
+  String get notification_hours_ago => 'ساعة مضت';
+
+  @override
+  String get trip_map_orders_unavailable =>
+      'طلبات الرحلة لم يتم تحميلها بعد. حاول مرة أخرى.';
+
+  @override
+  String get order_customer_data => 'بيانات العميل';
+
+  @override
+  String get order_address_defined => 'محدد';
+
+  @override
+  String get order_address_only => 'عنوان فقط';
+
+  @override
+  String get order_gps_only => 'موقع فقط';
+
+  @override
+  String get order_address_undefined => 'غير محدد';
+
+  @override
+  String get order_no_address => 'لا يوجد عنوان مسجل';
+
+  @override
+  String get order_customer_phone_missing => 'رقم هاتف العميل غير متوفر.';
+
+  @override
+  String get order_customer_gps_missing => 'إحداثيات GPS غير متوفرة';
+
+  @override
+  String get order_location_not_defined => 'العنوان موجود لكن الموقع غير محدد';
+
+  @override
+  String get order_address_not_defined => 'عنوان وموقع العميل غير محددين';
+
+  @override
+  String get order_set_location => 'تحديد الموقع الحالي';
+
+  @override
+  String get order_update_address => 'تحديث عنوان وموقع العميل';
+
+  @override
+  String get order_location_permission_required =>
+      'يجب السماح بالوصول للموقع من إعدادات التطبيق.';
+
+  @override
+  String get order_location_fetch_failed =>
+      'تعذر تحديد موقعك الحالي. حاول مرة أخرى.';
+
+  @override
+  String get order_address_required => 'من فضلك أدخل عنوان العميل الصحيح.';
+
+  @override
+  String get order_current_saved_data => 'البيانات المسجلة حالياً';
+
+  @override
+  String get order_use_current_location => 'استخدام موقعي الحالي';
+
+  @override
+  String get order_reselect_location => 'إعادة تحديد موقعي';
+
+  @override
+  String get order_location_accuracy => 'دقة الموقع';
+
+  @override
+  String get order_meters => 'متر';
+
+  @override
+  String get order_correct_address => 'العنوان الصحيح';
+
+  @override
+  String get order_optional_notes => 'ملاحظات (اختياري)';
+
+  @override
+  String get order_save_address => 'حفظ عنوان وموقع العميل';
+
+  @override
+  String get order_confirm_data_before_save => 'تأكيد البيانات قبل الحفظ';
+
+  @override
+  String get order_confirm_save => 'تأكيد الحفظ';
+
+  @override
+  String get order_back_to_edit => 'رجوع للتعديل';
+
+  @override
+  String get order_address_not_saved_yet =>
+      'هذه البيانات لم يتم حفظها على السيرفر بعد.';
+
+  @override
+  String get order_address_save_api_missing =>
+      'واجهة التعديل جاهزة، لكن خدمة حفظ عنوان العميل لم يتم ربطها بعد.';
+
+  @override
+  String get order_products => 'منتجات الطلب';
+
+  @override
+  String get order_visit_action_question => 'ماذا حدث في هذه الزيارة؟';
+
+  @override
+  String get deliver_order => 'تسليم الطلب';
+
+  @override
+  String get reschedule_delivery => 'إعادة جدولة';
+
+  @override
+  String get cancel_delivery => 'إلغاء التسليم';
+
+  @override
+  String get order_operation_not_connected =>
+      'هذه العملية لم يتم ربطها بالخدمة بعد.';
+
+  @override
+  String get open_location => 'فتح الموقع';
+
+  @override
+  String get start_navigation => 'بدء الملاحة';
+
+  @override
+  String get order_latitude => 'خط العرض';
+
+  @override
+  String get order_longitude => 'خط الطول';
+
+  @override
+  String get order_location_required =>
+      'يجب تحديد موقع العميل على الخريطة قبل الحفظ.';
+
+  @override
+  String get order_location_saving => 'جارٍ حفظ عنوان وموقع العميل...';
+
+  @override
+  String get order_location_save_failed =>
+      'تعذر حفظ عنوان وموقع العميل. حاول مرة أخرى.';
+
+  @override
+  String get order_confirm_location_warning =>
+      'تأكد من صحة العنوان والإحداثيات قبل تأكيد الحفظ.';
+
+  @override
+  String get order_location_updated_successfully =>
+      'تم تحديث عنوان وموقع العميل بنجاح';
+
+  @override
+  String get order_notes_not_saved =>
+      'الملاحظات غير مشمولة في خدمة تحديث العنوان الحالية.';
+
+  @override
+  String get top_rank_title => 'Top Rank';
+
+  @override
+  String get top_rank_subtitle => 'أفضل أداء في المنظومة';
+
+  @override
+  String get top_rank_intro =>
+      'تابع أفضل أداء واعرف إيه اللي ناقصك علشان تبقى رقم 1';
+
+  @override
+  String get top_rank_today => 'اليوم';
+
+  @override
+  String get top_rank_week => 'الأسبوع';
+
+  @override
+  String get top_rank_this_month => 'هذا الشهر';
+
+  @override
+  String get top_rank_previous_month => 'الشهر السابق';
+
+  @override
+  String get top_rank_all_warehouses => 'كل المخازن';
+
+  @override
+  String get top_rank_warehouse_october => 'مخزن 6 أكتوبر (تجريبي)';
+
+  @override
+  String get top_rank_warehouse_nasr_city => 'مخزن مدينة نصر (تجريبي)';
+
+  @override
+  String get top_rank_representatives => 'المناديب';
+
+  @override
+  String get top_rank_drivers => 'السائقين';
+
+  @override
+  String get top_rank_dispatchers => 'الـ Dispatchers';
+
+  @override
+  String get top_rank_best_representatives => 'أفضل المندوبين';
+
+  @override
+  String get top_rank_best_drivers => 'أفضل السائقين';
+
+  @override
+  String get top_rank_best_dispatchers => 'أفضل الـ Dispatchers';
+
+  @override
+  String get top_rank_best_representative => 'أفضل مندوب';
+
+  @override
+  String get top_rank_best_driver => 'أفضل سائق';
+
+  @override
+  String get top_rank_best_dispatcher => 'أفضل Dispatcher';
+
+  @override
+  String get top_rank_winner => 'الفائز';
+
+  @override
+  String get top_rank_delivery => 'التسليم';
+
+  @override
+  String get top_rank_collection => 'التحصيل';
+
+  @override
+  String get top_rank_extra_sales => 'Extra Sales';
+
+  @override
+  String get top_rank_view_details => 'عرض التفاصيل';
+
+  @override
+  String get top_rank_unqualified => 'غير مؤهل للترتيب بعد';
+
+  @override
+  String get top_rank_empty => 'لا توجد نتائج لهذه الفلاتر حالياً';
+
+  @override
+  String get top_rank_score => 'النتيجة';
+
+  @override
+  String get top_rank_position => 'الترتيب';
+
+  @override
+  String get top_rank_movement => 'تغير الترتيب';
+
+  @override
+  String get top_rank_unchanged => 'بدون تغيير';
+
+  @override
+  String top_rank_moved_up(int count) {
+    return 'صعد $count مركز';
+  }
+
+  @override
+  String top_rank_moved_down(int count) {
+    return 'تراجع $count مركز';
+  }
+
+  @override
+  String get delivery_order_title => 'تسليم الطلب';
+
+  @override
+  String get delivery_item_code => 'كود الصنف';
+
+  @override
+  String get delivery_ordered_quantity => 'المطلوب في الأوردر';
+
+  @override
+  String get delivery_vehicle_available => 'المتاح في العربية';
+
+  @override
+  String get delivery_insufficient_stock =>
+      'المتاح بالعربية أقل من الكمية المطلوبة';
+
+  @override
+  String get delivery_selected_quantity => 'الكمية المسلمة';
+
+  @override
+  String get delivery_ordered => 'المطلوب';
+
+  @override
+  String get delivery_selected => 'المختار';
+
+  @override
+  String get delivery_not_delivered => 'لم يتم تسليم';
+
+  @override
+  String get delivery_extra_products => 'منتجات إضافية';
+
+  @override
+  String get delivery_add_extra_product => 'إضافة منتج إضافي';
+
+  @override
+  String get delivery_extra_products_unavailable =>
+      'إضافة المنتجات الإضافية تحتاج خدمة الرصيد الحالي والتسعير من السيرفر.';
+
+  @override
+  String get delivery_selected_items_value => 'قيمة المنتجات المختارة للتسليم';
+
+  @override
+  String get delivery_estimated_total => 'إجمالي قيمة التسليم التقديرية';
+
+  @override
+  String get delivery_no_items_selected => 'لم يتم اختيار كميات للتسليم';
+
+  @override
+  String get delivery_partial_draft => 'تسليم جزئي (مبدئي)';
+
+  @override
+  String get delivery_full_draft => 'تسليم كامل (مبدئي)';
+
+  @override
+  String get delivery_auto_calculated => 'تلقائي';
+
+  @override
+  String get delivery_continue => 'متابعة التسليم';
+
+  @override
+  String get delivery_review_title => 'مراجعة التسليم';
+
+  @override
+  String get delivery_submission_not_available =>
+      'الكميات المختارة محفوظة مؤقتًا داخل الشاشة فقط. لم يتم إرسال أو اعتماد التسليم على السيرفر لأن خدمة تنفيذ التسليم لم تُربط بعد.';
+
+  @override
+  String get delivery_back_to_edit => 'رجوع لتعديل الكميات';
+
+  @override
+  String get delivery_order_not_pending =>
+      'لا يمكن إعداد تسليم لهذا الطلب لأن حالته ليست في انتظار التسليم.';
+
+  @override
+  String get delivery_back_to_details => 'الرجوع لتفاصيل الطلب';
+
+  @override
+  String get treasury_subtitle => 'ما في عهدتك حالياً';
+
+  @override
+  String get treasury_wallet => 'محفظتي';
+
+  @override
+  String get treasury_vehicle_goods => 'بضاعة العربية';
+
+  @override
+  String get treasury_active_trip => 'رحلة نشطة';
+
+  @override
+  String get treasury_after_settlement => 'بعد التسوية';
+
+  @override
+  String get treasury_no_trip => 'لا توجد رحلة';
+
+  @override
+  String get treasury_current_trip => 'الرحلة الحالية';
+
+  @override
+  String get treasury_trip_custody => 'عهدة الرحلة الحالية';
+
+  @override
+  String get treasury_custody_description =>
+      'إجمالي المبالغ الموجودة في عهدتك خلال الرحلة الحالية';
+
+  @override
+  String get treasury_delivered_total => 'إجمالي قيمة التسليمات';
+
+  @override
+  String get treasury_collected_total => 'إجمالي المحصل';
+
+  @override
+  String get treasury_collected_orders => 'الطلبات المحصلة';
+
+  @override
+  String get treasury_collection_details => 'تفاصيل التحصيلات';
+
+  @override
+  String get treasury_collected => 'تم التحصيل';
+
+  @override
+  String get treasury_delivered_value => 'قيمة التسليم';
+
+  @override
+  String get treasury_received_value => 'استلمت من العميل';
+
+  @override
+  String get treasury_cash => 'كاش';
+
+  @override
+  String get treasury_insta_pay => 'InstaPay';
+
+  @override
+  String get treasury_electronic_wallet => 'محفظة إلكترونية';
+
+  @override
+  String get treasury_custody_impact => 'أثر العملية على عهدتي';
+
+  @override
+  String get treasury_balance_after => 'الرصيد بعد العملية';
+
+  @override
+  String get treasury_pending_settlement =>
+      'حالة التسوية: في انتظار الرجوع للمخزن';
+
+  @override
+  String get treasury_current_custody => 'العهدة الحالية';
+
+  @override
+  String get treasury_settlement_hint =>
+      'العهدة تصفر فقط بعد تأكيد المخزن استلام المبلغ.';
+
+  @override
+  String get treasury_settled => 'تمت التسوية وتأكيد استلام المخزن';
+
+  @override
+  String get treasury_settled_hint =>
+      'تم تأكيد استلام المبلغ بالمخزن. لا توجد عهدة مالية حالياً.';
+
+  @override
+  String get treasury_no_active_trip => 'لا توجد رحلة نشطة حالياً';
+
+  @override
+  String get treasury_no_custody => 'لا توجد عهدة مالية حالياً';
+
+  @override
+  String get treasury_balance => 'الرصيد';
+
+  @override
+  String get treasury_current_goods => 'البضاعة الموجودة بالعربية حالياً';
+
+  @override
+  String get treasury_vehicle => 'العربية';
+
+  @override
+  String get treasury_remaining_units => 'إجمالي الأصناف المتبقية';
+
+  @override
+  String get treasury_product_search => 'بحث عن منتج';
+
+  @override
+  String get treasury_product_unit => 'الوحدة';
+
+  @override
+  String get treasury_trip_order_goods => 'من طلبات الرحلة';
+
+  @override
+  String get treasury_extra_product => 'منتج إضافي';
+
+  @override
+  String get treasury_loaded => 'تم تحميل';
+
+  @override
+  String get treasury_delivered => 'تم تسليم';
+
+  @override
+  String get treasury_remaining => 'المتبقي بالعربية';
+
+  @override
+  String get treasury_inventory_read_only =>
+      'للعرض فقط — لا يمكن تعديل المخزون من هنا';
+
+  @override
+  String get treasury_no_inventory => 'لا توجد بضاعة بالعربية حالياً';
+
+  @override
+  String get treasury_goods_returned => 'تمت إعادة البضاعة المتبقية إلى المخزن';
+
+  @override
+  String get treasury_no_search_results => 'لا توجد منتجات مطابقة للبحث';
+
+  @override
+  String get treasury_clear_search => 'مسح البحث';
+
+  @override
+  String get reschedule_order_title => 'إعادة جدولة الطلب';
+
+  @override
+  String get reschedule_new_date => 'تاريخ التسليم الجديد *';
+
+  @override
+  String get reschedule_new_time => 'الوقت المقترح *';
+
+  @override
+  String get reschedule_reason => 'سبب إعادة الجدولة *';
+
+  @override
+  String get reschedule_other_reason_hint => 'اكتب سبب إعادة الجدولة';
+
+  @override
+  String get reschedule_notes_hint => 'اختياري';
+
+  @override
+  String get reschedule_notes_not_sent =>
+      'الملاحظات غير مشمولة في خدمة إعادة الجدولة الحالية.';
+
+  @override
+  String get reschedule_date_must_be_future =>
+      'يجب اختيار موعد مستقبلي لإعادة الجدولة.';
+
+  @override
+  String get reschedule_confirm => 'تأكيد إعادة الجدولة';
+
+  @override
+  String get reschedule_order_failed =>
+      'تعذر إعادة جدولة الطلب. حاول مرة أخرى.';
+
+  @override
+  String get reschedule_success_title => 'تمت إعادة جدولة الطلب';
+
+  @override
+  String get reschedule_new_date_time => 'الموعد الجديد';
+
+  @override
+  String get reschedule_reason_label => 'السبب';
+
+  @override
+  String get reschedule_no_delivery_recorded =>
+      'لم يتم تسجيل كميات مسلّمة أو تحصيل لهذا الطلب من خلال عملية إعادة الجدولة.';
+
+  @override
+  String get reschedule_next_order => 'الطلب التالي';
+
+  @override
+  String get cancel_delivery_title => 'إلغاء التسليم';
+
+  @override
+  String get cancel_delivery_reason_required => 'سبب الإلغاء *';
+
+  @override
+  String get cancel_reason_customer_refused => 'العميل رفض الطلب';
+
+  @override
+  String get cancel_reason_customer_requested => 'العميل طلب الإلغاء';
+
+  @override
+  String get cancel_reason_shop_closed => 'المحل مغلق';
+
+  @override
+  String get cancel_reason_cannot_contact => 'تعذر التواصل مع العميل';
+
+  @override
+  String get cancel_reason_wrong_address => 'عنوان غير صحيح';
+
+  @override
+  String get cancel_reason_duplicate_order => 'طلب مكرر';
+
+  @override
+  String get cancel_reason_other => 'سبب آخر';
+
+  @override
+  String get cancel_delivery_other_reason_hint => 'اكتب سبب الإلغاء';
+
+  @override
+  String get cancel_delivery_notes_hint => 'اختياري';
+
+  @override
+  String get cancel_delivery_notes_not_sent =>
+      'الملاحظات غير مشمولة في خدمة إلغاء التسليم الحالية.';
+
+  @override
+  String get cancel_delivery_confirm_button => 'تأكيد إلغاء التسليم';
+
+  @override
+  String get cancel_delivery_confirm_title => 'تأكيد إلغاء التسليم؟';
+
+  @override
+  String get cancel_delivery_confirm_description =>
+      'سيتم تسجيل إلغاء التسليم للطلب';
+
+  @override
+  String get cancel_delivery_reason_label => 'السبب';
+
+  @override
+  String get cancel_delivery_yes => 'نعم، إلغاء التسليم';
+
+  @override
+  String get cancel_delivery_failed => 'تعذر إلغاء التسليم. حاول مرة أخرى.';
+
+  @override
+  String get cancel_delivery_success_title => 'تم تسجيل إلغاء التسليم';
+
+  @override
+  String get cancel_delivery_success_description =>
+      'لم يتم إرسال كميات مسلّمة أو مبالغ محصلة ضمن عملية الإلغاء.';
+
+  @override
+  String get cancel_delivery_next_order => 'الطلب التالي';
+
+  @override
+  String get cancel_delivery_next_order_failed =>
+      'تعذر تحميل الطلب التالي. حاول مرة أخرى.';
+
+  @override
+  String get order_delivery_phone => 'رقم هاتف المحل';
+
+  @override
+  String get order_delivery_city => 'المدينة';
+
+  @override
+  String get order_delivery_city_hint => 'اكتب اسم المدينة';
+
+  @override
+  String get order_delivery_country => 'الدولة';
 }

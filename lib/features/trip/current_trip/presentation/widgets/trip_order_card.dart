@@ -1,34 +1,79 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
+
+// =====================================================
+// Open Order Details & Refresh On Return
+// =====================================================
+
+Future<void> _openOrderDetails(
+    BuildContext context, {
+      required int tripID,
+      required int? orderID,
+    }) async {
+  // ======= Validate Order ID ======= //
+  if (orderID == null || orderID <= 0) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.strings.trip_order_details_unavailable,
+        ),
+      ),
+    );
+    return;
+  }
+
+  // ======= Keep Cubit Reference ======= //
+  final tripCubit = context.read<TripTabCubit>();
+
+  // ======= Navigate To Order Details ======= //
+  await GoRouter.of(context).push(
+    RoutesNames.orderDetails,
+    extra: {
+      'trip_id': tripID,
+      'order_id': orderID,
+    },
+  );
+
+  // ======= Check Widget & Cubit ======= //
+  if (!context.mounted || tripCubit.isClosed) {
+    return;
+  }
+
+  // ======= Refresh Orders After Returning ======= //
+  await tripCubit.getTripOrders();
+}
+
+// =====================================================
+// Trip Order Card
+// =====================================================
 
 class TripOrderCard extends StatelessWidget {
   const TripOrderCard({
     super.key,
     required this.order,
-    required this.onOpenOrder,
-    required this.onShowDeliveryDetails,
+    required this.tripID,
     this.onCallCustomer,
     this.onOpenDirections,
   });
 
   final TripOrderModel order;
-  final VoidCallback onOpenOrder;
-  final VoidCallback onShowDeliveryDetails;
+  final int tripID;
   final VoidCallback? onCallCustomer;
   final VoidCallback? onOpenDirections;
 
   @override
   Widget build(BuildContext context) {
-    final status = _StatusStyle.forOrder(
-      context,
-      order,
-    );
+    final status = _StatusStyle.forOrder(context, order);
 
     return Container(
       decoration: BoxDecoration(
@@ -39,9 +84,7 @@ class TripOrderCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(
-              alpha: 0.035,
-            ),
+            color: AppColors.black0.withValues(alpha: 0.035),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -62,8 +105,7 @@ class TripOrderCard extends StatelessWidget {
               children: [
                 // ======= Customer & Order ======= //
                 Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 60,
@@ -132,7 +174,9 @@ class TripOrderCard extends StatelessWidget {
 
                     const SizedBox(width: 6),
 
-                    _StatusBadge(style: status),
+                    _StatusBadge(
+                      style: status,
+                    ),
                   ],
                 ),
 
@@ -183,10 +227,10 @@ class TripOrderCard extends StatelessWidget {
                         ),
                       ),
 
-                      // Payment is based on payment_status,
-                      // not delivery_status.
+                      // ======= Payment Status ======= //
                       if (order.isPaymentCollected) ...[
                         const SizedBox(width: 6),
+
                         Flexible(
                           child: Text(
                             '✓ ${context.strings.payment_collected}',
@@ -200,6 +244,7 @@ class TripOrderCard extends StatelessWidget {
                         ),
                       ] else if (order.collectedAmount > 0) ...[
                         const SizedBox(width: 6),
+
                         Flexible(
                           child: Text(
                             '${context.strings.amount_collected} '
@@ -229,7 +274,8 @@ class TripOrderCard extends StatelessWidget {
           // ======= Bottom Actions ======= //
           if (order.isPending)
             _PendingOrderActions(
-              onOpenOrder: onOpenOrder,
+              tripID: tripID,
+              orderID: order.apiId,
               onCallCustomer: onCallCustomer,
               onOpenDirections: onOpenDirections,
             )
@@ -237,7 +283,11 @@ class TripOrderCard extends StatelessWidget {
             SizedBox(
               height: 54,
               child: TextButton(
-                onPressed: onShowDeliveryDetails,
+                onPressed: () => _openOrderDetails(
+                  context,
+                  tripID: tripID,
+                  orderID: order.apiId,
+                ),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.primary,
                 ),
@@ -255,6 +305,10 @@ class TripOrderCard extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// Order Contact Line
+// =====================================================
 
 class _OrderContactLine extends StatelessWidget {
   const _OrderContactLine({
@@ -307,14 +361,20 @@ class _OrderContactLine extends StatelessWidget {
   }
 }
 
+// =====================================================
+// Pending Order Actions
+// =====================================================
+
 class _PendingOrderActions extends StatelessWidget {
   const _PendingOrderActions({
-    required this.onOpenOrder,
+    required this.tripID,
+    required this.orderID,
     this.onCallCustomer,
     this.onOpenDirections,
   });
 
-  final VoidCallback onOpenOrder;
+  final int tripID;
+  final int? orderID;
   final VoidCallback? onCallCustomer;
   final VoidCallback? onOpenDirections;
 
@@ -333,11 +393,19 @@ class _PendingOrderActions extends StatelessWidget {
             child: SizedBox(
               height: 58,
               child: ElevatedButton(
-                onPressed: onOpenOrder,
+                // ======= Navigate & Refresh ======= //
+                onPressed: () => _openOrderDetails(
+                  context,
+                  tripID: tripID,
+                  orderID: orderID,
+                ),
+
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
-                  shadowColor: AppColors.primary
-                      .withValues(alpha: 0.22),
+                  shadowColor:
+                  AppColors.primary.withValues(
+                    alpha: 0.22,
+                  ),
                   foregroundColor: AppColors.white0,
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
@@ -345,6 +413,7 @@ class _PendingOrderActions extends StatelessWidget {
                     BorderRadius.circular(24),
                   ),
                 ),
+
                 child: Text(
                   context.strings.open_order,
                   style: const TextStyle(
@@ -380,6 +449,10 @@ class _PendingOrderActions extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// Square Action Button
+// =====================================================
 
 class _SquareActionButton extends StatelessWidget {
   const _SquareActionButton({
@@ -424,6 +497,10 @@ class _SquareActionButton extends StatelessWidget {
   }
 }
 
+// =====================================================
+// Status Badge
+// =====================================================
+
 class _StatusBadge extends StatelessWidget {
   const _StatusBadge({
     required this.style,
@@ -459,6 +536,10 @@ class _StatusBadge extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// Status Style
+// =====================================================
 
 class _StatusStyle {
   const _StatusStyle({
@@ -519,8 +600,9 @@ class _StatusStyle {
       case TripOrderStatus.cancelled:
         return _StatusStyle(
           title: context.strings.delivery_cancelled,
-          badgeBackground:
-          AppColors.red1.withValues(alpha: 0.10),
+          badgeBackground: AppColors.red1.withValues(
+            alpha: 0.10,
+          ),
           badgeForeground: AppColors.red1,
           numberBackground: AppColors.red1,
           numberForeground: AppColors.white0,
@@ -528,7 +610,8 @@ class _StatusStyle {
 
       case TripOrderStatus.unknown:
         return _StatusStyle(
-          title: order.rawDeliveryStatus?.isNotEmpty == true
+          title:
+          order.rawDeliveryStatus?.isNotEmpty == true
               ? order.rawDeliveryStatus!
               : context.strings.trip_tab_unknown_status,
           badgeBackground: AppColors.grey5,

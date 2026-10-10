@@ -4,6 +4,8 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_route_result.dart';
+import 'package:go_router/go_router.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 
 class TripMapStopSheet extends StatelessWidget {
   const TripMapStopSheet({
@@ -17,7 +19,7 @@ class TripMapStopSheet extends StatelessWidget {
     required this.routeError,
     required this.route,
     required this.onNavigate,
-    required this.onShowOrder,
+    required this.tripApiId,
   });
 
   final ScrollController scrollController;
@@ -29,7 +31,7 @@ class TripMapStopSheet extends StatelessWidget {
   final bool routeError;
   final TripRouteResult? route;
   final VoidCallback onNavigate;
-  final VoidCallback onShowOrder;
+  final int tripApiId;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +184,29 @@ class TripMapStopSheet extends StatelessWidget {
                 child: SizedBox(
                   height: 70,
                   child: OutlinedButton(
-                    onPressed: onShowOrder,
+
+                    onPressed: () {
+                      final int? orderID = stop.order.apiId;
+
+                      if (orderID == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              context.strings.trip_order_details_unavailable,
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
+                      GoRouter.of(context).push(
+                        RoutesNames.orderDetails,
+                        extra: {
+                          'trip_id': tripApiId,
+                          'order_id': orderID,
+                        },
+                      );
+                    },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: AppColors.lightPrimary,
                       foregroundColor: AppColors.primary,

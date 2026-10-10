@@ -4,7 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
 import 'package:storeus_delivery/features/login/data/models/login_request_body.dart';
 import 'package:storeus_delivery/features/login/data/models/login_response.dart';
-import 'package:storeus_delivery/features/account/data/models/me_response.dart';
+import 'package:storeus_delivery/features/drawer_features/account/data/models/me_response.dart';
 
 part 'auth_api_service.g.dart';
 

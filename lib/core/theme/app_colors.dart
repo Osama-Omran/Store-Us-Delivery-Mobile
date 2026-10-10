@@ -39,4 +39,12 @@ class AppColors {
   // Green
   static Color get green0 => const Color(0xff009b66);
   static Color get green1 => const Color(0xffd3f7e2);
+
+  // Top Rank
+  static Color get rankTeal => const Color(0xff009e8b);
+  static Color get rankTealLight => const Color(0xffd1ebe8);
+  static Color get rankGold => const Color(0xffefb31c);
+  static Color get rankGoldLight => const Color(0xfff8eccd);
+  static Color get rankWinnerBackground => const Color(0xfffbf5f6);
+  static Color get rankNavy => const Color(0xff142039);
 }

@@ -1,11 +1,17 @@
 import 'dart:math' as math;
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_logout_button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
+import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/layout/presentation/widgets/app_menu_drawer_item.dart';
 
 enum AppMenuSection {
@@ -41,7 +47,6 @@ class AppMenuDrawer extends StatelessWidget {
     this.onReportsTap,
     this.onContactUsTap,
     this.onReceiveCustodyTap,
-    this.onLogoutTap,
   });
 
   final String userName;
@@ -61,7 +66,6 @@ class AppMenuDrawer extends StatelessWidget {
   final VoidCallback? onReportsTap;
   final VoidCallback? onContactUsTap;
   final VoidCallback? onReceiveCustodyTap;
-  final VoidCallback? onLogoutTap;
 
   void _handleTap(BuildContext context, VoidCallback? callback) {
     Navigator.of(context).pop();
@@ -100,7 +104,14 @@ class AppMenuDrawer extends StatelessWidget {
                     title: context.strings.account,
                     icon: Icons.person_outline_rounded,
                     isSelected: selectedSection == AppMenuSection.account,
-                    onTap: () => GoRouter.of(context).push(RoutesNames.account),
+
+                    onTap: () {
+                      final router = GoRouter.of(context);
+
+                      Navigator.of(context).pop();
+
+                      router.push(RoutesNames.account);
+                    },
                   ),
 
                   AppMenuDrawerItem(
@@ -122,7 +133,10 @@ class AppMenuDrawer extends StatelessWidget {
                     icon: Icons.inventory_2_outlined,
                     badgeCount: pendingDeliveriesCount,
                     isSelected: selectedSection == AppMenuSection.deliveries,
-                    onTap: () => _handleTap(context, onDeliveriesTap),
+                    onTap: () {
+                      GoRouter.of(context).pop();
+                      LayoutCubit.get(context).selectTap(1);
+                    },
                   ),
 
                   AppMenuDrawerItem(
@@ -195,7 +209,22 @@ class AppMenuDrawer extends StatelessWidget {
                     title: context.strings.logout,
                     icon: Icons.logout_rounded,
                     isLogout: true,
-                    onTap: () => _handleTap(context, onLogoutTap),
+                    onTap: () async {
+                      // Get Cubit before closing the drawer.
+                      final accountCubit = context.read<AccountCubit>();
+
+                      final confirmed = await showAccountLogoutConfirmation(
+                        context,
+                      );
+
+                      if (!context.mounted || !confirmed) return;
+
+                      // Close drawer.
+                      Navigator.of(context).pop();
+
+                      // POST /logout
+                      await accountCubit.logout();
+                    },
                   ),
                 ),
               ),

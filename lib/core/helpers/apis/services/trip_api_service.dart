@@ -1,4 +1,5 @@
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
+import 'package:storeus_delivery/features/trip/cancel_delivery/data/models/cancel_delivery_request_body.dart';
 import 'dart:io';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:dio/dio.dart';
@@ -7,6 +8,9 @@ import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_items_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
+import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
+import 'package:storeus_delivery/features/trip/reschedule_order/data/models/reschedule_order_request_body.dart';
+
 part 'trip_api_service.g.dart';
 
 @RestApi()
@@ -60,6 +64,35 @@ abstract class TripApiService {
       @Path('tripId') int tripId,
       @Path('orderId') int orderId,
       @Header('Authorization') String authorization,
+      );
+
+
+
+  @PATCH(ApiConstants.updateOrderDeliveryLocation)
+  Future<dynamic> updateOrderDeliveryLocation(
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() UpdateDeliveryLocationBody body,
+      );
+
+
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> rescheduleOrder(
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() RescheduleOrderRequestBody body,
+      );
+
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> cancelDelivery(
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() CancelDeliveryRequestBody body,
       );
 
 }

@@ -9,6 +9,7 @@ class AppAssets {
   static const String home = '$iconsPath/home.svg';
   static const String notifications = '$iconsPath/notifications.svg';
   static const String menu = '$iconsPath/menu.svg';
+  static const String rankCrown = '$iconsPath/rank_crown.svg';
 
   //======= Audio =======//
   // static const String audioPath = 'assets/audio';

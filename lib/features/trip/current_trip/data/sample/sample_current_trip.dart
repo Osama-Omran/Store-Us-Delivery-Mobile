@@ -3,7 +3,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 
 // Replace these samples with API data. The handled count is intentionally 7/12.
 const sampleCurrentTrip = CurrentTripModel(
-  id: 'TRIP-0025',
+  id: 435345,
   vehicleName: 'سوزوكي فان',
   plateNumber: 'أ ب ج 1234',
   driverName: 'محمد أحمد',
