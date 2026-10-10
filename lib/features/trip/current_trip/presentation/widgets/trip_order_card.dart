@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
@@ -10,28 +13,35 @@ class TripOrderCard extends StatelessWidget {
     required this.order,
     required this.onOpenOrder,
     required this.onShowDeliveryDetails,
-    required this.onCallCustomer,
-    required this.onOpenDirections,
+    this.onCallCustomer,
+    this.onOpenDirections,
   });
 
   final TripOrderModel order;
   final VoidCallback onOpenOrder;
   final VoidCallback onShowDeliveryDetails;
-  final VoidCallback onCallCustomer;
-  final VoidCallback onOpenDirections;
+  final VoidCallback? onCallCustomer;
+  final VoidCallback? onOpenDirections;
 
   @override
   Widget build(BuildContext context) {
-    final status = _StatusStyle.forOrder(context, order.status);
+    final status = _StatusStyle.forOrder(
+      context,
+      order,
+    );
 
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: AppColors.grey3),
+        border: Border.all(
+          color: AppColors.grey3,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(alpha: 0.035),
+            color: AppColors.black0.withValues(
+              alpha: 0.035,
+            ),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -42,11 +52,18 @@ class TripOrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+            padding: const EdgeInsets.fromLTRB(
+              16,
+              18,
+              16,
+              16,
+            ),
             child: Column(
               children: [
+                // ======= Customer & Order ======= //
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 60,
@@ -65,10 +82,13 @@ class TripOrderCard extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(width: 10),
+
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
                         children: [
                           Text(
                             order.customerName,
@@ -81,7 +101,9 @@ class TripOrderCard extends StatelessWidget {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
+
                           const SizedBox(height: 2),
+
                           Text(
                             order.id,
                             textDirection: TextDirection.ltr,
@@ -91,11 +113,14 @@ class TripOrderCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+
                           const SizedBox(height: 4),
+
                           _OrderContactLine(
                             icon: Icons.location_on_outlined,
                             text: order.address,
                           ),
+
                           _OrderContactLine(
                             icon: Icons.phone_outlined,
                             text: order.phoneNumber,
@@ -104,19 +129,29 @@ class TripOrderCard extends StatelessWidget {
                         ],
                       ),
                     ),
+
                     const SizedBox(width: 6),
+
                     _StatusBadge(style: status),
                   ],
                 ),
+
                 const SizedBox(height: 14),
+
+                // ======= Order Amount ======= //
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 70),
+                  padding:
+                  const EdgeInsetsDirectional.only(
+                    start: 70,
+                  ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
                           children: [
                             Text(
                               context.strings.order_value,
@@ -126,10 +161,18 @@ class TripOrderCard extends StatelessWidget {
                                 color: AppColors.grey4,
                               ),
                             ),
+
                             const SizedBox(height: 4),
+
                             Text(
-                              formatTripAmount(context, order.orderAmount),
+                              order.orderAmount == null
+                                  ? '—'
+                                  : formatTripAmount(
+                                context,
+                                order.orderAmount!,
+                              ),
                               maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 23,
                                 fontWeight: FontWeight.w800,
@@ -139,7 +182,10 @@ class TripOrderCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (order.status == TripOrderStatus.delivered) ...[
+
+                      // Payment is based on payment_status,
+                      // not delivery_status.
+                      if (order.isPaymentCollected) ...[
                         const SizedBox(width: 6),
                         Flexible(
                           child: Text(
@@ -152,14 +198,12 @@ class TripOrderCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ] else if (order.status ==
-                              TripOrderStatus.partiallyDelivered &&
-                          order.collectedAmount > 0) ...[
+                      ] else if (order.collectedAmount > 0) ...[
                         const SizedBox(width: 6),
                         Flexible(
                           child: Text(
                             '${context.strings.amount_collected} '
-                            '${formatTripAmount(context, order.collectedAmount)}',
+                                '${formatTripAmount(context, order.collectedAmount)}',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 12,
@@ -175,7 +219,14 @@ class TripOrderCard extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, thickness: 1, color: AppColors.grey3),
+
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.grey3,
+          ),
+
+          // ======= Bottom Actions ======= //
           if (order.isPending)
             _PendingOrderActions(
               onOpenOrder: onOpenOrder,
@@ -218,19 +269,30 @@ class _OrderContactLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayText =
+    text.trim().isEmpty ? '—' : text;
+
     return Padding(
       padding: const EdgeInsets.only(top: 3),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 16, color: AppColors.grey4),
+          Icon(
+            icon,
+            size: 16,
+            color: AppColors.grey4,
+          ),
+
           const SizedBox(width: 5),
+
           Expanded(
             child: Text(
-              text,
+              displayText,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              textDirection: isPhone ? TextDirection.ltr : null,
+              textDirection:
+              isPhone ? TextDirection.ltr : null,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 13,
@@ -248,18 +310,23 @@ class _OrderContactLine extends StatelessWidget {
 class _PendingOrderActions extends StatelessWidget {
   const _PendingOrderActions({
     required this.onOpenOrder,
-    required this.onCallCustomer,
-    required this.onOpenDirections,
+    this.onCallCustomer,
+    this.onOpenDirections,
   });
 
   final VoidCallback onOpenOrder;
-  final VoidCallback onCallCustomer;
-  final VoidCallback onOpenDirections;
+  final VoidCallback? onCallCustomer;
+  final VoidCallback? onOpenDirections;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      padding: const EdgeInsets.fromLTRB(
+        14,
+        12,
+        14,
+        14,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -269,11 +336,13 @@ class _PendingOrderActions extends StatelessWidget {
                 onPressed: onOpenOrder,
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
-                  shadowColor: AppColors.primary.withValues(alpha: 0.22),
+                  shadowColor: AppColors.primary
+                      .withValues(alpha: 0.22),
                   foregroundColor: AppColors.white0,
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius:
+                    BorderRadius.circular(24),
                   ),
                 ),
                 child: Text(
@@ -286,7 +355,9 @@ class _PendingOrderActions extends StatelessWidget {
               ),
             ),
           ),
+
           const SizedBox(width: 9),
+
           _SquareActionButton(
             icon: Icons.near_me_outlined,
             background: AppColors.blue4,
@@ -294,7 +365,9 @@ class _PendingOrderActions extends StatelessWidget {
             onTap: onOpenDirections,
             tooltip: context.strings.open_directions,
           ),
+
           const SizedBox(width: 9),
+
           _SquareActionButton(
             icon: Icons.phone_outlined,
             background: AppColors.green1,
@@ -313,30 +386,37 @@ class _SquareActionButton extends StatelessWidget {
     required this.icon,
     required this.background,
     required this.foreground,
-    required this.onTap,
     required this.tooltip,
+    this.onTap,
   });
 
   final IconData icon;
   final Color background;
   final Color foreground;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String tooltip;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: tooltip,
-      child: Material(
-        color: background,
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          onTap: onTap,
+      child: Opacity(
+        opacity: onTap == null ? 0.45 : 1,
+        child: Material(
+          color: background,
           borderRadius: BorderRadius.circular(20),
-          child: SizedBox(
-            height: 58,
-            width: 55,
-            child: Icon(icon, color: foreground, size: 25),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(20),
+            child: SizedBox(
+              height: 58,
+              width: 55,
+              child: Icon(
+                icon,
+                color: foreground,
+                size: 25,
+              ),
+            ),
           ),
         ),
       ),
@@ -345,15 +425,22 @@ class _SquareActionButton extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.style});
+  const _StatusBadge({
+    required this.style,
+  });
 
   final _StatusStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 132),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      constraints: const BoxConstraints(
+        maxWidth: 132,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 7,
+      ),
       decoration: BoxDecoration(
         color: style.badgeBackground,
         borderRadius: BorderRadius.circular(20),
@@ -388,8 +475,11 @@ class _StatusStyle {
   final Color numberBackground;
   final Color numberForeground;
 
-  static _StatusStyle forOrder(BuildContext context, TripOrderStatus status) {
-    switch (status) {
+  static _StatusStyle forOrder(
+      BuildContext context,
+      TripOrderModel order,
+      ) {
+    switch (order.status) {
       case TripOrderStatus.delivered:
         return _StatusStyle(
           title: context.strings.delivered_fully,
@@ -398,6 +488,7 @@ class _StatusStyle {
           numberBackground: AppColors.green0,
           numberForeground: AppColors.white0,
         );
+
       case TripOrderStatus.rescheduled:
         return _StatusStyle(
           title: context.strings.delivery_rescheduled,
@@ -406,6 +497,7 @@ class _StatusStyle {
           numberBackground: AppColors.blue4,
           numberForeground: AppColors.primary,
         );
+
       case TripOrderStatus.partiallyDelivered:
         return _StatusStyle(
           title: context.strings.delivered_partially,
@@ -414,6 +506,7 @@ class _StatusStyle {
           numberBackground: AppColors.orange0,
           numberForeground: AppColors.white0,
         );
+
       case TripOrderStatus.pending:
         return _StatusStyle(
           title: context.strings.awaiting_delivery,
@@ -422,13 +515,26 @@ class _StatusStyle {
           numberBackground: AppColors.primary,
           numberForeground: AppColors.white0,
         );
+
       case TripOrderStatus.cancelled:
         return _StatusStyle(
           title: context.strings.delivery_cancelled,
-          badgeBackground: AppColors.red1.withValues(alpha: 0.10),
+          badgeBackground:
+          AppColors.red1.withValues(alpha: 0.10),
           badgeForeground: AppColors.red1,
           numberBackground: AppColors.red1,
           numberForeground: AppColors.white0,
+        );
+
+      case TripOrderStatus.unknown:
+        return _StatusStyle(
+          title: order.rawDeliveryStatus?.isNotEmpty == true
+              ? order.rawDeliveryStatus!
+              : context.strings.trip_tab_unknown_status,
+          badgeBackground: AppColors.grey5,
+          badgeForeground: AppColors.grey4,
+          numberBackground: AppColors.grey3,
+          numberForeground: AppColors.black1,
         );
     }
   }

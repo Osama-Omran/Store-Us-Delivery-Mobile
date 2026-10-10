@@ -9,4 +9,7 @@ class RoutesNames {
   static const String receiveTrip = '/receiveTripScreen';
   static const String receiveTripSuccess = '/receiveTripSuccessScreen';
   static const String tripMap = '/tripMapScreen';
+
+  //======= Account =======//
+  static const String account = '/accountScreen';
 }

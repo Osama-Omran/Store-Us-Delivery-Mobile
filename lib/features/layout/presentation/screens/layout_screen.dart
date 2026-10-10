@@ -30,7 +30,6 @@ class LayoutScreen extends StatelessWidget {
         pendingTransfersCount: 3,
         selectedSection: AppMenuSection.deliveries,
 
-        onAccountTap: () {},
         onTopRankTap: () {},
         onTreasuryTap: () {},
         onDeliveriesTap: () {},

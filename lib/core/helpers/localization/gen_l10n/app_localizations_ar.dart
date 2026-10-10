@@ -596,4 +596,193 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get direct_sale => 'بيع مباشر';
+
+  @override
+  String get account_delivery_representative => 'مندوب توصيل';
+
+  @override
+  String get account_my_data => 'بياناتي';
+
+  @override
+  String get account_edit_data => 'تعديل البيانات';
+
+  @override
+  String get account_name => 'الاسم';
+
+  @override
+  String get account_employee_number => 'رقم الموظف';
+
+  @override
+  String get account_change_password => 'تغيير كلمة المرور';
+
+  @override
+  String get account_wallet_title => 'محفظة التحصيل الحالية';
+
+  @override
+  String get account_wallet_name => 'محفظة';
+
+  @override
+  String get account_today_trips => 'رحلات اليوم';
+
+  @override
+  String get account_delivered_orders => 'طلبات مسلمة';
+
+  @override
+  String get account_today_collection => 'تحصيل اليوم ج.م';
+
+  @override
+  String get account_sync_status => 'حالة المزامنة';
+
+  @override
+  String get account_sync_unavailable => 'بيانات المزامنة غير متاحة حاليًا';
+
+  @override
+  String get account_offline_preview => 'معاينة وضع عدم الاتصال';
+
+  @override
+  String get account_feature_unavailable => 'هذه الخدمة غير متاحة حاليًا';
+
+  @override
+  String get account_logout_confirm_title => 'تسجيل الخروج؟';
+
+  @override
+  String get account_logout_confirm_description =>
+      'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟';
+
+  @override
+  String get account_cancel => 'إلغاء';
+
+  @override
+  String get account_load_failed => 'تعذر تحميل بيانات الحساب. حاول مرة أخرى.';
+
+  @override
+  String get account_logout_failed => 'تعذر تسجيل الخروج. حاول مرة أخرى.';
+
+  @override
+  String get account_retry => 'إعادة المحاولة';
+
+  @override
+  String get trip_tab_load_failed =>
+      'تعذر تحميل الرحلة الحالية. حاول مرة أخرى.';
+
+  @override
+  String get trip_tab_no_trip => 'لا توجد رحلة حالية مرتبطة بحسابك.';
+
+  @override
+  String get trip_tab_unsupported_status =>
+      'الرحلة الحالية غير متاحة للتنفيذ في هذه الحالة.';
+
+  @override
+  String get trip_tab_unknown_status => 'حالة غير معروفة';
+
+  @override
+  String get trip_tab_retry => 'إعادة المحاولة';
+
+  @override
+  String get trip_tab_accepted => 'تم استلام الرحلة';
+
+  @override
+  String get trip_tab_orders_not_loaded =>
+      'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.';
+
+  @override
+  String get trip_progress_unavailable =>
+      'بيانات إنجاز الطلبات غير متاحة حالياً';
+
+  @override
+  String get trip_map_wait_orders =>
+      'خريطة الرحلة ستتاح بعد تحميل مواقع الطلبات.';
+
+  @override
+  String get trip_orders_load_failed =>
+      'تعذر تحميل طلبات الرحلة. حاول مرة أخرى.';
+
+  @override
+  String get trip_order_details_unavailable =>
+      'تفاصيل الأوردر غير متاحة حالياً.';
+
+  @override
+  String get trip_action_unavailable => 'تعذر تنفيذ العملية. حاول مرة أخرى.';
+
+  @override
+  String get home_no_current_trip => 'لا توجد رحلة حالية مرتبطة بحسابك.';
+
+  @override
+  String get home_retry_orders =>
+      'تعذر تحميل إحصائيات الطلبات، اضغط لإعادة المحاولة.';
+
+  @override
+  String get home_history_completed => 'مكتملة';
+
+  @override
+  String get home_history_cancelled => 'ملغاة';
+
+  @override
+  String get home_history_empty_today => 'لا توجد رحلات سابقة اليوم.';
+
+  @override
+  String get home_history_load_failed =>
+      'تعذر تحميل الرحلات السابقة. حاول مرة أخرى.';
+
+  @override
+  String get order_details_title => 'تفاصيل التسليم';
+
+  @override
+  String get order_details_load_failed =>
+      'تعذر تحميل تفاصيل الطلب. حاول مرة أخرى.';
+
+  @override
+  String get order_details_confirmed_read_only =>
+      'تم تأكيد التسليم — للعرض فقط';
+
+  @override
+  String get order_details_read_only => 'تفاصيل الطلب — للعرض فقط';
+
+  @override
+  String get order_delivery_status => 'حالة التسليم';
+
+  @override
+  String get order_delivery_time => 'وقت التسليم';
+
+  @override
+  String get order_delivery_reason => 'سبب حالة التسليم';
+
+  @override
+  String get order_rescheduled_for => 'تاريخ إعادة الجدولة';
+
+  @override
+  String get order_details_items_title => 'المنتجات المطلوبة والكميات المتاحة';
+
+  @override
+  String get order_details_quantities_hint =>
+      'الكمية المطلوبة / أقصى كمية قابلة للتسليم';
+
+  @override
+  String get order_details_vehicle_available => 'المتاح بالعربية';
+
+  @override
+  String get order_details_no_items => 'لا توجد منتجات في هذا الطلب.';
+
+  @override
+  String get order_details_original_total => 'قيمة الطلب الأصلية';
+
+  @override
+  String get order_details_collected => 'المبلغ المحصل';
+
+  @override
+  String get order_details_remaining => 'المتبقي';
+
+  @override
+  String get order_details_payment_method => 'طريقة الدفع';
+
+  @override
+  String get order_details_financial_unavailable =>
+      'بيانات التحصيل وطريقة الدفع غير متاحة حاليًا.';
+
+  @override
+  String get order_details_notes => 'ملاحظات المندوب';
+
+  @override
+  String get order_details_notes_unavailable =>
+      'ملاحظات المندوب غير متاحة في بيانات هذا الطلب.';
 }

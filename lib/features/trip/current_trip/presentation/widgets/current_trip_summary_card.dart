@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -5,21 +6,30 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
 class CurrentTripSummaryCard extends StatelessWidget {
-  const CurrentTripSummaryCard({super.key, required this.trip});
+  const CurrentTripSummaryCard({
+    super.key,
+    required this.trip,
+  });
 
   final CurrentTripModel trip;
 
   @override
   Widget build(BuildContext context) {
+    final vehicleDisplay = trip.plateNumber.trim().isEmpty
+        ? trip.vehicleName
+        : '${trip.vehicleName} - ${trip.plateNumber}';
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: AppColors.grey3),
+        border: Border.all(
+          color: AppColors.grey3,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(alpha: 0.04),
+            color: AppColors.black0.withValues(alpha: .04),
             blurRadius: 12,
             offset: const Offset(0, 3),
           ),
@@ -28,6 +38,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ======= Vehicle ======= //
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -43,10 +54,12 @@ class CurrentTripSummaryCard extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '${context.strings.van}:  ',
-                        style: TextStyle(color: AppColors.grey4),
+                        style: TextStyle(
+                          color: AppColors.grey4,
+                        ),
                       ),
                       TextSpan(
-                        text: '${trip.vehicleName} - ${trip.plateNumber}',
+                        text: vehicleDisplay,
                         style: TextStyle(
                           color: AppColors.black1,
                           fontWeight: FontWeight.w700,
@@ -54,13 +67,18 @@ class CurrentTripSummaryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  style: const TextStyle(fontSize: 13, height: 1.5),
-                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
                 ),
               ),
             ],
           ),
+
           const SizedBox(height: 4),
+
+          // ======= Driver & Warehouse ======= //
           Wrap(
             spacing: 8,
             runSpacing: 2,
@@ -75,7 +93,10 @@ class CurrentTripSummaryCard extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 18),
+
+          // ======= Orders Statistics ======= //
           Row(
             children: [
               Expanded(
@@ -87,7 +108,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                   labelColor: AppColors.grey4,
                 ),
               ),
+
               const SizedBox(width: 9),
+
               Expanded(
                 child: _SummaryStat(
                   count: trip.handledOrders,
@@ -97,7 +120,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                   labelColor: AppColors.green0,
                 ),
               ),
+
               const SizedBox(width: 9),
+
               Expanded(
                 child: _SummaryStat(
                   count: trip.remainingOrders,
@@ -109,9 +134,15 @@ class CurrentTripSummaryCard extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 16),
+
+          // ======= Collected Amount ======= //
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 16,
+            ),
             decoration: BoxDecoration(
               color: AppColors.blue4,
               borderRadius: BorderRadius.circular(21),
@@ -123,7 +154,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                   color: AppColors.primary,
                   size: 21,
                 ),
+
                 const SizedBox(width: 8),
+
                 Expanded(
                   child: Text(
                     context.strings.collected_so_far,
@@ -134,8 +167,14 @@ class CurrentTripSummaryCard extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 Text(
-                  formatTripAmount(context, trip.collectedAmount),
+                  trip.collectedAmount == null
+                      ? '—'
+                      : formatTripAmount(
+                    context,
+                    trip.collectedAmount!,
+                  ),
                   style: TextStyle(
                     color: AppColors.primary,
                     fontSize: 22,
@@ -145,13 +184,21 @@ class CurrentTripSummaryCard extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 18),
+
+          // ======= Progress ======= //
           Row(
             children: [
               Expanded(
                 child: Text(
-                  '${trip.handledOrders} ${context.strings.of_total} '
-                  '${trip.totalOrders} ${context.strings.orders_handled}',
+                  trip.handledOrders == null ||
+                      trip.totalOrders == null
+                      ? context.strings.trip_progress_unavailable
+                      : '${trip.handledOrders} '
+                      '${context.strings.of_total} '
+                      '${trip.totalOrders} '
+                      '${context.strings.orders_handled}',
                   style: TextStyle(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w700,
@@ -160,7 +207,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${trip.progressPercent}%',
+                trip.progressPercent == null
+                    ? '—'
+                    : '${trip.progressPercent}%',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 13,
@@ -169,14 +218,19 @@ class CurrentTripSummaryCard extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 10),
+
+          // ======= Progress Bar ======= //
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: LinearProgressIndicator(
-              value: trip.progress,
+              value: trip.progress ?? 0,
               minHeight: 12,
               backgroundColor: AppColors.grey5,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                AppColors.primary,
+              ),
             ),
           ),
         ],
@@ -186,7 +240,10 @@ class CurrentTripSummaryCard extends StatelessWidget {
 }
 
 class _SummaryInfoLabel extends StatelessWidget {
-  const _SummaryInfoLabel({required this.label, required this.value});
+  const _SummaryInfoLabel({
+    required this.label,
+    required this.value,
+  });
 
   final String label;
   final String value;
@@ -198,7 +255,9 @@ class _SummaryInfoLabel extends StatelessWidget {
         children: [
           TextSpan(
             text: '$label: ',
-            style: TextStyle(color: AppColors.grey4),
+            style: TextStyle(
+              color: AppColors.grey4,
+            ),
           ),
           TextSpan(
             text: value,
@@ -209,7 +268,10 @@ class _SummaryInfoLabel extends StatelessWidget {
           ),
         ],
       ),
-      style: const TextStyle(fontSize: 13, height: 1.45),
+      style: const TextStyle(
+        fontSize: 13,
+        height: 1.45,
+      ),
     );
   }
 }
@@ -223,7 +285,7 @@ class _SummaryStat extends StatelessWidget {
     required this.labelColor,
   });
 
-  final int count;
+  final int? count;
   final String label;
   final Color background;
   final Color foreground;
@@ -233,7 +295,9 @@ class _SummaryStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 76,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 4,
+      ),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(20),
@@ -242,7 +306,7 @@ class _SummaryStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '$count',
+            count?.toString() ?? '—',
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w800,
@@ -251,10 +315,12 @@ class _SummaryStat extends StatelessWidget {
           ),
           Text(
             label,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: labelColor, fontSize: 12),
-            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: labelColor,
+              fontSize: 12,
+            ),
           ),
         ],
       ),

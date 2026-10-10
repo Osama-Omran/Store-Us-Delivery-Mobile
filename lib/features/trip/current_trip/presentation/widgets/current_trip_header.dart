@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 class CurrentTripHeader extends StatelessWidget {
-  const CurrentTripHeader({super.key, required this.tripNumber});
-
+  const CurrentTripHeader({super.key, required this.tripNumber, this.onMapPressed});
+  final VoidCallback? onMapPressed;
   final String tripNumber;
 
   @override
@@ -39,26 +37,33 @@ class CurrentTripHeader extends StatelessWidget {
               ),
             ],
           ),
-          PositionedDirectional(
-            end: 22,
-            child: Material(
-              color: AppColors.white0,
-              shape: CircleBorder(side: BorderSide(color: AppColors.grey3)),
-              child: InkWell(
-                onTap: () => GoRouter.of(context).push(RoutesNames.tripMap),
-                customBorder: const CircleBorder(),
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.location_on_outlined,
-                    color: AppColors.primary,
-                    size: 27,
+
+          if (onMapPressed != null)
+            PositionedDirectional(
+              end: 22,
+              child: Material(
+                color: AppColors.white0,
+                shape: CircleBorder(
+                  side: BorderSide(
+                    color: AppColors.grey3,
+                  ),
+                ),
+                child: InkWell(
+                  onTap: onMapPressed,
+                  customBorder: const CircleBorder(),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(
+                      Icons.location_on_outlined,
+                      color: AppColors.primary,
+                      size: 27,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+
         ],
       ),
     );

@@ -1185,6 +1185,354 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بيع مباشر'**
   String get direct_sale;
+
+  /// No description provided for @account_delivery_representative.
+  ///
+  /// In ar, this message translates to:
+  /// **'مندوب توصيل'**
+  String get account_delivery_representative;
+
+  /// No description provided for @account_my_data.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتي'**
+  String get account_my_data;
+
+  /// No description provided for @account_edit_data.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل البيانات'**
+  String get account_edit_data;
+
+  /// No description provided for @account_name.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get account_name;
+
+  /// No description provided for @account_employee_number.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموظف'**
+  String get account_employee_number;
+
+  /// No description provided for @account_change_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير كلمة المرور'**
+  String get account_change_password;
+
+  /// No description provided for @account_wallet_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة التحصيل الحالية'**
+  String get account_wallet_title;
+
+  /// No description provided for @account_wallet_name.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة'**
+  String get account_wallet_name;
+
+  /// No description provided for @account_today_trips.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلات اليوم'**
+  String get account_today_trips;
+
+  /// No description provided for @account_delivered_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات مسلمة'**
+  String get account_delivered_orders;
+
+  /// No description provided for @account_today_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل اليوم ج.م'**
+  String get account_today_collection;
+
+  /// No description provided for @account_sync_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة المزامنة'**
+  String get account_sync_status;
+
+  /// No description provided for @account_sync_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات المزامنة غير متاحة حاليًا'**
+  String get account_sync_unavailable;
+
+  /// No description provided for @account_offline_preview.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة وضع عدم الاتصال'**
+  String get account_offline_preview;
+
+  /// No description provided for @account_feature_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الخدمة غير متاحة حاليًا'**
+  String get account_feature_unavailable;
+
+  /// No description provided for @account_logout_confirm_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج؟'**
+  String get account_logout_confirm_title;
+
+  /// No description provided for @account_logout_confirm_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟'**
+  String get account_logout_confirm_description;
+
+  /// No description provided for @account_cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get account_cancel;
+
+  /// No description provided for @account_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات الحساب. حاول مرة أخرى.'**
+  String get account_load_failed;
+
+  /// No description provided for @account_logout_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تسجيل الخروج. حاول مرة أخرى.'**
+  String get account_logout_failed;
+
+  /// No description provided for @account_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get account_retry;
+
+  /// No description provided for @trip_tab_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الرحلة الحالية. حاول مرة أخرى.'**
+  String get trip_tab_load_failed;
+
+  /// No description provided for @trip_tab_no_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلة حالية مرتبطة بحسابك.'**
+  String get trip_tab_no_trip;
+
+  /// No description provided for @trip_tab_unsupported_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة الحالية غير متاحة للتنفيذ في هذه الحالة.'**
+  String get trip_tab_unsupported_status;
+
+  /// No description provided for @trip_tab_unknown_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة غير معروفة'**
+  String get trip_tab_unknown_status;
+
+  /// No description provided for @trip_tab_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get trip_tab_retry;
+
+  /// No description provided for @trip_tab_accepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم استلام الرحلة'**
+  String get trip_tab_accepted;
+
+  /// No description provided for @trip_tab_orders_not_loaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.'**
+  String get trip_tab_orders_not_loaded;
+
+  /// No description provided for @trip_progress_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات إنجاز الطلبات غير متاحة حالياً'**
+  String get trip_progress_unavailable;
+
+  /// No description provided for @trip_map_wait_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة الرحلة ستتاح بعد تحميل مواقع الطلبات.'**
+  String get trip_map_wait_orders;
+
+  /// No description provided for @trip_orders_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل طلبات الرحلة. حاول مرة أخرى.'**
+  String get trip_orders_load_failed;
+
+  /// No description provided for @trip_order_details_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الأوردر غير متاحة حالياً.'**
+  String get trip_order_details_unavailable;
+
+  /// No description provided for @trip_action_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تنفيذ العملية. حاول مرة أخرى.'**
+  String get trip_action_unavailable;
+
+  /// No description provided for @home_no_current_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلة حالية مرتبطة بحسابك.'**
+  String get home_no_current_trip;
+
+  /// No description provided for @home_retry_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل إحصائيات الطلبات، اضغط لإعادة المحاولة.'**
+  String get home_retry_orders;
+
+  /// No description provided for @home_history_completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get home_history_completed;
+
+  /// No description provided for @home_history_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get home_history_cancelled;
+
+  /// No description provided for @home_history_empty_today.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلات سابقة اليوم.'**
+  String get home_history_empty_today;
+
+  /// No description provided for @home_history_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الرحلات السابقة. حاول مرة أخرى.'**
+  String get home_history_load_failed;
+
+  /// No description provided for @order_details_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل التسليم'**
+  String get order_details_title;
+
+  /// No description provided for @order_details_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل تفاصيل الطلب. حاول مرة أخرى.'**
+  String get order_details_load_failed;
+
+  /// No description provided for @order_details_confirmed_read_only.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد التسليم — للعرض فقط'**
+  String get order_details_confirmed_read_only;
+
+  /// No description provided for @order_details_read_only.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الطلب — للعرض فقط'**
+  String get order_details_read_only;
+
+  /// No description provided for @order_delivery_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التسليم'**
+  String get order_delivery_status;
+
+  /// No description provided for @order_delivery_time.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت التسليم'**
+  String get order_delivery_time;
+
+  /// No description provided for @order_delivery_reason.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب حالة التسليم'**
+  String get order_delivery_reason;
+
+  /// No description provided for @order_rescheduled_for.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ إعادة الجدولة'**
+  String get order_rescheduled_for;
+
+  /// No description provided for @order_details_items_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتجات المطلوبة والكميات المتاحة'**
+  String get order_details_items_title;
+
+  /// No description provided for @order_details_quantities_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية المطلوبة / أقصى كمية قابلة للتسليم'**
+  String get order_details_quantities_hint;
+
+  /// No description provided for @order_details_vehicle_available.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح بالعربية'**
+  String get order_details_vehicle_available;
+
+  /// No description provided for @order_details_no_items.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات في هذا الطلب.'**
+  String get order_details_no_items;
+
+  /// No description provided for @order_details_original_total.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الطلب الأصلية'**
+  String get order_details_original_total;
+
+  /// No description provided for @order_details_collected.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المحصل'**
+  String get order_details_collected;
+
+  /// No description provided for @order_details_remaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتبقي'**
+  String get order_details_remaining;
+
+  /// No description provided for @order_details_payment_method.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get order_details_payment_method;
+
+  /// No description provided for @order_details_financial_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات التحصيل وطريقة الدفع غير متاحة حاليًا.'**
+  String get order_details_financial_unavailable;
+
+  /// No description provided for @order_details_notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات المندوب'**
+  String get order_details_notes;
+
+  /// No description provided for @order_details_notes_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات المندوب غير متاحة في بيانات هذا الطلب.'**
+  String get order_details_notes_unavailable;
 }
 
 class _AppLocalizationsDelegate

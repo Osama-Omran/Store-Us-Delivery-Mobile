@@ -1,73 +1,139 @@
+import 'package:storeus_delivery/features/home/presentation/cubit/home_history_cubit.dart';
+import 'package:storeus_delivery/features/home/presentation/widgets/home_previous_trips_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
+import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
+import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_svg.dart';
+
+import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
+import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({
-    super.key,
-    required this.userName,
-    required this.currentTrip,
-    required this.onContinueTrip,
-    this.previousTrip,
-    this.onPreviousTripTap,
-    this.unreadNotifications = 0,
-  });
-
-  final String userName;
-  final HomeCurrentTrip currentTrip;
-  final HomePreviousTrip? previousTrip;
-  final int unreadNotifications;
-
-  final VoidCallback onContinueTrip;
-  final VoidCallback? onPreviousTripTap;
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeCubit>(
+          create: (_) => getIt<HomeCubit>()..getCurrentTrip(),
+        ),
+        BlocProvider<HomeHistoryCubit>(
+          create: (_) => getIt<HomeHistoryCubit>()..getTripHistory(),
+        ),
+      ],
+      child: const _HomeScreenBody(),
+    );
+  }
+}
+
+class _HomeScreenBody extends StatelessWidget {
+  const _HomeScreenBody();
+
+  String? _getTripBadge(BuildContext context, HomeState state) {
+    if (state is! HomeSuccessState) return null;
+
+    final status = state.trip.acceptance?.status.trim().toUpperCase();
+
+    return switch (status) {
+      'ACCEPTED' => context.strings.currently_on_trip,
+      'PENDING' => context.strings.trip_acceptance_pending,
+      null || '' => null,
+      final value => value,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userName = PreferencesHelper.getUserName()?.trim() ?? '';
+
     return Scaffold(
       backgroundColor: AppColors.grey0,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-          children: [
-            _HomeHeader(
-              userName: userName,
-              unreadNotifications: unreadNotifications,
-            ),
-            const Gap(24),
-            _CurrentTripCard(trip: currentTrip),
-            if (previousTrip != null) ...[
-              const Gap(24),
-              Text(
-                context.strings.previous_today_trips,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.black1,
-                ),
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            return RefreshIndicator(
+              color: AppColors.primary,
+
+              onRefresh: () async {
+                await Future.wait<void>([
+                  HomeCubit.get(context).getCurrentTrip(),
+                  HomeHistoryCubit.get(context).getTripHistory(),
+                ]);
+              },
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+                children: [
+                  // ======= Original Header ======= //
+                  _HomeHeader(
+                    userName: userName,
+                    tripBadge: _getTripBadge(context, state),
+                  ),
+
+                  const Gap(24),
+
+                  // ======= Loading ======= //
+                  if (state is HomeInitial || state is HomeLoadingState)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 80),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  // ======= Failure ======= //
+                  else if (state is HomeFailureState)
+                    _HomeMessage(
+                      message: state.errorMessage?.isNotEmpty == true
+                          ? state.errorMessage!
+                          : context.strings.current_trip_load_failed,
+                      onRetry: () => HomeCubit.get(context).getCurrentTrip(),
+                    )
+                  // ======= No Current Trip ======= //
+                  else if (state is HomeEmptyState)
+                    _HomeMessage(
+                      message: context.strings.home_no_current_trip,
+                      onRetry: () => HomeCubit.get(context).getCurrentTrip(),
+                    )
+                  // ======= Current Trip ======= //
+                  else if (state is HomeSuccessState)
+                    _CurrentTripCard(
+                      state: state,
+                      onRetryOrders: () =>
+                          HomeCubit.get(context).getTripOrders(),
+                    ),
+
+                  const Gap(24),
+
+                  HomePreviousTripsSection(
+                    currentTripId: state is HomeSuccessState
+                        ? state.trip.id
+                        : null,
+                  ),
+                ],
               ),
-              const Gap(12),
-              _PreviousTripCard(trip: previousTrip!, onTap: onPreviousTripTap),
-            ],
-          ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
+// =====================================================
+// Home Header
+// =====================================================
+
 class _HomeHeader extends StatelessWidget {
-  const _HomeHeader({
-    required this.userName,
-    required this.unreadNotifications,
-  });
+  const _HomeHeader({required this.userName, required this.tripBadge});
 
   final String userName;
-  final int unreadNotifications;
+  final String? tripBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -83,88 +149,88 @@ class _HomeHeader extends StatelessWidget {
                 context.strings.welcome,
                 style: TextStyle(fontSize: 15, color: AppColors.grey4),
               ),
-              Text(
-                userName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.black1,
+              if (userName.isNotEmpty)
+                Text(
+                  userName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.black1,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
+
         const Gap(8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.blue4,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Text(
-            context.strings.currently_on_trip,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
+
+        if (tripBadge != null) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.blue4,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Text(
+              tripBadge!,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary,
+              ),
             ),
           ),
-        ),
-        const Gap(10),
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            InkWell(
-              onTap: () => LayoutCubit.get(context).selectTap(2),
+          const Gap(10),
+        ],
+
+        // ======= Notifications ======= //
+        InkWell(
+          onTap: () => LayoutCubit.get(context).selectTap(2),
+          borderRadius: BorderRadius.circular(18),
+          child: Container(
+            width: 54,
+            height: 54,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.white0,
               borderRadius: BorderRadius.circular(18),
-              child: Container(
-                width: 54,
-                height: 54,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.white0,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: AppColors.grey3),
-                ),
-                child: CustomSVG(assetName: AppAssets.notifications),
-              ),
+              border: Border.all(color: AppColors.grey3),
             ),
-            if (unreadNotifications > 0)
-              Positioned(
-                top: 8,
-                right: 7,
-                child: Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: AppColors.red1,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.white0, width: 1),
-                  ),
-                ),
-              ),
-          ],
+            child: CustomSVG(assetName: AppAssets.notifications),
+          ),
         ),
       ],
     );
   }
 }
 
-class _CurrentTripCard extends StatelessWidget {
-  const _CurrentTripCard({required this.trip});
+// =====================================================
+// Current Trip Card
+// =====================================================
 
-  final HomeCurrentTrip trip;
+class _CurrentTripCard extends StatelessWidget {
+  const _CurrentTripCard({required this.state, required this.onRetryOrders});
+
+  final HomeSuccessState state;
+  final VoidCallback onRetryOrders;
+
+  String _nameOrId(String? name, String? id) {
+    if (name != null && name.trim().isNotEmpty) return name;
+    if (id != null && id.trim().isNotEmpty) return id;
+    return '—';
+  }
 
   @override
   Widget build(BuildContext context) {
-    final time = MaterialLocalizations.of(context)
-        .formatTimeOfDay(TimeOfDay.fromDateTime(trip.startedAt.toLocal()));
+    final trip = state.trip;
 
-    final amount = NumberFormat.decimalPattern(
-      Localizations.localeOf(context).toString(),
-    ).format(trip.collectedAmount);
+    final vehicleName = _nameOrId(trip.vehicle?.name, trip.vehicle?.id);
+
+    final driverName = _nameOrId(trip.driver?.name, trip.driver?.id);
+
+    final warehouseName = _nameOrId(trip.warehouse?.name, trip.warehouse?.id);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -178,7 +244,7 @@ class _CurrentTripCard extends StatelessWidget {
         border: Border.all(color: AppColors.blue3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(alpha: 0.04),
+            color: AppColors.black0.withValues(alpha: .04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -187,6 +253,7 @@ class _CurrentTripCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ======= Trip Header ======= //
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -200,7 +267,9 @@ class _CurrentTripCard extends StatelessWidget {
                   ),
                 ),
               ),
+
               const Gap(8),
+
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
@@ -211,7 +280,8 @@ class _CurrentTripCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '#${trip.id}',
+                  '#${trip.number}',
+                  textDirection: TextDirection.ltr,
                   style: TextStyle(
                     color: AppColors.white0,
                     fontSize: 13,
@@ -221,47 +291,52 @@ class _CurrentTripCard extends StatelessWidget {
               ),
             ],
           ),
-          const Gap(20),
-          _TripInfoRow(
-            icon: Icons.local_shipping_outlined,
-            text: '${context.strings.van}: ${trip.vehicleName}',
-          ),
-          const Gap(8),
-          _TripInfoRow(text: '${context.strings.driver}: ${trip.driverName}'),
-          const Gap(8),
-          _TripInfoRow(
-            icon: Icons.location_on_outlined,
-            text:
-                '${trip.warehouseName} — '
-                '${context.strings.started_at} $time',
-          ),
+
           const Gap(20),
 
-          // Order Statistics
+          // ======= Trip Information ======= //
+          _TripInfoRow(
+            icon: Icons.local_shipping_outlined,
+            text: '${context.strings.van}: $vehicleName',
+          ),
+
+          const Gap(8),
+
+          _TripInfoRow(text: '${context.strings.driver}: $driverName'),
+
+          const Gap(8),
+
+          _TripInfoRow(icon: Icons.location_on_outlined, text: warehouseName),
+
+          const Gap(20),
+
+          // ======= Orders Statistics ======= //
           Row(
             spacing: 10,
             children: [
               Expanded(
                 child: _OrderStatCard(
-                  count: trip.totalOrders,
+                  count: trip.ordersSummary?.total,
                   label: context.strings.order,
                   backgroundColor: AppColors.white0,
                   countColor: AppColors.black1,
                   labelColor: AppColors.grey4,
                 ),
               ),
+
               Expanded(
                 child: _OrderStatCard(
-                  count: trip.deliveredOrders,
+                  count: state.deliveredOrders,
                   label: context.strings.delivered_orders,
                   backgroundColor: AppColors.green1,
                   countColor: AppColors.green0,
                   labelColor: AppColors.green0,
                 ),
               ),
+
               Expanded(
                 child: _OrderStatCard(
-                  count: trip.remainingOrders,
+                  count: state.remainingOrders,
                   label: context.strings.remaining_orders,
                   backgroundColor: AppColors.orange1,
                   countColor: AppColors.orange0,
@@ -270,9 +345,26 @@ class _CurrentTripCard extends StatelessWidget {
               ),
             ],
           ),
+
+          if (state.ordersStatus == HomeOrdersStatus.loading)
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: LinearProgressIndicator(minHeight: 3),
+            ),
+
+          if (state.ordersStatus == HomeOrdersStatus.failure)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: TextButton.icon(
+                onPressed: onRetryOrders,
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(context.strings.home_retry_orders),
+              ),
+            ),
+
           const Gap(14),
 
-          // Collected Amount
+          // ======= Collected Amount ======= //
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
             decoration: BoxDecoration(
@@ -280,53 +372,53 @@ class _CurrentTripCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(22),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  spacing: 8,
-                  children: [
-                    Icon(
-                      Icons.account_balance_wallet_outlined,
-                      size: 21,
+                Icon(
+                  Icons.account_balance_wallet_outlined,
+                  size: 21,
+                  color: AppColors.grey4,
+                ),
+
+                const Gap(8),
+
+                Expanded(
+                  child: Text(
+                    context.strings.collected_amount,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.grey4,
                     ),
-                    Text(
-                      context.strings.collected_amount,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.grey4,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Flexible(
-                  child: Text(
-                    '$amount ${context.strings.egp_currency}',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.black1,
-                    ),
+
+                Text(
+                  '—',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.black1,
                   ),
                 ),
               ],
             ),
           ),
+
           const Gap(20),
 
-          // Continue Trip
+          // ======= Continue Trip ======= //
           SizedBox(
             height: 70,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => LayoutCubit.get(context).selectTap(1),
+              onPressed: () {
+                LayoutCubit.get(context).selectTap(1);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white0,
                 elevation: 5,
-                shadowColor: AppColors.primary.withValues(alpha: 0.24),
+                shadowColor: AppColors.primary.withValues(alpha: .24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28),
                 ),
@@ -343,6 +435,7 @@ class _CurrentTripCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
+
                   const Icon(Icons.arrow_forward_ios, size: 17),
                 ],
               ),
@@ -353,6 +446,10 @@ class _CurrentTripCard extends StatelessWidget {
     );
   }
 }
+
+// =====================================================
+// Trip Info Row
+// =====================================================
 
 class _TripInfoRow extends StatelessWidget {
   const _TripInfoRow({required this.text, this.icon});
@@ -383,6 +480,10 @@ class _TripInfoRow extends StatelessWidget {
   }
 }
 
+// =====================================================
+// Statistics Card
+// =====================================================
+
 class _OrderStatCard extends StatelessWidget {
   const _OrderStatCard({
     required this.count,
@@ -392,7 +493,7 @@ class _OrderStatCard extends StatelessWidget {
     required this.labelColor,
   });
 
-  final int count;
+  final int? count;
   final String label;
   final Color backgroundColor;
   final Color countColor;
@@ -412,7 +513,7 @@ class _OrderStatCard extends StatelessWidget {
         spacing: 2,
         children: [
           Text(
-            count.toString(),
+            count?.toString() ?? '—',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w800,
@@ -432,118 +533,45 @@ class _OrderStatCard extends StatelessWidget {
   }
 }
 
-class _PreviousTripCard extends StatelessWidget {
-  const _PreviousTripCard({required this.trip, this.onTap});
+// =====================================================
+// Empty / Failure
+// =====================================================
 
-  final HomePreviousTrip trip;
-  final VoidCallback? onTap;
+class _HomeMessage extends StatelessWidget {
+  const _HomeMessage({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
-    final time = MaterialLocalizations.of(context)
-        .formatTimeOfDay(TimeOfDay.fromDateTime(trip.completedAt.toLocal()));
-
-    return Material(
-      color: AppColors.white0,
-      borderRadius: BorderRadius.circular(24),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.grey3),
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: AppColors.white0,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: AppColors.grey3),
+      ),
+      child: Column(
+        spacing: 18,
+        children: [
+          Icon(
+            Icons.local_shipping_outlined,
+            size: 54,
+            color: AppColors.primary,
           ),
-          child: Row(
-            spacing: 8,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 4,
-                  children: [
-                    Text(
-                      '${context.strings.trip_label} '
-                      '\u2066#${trip.id}\u2069',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.black1,
-                      ),
-                    ),
-                    Text(
-                      '${trip.totalOrders} '
-                      '${context.strings.orders_plural} — '
-                      '${context.strings.completed_at} $time',
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 13, color: AppColors.grey4),
-                    ),
-                  ],
-                ),
-              ),
-              if (trip.isSettled)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 5,
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline_rounded,
-                      size: 18,
-                      color: AppColors.green0,
-                    ),
-                    Text(
-                      context.strings.settled,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.green0,
-                      ),
-                    ),
-                  ],
-                ),
-            ],
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.grey4, fontSize: 15),
           ),
-        ),
+          OutlinedButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh_rounded),
+            label: Text(context.strings.current_trip_retry),
+          ),
+        ],
       ),
     );
   }
-}
-
-class HomeCurrentTrip {
-  const HomeCurrentTrip({
-    required this.id,
-    required this.vehicleName,
-    required this.driverName,
-    required this.warehouseName,
-    required this.startedAt,
-    required this.totalOrders,
-    required this.deliveredOrders,
-    required this.remainingOrders,
-    required this.collectedAmount,
-  });
-
-  final String id;
-  final String vehicleName;
-  final String driverName;
-  final String warehouseName;
-  final DateTime startedAt;
-  final int totalOrders;
-  final int deliveredOrders;
-  final int remainingOrders;
-  final num collectedAmount;
-}
-
-class HomePreviousTrip {
-  const HomePreviousTrip({
-    required this.id,
-    required this.totalOrders,
-    required this.completedAt,
-    required this.isSettled,
-  });
-
-  final String id;
-  final int totalOrders;
-  final DateTime completedAt;
-  final bool isSettled;
 }

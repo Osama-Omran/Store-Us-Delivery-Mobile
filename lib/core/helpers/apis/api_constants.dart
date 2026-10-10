@@ -23,4 +23,13 @@ class ApiConstants {
   static const String currentTrip = '$trips/current';
   static const String loadedItems = '$trips/{tripId}/loaded-items';
   static const String acceptTrip = '$trips/{tripId}/accept';
+  static const String tripOrders = '$trips/{tripId}/orders';
+  static const String tripHistory = '$trips/history';
+
+  //======= Orders =======//
+  static const String tripOrderDetails = '$trips/{tripId}/orders/{orderId}';
+
+  // ======= Account ======= //
+  static const String me = '/me';
+  static const String logout = '/logout';
 }

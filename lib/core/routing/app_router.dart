@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
+import 'package:storeus_delivery/features/account/presentation/cubit/account_cubit.dart';
+import 'package:storeus_delivery/features/account/presentation/screens/account_screen.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/layout/presentation/screens/layout_screen.dart';
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
@@ -151,16 +153,20 @@ class AppRouter {
         },
       ),
 
-      // GoRoute(
-      //   name: RoutesNames.layout,
-      //   path: RoutesNames.layout,
-      //   pageBuilder: (_, state) {
-      //     return _fadePageBuilder(
-      //       const LayoutScreen(),
-      //       state,
-      //     );
-      //   },
-      // ),
+      GoRoute(
+        name: RoutesNames.account,
+        path: RoutesNames.account,
+        pageBuilder: (_, state) {
+          return _fadePageBuilder(
+            BlocProvider<AccountCubit>(
+              lazy: false,
+              create: (_) => getIt<AccountCubit>()..getMe(),
+              child: const AccountScreen(),
+            ),
+            state,
+          );
+        },
+      ),
     ],
   );
 

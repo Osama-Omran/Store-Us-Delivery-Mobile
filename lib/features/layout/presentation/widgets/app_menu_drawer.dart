@@ -1,8 +1,9 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/layout/presentation/widgets/app_menu_drawer_item.dart';
@@ -30,7 +31,6 @@ class AppMenuDrawer extends StatelessWidget {
     this.pendingDeliveriesCount = 0,
     this.pendingTransfersCount = 0,
     this.selectedSection = AppMenuSection.deliveries,
-    this.onAccountTap,
     this.onTopRankTap,
     this.onTreasuryTap,
     this.onDeliveriesTap,
@@ -51,7 +51,6 @@ class AppMenuDrawer extends StatelessWidget {
   final int pendingTransfersCount;
   final AppMenuSection selectedSection;
 
-  final VoidCallback? onAccountTap;
   final VoidCallback? onTopRankTap;
   final VoidCallback? onTreasuryTap;
   final VoidCallback? onDeliveriesTap;
@@ -64,10 +63,7 @@ class AppMenuDrawer extends StatelessWidget {
   final VoidCallback? onReceiveCustodyTap;
   final VoidCallback? onLogoutTap;
 
-  void _handleTap(
-      BuildContext context,
-      VoidCallback? callback,
-      ) {
+  void _handleTap(BuildContext context, VoidCallback? callback) {
     Navigator.of(context).pop();
     callback?.call();
   }
@@ -83,9 +79,7 @@ class AppMenuDrawer extends StatelessWidget {
       width: drawerWidth,
       backgroundColor: AppColors.white0,
       surfaceTintColor: AppColors.white0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Column(
@@ -100,121 +94,86 @@ class AppMenuDrawer extends StatelessWidget {
             // ======= Menu Items ======= //
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 children: [
                   AppMenuDrawerItem(
                     title: context.strings.account,
                     icon: Icons.person_outline_rounded,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.account,
-                    onTap: () =>
-                        _handleTap(context, onAccountTap),
+                    isSelected: selectedSection == AppMenuSection.account,
+                    onTap: () => GoRouter.of(context).push(RoutesNames.account),
                   ),
 
                   AppMenuDrawerItem(
-                    title:
-                    '${context.strings.top_rank} · Top Rank',
+                    title: '${context.strings.top_rank} · Top Rank',
                     icon: Icons.emoji_events_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.topRank,
-                    onTap: () =>
-                        _handleTap(context, onTopRankTap),
+                    isSelected: selectedSection == AppMenuSection.topRank,
+                    onTap: () => _handleTap(context, onTopRankTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.treasury,
                     icon: Icons.account_balance_wallet_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.treasury,
-                    onTap: () =>
-                        _handleTap(context, onTreasuryTap),
+                    isSelected: selectedSection == AppMenuSection.treasury,
+                    onTap: () => _handleTap(context, onTreasuryTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.deliveries,
                     icon: Icons.inventory_2_outlined,
                     badgeCount: pendingDeliveriesCount,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.deliveries,
-                    onTap: () =>
-                        _handleTap(context, onDeliveriesTap),
+                    isSelected: selectedSection == AppMenuSection.deliveries,
+                    onTap: () => _handleTap(context, onDeliveriesTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.stock_transfer,
                     icon: Icons.swap_horiz_rounded,
                     badgeCount: pendingTransfersCount,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.stockTransfer,
-                    onTap: () =>
-                        _handleTap(context, onStockTransferTap),
+                    isSelected: selectedSection == AppMenuSection.stockTransfer,
+                    onTap: () => _handleTap(context, onStockTransferTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.direct_sale,
                     icon: Icons.shopping_bag_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.directSale,
-                    onTap: () =>
-                        _handleTap(context, onDirectSaleTap),
+                    isSelected: selectedSection == AppMenuSection.directSale,
+                    onTap: () => _handleTap(context, onDirectSaleTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.customers,
                     icon: Icons.groups_2_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.customers,
-                    onTap: () =>
-                        _handleTap(context, onCustomersTap),
+                    isSelected: selectedSection == AppMenuSection.customers,
+                    onTap: () => _handleTap(context, onCustomersTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.areas,
                     icon: Icons.route_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.areas,
-                    onTap: () =>
-                        _handleTap(context, onAreasTap),
+                    isSelected: selectedSection == AppMenuSection.areas,
+                    onTap: () => _handleTap(context, onAreasTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.reports,
                     icon: Icons.bar_chart_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.reports,
-                    onTap: () =>
-                        _handleTap(context, onReportsTap),
+                    isSelected: selectedSection == AppMenuSection.reports,
+                    onTap: () => _handleTap(context, onReportsTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.contact_us,
                     icon: Icons.support_agent_outlined,
-                    isSelected:
-                    selectedSection ==
-                        AppMenuSection.contactUs,
-                    onTap: () =>
-                        _handleTap(context, onContactUsTap),
+                    isSelected: selectedSection == AppMenuSection.contactUs,
+                    onTap: () => _handleTap(context, onContactUsTap),
                   ),
 
                   AppMenuDrawerItem(
                     title: context.strings.receive_custody,
                     icon: Icons.local_shipping_outlined,
                     isSelected:
-                    selectedSection ==
-                        AppMenuSection.receiveCustody,
-                    onTap: () =>
-                        _handleTap(context, onReceiveCustodyTap),
+                        selectedSection == AppMenuSection.receiveCustody,
+                    onTap: () => _handleTap(context, onReceiveCustodyTap),
                   ),
                 ],
               ),
@@ -225,25 +184,18 @@ class AppMenuDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white0,
                 border: Border(
-                  top: BorderSide(
-                    color: AppColors.grey3,
-                    width: 1,
-                  ),
+                  top: BorderSide(color: AppColors.grey3, width: 1),
                 ),
               ),
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    bottom: 4,
-                  ),
+                  padding: const EdgeInsets.only(top: 8, bottom: 4),
                   child: AppMenuDrawerItem(
                     title: context.strings.logout,
                     icon: Icons.logout_rounded,
                     isLogout: true,
-                    onTap: () =>
-                        _handleTap(context, onLogoutTap),
+                    onTap: () => _handleTap(context, onLogoutTap),
                   ),
                 ),
               ),
@@ -282,21 +234,13 @@ class _DrawerHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [
-            AppColors.blue4,
-            AppColors.blue5,
-          ],
+          colors: [AppColors.blue4, AppColors.blue5],
         ),
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            20,
-            18,
-            20,
-            24,
-          ),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -312,9 +256,7 @@ class _DrawerHeader extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withValues(
-                            alpha: 0.20,
-                          ),
+                          color: AppColors.primary.withValues(alpha: 0.20),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -334,8 +276,7 @@ class _DrawerHeader extends StatelessWidget {
                     shape: const CircleBorder(),
                     child: InkWell(
                       customBorder: const CircleBorder(),
-                      onTap: () =>
-                          Navigator.of(context).pop(),
+                      onTap: () => Navigator.of(context).pop(),
                       child: SizedBox(
                         width: 48,
                         height: 48,
@@ -354,8 +295,7 @@ class _DrawerHeader extends StatelessWidget {
 
               // ======= User Information ======= //
               Row(
-                crossAxisAlignment:
-                CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     width: 72,
@@ -363,8 +303,7 @@ class _DrawerHeader extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius:
-                      BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(22),
                     ),
                     child: Text(
                       initial,
@@ -380,16 +319,14 @@ class _DrawerHeader extends StatelessWidget {
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 3,
                       children: [
                         Text(
                           userName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                          Styles.textStyle20.copyWith(
+                          style: Styles.textStyle20.copyWith(
                             fontSize: 22,
                             color: AppColors.black1,
                             fontWeight: FontWeight.w800,
@@ -400,31 +337,26 @@ class _DrawerHeader extends StatelessWidget {
                           userRole,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                          Styles.textStyle14.copyWith(
+                          style: Styles.textStyle14.copyWith(
                             color: AppColors.grey4,
                           ),
                         ),
 
                         if (isOnTrip)
                           Padding(
-                            padding:
-                            const EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.only(top: 5),
                             child: Container(
-                              padding:
-                              const EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
                                 color: AppColors.primary,
-                                borderRadius:
-                                BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
                                 context.strings.currently_on_trip,
-                                style:
-                                Styles.textStyle12.copyWith(
+                                style: Styles.textStyle12.copyWith(
                                   color: AppColors.white0,
                                   fontWeight: FontWeight.w700,
                                 ),
