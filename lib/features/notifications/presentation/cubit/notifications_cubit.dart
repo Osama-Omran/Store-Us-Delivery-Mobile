@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -11,10 +10,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final GetNotificationsUsecase _getNotificationsUsecase;
   final MarkNotificationAsReadUsecase _markAsReadUsecase;
 
-  NotificationsCubit(
-      this._getNotificationsUsecase,
-      this._markAsReadUsecase,
-      ) : super(NotificationsInitial());
+  NotificationsCubit(this._getNotificationsUsecase, this._markAsReadUsecase)
+    : super(NotificationsInitial());
 
   static NotificationsCubit get(BuildContext context) =>
       BlocProvider.of<NotificationsCubit>(context);
@@ -42,9 +39,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     result.when(
       success: (response) {
         if (!response.success || response.data == null) {
-          emit(
-            NotificationsFailureState(response.message),
-          );
+          emit(NotificationsFailureState(response.message));
           return;
         }
 
@@ -56,11 +51,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         );
       },
       failure: (error) {
-        emit(
-          NotificationsFailureState(
-            error.apiErrorModel.message,
-          ),
-        );
+        emit(NotificationsFailureState(error.apiErrorModel.message));
       },
     );
   }
@@ -76,23 +67,20 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       return null;
     }
 
-    final notificationIndex = currentState.notifications
-        .indexWhere((item) => item.id == notificationId);
+    final notificationIndex = currentState.notifications.indexWhere(
+      (item) => item.id == notificationId,
+    );
 
     if (notificationIndex == -1) return null;
 
-    final notification =
-    currentState.notifications[notificationIndex];
+    final notification = currentState.notifications[notificationIndex];
 
     if (notification.isRead) return null;
 
     // Mark only this card as loading.
     emit(
       currentState.copyWith(
-        markingIds: {
-          ...currentState.markingIds,
-          notificationId,
-        },
+        markingIds: {...currentState.markingIds, notificationId},
       ),
     );
 
@@ -116,47 +104,39 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         if (response is Map && response['success'] == false) {
           errorMessage =
               response['message']?.toString() ??
-                  'notifications_mark_read_failed';
+              'notifications_mark_read_failed';
         }
       },
       failure: (error) {
-        errorMessage =
-        error.apiErrorModel.message.isNotEmpty
+        errorMessage = error.apiErrorModel.message.isNotEmpty
             ? error.apiErrorModel.message
             : 'notifications_mark_read_failed';
       },
     );
 
-    final updatedMarkingIds = {
-      ...latestState.markingIds,
-    }..remove(notificationId);
+    final updatedMarkingIds = {...latestState.markingIds}
+      ..remove(notificationId);
 
     // ======= Failure ======= //
     if (errorMessage != null) {
-      emit(
-        latestState.copyWith(
-          markingIds: updatedMarkingIds,
-        ),
-      );
+      emit(latestState.copyWith(markingIds: updatedMarkingIds));
 
       return errorMessage;
     }
 
     // ======= Success ======= //
     final wasUnread = latestState.notifications.any(
-          (item) => item.id == notificationId && !item.isRead,
+      (item) => item.id == notificationId && !item.isRead,
     );
 
     final updatedNotifications = latestState.notifications
         .map(
-          (item) => item.id == notificationId
-          ? item.copyWith(isRead: true)
-          : item,
-    )
+          (item) =>
+              item.id == notificationId ? item.copyWith(isRead: true) : item,
+        )
         .toList();
 
-    final updatedUnreadCount = wasUnread &&
-        latestState.unreadCount > 0
+    final updatedUnreadCount = wasUnread && latestState.unreadCount > 0
         ? latestState.unreadCount - 1
         : latestState.unreadCount;
 

@@ -1,20 +1,9 @@
-
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_items_response.dart';
 
-enum LoadedItemsStatus {
-  initial,
-  loading,
-  success,
-  empty,
-  failure,
-}
+enum LoadedItemsStatus { initial, loading, success, empty, failure }
 
-enum AcceptTripStatus {
-  initial,
-  loading,
-  failure,
-}
+enum AcceptTripStatus { initial, loading, failure }
 
 sealed class ReceiveTripState {}
 
@@ -32,13 +21,13 @@ final class ReceiveTripSuccessState extends ReceiveTripState {
   final String? acceptTripError;
 
   ReceiveTripSuccessState(
-      this.trip, {
-        this.loadedItemsStatus = LoadedItemsStatus.initial,
-        this.loadedItems,
-        this.loadedItemsError,
-        this.acceptTripStatus = AcceptTripStatus.initial,
-        this.acceptTripError,
-      });
+    this.trip, {
+    this.loadedItemsStatus = LoadedItemsStatus.initial,
+    this.loadedItems,
+    this.loadedItemsError,
+    this.acceptTripStatus = AcceptTripStatus.initial,
+    this.acceptTripError,
+  });
 
   ReceiveTripSuccessState copyWith({
     LoadedItemsStatus? loadedItemsStatus,
@@ -49,15 +38,11 @@ final class ReceiveTripSuccessState extends ReceiveTripState {
   }) {
     return ReceiveTripSuccessState(
       trip,
-      loadedItemsStatus:
-      loadedItemsStatus ?? this.loadedItemsStatus,
+      loadedItemsStatus: loadedItemsStatus ?? this.loadedItemsStatus,
       loadedItems: loadedItems ?? this.loadedItems,
-      loadedItemsError:
-      loadedItemsError ?? this.loadedItemsError,
-      acceptTripStatus:
-      acceptTripStatus ?? this.acceptTripStatus,
-      acceptTripError:
-      acceptTripError ?? this.acceptTripError,
+      loadedItemsError: loadedItemsError ?? this.loadedItemsError,
+      acceptTripStatus: acceptTripStatus ?? this.acceptTripStatus,
+      acceptTripError: acceptTripError ?? this.acceptTripError,
     );
   }
 }

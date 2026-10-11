@@ -9,6 +9,8 @@ import 'package:storeus_delivery/core/helpers/utils/force_update_services.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/cubit/top_rank_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/cubit/treasury_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/presentation/cubit/stock_transfer_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/reports/presentation/cubit/reports_cubit.dart';
 import 'package:storeus_delivery/features/login/data/repo/concrete_login_repo.dart';
 import 'package:storeus_delivery/features/login/domain/repo/login_repo_interface.dart';
 import 'package:storeus_delivery/features/login/domain/usecases/login_usecase.dart';
@@ -31,11 +33,17 @@ import 'package:storeus_delivery/features/trip/current_trip/domain/repo/trip_ord
 import 'package:storeus_delivery/features/trip/current_trip/domain/usecases/get_trip_orders_usecase.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
 
+import 'package:storeus_delivery/features/drawer_features/top_rank/data/repo/concrete_top_rank_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/top_rank/domain/repo/top_rank_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/top_rank/domain/usecases/get_top_rank_usecase.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/repo/concrete_confirm_delivery_repo.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/repo/confirm_delivery_repo_interface.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/usecases/confirm_delivery_usecase.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/confirm_delivery_cubit.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/data/repo/concrete_reschedule_order_repo.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/domain/repo/reschedule_order_repo_interface.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/domain/usecases/reschedule_order_usecase.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cubit/reschedule_order_cubit.dart';
-
 import 'package:storeus_delivery/features/trip/order_details/data/repo/concrete_order_details_repo.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/repo/order_details_repo_interface.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/get_order_details_usecase.dart';
@@ -87,8 +95,9 @@ void setupLocator() {
   getIt.registerFactory<LocaleCubit>(() => LocaleCubit());
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<LoginUsecase>()));
   getIt.registerFactory<LayoutCubit>(() => LayoutCubit());
-  getIt.registerFactory<TopRankCubit>(() => TopRankCubit());
   getIt.registerFactory<TreasuryCubit>(() => TreasuryCubit());
+  getIt.registerFactory<StockTransferCubit>(() => StockTransferCubit());
+  getIt.registerFactory<ReportsCubit>(() => ReportsCubit());
 
   getIt.registerLazySingleton<TripApiService>(
     () => TripApiService(getIt<Dio>()),
@@ -225,53 +234,71 @@ void setupLocator() {
   );
 
   getIt.registerLazySingleton<UpdateOrderDeliveryLocationUsecase>(
-        () => UpdateOrderDeliveryLocationUsecase(
-      getIt<OrderDetailsRepoInterface>(),
-    ),
+    () =>
+        UpdateOrderDeliveryLocationUsecase(getIt<OrderDetailsRepoInterface>()),
   );
 
-
-// ======= Reschedule Order Repository ======= //
+  // ======= Reschedule Order Repository ======= //
   getIt.registerLazySingleton<RescheduleOrderRepoInterface>(
-        () => ConcreteRescheduleOrderRepo(
-      getIt<TripApiService>(),
-    ),
+    () => ConcreteRescheduleOrderRepo(getIt<TripApiService>()),
   );
 
-// ======= Reschedule Order Usecase ======= //
+  // ======= Reschedule Order Usecase ======= //
   getIt.registerLazySingleton<RescheduleOrderUsecase>(
-        () => RescheduleOrderUsecase(
-      getIt<RescheduleOrderRepoInterface>(),
-    ),
+    () => RescheduleOrderUsecase(getIt<RescheduleOrderRepoInterface>()),
   );
 
-// ======= Reschedule Order Cubit ======= //
+  // ======= Reschedule Order Cubit ======= //
   getIt.registerFactory<RescheduleOrderCubit>(
-        () => RescheduleOrderCubit(
-      getIt<RescheduleOrderUsecase>(),
-    ),
+    () => RescheduleOrderCubit(getIt<RescheduleOrderUsecase>()),
+  );
+
+  // ======= Cancel Delivery Repository ======= //
+  getIt.registerLazySingleton<CancelDeliveryRepoInterface>(
+    () => ConcreteCancelDeliveryRepo(getIt<TripApiService>()),
+  );
+
+  // ======= Cancel Delivery Usecase ======= //
+  getIt.registerLazySingleton<CancelDeliveryUsecase>(
+    () => CancelDeliveryUsecase(getIt<CancelDeliveryRepoInterface>()),
+  );
+
+  // ======= Cancel Delivery Cubit ======= //
+  getIt.registerFactory<CancelDeliveryCubit>(
+    () => CancelDeliveryCubit(getIt<CancelDeliveryUsecase>()),
+  );
+
+  // ======= Confirm Delivery Repository ======= //
+  getIt.registerLazySingleton<ConfirmDeliveryRepoInterface>(
+    () => ConcreteConfirmDeliveryRepo(getIt<TripApiService>()),
+  );
+
+  // ======= Confirm Delivery Usecase ======= //
+  getIt.registerLazySingleton<ConfirmDeliveryUsecase>(
+    () => ConfirmDeliveryUsecase(getIt<ConfirmDeliveryRepoInterface>()),
+  );
+
+  // ======= Confirm Delivery Cubit ======= //
+  getIt.registerFactory<ConfirmDeliveryCubit>(
+    () => ConfirmDeliveryCubit(getIt<ConfirmDeliveryUsecase>()),
   );
 
 
-// ======= Cancel Delivery Repository ======= //
-  getIt.registerLazySingleton<CancelDeliveryRepoInterface>(
-        () => ConcreteCancelDeliveryRepo(
+  getIt.registerLazySingleton<TopRankRepoInterface>(
+        () => ConcreteTopRankRepo(
       getIt<TripApiService>(),
     ),
   );
 
-// ======= Cancel Delivery Usecase ======= //
-  getIt.registerLazySingleton<CancelDeliveryUsecase>(
-        () => CancelDeliveryUsecase(
-      getIt<CancelDeliveryRepoInterface>(),
+  getIt.registerLazySingleton<GetTopRankUsecase>(
+        () => GetTopRankUsecase(
+      getIt<TopRankRepoInterface>(),
     ),
   );
 
-// ======= Cancel Delivery Cubit ======= //
-  getIt.registerFactory<CancelDeliveryCubit>(
-        () => CancelDeliveryCubit(
-      getIt<CancelDeliveryUsecase>(),
+  getIt.registerFactory<TopRankCubit>(
+        () => TopRankCubit(
+      getIt<GetTopRankUsecase>(),
     ),
   );
-
 }

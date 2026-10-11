@@ -5,9 +5,11 @@ import 'package:storeus_delivery/features/layout/presentation/cubit/layout_state
 import 'package:storeus_delivery/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/screens/top_rank_screen.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/screens/treasury_screen.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/presentation/screens/stock_transfer_screen.dart';
+import 'package:storeus_delivery/features/drawer_features/reports/presentation/screens/reports_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/screen/trip_screen.dart';
 
-enum LayoutDrawerFeature { topRank, treasury }
+enum LayoutDrawerFeature { topRank, treasury, stockTransfer, reports }
 
 class LayoutCubit extends Cubit<LayoutState> {
   LayoutCubit() : super(LayoutInitial());
@@ -31,6 +33,9 @@ class LayoutCubit extends Cubit<LayoutState> {
   bool get isDrawerFeatureOpen => drawerFeature != null;
   bool get isTopRank => drawerFeature == LayoutDrawerFeature.topRank;
   bool get isTreasury => drawerFeature == LayoutDrawerFeature.treasury;
+  bool get isStockTransfer =>
+      drawerFeature == LayoutDrawerFeature.stockTransfer;
+  bool get isReports => drawerFeature == LayoutDrawerFeature.reports;
 
   void selectTap(int index) {
     if (index < 0 || index >= screens.length) return;
@@ -48,6 +53,14 @@ class LayoutCubit extends Cubit<LayoutState> {
 
   void openTreasury() {
     _openDrawerFeature(LayoutDrawerFeature.treasury);
+  }
+
+  void openStockTransfer() {
+    _openDrawerFeature(LayoutDrawerFeature.stockTransfer);
+  }
+
+  void openReports() {
+    _openDrawerFeature(LayoutDrawerFeature.reports);
   }
 
   void closeTopRank() {
@@ -68,6 +81,10 @@ class LayoutCubit extends Cubit<LayoutState> {
     currentScreen = switch (feature) {
       LayoutDrawerFeature.topRank => TopRankScreen(onBack: closeTopRank),
       LayoutDrawerFeature.treasury => const TreasuryScreen(),
+      LayoutDrawerFeature.stockTransfer => StockTransferScreen(
+        onBack: closeDrawerFeature,
+      ),
+      LayoutDrawerFeature.reports => const ReportsScreen(),
     };
     emit(LayoutInitial());
   }

@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
@@ -22,11 +21,11 @@ final class OrderDetailsSuccessState extends OrderDetailsState {
   final bool locationUpdated;
 
   OrderDetailsSuccessState(
-      this.order, {
-        this.tripOrder,
-        this.isSavingLocation = false,
-        this.locationUpdated = false,
-      });
+    this.order, {
+    this.tripOrder,
+    this.isSavingLocation = false,
+    this.locationUpdated = false,
+  });
 
   OrderDetailsSuccessState copyWith({
     bool? isSavingLocation,
@@ -35,10 +34,8 @@ final class OrderDetailsSuccessState extends OrderDetailsState {
     return OrderDetailsSuccessState(
       order,
       tripOrder: tripOrder,
-      isSavingLocation:
-      isSavingLocation ?? this.isSavingLocation,
-      locationUpdated:
-      locationUpdated ?? this.locationUpdated,
+      isSavingLocation: isSavingLocation ?? this.isSavingLocation,
+      locationUpdated: locationUpdated ?? this.locationUpdated,
     );
   }
 }

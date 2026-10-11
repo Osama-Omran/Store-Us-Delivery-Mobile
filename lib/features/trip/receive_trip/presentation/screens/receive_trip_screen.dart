@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -23,17 +22,14 @@ class ReceiveTripScreen extends StatefulWidget {
   const ReceiveTripScreen({super.key});
 
   @override
-  State<ReceiveTripScreen> createState() =>
-      _ReceiveTripScreenState();
+  State<ReceiveTripScreen> createState() => _ReceiveTripScreenState();
 }
 
 class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
   ReceivingProofModel? _approvedProof;
 
   // ======= Confirm Receiving ======= //
-  Future<void> _confirmReceiving(
-      ReceiveTripSuccessState state,
-      ) async {
+  Future<void> _confirmReceiving(ReceiveTripSuccessState state) async {
     final proof = _approvedProof;
 
     if (proof == null ||
@@ -53,8 +49,7 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
 
     if (currentState is! ReceiveTripSuccessState ||
         currentState.trip.id != state.trip.id ||
-        currentState.acceptTripStatus ==
-            AcceptTripStatus.loading) {
+        currentState.acceptTripStatus == AcceptTripStatus.loading) {
       return;
     }
 
@@ -64,43 +59,30 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
   }
 
   // ======= Accept Trip Error Message ======= //
-  String _getAcceptTripErrorMessage(
-      BuildContext context,
-      String? error,
-      ) {
+  String _getAcceptTripErrorMessage(BuildContext context, String? error) {
     return switch (error) {
-      'photo_missing' =>
-      context.strings.trip_accept_photo_missing,
+      'photo_missing' => context.strings.trip_accept_photo_missing,
 
-      'location_disabled' =>
-      context.strings.trip_accept_location_disabled,
+      'location_disabled' => context.strings.trip_accept_location_disabled,
 
       'location_permission_denied' =>
-      context.strings.trip_accept_location_permission_denied,
+        context.strings.trip_accept_location_permission_denied,
 
-      'location_timeout' =>
-      context.strings.trip_accept_location_timeout,
+      'location_timeout' => context.strings.trip_accept_location_timeout,
 
-      'trip_accept_failed' || null || '' =>
-      context.strings.trip_accept_failed,
+      'trip_accept_failed' || null || '' => context.strings.trip_accept_failed,
 
       final message => message,
     };
   }
 
   // ======= Bloc Listener ======= //
-  void _receiveTripListener(
-      BuildContext context,
-      ReceiveTripState state,
-      ) {
+  void _receiveTripListener(BuildContext context, ReceiveTripState state) {
     // ======= Accept Trip Success ======= //
     if (state is ReceiveTripAcceptedState) {
       context.pushReplacementNamed(
         RoutesNames.receiveTripSuccess,
-        extra: {
-          'tripNumber': state.tripNumber,
-          'receivedAt': state.acceptedAt,
-        },
+        extra: {'tripNumber': state.tripNumber, 'receivedAt': state.acceptedAt},
       );
       return;
     }
@@ -128,9 +110,9 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
 
   // ======= Bloc Listen When ======= //
   bool _receiveTripListenWhen(
-      ReceiveTripState previous,
-      ReceiveTripState current,
-      ) {
+    ReceiveTripState previous,
+    ReceiveTripState current,
+  ) {
     if (current is ReceiveTripAcceptedState) {
       return true;
     }
@@ -147,9 +129,7 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: context.strings.confirm_receiving_van,
-      ),
+      appBar: CustomAppBar(title: context.strings.confirm_receiving_van),
 
       // ======= Screen Body ======= //
       body: BlocConsumer<ReceiveTripCubit, ReceiveTripState>(
@@ -157,11 +137,8 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
         listener: _receiveTripListener,
         builder: (context, state) {
           // ======= Loading ======= //
-          if (state is ReceiveTripInitial ||
-              state is ReceiveTripLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (state is ReceiveTripInitial || state is ReceiveTripLoadingState) {
+            return const Center(child: CircularProgressIndicator());
           }
 
           // ======= Failure ======= //
@@ -189,27 +166,21 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
           // ======= Success ======= //
           if (state is ReceiveTripSuccessState) {
             final isPending =
-                state.trip.acceptance?.status.toUpperCase() ==
-                    'PENDING';
+                state.trip.acceptance?.status.toUpperCase() == 'PENDING';
 
             final isAccepting =
-                state.acceptTripStatus ==
-                    AcceptTripStatus.loading;
+                state.acceptTripStatus == AcceptTripStatus.loading;
 
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 // ======= Trip Information ======= //
-                TripData(
-                  trip: state.trip,
-                ),
+                TripData(trip: state.trip),
 
                 const Gap(24),
 
                 // ======= Loaded Items ======= //
-                LoadedItemsSection(
-                  state: state,
-                ),
+                LoadedItemsSection(state: state),
 
                 const Gap(24),
 
@@ -240,29 +211,25 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
       ),
 
       // ======= Confirm Receiving Bottom Bar ======= //
-      bottomNavigationBar:
-      BlocBuilder<ReceiveTripCubit, ReceiveTripState>(
+      bottomNavigationBar: BlocBuilder<ReceiveTripCubit, ReceiveTripState>(
         builder: (context, state) {
           if (state is! ReceiveTripSuccessState) {
             return const SizedBox.shrink();
           }
 
           final isPending =
-              state.trip.acceptance?.status.toUpperCase() ==
-                  'PENDING';
+              state.trip.acceptance?.status.toUpperCase() == 'PENDING';
 
           if (!isPending) {
             return const SizedBox.shrink();
           }
 
           final isAccepting =
-              state.acceptTripStatus ==
-                  AcceptTripStatus.loading;
+              state.acceptTripStatus == AcceptTripStatus.loading;
 
           final isProofApproved =
               _approvedProof != null &&
-                  _approvedProof!.tripNumber ==
-                      state.trip.number;
+              _approvedProof!.tripNumber == state.trip.number;
 
           return ConfirmReceivingBottomSheet(
             isProofApproved: isProofApproved,
@@ -279,10 +246,7 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
 
 // ======= Empty & Failure Widget ======= //
 class _ReceiveTripMessage extends StatelessWidget {
-  const _ReceiveTripMessage({
-    required this.message,
-    required this.onRetry,
-  });
+  const _ReceiveTripMessage({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -296,15 +260,10 @@ class _ReceiveTripMessage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 16,
           children: [
-            Text(
-              message,
-              textAlign: TextAlign.center,
-            ),
+            Text(message, textAlign: TextAlign.center),
             OutlinedButton(
               onPressed: onRetry,
-              child: Text(
-                context.strings.current_trip_retry,
-              ),
+              child: Text(context.strings.current_trip_retry),
             ),
           ],
         ),

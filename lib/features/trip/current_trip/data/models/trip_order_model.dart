@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 
 enum TripOrderStatus {
@@ -63,11 +62,11 @@ class TripOrderModel {
 
   bool get hasCoordinates =>
       latitude != null &&
-          longitude != null &&
-          latitude! >= -90 &&
-          latitude! <= 90 &&
-          longitude! >= -180 &&
-          longitude! <= 180;
+      longitude != null &&
+      latitude! >= -90 &&
+      latitude! <= 90 &&
+      longitude! >= -180 &&
+      longitude! <= 180;
 
   bool get isPaymentCollected {
     final payment = paymentStatus?.toUpperCase();
@@ -76,8 +75,7 @@ class TripOrderModel {
   }
 
   factory TripOrderModel.fromApi(TripOrderData data) {
-    final rawStatus =
-    data.deliveryStatus.trim().toUpperCase();
+    final rawStatus = data.deliveryStatus.trim().toUpperCase();
 
     return TripOrderModel(
       id: data.salesOrder,
@@ -109,13 +107,11 @@ class TripOrderModel {
       'PARTIAL' ||
       'PARTIALLY_DELIVERED' ||
       'PARTIAL_DELIVERED' ||
-      'DELIVERED_PARTIALLY' =>
-      TripOrderStatus.partiallyDelivered,
+      'DELIVERED_PARTIALLY' => TripOrderStatus.partiallyDelivered,
 
       'RESCHEDULED' => TripOrderStatus.rescheduled,
 
-      'CANCELLED' ||
-      'CANCELED' => TripOrderStatus.cancelled,
+      'CANCELLED' || 'CANCELED' => TripOrderStatus.cancelled,
 
       _ => TripOrderStatus.unknown,
     };

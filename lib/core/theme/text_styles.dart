@@ -40,11 +40,9 @@ class Styles {
     fontWeight: FontWeight.w900,
   );
 
-
   static TextStyle textStyle22 = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w800,
     color: AppColors.black1,
   );
-
 }

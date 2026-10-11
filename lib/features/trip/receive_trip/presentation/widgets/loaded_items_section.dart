@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -11,10 +10,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/van_products.dart';
 
 class LoadedItemsSection extends StatelessWidget {
-  const LoadedItemsSection({
-    super.key,
-    required this.state,
-  });
+  const LoadedItemsSection({super.key, required this.state});
 
   final ReceiveTripSuccessState state;
 
@@ -58,14 +54,11 @@ class LoadedItemsSection extends StatelessWidget {
                         ? state.loadedItemsError!
                         : context.strings.loaded_items_load_failed,
                     textAlign: TextAlign.center,
-                    style: Styles.textStyle14.copyWith(
-                      color: AppColors.grey4,
-                    ),
+                    style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                   ),
                   OutlinedButton(
                     onPressed: () =>
-                        ReceiveTripCubit.get(context)
-                            .getLoadedItems(),
+                        ReceiveTripCubit.get(context).getLoadedItems(),
                     child: Text(context.strings.current_trip_retry),
                   ),
                 ],
@@ -89,9 +82,7 @@ class LoadedItemsSection extends StatelessWidget {
                   child: Text(
                     context.strings.loaded_items_empty,
                     textAlign: TextAlign.center,
-                    style: Styles.textStyle14.copyWith(
-                      color: AppColors.grey4,
-                    ),
+                    style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                   ),
                 ),
               )

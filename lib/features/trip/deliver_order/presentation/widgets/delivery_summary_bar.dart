@@ -1,16 +1,62 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
+
+import 'package:go_router/go_router.dart';
+
+import 'package:storeus_delivery/core/routing/routes_names.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_state.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_review_sheet.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_state.dart';
+import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 
 class DeliverySummaryBar extends StatelessWidget {
-  const DeliverySummaryBar({super.key});
+  const DeliverySummaryBar({
+    super.key,
+    required this.tripId,
+    required this.orderId,
+  });
+
+  final int tripId;
+  final int orderId;
+
+  void _openDeliveryResult(BuildContext context, DeliveryDraftReady draft) {
+    final detailsState = context.read<OrderDetailsCubit>().state;
+
+    if (detailsState is! OrderDetailsSuccessState) return;
+
+    final customer = OrderCustomerLocation.fromApi(
+      details: detailsState.order,
+      tripOrder: detailsState.tripOrder,
+    );
+
+    final flow = DeliveryFlowData(
+      tripId: tripId,
+      orderId: orderId,
+      salesOrder: detailsState.order.salesOrder,
+      customerName: customer.name,
+      originalTotal: detailsState.order.originalTotal,
+      items: [
+        for (int i = 0; i < draft.items.length; i++)
+          DeliveryFlowItem(
+            lineId: draft.items[i].lineId,
+            itemCode: draft.items[i].itemCode,
+            itemName: draft.items[i].itemName,
+            uom: draft.items[i].uom,
+            orderedQty: draft.items[i].orderedQty ?? 0,
+            selectedQty: draft.qtyFor(i),
+            rate: draft.items[i].rate,
+          ),
+      ],
+    );
+
+    context.pushNamed(RoutesNames.deliveryResult, extra: flow);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +75,10 @@ class DeliverySummaryBar extends StatelessWidget {
             : context.strings.delivery_full_draft;
 
         return Container(
-          padding: const EdgeInsets.fromLTRB(
-            20,
-            14,
-            20,
-            14,
-          ),
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
           decoration: BoxDecoration(
             color: AppColors.white0,
-            border: Border(
-              top: BorderSide(color: AppColors.grey3),
-            ),
+            border: Border(top: BorderSide(color: AppColors.grey3)),
           ),
           child: SafeArea(
             top: false,
@@ -48,34 +87,27 @@ class DeliverySummaryBar extends StatelessWidget {
               spacing: 12,
               children: [
                 _SummaryRow(
-                  label: context.strings
-                      .order_details_original_total,
+                  label: context.strings.order_details_original_total,
                   amount: state.originalTotal,
                 ),
 
                 _SummaryRow(
-                  label: context.strings
-                      .delivery_selected_items_value,
+                  label: context.strings.delivery_selected_items_value,
                   amount: estimatedValue,
                 ),
 
                 _SummaryRow(
-                  label: context.strings
-                      .delivery_extra_products,
+                  label: context.strings.delivery_extra_products,
                   amount: 0,
                 ),
 
-                Divider(
-                  color: AppColors.grey3,
-                  height: 1,
-                ),
+                Divider(color: AppColors.grey3, height: 1),
 
                 Row(
                   children: [
                     Expanded(
                       child: Text(
-                        context.strings
-                            .delivery_estimated_total,
+                        context.strings.delivery_estimated_total,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
@@ -86,10 +118,7 @@ class DeliverySummaryBar extends StatelessWidget {
                     Text(
                       estimatedValue == null
                           ? '—'
-                          : formatTripAmount(
-                        context,
-                        estimatedValue,
-                      ),
+                          : formatTripAmount(context, estimatedValue),
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
@@ -136,10 +165,7 @@ class DeliverySummaryBar extends StatelessWidget {
                       ),
                       Text(
                         context.strings.delivery_auto_calculated,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.grey4,
-                        ),
+                        style: TextStyle(fontSize: 11, color: AppColors.grey4),
                       ),
                     ],
                   ),
@@ -152,26 +178,7 @@ class DeliverySummaryBar extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: !state.hasSelectedItems
                         ? null
-                        : () {
-                      final draftCubit =
-                      context.read<DeliveryDraftCubit>();
-
-                      showModalBottomSheet<void>(
-                        context: context,
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        backgroundColor: AppColors.white0,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(30),
-                          ),
-                        ),
-                        builder: (_) => BlocProvider.value(
-                          value: draftCubit,
-                          child: const DeliveryReviewSheet(),
-                        ),
-                      );
-                    },
+                        : () => _openDeliveryResult(context, state),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white0,
@@ -199,10 +206,7 @@ class DeliverySummaryBar extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({
-    required this.label,
-    required this.amount,
-  });
+  const _SummaryRow({required this.label, required this.amount});
 
   final String label;
   final num? amount;
@@ -214,17 +218,12 @@ class _SummaryRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.grey4,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.grey4),
           ),
         ),
 
         Text(
-          amount == null
-              ? '—'
-              : formatTripAmount(context, amount!),
+          amount == null ? '—' : formatTripAmount(context, amount!),
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w800,

@@ -1,13 +1,7 @@
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 
-enum HomeOrdersStatus {
-  initial,
-  loading,
-  success,
-  failure,
-}
+enum HomeOrdersStatus { initial, loading, success, failure }
 
 sealed class HomeState {}
 
@@ -30,11 +24,11 @@ final class HomeSuccessState extends HomeState {
   final String? ordersError;
 
   HomeSuccessState(
-      this.trip, {
-        this.ordersStatus = HomeOrdersStatus.initial,
-        this.orders = const [],
-        this.ordersError,
-      });
+    this.trip, {
+    this.ordersStatus = HomeOrdersStatus.initial,
+    this.orders = const [],
+    this.ordersError,
+  });
 
   int? get deliveredOrders {
     if (ordersStatus != HomeOrdersStatus.success) {
@@ -79,9 +73,7 @@ final class HomeSuccessState extends HomeState {
         .toList();
 
     if (statuses.any(
-          (status) =>
-      status != 'PENDING' &&
-          !handledStatuses.contains(status),
+      (status) => status != 'PENDING' && !handledStatuses.contains(status),
     )) {
       return null;
     }

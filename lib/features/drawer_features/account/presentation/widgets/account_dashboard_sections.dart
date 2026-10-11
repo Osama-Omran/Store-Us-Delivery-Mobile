@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -6,10 +5,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class AccountDashboardSections extends StatelessWidget {
-  const AccountDashboardSections({
-    super.key,
-    required this.userName,
-  });
+  const AccountDashboardSections({super.key, required this.userName});
 
   final String userName;
 
@@ -27,8 +23,7 @@ class AccountDashboardSections extends StatelessWidget {
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 4,
                   children: [
                     Text(
@@ -50,9 +45,7 @@ class AccountDashboardSections extends StatelessWidget {
               ),
               Text(
                 '—',
-                style: Styles.textStyle24.copyWith(
-                  color: AppColors.primary,
-                ),
+                style: Styles.textStyle24.copyWith(color: AppColors.primary),
               ),
             ],
           ),
@@ -92,15 +85,12 @@ class AccountDashboardSections extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: _cardDecoration(),
           child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 18,
             children: [
               Text(
                 context.strings.account_sync_status,
-                style: Styles.textStyle18.copyWith(
-                  color: AppColors.black1,
-                ),
+                style: Styles.textStyle18.copyWith(color: AppColors.black1),
               ),
               Row(
                 spacing: 10,
@@ -131,10 +121,7 @@ class AccountDashboardSections extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.wifi_off_rounded,
-                      color: AppColors.black1,
-                    ),
+                    Icon(Icons.wifi_off_rounded, color: AppColors.black1),
                     const Gap(12),
                     Expanded(
                       child: Text(
@@ -144,10 +131,7 @@ class AccountDashboardSections extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Switch.adaptive(
-                      value: false,
-                      onChanged: null,
-                    ),
+                    const Switch.adaptive(value: false, onChanged: null),
                   ],
                 ),
               ),
@@ -162,9 +146,7 @@ class AccountDashboardSections extends StatelessWidget {
     return BoxDecoration(
       color: AppColors.white0,
       borderRadius: BorderRadius.circular(26),
-      border: Border.all(
-        color: AppColors.grey3,
-      ),
+      border: Border.all(color: AppColors.grey3),
       boxShadow: [
         BoxShadow(
           color: AppColors.black1.withValues(alpha: .04),
@@ -190,38 +172,24 @@ class _StatisticCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: 110,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 18,
-      ),
+      constraints: const BoxConstraints(minHeight: 110),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18),
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.grey3,
-        ),
+        border: Border.all(color: AppColors.grey3),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 7,
         children: [
-          Text(
-            value,
-            style: Styles.textStyle24.copyWith(
-              color: valueColor,
-            ),
-          ),
+          Text(value, style: Styles.textStyle24.copyWith(color: valueColor)),
           Text(
             title,
             maxLines: 2,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: Styles.textStyle12.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle12.copyWith(color: AppColors.grey4),
           ),
         ],
       ),

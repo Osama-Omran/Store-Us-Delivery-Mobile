@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,8 +7,7 @@ import 'package:storeus_delivery/features/trip/cancel_delivery/domain/usecases/c
 import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/cubit/cancel_delivery_state.dart';
 
 class CancelDeliveryCubit extends Cubit<CancelDeliveryState> {
-  CancelDeliveryCubit(this._usecase)
-      : super(CancelDeliveryInitial());
+  CancelDeliveryCubit(this._usecase) : super(CancelDeliveryInitial());
 
   final CancelDeliveryUsecase _usecase;
 
@@ -22,7 +20,8 @@ class CancelDeliveryCubit extends Cubit<CancelDeliveryState> {
     required int orderId,
     required String reason,
   }) async {
-    if (isClosed || state is CancelDeliveryLoading ||
+    if (isClosed ||
+        state is CancelDeliveryLoading ||
         state is CancelDeliverySuccess) {
       return;
     }
@@ -48,8 +47,7 @@ class CancelDeliveryCubit extends Cubit<CancelDeliveryState> {
         if (response is Map && response['success'] == false) {
           emit(
             CancelDeliveryFailure(
-              response['message']?.toString() ??
-                  'cancel_delivery_failed',
+              response['message']?.toString() ?? 'cancel_delivery_failed',
             ),
           );
           return;
@@ -58,18 +56,13 @@ class CancelDeliveryCubit extends Cubit<CancelDeliveryState> {
         emit(CancelDeliverySuccess());
       },
       failure: (error) {
-        final dynamic rawMessage =
-            error.apiErrorModel.message;
+        final dynamic rawMessage = error.apiErrorModel.message;
 
-        final message = rawMessage is String
-            ? rawMessage.trim()
-            : '';
+        final message = rawMessage is String ? rawMessage.trim() : '';
 
         emit(
           CancelDeliveryFailure(
-            message.isNotEmpty
-                ? message
-                : 'cancel_delivery_failed',
+            message.isNotEmpty ? message : 'cancel_delivery_failed',
           ),
         );
       },

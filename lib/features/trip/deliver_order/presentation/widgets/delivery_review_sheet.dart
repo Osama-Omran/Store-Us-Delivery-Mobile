@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,8 +45,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () =>
-                              Navigator.of(context).pop(),
+                          onPressed: () => Navigator.of(context).pop(),
                           icon: const Icon(Icons.close),
                         ),
                       ],
@@ -57,9 +55,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                       state.salesOrder,
                       textDirection: TextDirection.ltr,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: AppColors.grey4,
-                      ),
+                      style: TextStyle(color: AppColors.grey4),
                     ),
 
                     // ======= Selected Items ======= //
@@ -71,9 +67,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          for (var i = 0;
-                          i < state.items.length;
-                          i++)
+                          for (var i = 0; i < state.items.length; i++)
                             if (state.qtyFor(i) > 0)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -82,13 +76,11 @@ class DeliveryReviewSheet extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      child: Text(
-                                        state.items[i].itemName,
-                                      ),
+                                      child: Text(state.items[i].itemName),
                                     ),
                                     Text(
                                       '${formatDeliveryQty(state.qtyFor(i))} '
-                                          '${state.items[i].uom}',
+                                      '${state.items[i].uom}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w800,
                                         color: AppColors.black1,
@@ -106,20 +98,17 @@ class DeliveryReviewSheet extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            context.strings
-                                .delivery_estimated_total,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                            ),
+                            context.strings.delivery_estimated_total,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ),
                         Text(
                           state.estimatedItemsValue == null
                               ? '—'
                               : formatTripAmount(
-                            context,
-                            state.estimatedItemsValue!,
-                          ),
+                                  context,
+                                  state.estimatedItemsValue!,
+                                ),
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
                             fontSize: 21,
@@ -145,8 +134,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              context.strings
-                                  .delivery_submission_not_available,
+                              context.strings.delivery_submission_not_available,
                               style: TextStyle(
                                 color: AppColors.orange0,
                                 fontWeight: FontWeight.w600,
@@ -160,11 +148,8 @@ class DeliveryReviewSheet extends StatelessWidget {
                     SizedBox(
                       height: 60,
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(),
-                        child: Text(
-                          context.strings.delivery_back_to_edit,
-                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(context.strings.delivery_back_to_edit),
                       ),
                     ),
                   ],

@@ -1,119 +1,141 @@
+
 import 'package:flutter/material.dart';
-import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
-import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
-class TopRankMetrics extends StatelessWidget {
-  const TopRankMetrics({super.key, required this.entry});
+String formatRankNumber(num? number) {
+  if (number == null) return '—';
 
-  final TopRankEntry entry;
+  final value = number.toDouble();
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      spacing: 4,
-      children: [
-        _MetricRow(
-          label: context.strings.top_rank_delivery,
-          value: entry.deliveryPercentage == null
-              ? '—'
-              : '${entry.deliveryPercentage}%',
-        ),
-        _MetricRow(
-          label: context.strings.top_rank_collection,
-          value: entry.collectionPercentage == null
-              ? '—'
-              : '${entry.collectionPercentage}%',
-        ),
-        _MetricRow(
-          label: context.strings.top_rank_extra_sales,
-          value: entry.extraSales == null
-              ? '—'
-              : formatTripAmount(context, entry.extraSales!),
-        ),
-      ],
-    );
+  if (value == value.roundToDouble()) {
+    return value.toStringAsFixed(0);
   }
+
+  if (value.abs() < 1) {
+    return value.toStringAsFixed(2);
+  }
+
+  return value.toStringAsFixed(1);
 }
 
-class _MetricRow extends StatelessWidget {
-  const _MetricRow({required this.label, required this.value});
+String formatRankMetric(TopRankMetric metric) {
+  if (metric.value == null) return '—';
 
-  final String label;
-  final String value;
+  final number = formatRankNumber(metric.value);
+  final unit = metric.unit?.trim() ?? '';
+
+  if (unit.isEmpty) return number;
+  if (unit == '%') return '$number%';
+
+  return '$number $unit';
+}
+
+class TopRankMetrics extends StatelessWidget {
+  const TopRankMetrics({
+    super.key,
+    required this.entry,
+    this.maxRows = 3,
+  });
+
+  final TopRankEntry entry;
+  final int maxRows;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final metrics = entry.metrics.take(maxRows).toList();
+
+    if (metrics.isEmpty) {
+      return Text(
+        'لا توجد مؤشرات أداء متاحة',
+        style: Styles.textStyle14.copyWith(
+          color: AppColors.grey4,
+        ),
+      );
+    }
+
+    return Column(
+      spacing: 5,
       children: [
-        Expanded(
-          child: Text(
-            label,
-            style: Styles.textStyle12.copyWith(
-              color: AppColors.grey4,
-              height: 1.5,
-            ),
+        for (final metric in metrics)
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  metric.label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Styles.textStyle12.copyWith(
+                    color: AppColors.grey4,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                formatRankMetric(metric),
+                textDirection: TextDirection.ltr,
+                style: Styles.textStyle14.copyWith(
+                  color: AppColors.black1,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          value,
-          textAlign: TextAlign.end,
-          style: Styles.textStyle14.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-            height: 1.5,
-          ),
-        ),
       ],
     );
   }
 }
 
 class TopRankMovement extends StatelessWidget {
-  const TopRankMovement({super.key, required this.movement});
+  const TopRankMovement({
+    super.key,
+    required this.movement,
+  });
 
-  final int movement;
+  final int? movement;
 
   @override
   Widget build(BuildContext context) {
-    final color = movement > 0
-        ? AppColors.green0
-        : movement < 0
-        ? AppColors.red1
-        : AppColors.grey4;
-    final label = movement > 0
-        ? context.strings.top_rank_moved_up(movement)
-        : movement < 0
-        ? context.strings.top_rank_moved_down(movement.abs())
-        : context.strings.top_rank_unchanged;
+    if (movement == null) {
+      return Text(
+        'غير متاح',
+        style: Styles.textStyle12.copyWith(
+          color: AppColors.grey4,
+        ),
+      );
+    }
 
-    return Semantics(
-      label: label,
-      excludeSemantics: true,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        textDirection: TextDirection.ltr,
-        children: [
-          Text(
-            movement == 0 ? '—' : '${movement.abs()}',
-            style: Styles.textStyle12.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+    if (movement == 0) {
+      return Text(
+        'بدون تغيير',
+        style: Styles.textStyle12.copyWith(
+          color: AppColors.grey4,
+        ),
+      );
+    }
+
+    final improved = movement! > 0;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          improved
+              ? Icons.arrow_upward_rounded
+              : Icons.arrow_downward_rounded,
+          color: improved ? AppColors.green0 : AppColors.red1,
+          size: 16,
+        ),
+        Text(
+          '${movement!.abs()}',
+          style: Styles.textStyle12.copyWith(
+            color: improved ? AppColors.green0 : AppColors.red1,
+            fontWeight: FontWeight.w800,
           ),
-          if (movement != 0)
-            Icon(
-              movement > 0
-                  ? Icons.arrow_upward_rounded
-                  : Icons.arrow_downward_rounded,
-              size: 14,
-              color: color,
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

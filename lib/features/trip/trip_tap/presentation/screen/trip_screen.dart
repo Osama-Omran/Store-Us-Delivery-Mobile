@@ -95,8 +95,6 @@ class _TripScreenBody extends StatelessWidget {
 
           // ======= Accepted ======= //
           if (acceptanceStatus == 'ACCEPTED') {
-            final ordersLoaded = state.ordersStatus == TripOrdersStatus.success;
-
             if (acceptanceStatus == 'ACCEPTED') {
               final ordersLoaded =
                   state.ordersStatus == TripOrdersStatus.success;

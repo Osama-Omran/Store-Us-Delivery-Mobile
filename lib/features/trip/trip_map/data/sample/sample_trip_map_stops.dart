@@ -19,7 +19,9 @@ const _sampleCoordinates = <int, LatLng>{
   12: LatLng(30.0340, 31.2107),
 };
 
-final sampleTripMapStops = sampleTripOrders.map((order) {
-  final coordinates = _sampleCoordinates[order.stopNumber]!;
-  return TripMapStop(order: order, location: coordinates);
-}).toList(growable: false);
+final sampleTripMapStops = sampleTripOrders
+    .map((order) {
+      final coordinates = _sampleCoordinates[order.stopNumber]!;
+      return TripMapStop(order: order, location: coordinates);
+    })
+    .toList(growable: false);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,10 +12,7 @@ import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
 
 class CurrentTripHeader extends StatelessWidget {
-  const CurrentTripHeader({
-    super.key,
-    required this.tripNumber,
-  });
+  const CurrentTripHeader({super.key, required this.tripNumber});
 
   final String tripNumber;
 
@@ -27,31 +23,23 @@ class CurrentTripHeader extends StatelessWidget {
     if (state is! TripTabSuccessState ||
         state.ordersStatus != TripOrdersStatus.success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.strings.trip_map_orders_unavailable,
-          ),
-        ),
+        SnackBar(content: Text(context.strings.trip_map_orders_unavailable)),
       );
       return;
     }
 
     // ======= Build Real Map Stops ======= //
-    final stops = state.orders
-        .where((order) => order.hasCoordinates)
-        .map(
-          (order) => TripMapStop(
-        order: order,
-        location: LatLng(
-          order.latitude!,
-          order.longitude!,
-        ),
-      ),
-    )
-        .toList()
-      ..sort(
-            (a, b) => a.number.compareTo(b.number),
-      );
+    final stops =
+        state.orders
+            .where((order) => order.hasCoordinates)
+            .map(
+              (order) => TripMapStop(
+                order: order,
+                location: LatLng(order.latitude!, order.longitude!),
+              ),
+            )
+            .toList()
+          ..sort((a, b) => a.number.compareTo(b.number));
 
     // ======= Navigate To Trip Map ======= //
     GoRouter.of(context).push(
@@ -77,11 +65,7 @@ class CurrentTripHeader extends StatelessWidget {
       height: 90,
       decoration: BoxDecoration(
         color: AppColors.grey0,
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.grey3,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.grey3)),
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -100,11 +84,8 @@ class CurrentTripHeader extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 '${context.strings.trip_label} '
-                    '\u2066#$displayTripNumber\u2069',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.grey4,
-                ),
+                '\u2066#$displayTripNumber\u2069',
+                style: TextStyle(fontSize: 13, color: AppColors.grey4),
               ),
             ],
           ),
@@ -114,11 +95,7 @@ class CurrentTripHeader extends StatelessWidget {
             end: 22,
             child: Material(
               color: AppColors.white0,
-              shape: CircleBorder(
-                side: BorderSide(
-                  color: AppColors.grey3,
-                ),
-              ),
+              shape: CircleBorder(side: BorderSide(color: AppColors.grey3)),
               child: InkWell(
                 onTap: () => _openTripMap(context),
                 customBorder: const CircleBorder(),

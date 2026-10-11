@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -89,9 +88,7 @@ class TripStatusPlaceholder extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh_rounded),
-                label: Text(
-                  context.strings.trip_tab_retry,
-                ),
+                label: Text(context.strings.trip_tab_retry),
               ),
             ],
           ],

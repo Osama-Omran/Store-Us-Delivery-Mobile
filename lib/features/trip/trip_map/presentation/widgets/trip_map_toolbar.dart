@@ -38,7 +38,8 @@ class TripMapToolbar extends StatelessWidget {
                     color: AppColors.black1,
                     iconSize: 30,
                     onPressed: onBack,
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(context)
+                        .backButtonTooltip,
                   ),
                 ),
               ),
@@ -86,7 +87,10 @@ class TripMapToolbar extends StatelessWidget {
                               color: AppColors.primary,
                             ),
                           )
-                        : Icon(Icons.my_location_rounded, color: AppColors.primary),
+                        : Icon(
+                            Icons.my_location_rounded,
+                            color: AppColors.primary,
+                          ),
                     onPressed: isRefreshing ? null : onRefreshLocation,
                     tooltip: context.strings.trip_map_refresh_location,
                   ),

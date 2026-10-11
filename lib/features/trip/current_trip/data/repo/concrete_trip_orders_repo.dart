@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/trip_api_service.dart';
@@ -23,18 +22,13 @@ class ConcreteTripOrdersRepo implements TripOrdersRepoInterface {
         throw StateError('Access token is missing');
       }
 
-      final response = await _apiService.getTripOrders(
-        tripId,
-        'Bearer $token',
-      );
+      final response = await _apiService.getTripOrders(tripId, 'Bearer $token');
 
       return ApiResult.success(response);
     } catch (error) {
       CustomLogger.logger?.f(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 }

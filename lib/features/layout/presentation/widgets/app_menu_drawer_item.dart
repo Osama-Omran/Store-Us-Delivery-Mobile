@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -41,31 +40,20 @@ class AppMenuDrawerItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 3,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
           child: Material(
-            color: isSelected
-                ? AppColors.blue4
-                : AppColors.white0,
+            color: isSelected ? AppColors.blue4 : AppColors.white0,
             borderRadius: BorderRadius.circular(20),
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 height: 64,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   textDirection: TextDirection.rtl,
                   children: [
-                    Icon(
-                      icon,
-                      size: 24,
-                      color: iconColor,
-                    ),
+                    Icon(icon, size: 24, color: iconColor),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Text(
@@ -79,21 +67,15 @@ class AppMenuDrawerItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (badgeCount != null &&
-                        badgeCount! > 0)
+                    if (badgeCount != null && badgeCount! > 0)
                       Container(
                         height: 28,
-                        constraints: const BoxConstraints(
-                          minWidth: 28,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 7,
-                        ),
+                        constraints: const BoxConstraints(minWidth: 28),
+                        padding: const EdgeInsets.symmetric(horizontal: 7),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.orange0,
-                          borderRadius:
-                          BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           '$badgeCount',
@@ -110,11 +92,7 @@ class AppMenuDrawerItem extends StatelessWidget {
           ),
         ),
         if (showDivider)
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.grey3,
-          ),
+          Divider(height: 1, thickness: 1, color: AppColors.grey3),
       ],
     );
   }

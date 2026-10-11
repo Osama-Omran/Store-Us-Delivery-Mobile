@@ -1,33 +1,22 @@
-
 class LoginResponse {
   final bool success;
   final LoginResponseData? data;
   final String? message;
 
-  const LoginResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const LoginResponse({required this.success, this.data, this.message});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       success: json['success'] as bool? ?? false,
       data: json['data'] == null
           ? null
-          : LoginResponseData.fromJson(
-        json['data'] as Map<String, dynamic>,
-      ),
+          : LoginResponseData.fromJson(json['data'] as Map<String, dynamic>),
       message: json['message'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data?.toJson(),
-      'message': message,
-    };
+    return {'success': success, 'data': data?.toJson(), 'message': message};
   }
 }
 
@@ -46,18 +35,12 @@ class LoginResponseData {
     return LoginResponseData(
       token: json['token'] as String,
       tokenType: json['token_type'] as String,
-      user: LoginUser.fromJson(
-        json['user'] as Map<String, dynamic>,
-      ),
+      user: LoginUser.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'token': token,
-      'token_type': tokenType,
-      'user': user.toJson(),
-    };
+    return {'token': token, 'token_type': tokenType, 'user': user.toJson()};
   }
 }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,12 +24,10 @@ class CancelDeliverySheet extends StatefulWidget {
   final String salesOrder;
 
   @override
-  State<CancelDeliverySheet> createState() =>
-      _CancelDeliverySheetState();
+  State<CancelDeliverySheet> createState() => _CancelDeliverySheetState();
 }
 
-class _CancelDeliverySheetState
-    extends State<CancelDeliverySheet> {
+class _CancelDeliverySheetState extends State<CancelDeliverySheet> {
   final _otherReasonController = TextEditingController();
   final _notesController = TextEditingController();
 
@@ -58,8 +55,7 @@ class _CancelDeliverySheetState
     return _reasons(context)[index];
   }
 
-  bool _canSubmit(BuildContext context) =>
-      _selectedReason(context).isNotEmpty;
+  bool _canSubmit(BuildContext context) => _selectedReason(context).isNotEmpty;
 
   @override
   void dispose() {
@@ -80,12 +76,9 @@ class _CancelDeliverySheetState
       context: context,
       useSafeArea: true,
       backgroundColor: AppColors.white0,
-      barrierColor:
-      AppColors.black1.withValues(alpha: 0.45),
+      barrierColor: AppColors.black1.withValues(alpha: 0.45),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (_) => CancelDeliveryConfirmationSheet(
         salesOrder: widget.salesOrder,
@@ -107,10 +100,7 @@ class _CancelDeliverySheetState
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.red0,
-        ),
+        SnackBar(content: Text(message), backgroundColor: AppColors.red0),
       );
   }
 
@@ -120,15 +110,13 @@ class _CancelDeliverySheetState
 
     return BlocConsumer<CancelDeliveryCubit, CancelDeliveryState>(
       listenWhen: (_, current) =>
-      current is CancelDeliverySuccess ||
-          current is CancelDeliveryFailure,
+          current is CancelDeliverySuccess || current is CancelDeliveryFailure,
       listener: (context, state) {
         if (state is CancelDeliveryFailure) {
           final message = switch (state.message) {
-            'cancel_delivery_failed' =>
-            context.strings.cancel_delivery_failed,
+            'cancel_delivery_failed' => context.strings.cancel_delivery_failed,
             'cancel_reason_required' =>
-            context.strings.cancel_delivery_reason_required,
+              context.strings.cancel_delivery_reason_required,
             final message => message,
           };
 
@@ -175,9 +163,7 @@ class _CancelDeliverySheetState
                     const SizedBox(height: 18),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
@@ -195,24 +181,20 @@ class _CancelDeliverySheetState
                     // ======= Scrollable Form ======= //
                     Expanded(
                       child: ListView(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         children: [
                           // ======= Order Information ======= //
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: AppColors.grey5,
-                              borderRadius:
-                              BorderRadius.circular(22),
+                              borderRadius: BorderRadius.circular(22),
                             ),
                             child: Column(
                               spacing: 12,
                               children: [
                                 _CancelInfoRow(
-                                  title: context.strings
-                                      .order_customer_data,
+                                  title: context.strings.order_customer_data,
                                   value: widget.customerName,
                                 ),
                                 _CancelInfoRow(
@@ -227,8 +209,7 @@ class _CancelDeliverySheetState
 
                           // ======= Reasons ======= //
                           Text(
-                            context.strings
-                                .cancel_delivery_reason_required,
+                            context.strings.cancel_delivery_reason_required,
                             style: Styles.textStyle16.copyWith(
                               color: AppColors.black1,
                               fontWeight: FontWeight.w800,
@@ -241,21 +222,16 @@ class _CancelDeliverySheetState
                             spacing: 8,
                             runSpacing: 9,
                             children: [
-                              for (int i = 0;
-                              i < _reasons(context).length;
-                              i++)
+                              for (int i = 0; i < _reasons(context).length; i++)
                                 ChoiceChip(
                                   showCheckmark: false,
-                                  selected:
-                                  _selectedReasonIndex == i,
-                                  label: Text(
-                                    _reasons(context)[i],
-                                  ),
+                                  selected: _selectedReasonIndex == i,
+                                  label: Text(_reasons(context)[i]),
                                   onSelected: isLoading
                                       ? null
                                       : (_) => setState(() {
-                                    _selectedReasonIndex = i;
-                                  }),
+                                          _selectedReasonIndex = i;
+                                        }),
                                   backgroundColor: AppColors.white0,
                                   selectedColor: AppColors.red0,
                                   side: BorderSide(
@@ -265,8 +241,7 @@ class _CancelDeliverySheetState
                                     width: 1.5,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(25),
+                                    borderRadius: BorderRadius.circular(25),
                                   ),
                                   labelStyle: Styles.textStyle14.copyWith(
                                     color: _selectedReasonIndex == i
@@ -288,7 +263,8 @@ class _CancelDeliverySheetState
                               onChanged: (_) => setState(() {}),
                               maxLines: 2,
                               decoration: _inputDecoration(
-                                context.strings
+                                context
+                                    .strings
                                     .cancel_delivery_other_reason_hint,
                               ),
                             ),
@@ -313,16 +289,14 @@ class _CancelDeliverySheetState
                             minLines: 2,
                             maxLines: 3,
                             decoration: _inputDecoration(
-                              context.strings
-                                  .cancel_delivery_notes_hint,
+                              context.strings.cancel_delivery_notes_hint,
                             ),
                           ),
 
                           const SizedBox(height: 7),
 
                           Text(
-                            context.strings
-                                .cancel_delivery_notes_not_sent,
+                            context.strings.cancel_delivery_notes_not_sent,
                             style: Styles.textStyle12.copyWith(
                               color: AppColors.grey4,
                             ),
@@ -335,55 +309,47 @@ class _CancelDeliverySheetState
 
                     // ======= Confirm Button ======= //
                     Container(
-                      padding: const EdgeInsets.fromLTRB(
-                        20, 12, 20, 20,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
                       decoration: BoxDecoration(
                         color: AppColors.white0,
-                        border: Border(
-                          top: BorderSide(
-                            color: AppColors.grey3,
-                          ),
-                        ),
+                        border: Border(top: BorderSide(color: AppColors.grey3)),
                       ),
                       child: SizedBox(
                         width: double.infinity,
                         height: 68,
                         child: ElevatedButton(
-                          onPressed: isLoading ||
-                              !_canSubmit(context)
+                          onPressed: isLoading || !_canSubmit(context)
                               ? null
                               : _confirmCancellation,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: AppColors.red1,
-                            disabledBackgroundColor:
-                            AppColors.red1.withValues(
+                            disabledBackgroundColor: AppColors.red1.withValues(
                               alpha: 0.4,
                             ),
                             foregroundColor: AppColors.white0,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(25),
                             ),
                           ),
                           child: isLoading
                               ? SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(
-                              color: AppColors.white0,
-                              strokeWidth: 2.5,
-                            ),
-                          )
+                                  width: 25,
+                                  height: 25,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.white0,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
                               : Text(
-                            context.strings
-                                .cancel_delivery_confirm_button,
-                            style: Styles.textStyle18.copyWith(
-                              color: AppColors.white0,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
+                                  context
+                                      .strings
+                                      .cancel_delivery_confirm_button,
+                                  style: Styles.textStyle18.copyWith(
+                                    color: AppColors.white0,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -416,10 +382,7 @@ class _CancelDeliverySheetState
 }
 
 class _CancelInfoRow extends StatelessWidget {
-  const _CancelInfoRow({
-    required this.title,
-    required this.value,
-  });
+  const _CancelInfoRow({required this.title, required this.value});
 
   final String title;
   final String value;
@@ -433,9 +396,7 @@ class _CancelInfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
         ),
 

@@ -1,4 +1,3 @@
-
 sealed class RescheduleOrderState {}
 
 final class RescheduleOrderInitial extends RescheduleOrderState {}

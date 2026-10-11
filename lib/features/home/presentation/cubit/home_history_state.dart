@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
 
 sealed class HomeHistoryState {}

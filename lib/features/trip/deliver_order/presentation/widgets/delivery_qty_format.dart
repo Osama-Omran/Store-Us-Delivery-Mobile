@@ -1,4 +1,3 @@
-
 String formatDeliveryQty(num? quantity) {
   if (quantity == null) return '—';
 

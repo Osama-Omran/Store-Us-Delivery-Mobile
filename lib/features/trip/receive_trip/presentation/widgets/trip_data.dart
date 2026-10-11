@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -7,10 +6,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/custom_trip_container.dart';
 
 class TripData extends StatelessWidget {
-  const TripData({
-    super.key,
-    required this.trip,
-  });
+  const TripData({super.key, required this.trip});
 
   final CurrentTripData trip;
 
@@ -40,8 +36,7 @@ class TripData extends StatelessWidget {
 
   // ======= Acceptance Status ======= //
   String _getAcceptanceStatus(BuildContext context) {
-    final status =
-    trip.acceptance?.status.trim().toUpperCase();
+    final status = trip.acceptance?.status.trim().toUpperCase();
 
     return switch (status) {
       'PENDING' => context.strings.trip_acceptance_pending,
@@ -52,16 +47,12 @@ class TripData extends StatelessWidget {
   }
 
   // ======= Accepted Date & Time ======= //
-  String _formatAcceptedAt(
-      BuildContext context,
-      DateTime date,
-      ) {
+  String _formatAcceptedAt(BuildContext context, DateTime date) {
     final localDate = date.toLocal();
 
     final localization = MaterialLocalizations.of(context);
 
-    final formattedDate =
-    localization.formatMediumDate(localDate);
+    final formattedDate = localization.formatMediumDate(localDate);
 
     final formattedTime = localization.formatTimeOfDay(
       TimeOfDay.fromDateTime(localDate),
@@ -80,10 +71,7 @@ class TripData extends StatelessWidget {
         spacing: 12,
         children: [
           // ======= Trip Number ======= //
-          TripDataItem(
-            title: context.strings.trip_number,
-            value: trip.number,
-          ),
+          TripDataItem(title: context.strings.trip_number, value: trip.number),
 
           // ======= Trip Status ======= //
           TripDataItem(
@@ -94,28 +82,19 @@ class TripData extends StatelessWidget {
           // ======= Warehouse ======= //
           TripDataItem(
             title: context.strings.warehouse,
-            value: _nameOrId(
-              trip.warehouse?.name,
-              trip.warehouse?.id,
-            ),
+            value: _nameOrId(trip.warehouse?.name, trip.warehouse?.id),
           ),
 
           // ======= Vehicle ======= //
           TripDataItem(
             title: context.strings.van,
-            value: _nameOrId(
-              trip.vehicle?.name,
-              trip.vehicle?.id,
-            ),
+            value: _nameOrId(trip.vehicle?.name, trip.vehicle?.id),
           ),
 
           // ======= Driver ======= //
           TripDataItem(
             title: context.strings.driver,
-            value: _nameOrId(
-              trip.driver?.name,
-              trip.driver?.id,
-            ),
+            value: _nameOrId(trip.driver?.name, trip.driver?.id),
           ),
 
           // ======= Total Orders ======= //
@@ -134,10 +113,7 @@ class TripData extends StatelessWidget {
           if (acceptedAt != null)
             TripDataItem(
               title: context.strings.trip_accepted_at,
-              value: _formatAcceptedAt(
-                context,
-                acceptedAt,
-              ),
+              value: _formatAcceptedAt(context, acceptedAt),
             ),
         ],
       ),
@@ -150,11 +126,7 @@ class TripData extends StatelessWidget {
 // =====================================================
 
 class TripDataItem extends StatelessWidget {
-  const TripDataItem({
-    super.key,
-    required this.title,
-    required this.value,
-  });
+  const TripDataItem({super.key, required this.title, required this.value});
 
   final String title;
   final String value;
@@ -169,9 +141,7 @@ class TripDataItem extends StatelessWidget {
           flex: 2,
           child: Text(
             title,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
         ),
         Expanded(

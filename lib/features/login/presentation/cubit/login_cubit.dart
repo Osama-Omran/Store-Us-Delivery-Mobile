@@ -19,6 +19,13 @@ class LoginCubit extends Cubit<LoginState> {
       passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
+  @override
+  Future<void> close() {
+    emailController.dispose();
+    passwordController.dispose();
+    return super.close();
+  }
+
   void validateToLogin() {
     if (formKey.currentState!.validate()) login();
   }

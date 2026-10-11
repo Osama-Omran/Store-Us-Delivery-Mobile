@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -6,45 +8,42 @@ import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/t
 
 extension TopRankPeriodLabels on TopRankPeriod {
   String label(BuildContext context) => switch (this) {
-    TopRankPeriod.today => context.strings.top_rank_today,
-    TopRankPeriod.week => context.strings.top_rank_week,
-    TopRankPeriod.thisMonth => context.strings.top_rank_this_month,
-    TopRankPeriod.previousMonth => context.strings.top_rank_previous_month,
-  };
-}
-
-extension TopRankWarehouseLabels on TopRankWarehouse {
-  String label(BuildContext context) => switch (this) {
-    TopRankWarehouse.all => context.strings.top_rank_all_warehouses,
-    TopRankWarehouse.october => context.strings.top_rank_warehouse_october,
-    TopRankWarehouse.nasrCity => context.strings.top_rank_warehouse_nasr_city,
+    TopRankPeriod.month =>
+    context.strings.top_rank_this_month,
+    TopRankPeriod.last30Days =>
+    context.strings.top_rank_last_30_days,
   };
 }
 
 extension TopRankRoleLabels on TopRankRole {
   String label(BuildContext context) => switch (this) {
-    TopRankRole.representatives => context.strings.top_rank_representatives,
-    TopRankRole.drivers => context.strings.top_rank_drivers,
-    TopRankRole.dispatchers => context.strings.top_rank_dispatchers,
-  };
-
-  String bestLabel(BuildContext context) => switch (this) {
     TopRankRole.representatives =>
-      context.strings.top_rank_best_representatives,
-    TopRankRole.drivers => context.strings.top_rank_best_drivers,
-    TopRankRole.dispatchers => context.strings.top_rank_best_dispatchers,
-  };
-
-  String winnerLabel(BuildContext context) => switch (this) {
-    TopRankRole.representatives => context.strings.top_rank_best_representative,
-    TopRankRole.drivers => context.strings.top_rank_best_driver,
-    TopRankRole.dispatchers => context.strings.top_rank_best_dispatcher,
+    context.strings.top_rank_representatives,
+    TopRankRole.drivers =>
+    context.strings.top_rank_drivers,
+    TopRankRole.dispatchers =>
+    context.strings.top_rank_dispatchers,
+    TopRankRole.warehouses =>
+    context.strings.top_rank_warehouses,
+    TopRankRole.warehouseStaff =>
+    context.strings.top_rank_warehouse_staff,
+    TopRankRole.vehicles =>
+    context.strings.top_rank_vehicles,
   };
 
   IconData get icon => switch (this) {
-    TopRankRole.representatives => Icons.person_outline_rounded,
-    TopRankRole.drivers => Icons.local_shipping_outlined,
-    TopRankRole.dispatchers => Icons.assignment_outlined,
+    TopRankRole.representatives =>
+    Icons.person_outline_rounded,
+    TopRankRole.drivers =>
+    Icons.local_shipping_outlined,
+    TopRankRole.dispatchers =>
+    Icons.assignment_outlined,
+    TopRankRole.warehouses =>
+    Icons.warehouse_outlined,
+    TopRankRole.warehouseStaff =>
+    Icons.manage_accounts_outlined,
+    TopRankRole.vehicles =>
+    Icons.directions_car_outlined,
   };
 }
 
@@ -53,18 +52,14 @@ class TopRankFilters extends StatelessWidget {
     super.key,
     required this.period,
     required this.role,
-    required this.warehouse,
     required this.onPeriodChanged,
     required this.onRoleChanged,
-    required this.onWarehouseChanged,
   });
 
   final TopRankPeriod period;
   final TopRankRole role;
-  final TopRankWarehouse warehouse;
   final ValueChanged<TopRankPeriod> onPeriodChanged;
   final ValueChanged<TopRankRole> onRoleChanged;
-  final ValueChanged<TopRankWarehouse> onWarehouseChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -78,71 +73,61 @@ class TopRankFilters extends StatelessWidget {
             spacing: 10,
             children: [
               for (final value in TopRankPeriod.values)
-                _TopRankFilterChip(
-                  key: ValueKey('top-rank-period-${value.name}'),
+                _RankChip(
                   title: value.label(context),
-                  selected: value == period,
+                  selected: period == value,
                   onTap: () => onPeriodChanged(value),
                 ),
             ],
           ),
         ),
-        const SizedBox(height: 10),
 
-        // ======= Warehouse ======= //
+        const SizedBox(height: 14),
+
+        // ======= Warehouse Filter Placeholder ======= //
+        // No warehouse query/filter contract supplied by backend.
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 15,
+          ),
           decoration: BoxDecoration(
             color: AppColors.white0,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(23),
             border: Border.all(color: AppColors.grey3),
           ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<TopRankWarehouse>(
-              key: const ValueKey('top-rank-warehouse'),
-              value: warehouse,
-              isExpanded: true,
-              dropdownColor: AppColors.white0,
-              borderRadius: BorderRadius.circular(20),
-              style: Theme.of(context).textTheme.bodyMedium!
-                  .merge(Styles.textStyle16)
-                  .copyWith(color: AppColors.black1),
-              icon: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: AppColors.black1,
-              ),
-              items: [
-                for (final value in TopRankWarehouse.values)
-                  DropdownMenuItem(
-                    value: value,
-                    child: Text(
-                      value.label(context),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  context.strings.top_rank_all_warehouses,
+                  style: Styles.textStyle16.copyWith(
+                    color: AppColors.grey4,
                   ),
-              ],
-              onChanged: (value) {
-                if (value != null) onWarehouseChanged(value);
-              },
-            ),
+                ),
+              ),
+              Icon(
+                Icons.lock_outline_rounded,
+                color: AppColors.grey4,
+                size: 17,
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 24),
 
-        // ======= Role ======= //
+        const SizedBox(height: 20),
+
+        // ======= Categories ======= //
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            spacing: 10,
+            spacing: 9,
             children: [
               for (final value in TopRankRole.values)
-                _TopRankFilterChip(
-                  key: ValueKey('top-rank-role-${value.name}'),
+                _RankChip(
                   title: value.label(context),
                   icon: value.icon,
-                  selected: value == role,
-                  isRole: true,
+                  selected: role == value,
                   onTap: () => onRoleChanged(value),
                 ),
             ],
@@ -153,57 +138,62 @@ class TopRankFilters extends StatelessWidget {
   }
 }
 
-class _TopRankFilterChip extends StatelessWidget {
-  const _TopRankFilterChip({
-    super.key,
+class _RankChip extends StatelessWidget {
+  const _RankChip({
     required this.title,
     required this.selected,
     required this.onTap,
     this.icon,
-    this.isRole = false,
   });
 
   final String title;
   final bool selected;
   final VoidCallback onTap;
   final IconData? icon;
-  final bool isRole;
 
   @override
   Widget build(BuildContext context) {
-    final color = selected
-        ? isRole
-              ? AppColors.rankTeal
-              : AppColors.white0
-        : AppColors.grey4;
-
-    return Semantics(
-      selected: selected,
-      button: true,
-      child: Material(
-        color: selected
-            ? isRole
-                  ? AppColors.rankTealLight
-                  : AppColors.primary
-            : AppColors.white0,
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: selected ? Colors.transparent : AppColors.grey3,
-          ),
+    return Material(
+      color: selected
+          ? AppColors.blue4
+          : AppColors.white0,
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: selected
+              ? AppColors.blue3
+              : AppColors.grey3,
         ),
-        child: InkWell(
-          customBorder: const StadiumBorder(),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 8,
-              children: [
-                if (icon != null) Icon(icon, size: 20, color: color),
-                Text(title, style: Styles.textStyle16.copyWith(color: color)),
-              ],
-            ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 17,
+            vertical: 12,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 7,
+            children: [
+              if (icon != null)
+                Icon(
+                  icon,
+                  size: 18,
+                  color: selected
+                      ? AppColors.primary
+                      : AppColors.grey4,
+                ),
+              Text(
+                title,
+                style: Styles.textStyle14.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: selected
+                      ? AppColors.primary
+                      : AppColors.black1,
+                ),
+              ),
+            ],
           ),
         ),
       ),

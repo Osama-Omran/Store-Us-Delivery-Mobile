@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,11 +57,8 @@ class _CancelDeliverySuccessScreenState
             return;
           }
 
-          final List<TripOrderData> orders = [
-            ...response.data,
-          ]..sort(
-                (a, b) => a.stopOrder.compareTo(b.stopOrder),
-          );
+          final List<TripOrderData> orders = [...response.data]
+            ..sort((a, b) => a.stopOrder.compareTo(b.stopOrder));
 
           int? currentStopOrder;
 
@@ -75,8 +71,7 @@ class _CancelDeliverySuccessScreenState
 
           final pendingOrders = orders.where((order) {
             return order.id != widget.orderId &&
-                order.deliveryStatus.trim().toUpperCase() ==
-                    'PENDING';
+                order.deliveryStatus.trim().toUpperCase() == 'PENDING';
           }).toList();
 
           // Prefer the next stop in the actual trip order.
@@ -110,9 +105,7 @@ class _CancelDeliverySuccessScreenState
     if (requestFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            context.strings.cancel_delivery_next_order_failed,
-          ),
+          content: Text(context.strings.cancel_delivery_next_order_failed),
           backgroundColor: AppColors.red0,
         ),
       );
@@ -123,10 +116,7 @@ class _CancelDeliverySuccessScreenState
     if (nextOrderId != null) {
       context.goNamed(
         RoutesNames.orderDetails,
-        extra: {
-          'trip_id': widget.tripId,
-          'order_id': nextOrderId,
-        },
+        extra: {'trip_id': widget.tripId, 'order_id': nextOrderId},
       );
       return;
     }
@@ -143,9 +133,7 @@ class _CancelDeliverySuccessScreenState
         backgroundColor: AppColors.grey0,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              28, 75, 28, 36,
-            ),
+            padding: const EdgeInsets.fromLTRB(28, 75, 28, 36),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 24,
@@ -157,9 +145,7 @@ class _CancelDeliverySuccessScreenState
                     width: 145,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: AppColors.red1.withValues(
-                        alpha: 0.10,
-                      ),
+                      color: AppColors.red1.withValues(alpha: 0.10),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -187,14 +173,10 @@ class _CancelDeliverySuccessScreenState
                   decoration: BoxDecoration(
                     color: AppColors.white0,
                     borderRadius: BorderRadius.circular(26),
-                    border: Border.all(
-                      color: AppColors.grey3,
-                    ),
+                    border: Border.all(color: AppColors.grey3),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.black0.withValues(
-                          alpha: 0.035,
-                        ),
+                        color: AppColors.black0.withValues(alpha: 0.035),
                         blurRadius: 10,
                         offset: const Offset(0, 3),
                       ),
@@ -204,8 +186,7 @@ class _CancelDeliverySuccessScreenState
                     spacing: 19,
                     children: [
                       _SuccessInfoRow(
-                        title: context.strings
-                            .order_customer_data,
+                        title: context.strings.order_customer_data,
                         value: widget.customerName,
                       ),
 
@@ -215,8 +196,7 @@ class _CancelDeliverySuccessScreenState
                       ),
 
                       _SuccessInfoRow(
-                        title: context.strings
-                            .cancel_delivery_reason_label,
+                        title: context.strings.cancel_delivery_reason_label,
                         value: widget.reason,
                       ),
                     ],
@@ -224,12 +204,9 @@ class _CancelDeliverySuccessScreenState
                 ),
 
                 Text(
-                  context.strings
-                      .cancel_delivery_success_description,
+                  context.strings.cancel_delivery_success_description,
                   textAlign: TextAlign.center,
-                  style: Styles.textStyle14.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                 ),
 
                 const SizedBox(height: 5),
@@ -239,28 +216,23 @@ class _CancelDeliverySuccessScreenState
                   width: double.infinity,
                   height: 70,
                   child: ElevatedButton(
-                    onPressed:
-                    _loadingNext ? null : _goToNextOrder,
+                    onPressed: _loadingNext ? null : _goToNextOrder,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white0,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(26),
+                        borderRadius: BorderRadius.circular(26),
                       ),
                     ),
                     child: _loadingNext
-                        ? CircularProgressIndicator(
-                      color: AppColors.white0,
-                    )
+                        ? CircularProgressIndicator(color: AppColors.white0)
                         : Text(
-                      context.strings
-                          .cancel_delivery_next_order,
-                      style: Styles.textStyle20.copyWith(
-                        color: AppColors.white0,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                            context.strings.cancel_delivery_next_order,
+                            style: Styles.textStyle20.copyWith(
+                              color: AppColors.white0,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -273,10 +245,7 @@ class _CancelDeliverySuccessScreenState
 }
 
 class _SuccessInfoRow extends StatelessWidget {
-  const _SuccessInfoRow({
-    required this.title,
-    required this.value,
-  });
+  const _SuccessInfoRow({required this.title, required this.value});
 
   final String title;
   final String value;
@@ -291,9 +260,7 @@ class _SuccessInfoRow extends StatelessWidget {
           width: 85,
           child: Text(
             title,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
         ),
 

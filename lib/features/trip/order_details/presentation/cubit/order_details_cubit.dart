@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -13,10 +12,10 @@ import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/
 
 class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   OrderDetailsCubit(
-      this._getOrderDetailsUsecase,
-      this._getTripOrdersUsecase,
-      this._updateDeliveryLocationUsecase,
-      ) : super(OrderDetailsInitial());
+    this._getOrderDetailsUsecase,
+    this._getTripOrdersUsecase,
+    this._updateDeliveryLocationUsecase,
+  ) : super(OrderDetailsInitial());
 
   final GetOrderDetailsUsecase _getOrderDetailsUsecase;
   final GetTripOrdersUsecase _getTripOrdersUsecase;
@@ -60,26 +59,18 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
             ),
           );
         } else {
-          emit(
-            OrderDetailsFailureState(response.message),
-          );
+          emit(OrderDetailsFailureState(response.message));
         }
       },
       failure: (error) {
-        emit(
-          OrderDetailsFailureState(
-            error.apiErrorModel.message,
-          ),
-        );
+        emit(OrderDetailsFailureState(error.apiErrorModel.message));
       },
     );
 
     if (details == null) return;
 
     // ======= Get Latest Customer Address ======= //
-    final ordersResult = await _getTripOrdersUsecase.call(
-      tripId: tripId,
-    );
+    final ordersResult = await _getTripOrdersUsecase.call(tripId: tripId);
 
     if (isClosed || requestId != _requestId) return;
 
@@ -110,8 +101,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     );
   }
 
-
-// ======= Update Delivery Location ======= //
+  // ======= Update Delivery Location ======= //
   Future<String?> updateDeliveryLocation({
     required int tripId,
     required int orderId,
@@ -129,12 +119,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     // Reset any success message from a previous update.
     _locationUpdated = false;
 
-    emit(
-      currentState.copyWith(
-        isSavingLocation: true,
-        locationUpdated: false,
-      ),
-    );
+    emit(currentState.copyWith(isSavingLocation: true, locationUpdated: false));
 
     String? errorMessage;
 
@@ -148,20 +133,16 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       result.when(
         success: (response) {
           // A 2xx response may still contain a business failure.
-          if (response is Map &&
-              response['success'] == false) {
-            final message =
-            response['message']?.toString().trim();
+          if (response is Map && response['success'] == false) {
+            final message = response['message']?.toString().trim();
 
-            errorMessage =
-            message != null && message.isNotEmpty
+            errorMessage = message != null && message.isNotEmpty
                 ? message
                 : 'order_location_save_failed';
           }
         },
         failure: (error) {
-          final message =
-          error.apiErrorModel.message.trim();
+          final message = error.apiErrorModel.message.trim();
 
           errorMessage = message.isNotEmpty
               ? message
@@ -182,10 +163,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 
     if (latestState is OrderDetailsSuccessState) {
       emit(
-        latestState.copyWith(
-          isSavingLocation: false,
-          locationUpdated: success,
-        ),
+        latestState.copyWith(isSavingLocation: false, locationUpdated: success),
       );
     }
 

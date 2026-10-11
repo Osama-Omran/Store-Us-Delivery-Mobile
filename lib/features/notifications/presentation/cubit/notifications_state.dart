@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 
 sealed class NotificationsState {}

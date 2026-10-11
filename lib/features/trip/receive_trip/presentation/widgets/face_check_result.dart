@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:flutter/painting.dart';
@@ -15,20 +16,19 @@ enum FaceCheckResult {
 
 class FaceValidator {
   FaceValidator()
-      : _detector = FaceDetector(
-          options: FaceDetectorOptions(
-            performanceMode: FaceDetectorMode.accurate,
-            enableClassification: true, // عشان eye open probability
-            minFaceSize: 0.15,
-          ),
-        );
+    : _detector = FaceDetector(
+        options: FaceDetectorOptions(
+          performanceMode: FaceDetectorMode.accurate,
+          enableClassification: true, // عشان eye open probability
+          minFaceSize: 0.15,
+        ),
+      );
 
   final FaceDetector _detector;
 
   Future<FaceCheckResult> validate(String path) async {
     try {
-      final faces =
-          await _detector.processImage(InputImage.fromFilePath(path));
+      final faces = await _detector.processImage(InputImage.fromFilePath(path));
 
       if (faces.isEmpty) return FaceCheckResult.noFace;
       if (faces.length > 1) return FaceCheckResult.multipleFaces;

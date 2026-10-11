@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -7,10 +6,7 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
 class OrderDeliveryStatusCard extends StatelessWidget {
-  const OrderDeliveryStatusCard({
-    super.key,
-    required this.order,
-  });
+  const OrderDeliveryStatusCard({super.key, required this.order});
 
   final OrderDetailsData order;
 
@@ -51,8 +47,7 @@ class OrderDeliveryStatusCard extends StatelessWidget {
       case 'CANCELED':
         statusLabel = context.strings.delivery_cancelled;
         statusColor = AppColors.red1;
-        statusBackground =
-            AppColors.red1.withValues(alpha: 0.10);
+        statusBackground = AppColors.red1.withValues(alpha: 0.10);
 
       default:
         statusLabel = status.isEmpty
@@ -71,9 +66,7 @@ class OrderDeliveryStatusCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.order_delivery_status,
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle16.copyWith(color: AppColors.grey4),
                 ),
               ),
               Container(
@@ -100,16 +93,12 @@ class OrderDeliveryStatusCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.order_delivery_time,
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle16.copyWith(color: AppColors.grey4),
                 ),
               ),
               Text(
                 '—',
-                style: Styles.textStyle18.copyWith(
-                  color: AppColors.black1,
-                ),
+                style: Styles.textStyle18.copyWith(color: AppColors.black1),
               ),
             ],
           ),
@@ -124,9 +113,7 @@ class OrderDeliveryStatusCard extends StatelessWidget {
             _ExtraRow(
               label: context.strings.order_rescheduled_for,
               value: MaterialLocalizations.of(context)
-                  .formatMediumDate(
-                order.rescheduledFor!.toLocal(),
-              ),
+                  .formatMediumDate(order.rescheduledFor!.toLocal()),
             ),
         ],
       ),
@@ -135,10 +122,7 @@ class OrderDeliveryStatusCard extends StatelessWidget {
 }
 
 class _ExtraRow extends StatelessWidget {
-  const _ExtraRow({
-    required this.label,
-    required this.value,
-  });
+  const _ExtraRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -152,9 +136,7 @@ class _ExtraRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
         ),
         Expanded(

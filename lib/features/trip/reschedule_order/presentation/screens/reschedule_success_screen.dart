@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,8 +33,7 @@ class RescheduleSuccessScreen extends StatefulWidget {
       _RescheduleSuccessScreenState();
 }
 
-class _RescheduleSuccessScreenState
-    extends State<RescheduleSuccessScreen> {
+class _RescheduleSuccessScreenState extends State<RescheduleSuccessScreen> {
   bool _loadingNext = false;
 
   // ======= Find Next Pending Order ======= //
@@ -66,18 +64,15 @@ class _RescheduleSuccessScreenState
             }
           }
 
-          final pending = orders
-              .where(
-                (item) =>
-            item.deliveryStatus.trim().toUpperCase() ==
-                'PENDING' &&
-                item.id != widget.orderId,
-          )
-              .toList()
-            ..sort(
-                  (a, b) =>
-                  a.stopOrder.compareTo(b.stopOrder),
-            );
+          final pending =
+              orders
+                  .where(
+                    (item) =>
+                        item.deliveryStatus.trim().toUpperCase() == 'PENDING' &&
+                        item.id != widget.orderId,
+                  )
+                  .toList()
+                ..sort((a, b) => a.stopOrder.compareTo(b.stopOrder));
 
           if (pending.isEmpty) return;
 
@@ -103,10 +98,7 @@ class _RescheduleSuccessScreenState
     if (nextOrder != null) {
       context.goNamed(
         RoutesNames.orderDetails,
-        extra: {
-          'trip_id': widget.tripId,
-          'order_id': nextOrder!.id,
-        },
+        extra: {'trip_id': widget.tripId, 'order_id': nextOrder!.id},
       );
     } else {
       context.goNamed(RoutesNames.layout);
@@ -117,13 +109,11 @@ class _RescheduleSuccessScreenState
   Widget build(BuildContext context) {
     final date = widget.rescheduledFor.toLocal();
 
-    final formattedDate =
-    MaterialLocalizations.of(context).formatMediumDate(date);
+    final formattedDate = MaterialLocalizations.of(context)
+        .formatMediumDate(date);
 
-    final formattedTime =
-    MaterialLocalizations.of(context).formatTimeOfDay(
-      TimeOfDay.fromDateTime(date),
-    );
+    final formattedTime = MaterialLocalizations.of(context)
+        .formatTimeOfDay(TimeOfDay.fromDateTime(date));
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -131,12 +121,7 @@ class _RescheduleSuccessScreenState
         backgroundColor: AppColors.grey0,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              28,
-              70,
-              28,
-              36,
-            ),
+            padding: const EdgeInsets.fromLTRB(28, 70, 28, 36),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 24,
@@ -175,14 +160,10 @@ class _RescheduleSuccessScreenState
                   decoration: BoxDecoration(
                     color: AppColors.white0,
                     borderRadius: BorderRadius.circular(26),
-                    border: Border.all(
-                      color: AppColors.grey3,
-                    ),
+                    border: Border.all(color: AppColors.grey3),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.black0.withValues(
-                          alpha: 0.04,
-                        ),
+                        color: AppColors.black0.withValues(alpha: 0.04),
                         blurRadius: 12,
                         offset: const Offset(0, 3),
                       ),
@@ -192,8 +173,7 @@ class _RescheduleSuccessScreenState
                     spacing: 18,
                     children: [
                       _ResultRow(
-                        title: context.strings
-                            .order_customer_data,
+                        title: context.strings.order_customer_data,
                         value: widget.customerName,
                       ),
 
@@ -203,16 +183,13 @@ class _RescheduleSuccessScreenState
                       ),
 
                       _ResultRow(
-                        title: context.strings
-                            .reschedule_new_date_time,
-                        value:
-                        '$formattedDate\n$formattedTime',
+                        title: context.strings.reschedule_new_date_time,
+                        value: '$formattedDate\n$formattedTime',
                         highlighted: true,
                       ),
 
                       _ResultRow(
-                        title: context.strings
-                            .reschedule_reason_label,
+                        title: context.strings.reschedule_reason_label,
                         value: widget.reason,
                       ),
                     ],
@@ -220,13 +197,9 @@ class _RescheduleSuccessScreenState
                 ),
 
                 Text(
-                  context.strings
-                      .reschedule_no_delivery_recorded,
+                  context.strings.reschedule_no_delivery_recorded,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.grey4,
-                  ),
+                  style: TextStyle(fontSize: 14, color: AppColors.grey4),
                 ),
 
                 const SizedBox(height: 4),
@@ -235,8 +208,7 @@ class _RescheduleSuccessScreenState
                 SizedBox(
                   height: 70,
                   child: ElevatedButton(
-                    onPressed:
-                    _loadingNext ? null : _openNextOrder,
+                    onPressed: _loadingNext ? null : _openNextOrder,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white0,
@@ -245,17 +217,14 @@ class _RescheduleSuccessScreenState
                       ),
                     ),
                     child: _loadingNext
-                        ? CircularProgressIndicator(
-                      color: AppColors.white0,
-                    )
+                        ? CircularProgressIndicator(color: AppColors.white0)
                         : Text(
-                      context.strings
-                          .reschedule_next_order,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                            context.strings.reschedule_next_order,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -287,10 +256,7 @@ class _ResultRow extends StatelessWidget {
           width: 110,
           child: Text(
             title,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.grey4,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.grey4),
           ),
         ),
 
@@ -303,9 +269,7 @@ class _ResultRow extends StatelessWidget {
             style: TextStyle(
               fontSize: highlighted ? 22 : 16,
               fontWeight: FontWeight.w800,
-              color: highlighted
-                  ? AppColors.primary
-                  : AppColors.black1,
+              color: highlighted ? AppColors.primary : AppColors.black1,
             ),
           ),
         ),

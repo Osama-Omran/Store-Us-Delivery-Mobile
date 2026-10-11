@@ -235,10 +235,7 @@ class _OrderDetailsBody extends StatelessWidget {
 
           // ======= Order Actions ======= //
           bottomNavigationBar: success != null && isPending
-              ? OrderActionBar(
-            tripId: tripId,
-            orderId: orderId,
-          )
+              ? OrderActionBar(tripId: tripId, orderId: orderId)
               : null,
         );
       },

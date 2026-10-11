@@ -1,4 +1,3 @@
-
 enum AppNotificationType {
   tripAssigned,
   tripReordered,

@@ -3,11 +3,7 @@ class CurrentTripResponse {
   final CurrentTripData? data;
   final String? message;
 
-  const CurrentTripResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const CurrentTripResponse({required this.success, this.data, this.message});
 
   factory CurrentTripResponse.fromJson(Map<String, dynamic> json) {
     return CurrentTripResponse(
@@ -22,10 +18,10 @@ class CurrentTripResponse {
   }
 
   Map<String, dynamic> toJson() => {
-        'success': success,
-        'data': data?.toJson(),
-        if (message != null) 'message': message,
-      };
+    'success': success,
+    'data': data?.toJson(),
+    if (message != null) 'message': message,
+  };
 }
 
 class CurrentTripData {
@@ -83,15 +79,15 @@ class CurrentTripData {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'number': number,
-        'status': status,
-        'warehouse': warehouse?.toJson(),
-        'vehicle': vehicle?.toJson(),
-        'driver': driver?.toJson(),
-        'acceptance': acceptance?.toJson(),
-        'orders_summary': ordersSummary?.toJson(),
-      };
+    'id': id,
+    'number': number,
+    'status': status,
+    'warehouse': warehouse?.toJson(),
+    'vehicle': vehicle?.toJson(),
+    'driver': driver?.toJson(),
+    'acceptance': acceptance?.toJson(),
+    'orders_summary': ordersSummary?.toJson(),
+  };
 }
 
 class TripWarehouse {
@@ -100,12 +96,7 @@ class TripWarehouse {
   final String? latitude;
   final String? longitude;
 
-  const TripWarehouse({
-    this.id,
-    this.name,
-    this.latitude,
-    this.longitude,
-  });
+  const TripWarehouse({this.id, this.name, this.latitude, this.longitude});
 
   factory TripWarehouse.fromJson(Map<String, dynamic> json) {
     return TripWarehouse(
@@ -117,11 +108,11 @@ class TripWarehouse {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+    'id': id,
+    'name': name,
+    'latitude': latitude,
+    'longitude': longitude,
+  };
 }
 
 class TripVehicle {
@@ -137,10 +128,7 @@ class TripVehicle {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }
 
 class TripDriver {
@@ -156,20 +144,14 @@ class TripDriver {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }
 
 class TripAcceptance {
   final String status;
   final DateTime? acceptedAt;
 
-  const TripAcceptance({
-    required this.status,
-    this.acceptedAt,
-  });
+  const TripAcceptance({required this.status, this.acceptedAt});
 
   factory TripAcceptance.fromJson(Map<String, dynamic> json) {
     return TripAcceptance(
@@ -179,9 +161,9 @@ class TripAcceptance {
   }
 
   Map<String, dynamic> toJson() => {
-        'status': status,
-        'accepted_at': acceptedAt?.toUtc().toIso8601String(),
-      };
+    'status': status,
+    'accepted_at': acceptedAt?.toUtc().toIso8601String(),
+  };
 }
 
 class TripOrdersSummary {
@@ -190,9 +172,7 @@ class TripOrdersSummary {
   const TripOrdersSummary({required this.total});
 
   factory TripOrdersSummary.fromJson(Map<String, dynamic> json) {
-    return TripOrdersSummary(
-      total: (json['total'] as num?)?.toInt() ?? 0,
-    );
+    return TripOrdersSummary(total: (json['total'] as num?)?.toInt() ?? 0);
   }
 
   Map<String, dynamic> toJson() => {'total': total};

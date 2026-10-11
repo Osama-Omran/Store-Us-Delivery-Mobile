@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -25,10 +24,7 @@ class EmptyTrips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 32,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         child: Column(
           children: [
             Container(
@@ -55,8 +51,7 @@ class EmptyTrips extends StatelessWidget {
             const Gap(12),
 
             Text(
-              context.strings
-                  .you_must_confirm_receiving_van_and_goods_first,
+              context.strings.you_must_confirm_receiving_van_and_goods_first,
               textAlign: TextAlign.center,
             ),
 
@@ -66,9 +61,7 @@ class EmptyTrips extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.orange1,
-                border: Border.all(
-                  color: AppColors.orange0,
-                ),
+                border: Border.all(color: AppColors.orange0),
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.all(16),
@@ -79,13 +72,11 @@ class EmptyTrips extends StatelessWidget {
                   Row(
                     spacing: 6,
                     children: [
-                      Icon(
-                        Icons.timelapse,
-                        color: AppColors.orange0,
-                      ),
+                      Icon(Icons.timelapse, color: AppColors.orange0),
                       Expanded(
                         child: Text(
-                          context.strings
+                          context
+                              .strings
                               .you_have_a_new_trip_awaiting_for_receiving_confirmation,
                           style: Styles.textStyle16.copyWith(
                             color: AppColors.orange0,
@@ -108,9 +99,7 @@ class EmptyTrips extends StatelessWidget {
 
             CustomButton(
               text: context.strings.review_and_receive_van,
-              icon: const CustomSVG(
-                assetName: AppAssets.van,
-              ),
+              icon: const CustomSVG(assetName: AppAssets.van),
               icon1st: true,
               onPressed: onReviewAndReceive,
             ),

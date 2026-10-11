@@ -10,6 +10,7 @@ import 'package:storeus_delivery/features/layout/presentation/screens/layout_scr
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
 import 'package:storeus_delivery/features/login/presentation/screens/login_screen.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/screens/cancel_delivery_success_screen.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/deliver_order_screen.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/screens/order_details_screen.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/cubit/receive_trip_cubit.dart';
@@ -18,6 +19,12 @@ import 'package:storeus_delivery/features/trip/receive_trip/presentation/screens
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/screens/reschedule_success_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
 import 'package:storeus_delivery/features/trip/trip_map/presentation/screens/trip_map_screen.dart';
+
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_result_screen.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_payment_screen.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_proof_screen.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_success_screen.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/confirm_delivery_cubit.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 String? token;
@@ -88,32 +95,23 @@ class AppRouter {
         },
       ),
 
-
       GoRoute(
         name: RoutesNames.tripMap,
         path: RoutesNames.tripMap,
         pageBuilder: (_, state) {
-          final Map<String, dynamic> args =
-          state.extra as Map<String, dynamic>;
+          final Map<String, dynamic> args = state.extra as Map<String, dynamic>;
 
           final int tripID = args['trip_id'] as int;
-          final String tripNumber =
-          args['trip_number'] as String;
+          final String tripNumber = args['trip_number'] as String;
 
-          final List<TripMapStop> stops =
-          args['stops'] as List<TripMapStop>;
+          final List<TripMapStop> stops = args['stops'] as List<TripMapStop>;
 
           return _slidePageBuilder(
-            TripMapScreen(
-              tripId: tripNumber,
-              tripApiId: tripID,
-              stops: stops,
-            ),
+            TripMapScreen(tripId: tripNumber, tripApiId: tripID, stops: stops),
             state,
           );
         },
       ),
-
 
       GoRoute(
         name: RoutesNames.orderDetails,
@@ -146,34 +144,27 @@ class AppRouter {
         },
       ),
 
-
       GoRoute(
         name: RoutesNames.deliverOrder,
         path: RoutesNames.deliverOrder,
         pageBuilder: (_, state) {
-          final Map<String, dynamic> args =
-          state.extra as Map<String, dynamic>;
+          final Map<String, dynamic> args = state.extra as Map<String, dynamic>;
 
           final int tripID = args['trip_id'] as int;
           final int orderID = args['order_id'] as int;
 
           return _slidePageBuilder(
-            DeliverOrderScreen(
-              tripId: tripID,
-              orderId: orderID,
-            ),
+            DeliverOrderScreen(tripId: tripID, orderId: orderID),
             state,
           );
         },
       ),
 
-
       GoRoute(
         name: RoutesNames.rescheduleSuccess,
         path: RoutesNames.rescheduleSuccess,
         pageBuilder: (_, state) {
-          final Map<String, dynamic> args =
-          state.extra as Map<String, dynamic>;
+          final Map<String, dynamic> args = state.extra as Map<String, dynamic>;
 
           return _slidePageBuilder(
             RescheduleSuccessScreen(
@@ -181,9 +172,7 @@ class AppRouter {
               orderId: args['order_id'] as int,
               salesOrder: args['sales_order'] as String,
               customerName: args['customer_name'] as String,
-              rescheduledFor: DateTime.parse(
-                args['rescheduled_for'] as String,
-              ),
+              rescheduledFor: DateTime.parse(args['rescheduled_for'] as String),
               reason: args['reason'] as String,
             ),
             state,
@@ -191,13 +180,11 @@ class AppRouter {
         },
       ),
 
-
       GoRoute(
         name: RoutesNames.cancelDeliverySuccess,
         path: RoutesNames.cancelDeliverySuccess,
         pageBuilder: (_, state) {
-          final Map<String, dynamic> args =
-          state.extra as Map<String, dynamic>;
+          final Map<String, dynamic> args = state.extra as Map<String, dynamic>;
 
           return _slidePageBuilder(
             CancelDeliverySuccessScreen(
@@ -212,8 +199,60 @@ class AppRouter {
         },
       ),
 
+      // ======= Delivery Result ======= //
+      GoRoute(
+        name: RoutesNames.deliveryResult,
+        path: RoutesNames.deliveryResult,
+        pageBuilder: (_, state) {
+          final flow = state.extra as DeliveryFlowData;
 
+          return _slidePageBuilder(DeliveryResultScreen(flow: flow), state);
+        },
+      ),
 
+      // ======= Collect Payment ======= //
+      GoRoute(
+        name: RoutesNames.deliveryPayment,
+        path: RoutesNames.deliveryPayment,
+        pageBuilder: (_, state) {
+          final flow = state.extra as DeliveryFlowData;
+
+          return _slidePageBuilder(
+            BlocProvider(
+              create: (_) => getIt<ConfirmDeliveryCubit>(),
+              child: DeliveryPaymentScreen(flow: flow),
+            ),
+            state,
+          );
+        },
+      ),
+
+      // ======= Optional Local Proof ======= //
+      GoRoute(
+        name: RoutesNames.deliveryProof,
+        path: RoutesNames.deliveryProof,
+        pageBuilder: (_, state) {
+          return _slidePageBuilder(const DeliveryProofScreen(), state);
+        },
+      ),
+
+      // ======= Delivery Success ======= //
+      GoRoute(
+        name: RoutesNames.deliverySuccess,
+        path: RoutesNames.deliverySuccess,
+        pageBuilder: (_, state) {
+          final args = state.extra as Map<String, dynamic>;
+
+          return _fadePageBuilder(
+            DeliverySuccessScreen(
+              flow: args['flow'] as DeliveryFlowData,
+              collectedAmount: args['collected_amount'] as num,
+              paymentMethod: args['payment_method'] as String,
+            ),
+            state,
+          );
+        },
+      ),
     ],
   );
 

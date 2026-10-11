@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/drawer_features/account/data/models/me_response.dart';
 
 sealed class AccountState {}
@@ -29,10 +28,7 @@ final class AccountLogoutFailureState extends AccountState {
   final AccountUser? user;
   final String errorMessage;
 
-  AccountLogoutFailureState({
-    required this.user,
-    required this.errorMessage,
-  });
+  AccountLogoutFailureState({required this.user, required this.errorMessage});
 }
 
 final class AccountLoggedOutState extends AccountState {}

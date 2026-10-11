@@ -9,7 +9,6 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_address_edit_sheet.dart';
 
-
 class OrderCustomerCard extends StatelessWidget {
   const OrderCustomerCard({
     super.key,
@@ -22,7 +21,6 @@ class OrderCustomerCard extends StatelessWidget {
   final int orderId;
   final OrderCustomerLocation location;
 
-
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -31,51 +29,38 @@ class OrderCustomerCard extends StatelessWidget {
 
   Future<void> _openPhone(BuildContext context) async {
     if (location.phone.isEmpty) {
-      _showMessage(
-        context,
-        context.strings.order_customer_phone_missing,
-      );
+      _showMessage(context, context.strings.order_customer_phone_missing);
       return;
     }
 
-    await _launch(
-      context,
-      Uri(scheme: 'tel', path: location.phone),
-    );
+    await _launch(context, Uri(scheme: 'tel', path: location.phone));
   }
 
   Future<void> _openMap(
-      BuildContext context, {
-        required bool directions,
-      }) async {
+    BuildContext context, {
+    required bool directions,
+  }) async {
     if (!location.hasCoordinates) {
-      _showMessage(
-        context,
-        context.strings.order_customer_gps_missing,
-      );
+      _showMessage(context, context.strings.order_customer_gps_missing);
       return;
     }
 
-    final coordinates =
-        '${location.latitude},${location.longitude}';
+    final coordinates = '${location.latitude},${location.longitude}';
 
     final uri = directions
         ? Uri.https('www.google.com', '/maps/dir/', {
-      'api': '1',
-      'destination': coordinates,
-    })
+            'api': '1',
+            'destination': coordinates,
+          })
         : Uri.https('www.google.com', '/maps/search/', {
-      'api': '1',
-      'query': coordinates,
-    });
+            'api': '1',
+            'query': coordinates,
+          });
 
     await _launch(context, uri);
   }
 
-  Future<void> _launch(
-      BuildContext context,
-      Uri uri,
-      ) async {
+  Future<void> _launch(BuildContext context, Uri uri) async {
     try {
       final success = await launchUrl(
         uri,
@@ -83,23 +68,16 @@ class OrderCustomerCard extends StatelessWidget {
       );
 
       if (!success && context.mounted) {
-        _showMessage(
-          context,
-          context.strings.trip_action_unavailable,
-        );
+        _showMessage(context, context.strings.trip_action_unavailable);
       }
     } catch (_) {
       if (context.mounted) {
-        _showMessage(
-          context,
-          context.strings.trip_action_unavailable,
-        );
+        _showMessage(context, context.strings.trip_action_unavailable);
       }
     }
   }
 
-
-// ======= Open Address Edit Bottom Sheet ======= //
+  // ======= Open Address Edit Bottom Sheet ======= //
   void _editAddress(BuildContext context) {
     final cubit = context.read<OrderDetailsCubit>();
 
@@ -109,9 +87,7 @@ class OrderCustomerCard extends StatelessWidget {
       useSafeArea: true,
       backgroundColor: AppColors.white0,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (sheetContext) {
         return BlocProvider.value(
@@ -125,7 +101,6 @@ class OrderCustomerCard extends StatelessWidget {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -203,17 +178,11 @@ class OrderCustomerCard extends StatelessWidget {
 
           Row(
             children: [
-              Icon(
-                Icons.phone_outlined,
-                color: AppColors.grey4,
-                size: 20,
-              ),
+              Icon(Icons.phone_outlined, color: AppColors.grey4, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  location.phone.isEmpty
-                      ? '—'
-                      : location.phone,
+                  location.phone.isEmpty ? '—' : location.phone,
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.end,
                   style: Styles.textStyle16,
@@ -236,10 +205,7 @@ class OrderCustomerCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.grey4,
-                    ),
+                    Icon(Icons.location_on_outlined, color: AppColors.grey4),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -262,21 +228,17 @@ class OrderCustomerCard extends StatelessWidget {
                     Icon(
                       Icons.my_location_outlined,
                       size: 20,
-                      color: hasGPS
-                          ? AppColors.grey4
-                          : AppColors.red1,
+                      color: hasGPS ? AppColors.grey4 : AppColors.red1,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         hasGPS
                             ? '${location.latitude!.toStringAsFixed(7)}, '
-                            '${location.longitude!.toStringAsFixed(7)}'
+                                  '${location.longitude!.toStringAsFixed(7)}'
                             : context.strings.order_customer_gps_missing,
                         style: Styles.textStyle12.copyWith(
-                          color: hasGPS
-                              ? AppColors.grey4
-                              : AppColors.red1,
+                          color: hasGPS ? AppColors.grey4 : AppColors.red1,
                         ),
                       ),
                     ),
@@ -294,9 +256,7 @@ class OrderCustomerCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.orange1,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.orange0,
-                ),
+                border: Border.all(color: AppColors.orange0),
               ),
               child: Column(
                 children: [
@@ -310,10 +270,8 @@ class OrderCustomerCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           hasAddress
-                              ? context.strings
-                              .order_location_not_defined
-                              : context.strings
-                              .order_address_not_defined,
+                              ? context.strings.order_location_not_defined
+                              : context.strings.order_address_not_defined,
                           style: Styles.textStyle16.copyWith(
                             color: AppColors.orange0,
                             fontWeight: FontWeight.w800,
@@ -358,10 +316,7 @@ class OrderCustomerCard extends StatelessWidget {
                   icon: Icons.location_on_outlined,
                   background: AppColors.grey5,
                   foreground: AppColors.black1,
-                  onTap: () => _openMap(
-                    context,
-                    directions: false,
-                  ),
+                  onTap: () => _openMap(context, directions: false),
                 ),
               ),
               const SizedBox(width: 8),
@@ -371,10 +326,7 @@ class OrderCustomerCard extends StatelessWidget {
                   icon: Icons.navigation_outlined,
                   background: AppColors.blue4,
                   foreground: AppColors.primary,
-                  onTap: () => _openMap(
-                    context,
-                    directions: true,
-                  ),
+                  onTap: () => _openMap(context, directions: true),
                 ),
               ),
             ],
@@ -385,9 +337,7 @@ class OrderCustomerCard extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () => _editAddress(context),
             icon: const Icon(Icons.sync_rounded),
-            label: Text(
-              context.strings.order_update_address,
-            ),
+            label: Text(context.strings.order_update_address),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
               side: BorderSide(color: AppColors.blue3),

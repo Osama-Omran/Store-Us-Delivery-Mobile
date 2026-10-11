@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -7,10 +6,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_i
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/custom_trip_container.dart';
 
 class LoadedGoodsDetails extends StatelessWidget {
-  const LoadedGoodsDetails({
-    super.key,
-    required this.totals,
-  });
+  const LoadedGoodsDetails({super.key, required this.totals});
 
   final LoadedItemsTotals? totals;
 
@@ -20,10 +16,7 @@ class LoadedGoodsDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
       children: [
-        Text(
-          context.strings.loaded_goods_details,
-          style: Styles.textStyle18,
-        ),
+        Text(context.strings.loaded_goods_details, style: Styles.textStyle18),
         Row(
           spacing: 8,
           children: [

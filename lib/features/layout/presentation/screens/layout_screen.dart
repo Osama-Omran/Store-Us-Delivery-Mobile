@@ -173,16 +173,20 @@ class _LayoutContentState extends State<_LayoutContent> {
                         ? AppMenuSection.topRank
                         : layout.isTreasury
                         ? AppMenuSection.treasury
+                        : layout.isStockTransfer
+                        ? AppMenuSection.stockTransfer
+                        : layout.isReports
+                        ? AppMenuSection.reports
                         : AppMenuSection.deliveries,
 
                     onTopRankTap: layout.openTopRank,
                     onTreasuryTap: layout.openTreasury,
                     onDeliveriesTap: () {},
-                    onStockTransferTap: () {},
+                    onStockTransferTap: layout.openStockTransfer,
                     onDirectSaleTap: () {},
                     onCustomersTap: () {},
                     onAreasTap: () {},
-                    onReportsTap: () {},
+                    onReportsTap: layout.openReports,
                     onContactUsTap: () {},
                     onReceiveCustodyTap: () {},
                   );

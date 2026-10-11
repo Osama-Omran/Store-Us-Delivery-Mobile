@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -22,12 +21,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
       decoration: BoxDecoration(
         color: AppColors.white0,
-        border: Border(
-          top: BorderSide(
-            color: AppColors.grey3,
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: AppColors.grey3, width: 1)),
       ),
       child: SafeArea(
         top: false,
@@ -52,10 +46,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                 Text(
                   context.strings.confirm_receiving_description,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.grey4,
-                  ),
+                  style: TextStyle(fontSize: 14, color: AppColors.grey4),
                 ),
               ],
             ),
@@ -63,9 +54,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
               width: double.infinity,
               height: 70,
               child: ElevatedButton(
-                onPressed: isLoading || !isProofApproved
-                    ? null
-                    : onConfirm,
+                onPressed: isLoading || !isProofApproved ? null : onConfirm,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   disabledBackgroundColor: AppColors.blue0,
@@ -79,20 +68,20 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                 ),
                 child: isLoading
                     ? SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    color: AppColors.white0,
-                    strokeWidth: 2,
-                  ),
-                )
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: AppColors.white0,
+                          strokeWidth: 2,
+                        ),
+                      )
                     : Text(
-                  context.strings.confirm_receiving_van,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                        context.strings.confirm_receiving_van,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               ),
             ),
             if (!isProofApproved)

@@ -1,13 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 class NotificationsHeader extends StatelessWidget {
-  const NotificationsHeader({
-    super.key,
-    this.unreadCount,
-  });
+  const NotificationsHeader({super.key, this.unreadCount});
 
   final int? unreadCount;
 
@@ -18,9 +14,7 @@ class NotificationsHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 22, 16, 14),
       decoration: BoxDecoration(
         color: AppColors.grey0,
-        border: Border(
-          bottom: BorderSide(color: AppColors.grey3),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.grey3)),
       ),
       child: Column(
         spacing: 2,
@@ -37,12 +31,9 @@ class NotificationsHeader extends StatelessWidget {
           if (unreadCount != null)
             Text(
               '$unreadCount '
-                  '${context.strings.unread_notifications}',
+              '${context.strings.unread_notifications}',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.grey4,
-              ),
+              style: TextStyle(fontSize: 14, color: AppColors.grey4),
             ),
         ],
       ),

@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
@@ -21,11 +20,11 @@ class OrderCustomerLocation {
 
   bool get hasCoordinates =>
       latitude != null &&
-          longitude != null &&
-          latitude! >= -90 &&
-          latitude! <= 90 &&
-          longitude! >= -180 &&
-          longitude! <= 180;
+      longitude != null &&
+      latitude! >= -90 &&
+      latitude! <= 90 &&
+      longitude! >= -180 &&
+      longitude! <= 180;
 
   bool get isComplete => hasAddress && hasCoordinates;
 
@@ -48,18 +47,9 @@ class OrderCustomerLocation {
     final listLng = tripOrder?.longitude;
 
     return OrderCustomerLocation(
-      name: firstNonEmpty(
-        listCustomer?.name,
-        customer?.name,
-      ),
-      phone: firstNonEmpty(
-        listCustomer?.phone,
-        customer?.phone,
-      ),
-      address: firstNonEmpty(
-        tripOrder?.address,
-        customer?.address,
-      ),
+      name: firstNonEmpty(listCustomer?.name, customer?.name),
+      phone: firstNonEmpty(listCustomer?.phone, customer?.phone),
+      address: firstNonEmpty(tripOrder?.address, customer?.address),
       latitude: listLat != null && listLng != null
           ? listLat
           : customer?.latitude,

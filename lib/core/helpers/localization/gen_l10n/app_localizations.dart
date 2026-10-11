@@ -2679,6 +2679,600 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الدولة'**
   String get order_delivery_country;
+
+  /// No description provided for @stock_transfer_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقل بضاعة بين المخازن — منفصل عن التسليمات'**
+  String get stock_transfer_subtitle;
+
+  /// No description provided for @stock_transfer_awaiting_receipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار الاستلام'**
+  String get stock_transfer_awaiting_receipt;
+
+  /// No description provided for @stock_transfer_on_vehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معايا على العربية'**
+  String get stock_transfer_on_vehicle;
+
+  /// No description provided for @stock_transfer_awaiting_warehouse.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار استلام المخزن'**
+  String get stock_transfer_awaiting_warehouse;
+
+  /// No description provided for @stock_transfer_completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get stock_transfer_completed;
+
+  /// No description provided for @stock_transfer_receipt_discrepancy.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد فرق في الاستلام'**
+  String get stock_transfer_receipt_discrepancy;
+
+  /// No description provided for @stock_transfer_vehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get stock_transfer_vehicle;
+
+  /// No description provided for @stock_transfer_representative.
+  ///
+  /// In ar, this message translates to:
+  /// **'المندوب'**
+  String get stock_transfer_representative;
+
+  /// No description provided for @stock_transfer_item_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأصناف'**
+  String get stock_transfer_item_count;
+
+  /// No description provided for @stock_transfer_total_quantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الكمية'**
+  String get stock_transfer_total_quantity;
+
+  /// No description provided for @stock_transfer_created.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشئ'**
+  String get stock_transfer_created;
+
+  /// No description provided for @stock_transfer_expected_arrival.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول المتوقع'**
+  String get stock_transfer_expected_arrival;
+
+  /// No description provided for @stock_transfer_today.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get stock_transfer_today;
+
+  /// No description provided for @stock_transfer_two_days_ago.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ يومين'**
+  String get stock_transfer_two_days_ago;
+
+  /// No description provided for @stock_transfer_am.
+  ///
+  /// In ar, this message translates to:
+  /// **'ص'**
+  String get stock_transfer_am;
+
+  /// No description provided for @stock_transfer_pm.
+  ///
+  /// In ar, this message translates to:
+  /// **'م'**
+  String get stock_transfer_pm;
+
+  /// No description provided for @stock_transfer_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عمليات نقل مخزني في هذه الحالة'**
+  String get stock_transfer_empty;
+
+  /// No description provided for @reports_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدائك في التوصيل'**
+  String get reports_subtitle;
+
+  /// No description provided for @reports_today.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get reports_today;
+
+  /// No description provided for @reports_this_week.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الأسبوع'**
+  String get reports_this_week;
+
+  /// No description provided for @reports_this_month.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الشهر'**
+  String get reports_this_month;
+
+  /// No description provided for @reports_custom_period.
+  ///
+  /// In ar, this message translates to:
+  /// **'فترة مخصصة'**
+  String get reports_custom_period;
+
+  /// No description provided for @reports_from_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'من تاريخ'**
+  String get reports_from_date;
+
+  /// No description provided for @reports_to_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى تاريخ'**
+  String get reports_to_date;
+
+  /// No description provided for @reports_all_trips.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الرحلات'**
+  String get reports_all_trips;
+
+  /// No description provided for @reports_delivery_rate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة التسليم'**
+  String get reports_delivery_rate;
+
+  /// No description provided for @reports_total_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي التحصيل'**
+  String get reports_total_collection;
+
+  /// No description provided for @reports_total_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلبات'**
+  String get reports_total_orders;
+
+  /// No description provided for @reports_delivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم'**
+  String get reports_delivered;
+
+  /// No description provided for @reports_partial.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم جزئي'**
+  String get reports_partial;
+
+  /// No description provided for @reports_undelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم التسليم'**
+  String get reports_undelivered;
+
+  /// No description provided for @reports_order_distribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'توزيع الطلبات'**
+  String get reports_order_distribution;
+
+  /// No description provided for @reports_rate_by_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة التسليم حسب الرحلة'**
+  String get reports_rate_by_trip;
+
+  /// No description provided for @reports_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات تقارير لهذه الفترة'**
+  String get reports_empty;
+
+  /// No description provided for @delivery_result_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة التسليم'**
+  String get delivery_result_title;
+
+  /// No description provided for @delivery_partial_reason_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب التسليم الجزئي *'**
+  String get delivery_partial_reason_required;
+
+  /// No description provided for @delivery_reason_customer_refused.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل رفض جزء من الطلب'**
+  String get delivery_reason_customer_refused;
+
+  /// No description provided for @delivery_reason_stock_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية غير متاحة'**
+  String get delivery_reason_stock_unavailable;
+
+  /// No description provided for @delivery_reason_customer_requested_less.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل طلب كمية أقل'**
+  String get delivery_reason_customer_requested_less;
+
+  /// No description provided for @delivery_reason_damaged.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتج تالف'**
+  String get delivery_reason_damaged;
+
+  /// No description provided for @delivery_reason_other.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب آخر'**
+  String get delivery_reason_other;
+
+  /// No description provided for @delivery_other_reason_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب سبب التسليم الجزئي'**
+  String get delivery_other_reason_hint;
+
+  /// No description provided for @delivery_notes_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات التسليم'**
+  String get delivery_notes_title;
+
+  /// No description provided for @delivery_notes_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب أي ملاحظة (اختياري)'**
+  String get delivery_notes_hint;
+
+  /// No description provided for @delivery_reason_not_sent.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب التسليم الجزئي والملاحظات غير مشمولين في خدمة تأكيد التسليم الحالية.'**
+  String get delivery_reason_not_sent;
+
+  /// No description provided for @delivery_continue_payment.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة — تحصيل المبلغ'**
+  String get delivery_continue_payment;
+
+  /// No description provided for @delivery_payment_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل المبلغ'**
+  String get delivery_payment_title;
+
+  /// No description provided for @delivery_required_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المطلوب تحصيله'**
+  String get delivery_required_amount;
+
+  /// No description provided for @delivery_collected_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الذي استلمته بعد العد'**
+  String get delivery_collected_amount;
+
+  /// No description provided for @delivery_payment_method.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get delivery_payment_method;
+
+  /// No description provided for @delivery_cash.
+  ///
+  /// In ar, this message translates to:
+  /// **'كاش'**
+  String get delivery_cash;
+
+  /// No description provided for @delivery_wallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة إلكترونية'**
+  String get delivery_wallet;
+
+  /// No description provided for @delivery_amount_matches.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ مطابق'**
+  String get delivery_amount_matches;
+
+  /// No description provided for @delivery_amount_mismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المدخل غير مطابق للمبلغ المطلوب.'**
+  String get delivery_amount_mismatch;
+
+  /// No description provided for @delivery_missing_line_ids.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن تأكيد التسليم لأن معرفات بنود الأوردر (line_id) غير متوفرة من السيرفر.'**
+  String get delivery_missing_line_ids;
+
+  /// No description provided for @delivery_payment_not_supported.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع المتاحة للتأكيد حاليًا هي الكاش فقط، لحين تأكيد قيم طرق الدفع الأخرى من السيرفر.'**
+  String get delivery_payment_not_supported;
+
+  /// No description provided for @delivery_confirmation_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص التأكيد'**
+  String get delivery_confirmation_summary;
+
+  /// No description provided for @delivery_status_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التسليم'**
+  String get delivery_status_label;
+
+  /// No description provided for @delivery_confirmation_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع البيانات جيدًا قبل التأكيد. سيتم إرسال التسليم والمبلغ المحدد إلى السيرفر.'**
+  String get delivery_confirmation_warning;
+
+  /// No description provided for @delivery_confirm_button.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التسليم والتحصيل'**
+  String get delivery_confirm_button;
+
+  /// No description provided for @delivery_invalid_items.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات المنتجات غير مكتملة أو الكميات غير صالحة.'**
+  String get delivery_invalid_items;
+
+  /// No description provided for @delivery_invalid_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المدخل غير صالح.'**
+  String get delivery_invalid_amount;
+
+  /// No description provided for @delivery_confirm_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد التسليم. تحقق من حالة الطلب وحاول مرة أخرى.'**
+  String get delivery_confirm_failed;
+
+  /// No description provided for @delivery_success_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل التسليم بنجاح'**
+  String get delivery_success_title;
+
+  /// No description provided for @delivery_next_order.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب التالي'**
+  String get delivery_next_order;
+
+  /// No description provided for @delivery_next_order_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الطلب التالي.'**
+  String get delivery_next_order_failed;
+
+  /// No description provided for @delivery_proof_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إثبات التسليم'**
+  String get delivery_proof_title;
+
+  /// No description provided for @delivery_proof_photo.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة إثبات التسليم'**
+  String get delivery_proof_photo;
+
+  /// No description provided for @delivery_take_photo.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط صورة'**
+  String get delivery_take_photo;
+
+  /// No description provided for @delivery_customer_signature.
+  ///
+  /// In ar, this message translates to:
+  /// **'توقيع العميل'**
+  String get delivery_customer_signature;
+
+  /// No description provided for @delivery_clear_signature.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح التوقيع'**
+  String get delivery_clear_signature;
+
+  /// No description provided for @delivery_photo_capture_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر التقاط الصورة. حاول مرة أخرى.'**
+  String get delivery_photo_capture_failed;
+
+  /// No description provided for @delivery_proof_not_uploaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة والتوقيع للمعاينة المحلية فقط ولم يتم رفعهما للسيرفر.'**
+  String get delivery_proof_not_uploaded;
+
+  /// No description provided for @delivery_save_local_proof.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة مع الإثبات'**
+  String get delivery_save_local_proof;
+
+  /// No description provided for @delivery_add_proof.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صورة وتوقيع (اختياري)'**
+  String get delivery_add_proof;
+
+  /// No description provided for @delivery_proof_prepared.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تجهيز الإثبات محليًا'**
+  String get delivery_proof_prepared;
+
+  /// No description provided for @top_rank_last_30_days.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر 30 يوم'**
+  String get top_rank_last_30_days;
+
+  /// No description provided for @top_rank_warehouses.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخازن'**
+  String get top_rank_warehouses;
+
+  /// No description provided for @top_rank_warehouse_staff.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمناء المخازن'**
+  String get top_rank_warehouse_staff;
+
+  /// No description provided for @top_rank_vehicles.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربيات'**
+  String get top_rank_vehicles;
+
+  /// No description provided for @top_rank_provisional.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييم مبدئي'**
+  String get top_rank_provisional;
+
+  /// No description provided for @top_rank_data_notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات عن دقة البيانات'**
+  String get top_rank_data_notes;
+
+  /// No description provided for @top_rank_current_rank.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترتيب الحالي'**
+  String get top_rank_current_rank;
+
+  /// No description provided for @top_rank_score_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم'**
+  String get top_rank_score_label;
+
+  /// No description provided for @top_rank_breakdown_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفصيل النقاط'**
+  String get top_rank_breakdown_title;
+
+  /// No description provided for @top_rank_total_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get top_rank_total_score;
+
+  /// No description provided for @top_rank_strengths_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمل إيه علشان وصل كده؟'**
+  String get top_rank_strengths_title;
+
+  /// No description provided for @top_rank_improvement_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعمل إيه علشان تحسن ترتيبك؟'**
+  String get top_rank_improvement_title;
+
+  /// No description provided for @top_rank_compare_leader.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقارنة مع الأول'**
+  String get top_rank_compare_leader;
+
+  /// No description provided for @top_rank_your_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجتك'**
+  String get top_rank_your_score;
+
+  /// No description provided for @top_rank_leader_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة الأول'**
+  String get top_rank_leader_score;
+
+  /// No description provided for @top_rank_gap.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفرق'**
+  String get top_rank_gap;
+
+  /// No description provided for @top_rank_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متاح'**
+  String get top_rank_unavailable;
+
+  /// No description provided for @top_rank_unchanged_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تغيير'**
+  String get top_rank_unchanged_label;
+
+  /// No description provided for @top_rank_approved_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم المعتمد'**
+  String get top_rank_approved_score;
+
+  /// No description provided for @top_rank_data_incomplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا تقييم مبدئي بسبب نقص بعض بيانات الأداء.'**
+  String get top_rank_data_incomplete;
+
+  /// No description provided for @top_rank_details_refresh_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث التفاصيل. يتم عرض بيانات الترتيب المحمّلة.'**
+  String get top_rank_details_refresh_failed;
+
+  /// No description provided for @top_rank_data_insufficient.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات غير كافية'**
+  String get top_rank_data_insufficient;
+
+  /// No description provided for @top_rank_improvement_opportunity.
+  ///
+  /// In ar, this message translates to:
+  /// **'فرصة للتحسين'**
+  String get top_rank_improvement_opportunity;
 }
 
 class _AppLocalizationsDelegate

@@ -35,19 +35,17 @@ class HttpTripRouteRepository implements TripRouteRepository {
   }) async {
     final path =
         '${baseUrl.replaceAll(RegExp(r"/$"), "")}/api/mobile/trips/${Uri.encodeComponent(tripId)}/route';
-    final uri = Uri.parse(path).replace(queryParameters: {
-      'order_id': orderId,
-      'origin_lat': origin.latitude.toString(),
-      'origin_lng': origin.longitude.toString(),
-    });
-
-    final response = await http.get(
-      uri,
-      headers: {
-        'Accept': 'application/json',
-        ...headers,
+    final uri = Uri.parse(path).replace(
+      queryParameters: {
+        'order_id': orderId,
+        'origin_lat': origin.latitude.toString(),
+        'origin_lng': origin.longitude.toString(),
       },
-    ).timeout(timeout);
+    );
+
+    final response = await http
+        .get(uri, headers: {'Accept': 'application/json', ...headers})
+        .timeout(timeout);
 
     if (response.statusCode != 200) {
       throw StateError('Route API returned HTTP ${response.statusCode}');

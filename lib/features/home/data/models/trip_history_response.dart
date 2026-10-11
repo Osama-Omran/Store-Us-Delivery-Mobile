@@ -1,4 +1,3 @@
-
 class TripHistoryResponse {
   final bool success;
   final List<TripHistoryItem> data;
@@ -10,17 +9,15 @@ class TripHistoryResponse {
     this.message,
   });
 
-  factory TripHistoryResponse.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TripHistoryResponse.fromJson(Map<String, dynamic> json) {
     return TripHistoryResponse(
       success: json['success'] as bool? ?? false,
       data: (json['data'] as List<dynamic>? ?? [])
           .map(
             (item) => TripHistoryItem.fromJson(
-          Map<String, dynamic>.from(item as Map),
-        ),
-      )
+              Map<String, dynamic>.from(item as Map),
+            ),
+          )
           .toList(),
       message: json['message']?.toString(),
     );
@@ -52,24 +49,16 @@ class TripHistoryItem {
     this.totalOrders,
   });
 
-  factory TripHistoryItem.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TripHistoryItem.fromJson(Map<String, dynamic> json) {
     final summary = json['orders_summary'];
 
     return TripHistoryItem(
       id: _parseInt(json['id']) ?? 0,
       number: json['number']?.toString() ?? '',
       status: json['status']?.toString() ?? '',
-      tripDate: DateTime.tryParse(
-        json['trip_date']?.toString() ?? '',
-      ),
-      completedAt: DateTime.tryParse(
-        json['completed_at']?.toString() ?? '',
-      ),
-      totalOrders: summary is Map
-          ? _parseInt(summary['total'])
-          : null,
+      tripDate: DateTime.tryParse(json['trip_date']?.toString() ?? ''),
+      completedAt: DateTime.tryParse(json['completed_at']?.toString() ?? ''),
+      totalOrders: summary is Map ? _parseInt(summary['total']) : null,
     );
   }
 
@@ -81,21 +70,17 @@ class TripHistoryItem {
       'trip_date': tripDate == null
           ? null
           : '${tripDate!.year.toString().padLeft(4, '0')}-'
-          '${tripDate!.month.toString().padLeft(2, '0')}-'
-          '${tripDate!.day.toString().padLeft(2, '0')}',
+                '${tripDate!.month.toString().padLeft(2, '0')}-'
+                '${tripDate!.day.toString().padLeft(2, '0')}',
       'completed_at': completedAt?.toUtc().toIso8601String(),
-      'orders_summary': {
-        'total': totalOrders,
-      },
+      'orders_summary': {'total': totalOrders},
     };
   }
 
-  String get normalizedStatus =>
-      status.trim().toUpperCase();
+  String get normalizedStatus => status.trim().toUpperCase();
 
   bool get isPreviousTrip =>
-      normalizedStatus == 'COMPLETED' ||
-          normalizedStatus == 'CANCELLED';
+      normalizedStatus == 'COMPLETED' || normalizedStatus == 'CANCELLED';
 
   bool isOnDate(DateTime date) {
     final value = tripDate;

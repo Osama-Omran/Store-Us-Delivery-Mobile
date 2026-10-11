@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/notifications_api_service.dart';
@@ -7,8 +6,7 @@ import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 import 'package:storeus_delivery/features/notifications/domain/repo/notifications_repo_interface.dart';
 
-class ConcreteNotificationsRepo
-    implements NotificationsRepoInterface {
+class ConcreteNotificationsRepo implements NotificationsRepoInterface {
   final NotificationsApiService _apiService;
 
   ConcreteNotificationsRepo(this._apiService);
@@ -34,16 +32,12 @@ class ConcreteNotificationsRepo
     } catch (error) {
       CustomLogger.logger?.e(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 
   @override
-  Future<ApiResult<dynamic>> markAsRead({
-    required int notificationId,
-  }) async {
+  Future<ApiResult<dynamic>> markAsRead({required int notificationId}) async {
     try {
       final response = await _apiService.markAsRead(
         notificationId,
@@ -54,9 +48,7 @@ class ConcreteNotificationsRepo
     } catch (error) {
       CustomLogger.logger?.e(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 }

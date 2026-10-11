@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -7,20 +6,14 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
 class OrderDetailsItemsCard extends StatelessWidget {
-  const OrderDetailsItemsCard({
-    super.key,
-    required this.items,
-  });
+  const OrderDetailsItemsCard({super.key, required this.items});
 
   final List<OrderDetailsItem> items;
 
   String _formatQty(num? quantity) {
     if (quantity == null) return '—';
 
-    return quantity.toString().replaceFirst(
-      RegExp(r'\.0$'),
-      '',
-    );
+    return quantity.toString().replaceFirst(RegExp(r'\.0$'), '');
   }
 
   @override
@@ -46,18 +39,10 @@ class OrderDetailsItemsCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           if (items.isEmpty)
-            Center(
-              child: Text(
-                context.strings.order_details_no_items,
-              ),
-            ),
+            Center(child: Text(context.strings.order_details_no_items)),
 
           for (int i = 0; i < items.length; i++) ...[
-            if (i > 0)
-              Divider(
-                color: AppColors.grey3,
-                height: 20,
-              ),
+            if (i > 0) Divider(color: AppColors.grey3, height: 20),
 
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,9 +50,7 @@ class OrderDetailsItemsCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     items[i].itemName,
-                    style: Styles.textStyle16.copyWith(
-                      color: AppColors.black1,
-                    ),
+                    style: Styles.textStyle16.copyWith(color: AppColors.black1),
                   ),
                 ),
 
@@ -75,7 +58,7 @@ class OrderDetailsItemsCard extends StatelessWidget {
 
                 Text(
                   '${_formatQty(items[i].orderedQty)} '
-                      '${items[i].uom}',
+                  '${items[i].uom}',
                   style: Styles.textStyle16.copyWith(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w800,

@@ -1,4 +1,4 @@
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,18 +16,14 @@ import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_
 // =====================================================
 
 Future<void> _openOrderDetails(
-    BuildContext context, {
-      required int tripID,
-      required int? orderID,
-    }) async {
+  BuildContext context, {
+  required int tripID,
+  required int? orderID,
+}) async {
   // ======= Validate Order ID ======= //
   if (orderID == null || orderID <= 0) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.strings.trip_order_details_unavailable,
-        ),
-      ),
+      SnackBar(content: Text(context.strings.trip_order_details_unavailable)),
     );
     return;
   }
@@ -38,10 +34,7 @@ Future<void> _openOrderDetails(
   // ======= Navigate To Order Details ======= //
   await GoRouter.of(context).push(
     RoutesNames.orderDetails,
-    extra: {
-      'trip_id': tripID,
-      'order_id': orderID,
-    },
+    extra: {'trip_id': tripID, 'order_id': orderID},
   );
 
   // ======= Check Widget & Cubit ======= //
@@ -79,9 +72,7 @@ class TripOrderCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.grey3,
-        ),
+        border: Border.all(color: AppColors.grey3),
         boxShadow: [
           BoxShadow(
             color: AppColors.black0.withValues(alpha: 0.035),
@@ -95,12 +86,7 @@ class TripOrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              16,
-              18,
-              16,
-              16,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
             child: Column(
               children: [
                 // ======= Customer & Order ======= //
@@ -129,8 +115,7 @@ class TripOrderCard extends StatelessWidget {
 
                     Expanded(
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             order.customerName,
@@ -158,25 +143,25 @@ class TripOrderCard extends StatelessWidget {
 
                           const SizedBox(height: 4),
 
-                          _OrderContactLine(
-                            icon: Icons.location_on_outlined,
-                            text: order.address,
-                          ),
+                          if (order.address.trim().isNotEmpty)
+                            _OrderContactLine(
+                              icon: Icons.location_on_outlined,
+                              text: order.address,
+                            ),
 
-                          _OrderContactLine(
-                            icon: Icons.phone_outlined,
-                            text: order.phoneNumber,
-                            isPhone: true,
-                          ),
+                          if (_hasValidPhone(order.phoneNumber))
+                            _OrderContactLine(
+                              icon: Icons.phone_outlined,
+                              text: order.phoneNumber,
+                              isPhone: true,
+                            ),
                         ],
                       ),
                     ),
 
                     const SizedBox(width: 6),
 
-                    _StatusBadge(
-                      style: status,
-                    ),
+                    _StatusBadge(style: status),
                   ],
                 ),
 
@@ -184,18 +169,13 @@ class TripOrderCard extends StatelessWidget {
 
                 // ======= Order Amount ======= //
                 Padding(
-                  padding:
-                  const EdgeInsetsDirectional.only(
-                    start: 70,
-                  ),
+                  padding: const EdgeInsetsDirectional.only(start: 70),
                   child: Row(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               context.strings.order_value,
@@ -212,9 +192,9 @@ class TripOrderCard extends StatelessWidget {
                               order.orderAmount == null
                                   ? '—'
                                   : formatTripAmount(
-                                context,
-                                order.orderAmount!,
-                              ),
+                                      context,
+                                      order.orderAmount!,
+                                    ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -248,7 +228,7 @@ class TripOrderCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             '${context.strings.amount_collected} '
-                                '${formatTripAmount(context, order.collectedAmount)}',
+                            '${formatTripAmount(context, order.collectedAmount)}',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 12,
@@ -265,19 +245,14 @@ class TripOrderCard extends StatelessWidget {
             ),
           ),
 
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.grey3,
-          ),
+          Divider(height: 1, thickness: 1, color: AppColors.grey3),
 
           // ======= Bottom Actions ======= //
           if (order.isPending)
             _PendingOrderActions(
               tripID: tripID,
               orderID: order.apiId,
-              onCallCustomer: onCallCustomer,
-              onOpenDirections: onOpenDirections,
+              order: order,
             )
           else
             SizedBox(
@@ -288,9 +263,7 @@ class TripOrderCard extends StatelessWidget {
                   tripID: tripID,
                   orderID: order.apiId,
                 ),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                ),
+                style: TextButton.styleFrom(foregroundColor: AppColors.primary),
                 child: Text(
                   context.strings.view_delivery_details,
                   style: const TextStyle(
@@ -323,39 +296,39 @@ class _OrderContactLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayText =
-    text.trim().isEmpty ? '—' : text;
-
     return Padding(
       padding: const EdgeInsets.only(top: 3),
-      child: Row(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: AppColors.grey4,
-          ),
+      child: InkWell(
+        onTap: isPhone ? () => _callCustomer(context, text) : null,
+        borderRadius: BorderRadius.circular(8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isPhone ? AppColors.primary : AppColors.grey4,
+            ),
 
-          const SizedBox(width: 5),
+            const SizedBox(width: 5),
 
-          Expanded(
-            child: Text(
-              displayText,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textDirection:
-              isPhone ? TextDirection.ltr : null,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 13,
-                height: 1.25,
-                color: AppColors.grey4,
+            Expanded(
+              child: Text(
+                text,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textDirection: isPhone ? TextDirection.ltr : null,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.25,
+                  color: isPhone ? AppColors.primary : AppColors.grey4,
+                  fontWeight: isPhone ? FontWeight.w600 : FontWeight.w400,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -369,51 +342,41 @@ class _PendingOrderActions extends StatelessWidget {
   const _PendingOrderActions({
     required this.tripID,
     required this.orderID,
-    this.onCallCustomer,
-    this.onOpenDirections,
+    required this.order,
   });
 
   final int tripID;
   final int? orderID;
-  final VoidCallback? onCallCustomer;
-  final VoidCallback? onOpenDirections;
+  final TripOrderModel order;
 
   @override
   Widget build(BuildContext context) {
+    final bool hasLocation = order.hasCoordinates;
+    final bool hasPhone = _hasValidPhone(order.phoneNumber);
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        14,
-        12,
-        14,
-        14,
-      ),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
       child: Row(
         children: [
+          // ======= Open Order ======= //
           Expanded(
             child: SizedBox(
               height: 58,
               child: ElevatedButton(
-                // ======= Navigate & Refresh ======= //
                 onPressed: () => _openOrderDetails(
                   context,
                   tripID: tripID,
                   orderID: orderID,
                 ),
-
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
-                  shadowColor:
-                  AppColors.primary.withValues(
-                    alpha: 0.22,
-                  ),
+                  shadowColor: AppColors.primary.withValues(alpha: 0.22),
                   foregroundColor: AppColors.white0,
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(24),
                   ),
                 ),
-
                 child: Text(
                   context.strings.open_order,
                   style: const TextStyle(
@@ -425,25 +388,31 @@ class _PendingOrderActions extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 9),
+          // ======= Directions Button ======= //
+          if (hasLocation) ...[
+            const SizedBox(width: 9),
 
-          _SquareActionButton(
-            icon: Icons.near_me_outlined,
-            background: AppColors.blue4,
-            foreground: AppColors.primary,
-            onTap: onOpenDirections,
-            tooltip: context.strings.open_directions,
-          ),
+            _SquareActionButton(
+              icon: Icons.near_me_outlined,
+              background: AppColors.blue4,
+              foreground: AppColors.primary,
+              onTap: () => _openOrderDirections(context, order),
+              tooltip: context.strings.open_directions,
+            ),
+          ],
 
-          const SizedBox(width: 9),
+          // ======= Call Customer Button ======= //
+          if (hasPhone) ...[
+            const SizedBox(width: 9),
 
-          _SquareActionButton(
-            icon: Icons.phone_outlined,
-            background: AppColors.green1,
-            foreground: AppColors.green0,
-            onTap: onCallCustomer,
-            tooltip: context.strings.call_customer,
-          ),
+            _SquareActionButton(
+              icon: Icons.phone_outlined,
+              background: AppColors.green1,
+              foreground: AppColors.green0,
+              onTap: () => _callCustomer(context, order.phoneNumber),
+              tooltip: context.strings.call_customer,
+            ),
+          ],
         ],
       ),
     );
@@ -484,11 +453,7 @@ class _SquareActionButton extends StatelessWidget {
             child: SizedBox(
               height: 58,
               width: 55,
-              child: Icon(
-                icon,
-                color: foreground,
-                size: 25,
-              ),
+              child: Icon(icon, color: foreground, size: 25),
             ),
           ),
         ),
@@ -502,22 +467,15 @@ class _SquareActionButton extends StatelessWidget {
 // =====================================================
 
 class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({
-    required this.style,
-  });
+  const _StatusBadge({required this.style});
 
   final _StatusStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxWidth: 132,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 7,
-      ),
+      constraints: const BoxConstraints(maxWidth: 132),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
         color: style.badgeBackground,
         borderRadius: BorderRadius.circular(20),
@@ -556,10 +514,7 @@ class _StatusStyle {
   final Color numberBackground;
   final Color numberForeground;
 
-  static _StatusStyle forOrder(
-      BuildContext context,
-      TripOrderModel order,
-      ) {
+  static _StatusStyle forOrder(BuildContext context, TripOrderModel order) {
     switch (order.status) {
       case TripOrderStatus.delivered:
         return _StatusStyle(
@@ -600,9 +555,7 @@ class _StatusStyle {
       case TripOrderStatus.cancelled:
         return _StatusStyle(
           title: context.strings.delivery_cancelled,
-          badgeBackground: AppColors.red1.withValues(
-            alpha: 0.10,
-          ),
+          badgeBackground: AppColors.red1.withValues(alpha: 0.10),
           badgeForeground: AppColors.red1,
           numberBackground: AppColors.red1,
           numberForeground: AppColors.white0,
@@ -610,8 +563,7 @@ class _StatusStyle {
 
       case TripOrderStatus.unknown:
         return _StatusStyle(
-          title:
-          order.rawDeliveryStatus?.isNotEmpty == true
+          title: order.rawDeliveryStatus?.isNotEmpty == true
               ? order.rawDeliveryStatus!
               : context.strings.trip_tab_unknown_status,
           badgeBackground: AppColors.grey5,
@@ -619,6 +571,67 @@ class _StatusStyle {
           numberBackground: AppColors.grey3,
           numberForeground: AppColors.black1,
         );
+    }
+  }
+}
+
+// ======= Check Phone ======= //
+bool _hasValidPhone(String phone) {
+  final value = phone.trim();
+
+  return value.isNotEmpty && value != '—' && value.toLowerCase() != 'null';
+}
+
+// ======= Call Customer ======= //
+Future<void> _callCustomer(BuildContext context, String phone) async {
+  if (!_hasValidPhone(phone)) return;
+
+  final number = phone.trim().replaceAll(RegExp(r'\s+'), '');
+
+  final uri = Uri(scheme: 'tel', path: number);
+
+  try {
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.strings.trip_action_unavailable)),
+      );
+    }
+  } catch (_) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.strings.trip_action_unavailable)),
+      );
+    }
+  }
+}
+
+// ======= Open Google Maps Directions ======= //
+Future<void> _openOrderDirections(
+  BuildContext context,
+  TripOrderModel order,
+) async {
+  if (!order.hasCoordinates) return;
+
+  final uri = Uri.https('www.google.com', '/maps/dir/', {
+    'api': '1',
+    'destination': '${order.latitude},${order.longitude}',
+  });
+
+  try {
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.strings.trip_action_unavailable)),
+      );
+    }
+  } catch (_) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.strings.trip_action_unavailable)),
+      );
     }
   }
 }

@@ -8,8 +8,7 @@ class RouteNavigationLauncher {
   Future<bool> navigateTo(LatLng destination) {
     final uri = Uri.https('www.google.com', '/maps/dir/', {
       'api': '1',
-      'destination':
-          '${destination.latitude},${destination.longitude}',
+      'destination': '${destination.latitude},${destination.longitude}',
       'travelmode': 'driving',
       'dir_action': 'navigate',
     });

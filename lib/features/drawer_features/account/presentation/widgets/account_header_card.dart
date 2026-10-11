@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -61,22 +60,16 @@ class AccountHeaderCard extends StatelessWidget {
                   user.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Styles.textStyle24.copyWith(
-                    color: AppColors.black1,
-                  ),
+                  style: Styles.textStyle24.copyWith(color: AppColors.black1),
                 ),
                 Text(
                   role,
-                  style: Styles.textStyle14.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                 ),
                 Text(
                   user.employeeId,
                   textDirection: TextDirection.ltr,
-                  style: Styles.textStyle12.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
                 if (isOnTrip)
                   Align(

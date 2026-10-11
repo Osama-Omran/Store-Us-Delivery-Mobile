@@ -27,6 +27,7 @@ class AppColors {
   // Red
   static Color get red0 => const Color(0xffA30002);
   static Color get red1 => const Color(0xffdf242b);
+  static Color get red2 => const Color(0xffffe5e5);
 
   // Black
   static Color get black0 => const Color(0xff000000);

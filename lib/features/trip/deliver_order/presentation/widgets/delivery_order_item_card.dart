@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,8 +30,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
         final selectedQty = state.qtyFor(index);
         final maxQty = state.maxFor(index);
         final shortfall = state.shortfallFor(index);
-        final insufficientStock =
-        state.hasStockShortage(index);
+        final insufficientStock = state.hasStockShortage(index);
 
         return Container(
           padding: const EdgeInsets.all(18),
@@ -55,8 +53,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 4,
                       children: [
                         Text(
@@ -70,8 +67,8 @@ class DeliveryOrderItemCard extends StatelessWidget {
 
                         Text(
                           '${context.strings.delivery_item_code}: '
-                              '${item.itemCode} • '
-                              '${context.strings.unit}: ${item.uom}',
+                          '${item.itemCode} • '
+                          '${context.strings.unit}: ${item.uom}',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.grey4,
@@ -86,10 +83,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                   Text(
                     item.rate == null
                         ? '—'
-                        : formatTripAmount(
-                      context,
-                      item.rate!,
-                    ),
+                        : formatTripAmount(context, item.rate!),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -104,8 +98,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _QuantityInfoTile(
-                      label: context.strings
-                          .delivery_ordered_quantity,
+                      label: context.strings.delivery_ordered_quantity,
                       quantity: item.orderedQty,
                       background: AppColors.grey5,
                       color: AppColors.black1,
@@ -116,8 +109,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
 
                   Expanded(
                     child: _QuantityInfoTile(
-                      label: context.strings
-                          .delivery_vehicle_available,
+                      label: context.strings.delivery_vehicle_available,
                       quantity: item.vehicleAvailableQty,
                       background: insufficientStock
                           ? AppColors.orange1
@@ -153,8 +145,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
 
                       Expanded(
                         child: Text(
-                          context.strings
-                              .delivery_insufficient_stock,
+                          context.strings.delivery_insufficient_stock,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -189,14 +180,12 @@ class DeliveryOrderItemCard extends StatelessWidget {
                       ),
                     ),
 
-
                     _StepperButton(
                       index: index,
                       icon: Icons.remove,
                       enabled: selectedQty > 0,
                       primary: false,
                     ),
-
 
                     SizedBox(
                       width: 48,
@@ -211,14 +200,12 @@ class DeliveryOrderItemCard extends StatelessWidget {
                       ),
                     ),
 
-
                     _StepperButton(
                       index: index,
                       icon: Icons.add,
                       enabled: selectedQty < maxQty,
                       primary: true,
                     ),
-
                   ],
                 ),
               ),
@@ -235,8 +222,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _DifferenceValue(
                         label: context.strings.delivery_ordered,
@@ -293,10 +279,7 @@ class _QuantityInfoTile extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: color,
-            ),
+            style: TextStyle(fontSize: 12, color: color),
           ),
           Text(
             formatDeliveryQty(quantity),
@@ -316,7 +299,6 @@ class _QuantityInfoTile extends StatelessWidget {
 // Stepper Button
 // =====================================================
 
-
 class _StepperButton extends StatelessWidget {
   const _StepperButton({
     required this.icon,
@@ -333,24 +315,18 @@ class _StepperButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: primary
-          ? AppColors.primary
-          : AppColors.white0,
+      color: primary ? AppColors.primary : AppColors.white0,
       borderRadius: BorderRadius.circular(17),
       child: InkWell(
         onTap: !enabled
             ? null
             : () {
-          if (primary) {
-            context
-                .read<DeliveryDraftCubit>()
-                .increment(index);
-          } else {
-            context
-                .read<DeliveryDraftCubit>()
-                .decrement(index);
-          }
-        },
+                if (primary) {
+                  context.read<DeliveryDraftCubit>().increment(index);
+                } else {
+                  context.read<DeliveryDraftCubit>().decrement(index);
+                }
+              },
         borderRadius: BorderRadius.circular(17),
         child: Container(
           width: 52,
@@ -358,16 +334,14 @@ class _StepperButton extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(17),
-            border: primary
-                ? null
-                : Border.all(color: AppColors.grey3),
+            border: primary ? null : Border.all(color: AppColors.grey3),
           ),
           child: Icon(
             icon,
             color: enabled
                 ? primary
-                ? AppColors.white0
-                : AppColors.black1
+                      ? AppColors.white0
+                      : AppColors.black1
                 : AppColors.grey2,
             size: 24,
           ),
@@ -382,10 +356,7 @@ class _StepperButton extends StatelessWidget {
 // =====================================================
 
 class _DifferenceValue extends StatelessWidget {
-  const _DifferenceValue({
-    required this.label,
-    required this.value,
-  });
+  const _DifferenceValue({required this.label, required this.value});
 
   final String label;
   final num? value;
@@ -395,13 +366,7 @@ class _DifferenceValue extends StatelessWidget {
     return Column(
       spacing: 4,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: AppColors.orange0,
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.orange0)),
         Text(
           formatDeliveryQty(value),
           style: TextStyle(

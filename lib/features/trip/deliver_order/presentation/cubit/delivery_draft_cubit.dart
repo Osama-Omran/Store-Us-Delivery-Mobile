@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,12 +62,7 @@ class DeliveryDraftCubit extends Cubit<DeliveryDraftState> {
     if (current.qtyFor(index) == nextValue) return;
 
     emit(
-      current.copyWith(
-        quantities: {
-          ...current.quantities,
-          index: nextValue,
-        },
-      ),
+      current.copyWith(quantities: {...current.quantities, index: nextValue}),
     );
   }
 
@@ -78,10 +72,7 @@ class DeliveryDraftCubit extends Cubit<DeliveryDraftState> {
 
     if (current is! DeliveryDraftReady) return;
 
-    setQuantity(
-      index,
-      current.qtyFor(index) + 1,
-    );
+    setQuantity(index, current.qtyFor(index) + 1);
   }
 
   // ======= Decrease Quantity ======= //
@@ -90,9 +81,6 @@ class DeliveryDraftCubit extends Cubit<DeliveryDraftState> {
 
     if (current is! DeliveryDraftReady) return;
 
-    setQuantity(
-      index,
-      current.qtyFor(index) - 1,
-    );
+    setQuantity(index, current.qtyFor(index) - 1);
   }
 }

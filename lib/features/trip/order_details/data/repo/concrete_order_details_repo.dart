@@ -9,8 +9,6 @@ import 'package:storeus_delivery/features/trip/order_details/domain/repo/order_d
 
 import 'package:dio/dio.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_error_model.dart';
-import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
-import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 
 class ConcreteOrderDetailsRepo implements OrderDetailsRepoInterface {
   final TripApiService _apiService;

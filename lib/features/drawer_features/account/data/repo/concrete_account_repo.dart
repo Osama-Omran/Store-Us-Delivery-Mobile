@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/auth_api_service.dart';
@@ -25,34 +24,26 @@ class ConcreteAccountRepo implements AccountRepoInterface {
   @override
   Future<ApiResult<MeResponse>> getMe() async {
     try {
-      final response = await _apiService.getMe(
-        await _getAuthorization(),
-      );
+      final response = await _apiService.getMe(await _getAuthorization());
 
       return ApiResult.success(response);
     } catch (error) {
       CustomLogger.logger?.e(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 
   @override
   Future<ApiResult<dynamic>> logout() async {
     try {
-      final response = await _apiService.logout(
-        await _getAuthorization(),
-      );
+      final response = await _apiService.logout(await _getAuthorization());
 
       return ApiResult.success(response);
     } catch (error) {
       CustomLogger.logger?.e(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 }

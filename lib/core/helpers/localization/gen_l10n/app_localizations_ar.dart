@@ -1393,4 +1393,313 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get order_delivery_country => 'الدولة';
+
+  @override
+  String get stock_transfer_subtitle =>
+      'نقل بضاعة بين المخازن — منفصل عن التسليمات';
+
+  @override
+  String get stock_transfer_awaiting_receipt => 'في انتظار الاستلام';
+
+  @override
+  String get stock_transfer_on_vehicle => 'معايا على العربية';
+
+  @override
+  String get stock_transfer_awaiting_warehouse => 'في انتظار استلام المخزن';
+
+  @override
+  String get stock_transfer_completed => 'مكتملة';
+
+  @override
+  String get stock_transfer_receipt_discrepancy => 'يوجد فرق في الاستلام';
+
+  @override
+  String get stock_transfer_vehicle => 'العربية';
+
+  @override
+  String get stock_transfer_representative => 'المندوب';
+
+  @override
+  String get stock_transfer_item_count => 'عدد الأصناف';
+
+  @override
+  String get stock_transfer_total_quantity => 'إجمالي الكمية';
+
+  @override
+  String get stock_transfer_created => 'أنشئ';
+
+  @override
+  String get stock_transfer_expected_arrival => 'الوصول المتوقع';
+
+  @override
+  String get stock_transfer_today => 'اليوم';
+
+  @override
+  String get stock_transfer_two_days_ago => 'منذ يومين';
+
+  @override
+  String get stock_transfer_am => 'ص';
+
+  @override
+  String get stock_transfer_pm => 'م';
+
+  @override
+  String get stock_transfer_empty => 'لا توجد عمليات نقل مخزني في هذه الحالة';
+
+  @override
+  String get reports_subtitle => 'أدائك في التوصيل';
+
+  @override
+  String get reports_today => 'اليوم';
+
+  @override
+  String get reports_this_week => 'هذا الأسبوع';
+
+  @override
+  String get reports_this_month => 'هذا الشهر';
+
+  @override
+  String get reports_custom_period => 'فترة مخصصة';
+
+  @override
+  String get reports_from_date => 'من تاريخ';
+
+  @override
+  String get reports_to_date => 'إلى تاريخ';
+
+  @override
+  String get reports_all_trips => 'كل الرحلات';
+
+  @override
+  String get reports_delivery_rate => 'نسبة التسليم';
+
+  @override
+  String get reports_total_collection => 'إجمالي التحصيل';
+
+  @override
+  String get reports_total_orders => 'إجمالي الطلبات';
+
+  @override
+  String get reports_delivered => 'تم التسليم';
+
+  @override
+  String get reports_partial => 'تسليم جزئي';
+
+  @override
+  String get reports_undelivered => 'لم يتم التسليم';
+
+  @override
+  String get reports_order_distribution => 'توزيع الطلبات';
+
+  @override
+  String get reports_rate_by_trip => 'نسبة التسليم حسب الرحلة';
+
+  @override
+  String get reports_empty => 'لا توجد بيانات تقارير لهذه الفترة';
+
+  @override
+  String get delivery_result_title => 'نتيجة التسليم';
+
+  @override
+  String get delivery_partial_reason_required => 'سبب التسليم الجزئي *';
+
+  @override
+  String get delivery_reason_customer_refused => 'العميل رفض جزء من الطلب';
+
+  @override
+  String get delivery_reason_stock_unavailable => 'الكمية غير متاحة';
+
+  @override
+  String get delivery_reason_customer_requested_less => 'العميل طلب كمية أقل';
+
+  @override
+  String get delivery_reason_damaged => 'منتج تالف';
+
+  @override
+  String get delivery_reason_other => 'سبب آخر';
+
+  @override
+  String get delivery_other_reason_hint => 'اكتب سبب التسليم الجزئي';
+
+  @override
+  String get delivery_notes_title => 'ملاحظات التسليم';
+
+  @override
+  String get delivery_notes_hint => 'اكتب أي ملاحظة (اختياري)';
+
+  @override
+  String get delivery_reason_not_sent =>
+      'سبب التسليم الجزئي والملاحظات غير مشمولين في خدمة تأكيد التسليم الحالية.';
+
+  @override
+  String get delivery_continue_payment => 'متابعة — تحصيل المبلغ';
+
+  @override
+  String get delivery_payment_title => 'تحصيل المبلغ';
+
+  @override
+  String get delivery_required_amount => 'المبلغ المطلوب تحصيله';
+
+  @override
+  String get delivery_collected_amount => 'المبلغ الذي استلمته بعد العد';
+
+  @override
+  String get delivery_payment_method => 'طريقة الدفع';
+
+  @override
+  String get delivery_cash => 'كاش';
+
+  @override
+  String get delivery_wallet => 'محفظة إلكترونية';
+
+  @override
+  String get delivery_amount_matches => 'المبلغ مطابق';
+
+  @override
+  String get delivery_amount_mismatch =>
+      'المبلغ المدخل غير مطابق للمبلغ المطلوب.';
+
+  @override
+  String get delivery_missing_line_ids =>
+      'لا يمكن تأكيد التسليم لأن معرفات بنود الأوردر (line_id) غير متوفرة من السيرفر.';
+
+  @override
+  String get delivery_payment_not_supported =>
+      'طريقة الدفع المتاحة للتأكيد حاليًا هي الكاش فقط، لحين تأكيد قيم طرق الدفع الأخرى من السيرفر.';
+
+  @override
+  String get delivery_confirmation_summary => 'ملخص التأكيد';
+
+  @override
+  String get delivery_status_label => 'حالة التسليم';
+
+  @override
+  String get delivery_confirmation_warning =>
+      'راجع البيانات جيدًا قبل التأكيد. سيتم إرسال التسليم والمبلغ المحدد إلى السيرفر.';
+
+  @override
+  String get delivery_confirm_button => 'تأكيد التسليم والتحصيل';
+
+  @override
+  String get delivery_invalid_items =>
+      'بيانات المنتجات غير مكتملة أو الكميات غير صالحة.';
+
+  @override
+  String get delivery_invalid_amount => 'المبلغ المدخل غير صالح.';
+
+  @override
+  String get delivery_confirm_failed =>
+      'تعذر تأكيد التسليم. تحقق من حالة الطلب وحاول مرة أخرى.';
+
+  @override
+  String get delivery_success_title => 'تم تسجيل التسليم بنجاح';
+
+  @override
+  String get delivery_next_order => 'الطلب التالي';
+
+  @override
+  String get delivery_next_order_failed => 'تعذر تحميل الطلب التالي.';
+
+  @override
+  String get delivery_proof_title => 'إثبات التسليم';
+
+  @override
+  String get delivery_proof_photo => 'صورة إثبات التسليم';
+
+  @override
+  String get delivery_take_photo => 'التقاط صورة';
+
+  @override
+  String get delivery_customer_signature => 'توقيع العميل';
+
+  @override
+  String get delivery_clear_signature => 'مسح التوقيع';
+
+  @override
+  String get delivery_photo_capture_failed =>
+      'تعذر التقاط الصورة. حاول مرة أخرى.';
+
+  @override
+  String get delivery_proof_not_uploaded =>
+      'الصورة والتوقيع للمعاينة المحلية فقط ولم يتم رفعهما للسيرفر.';
+
+  @override
+  String get delivery_save_local_proof => 'العودة مع الإثبات';
+
+  @override
+  String get delivery_add_proof => 'إضافة صورة وتوقيع (اختياري)';
+
+  @override
+  String get delivery_proof_prepared => 'تم تجهيز الإثبات محليًا';
+
+  @override
+  String get top_rank_last_30_days => 'آخر 30 يوم';
+
+  @override
+  String get top_rank_warehouses => 'المخازن';
+
+  @override
+  String get top_rank_warehouse_staff => 'أمناء المخازن';
+
+  @override
+  String get top_rank_vehicles => 'العربيات';
+
+  @override
+  String get top_rank_provisional => 'تقييم مبدئي';
+
+  @override
+  String get top_rank_data_notes => 'ملاحظات عن دقة البيانات';
+
+  @override
+  String get top_rank_current_rank => 'الترتيب الحالي';
+
+  @override
+  String get top_rank_score_label => 'التقييم';
+
+  @override
+  String get top_rank_breakdown_title => 'تفصيل النقاط';
+
+  @override
+  String get top_rank_total_score => 'الإجمالي';
+
+  @override
+  String get top_rank_strengths_title => 'عمل إيه علشان وصل كده؟';
+
+  @override
+  String get top_rank_improvement_title => 'إعمل إيه علشان تحسن ترتيبك؟';
+
+  @override
+  String get top_rank_compare_leader => 'المقارنة مع الأول';
+
+  @override
+  String get top_rank_your_score => 'درجتك';
+
+  @override
+  String get top_rank_leader_score => 'درجة الأول';
+
+  @override
+  String get top_rank_gap => 'الفرق';
+
+  @override
+  String get top_rank_unavailable => 'غير متاح';
+
+  @override
+  String get top_rank_unchanged_label => 'بدون تغيير';
+
+  @override
+  String get top_rank_approved_score => 'التقييم المعتمد';
+
+  @override
+  String get top_rank_data_incomplete =>
+      'هذا تقييم مبدئي بسبب نقص بعض بيانات الأداء.';
+
+  @override
+  String get top_rank_details_refresh_failed =>
+      'تعذر تحديث التفاصيل. يتم عرض بيانات الترتيب المحمّلة.';
+
+  @override
+  String get top_rank_data_insufficient => 'بيانات غير كافية';
+
+  @override
+  String get top_rank_improvement_opportunity => 'فرصة للتحسين';
 }

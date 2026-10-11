@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -7,7 +8,9 @@ import 'package:storeus_delivery/features/trip/receive_trip/domain/usecases/acce
 import 'package:storeus_delivery/features/trip/receive_trip/domain/usecases/current_trip_usecase.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/domain/usecases/loaded_items_usecase.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/cubit/receive_trip_state.dart';
+
 import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/helpers/trip_acceptance_identifiers.dart';
 
@@ -17,10 +20,10 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
   final AcceptTripUsecase _acceptTripUsecase;
 
   ReceiveTripCubit(
-      this._currentTripUsecase,
-      this._loadedItemsUsecase,
-      this._acceptTripUsecase,
-      ) : super(ReceiveTripInitial());
+    this._currentTripUsecase,
+    this._loadedItemsUsecase,
+    this._acceptTripUsecase,
+  ) : super(ReceiveTripInitial());
 
   static ReceiveTripCubit get(BuildContext context) =>
       BlocProvider.of<ReceiveTripCubit>(context);
@@ -55,17 +58,11 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
         } else {
           activeTrip = response.data;
 
-          emit(
-            ReceiveTripSuccessState(response.data!),
-          );
+          emit(ReceiveTripSuccessState(response.data!));
         }
       },
       failure: (error) {
-        emit(
-          ReceiveTripFailureState(
-            error.apiErrorModel.message,
-          ),
-        );
+        emit(ReceiveTripFailureState(error.apiErrorModel.message));
       },
     );
 
@@ -80,23 +77,16 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
     final currentState = state;
 
     if (currentState is! ReceiveTripSuccessState ||
-        currentState.loadedItemsStatus ==
-            LoadedItemsStatus.loading) {
+        currentState.loadedItemsStatus == LoadedItemsStatus.loading) {
       return;
     }
 
     final trip = currentState.trip;
     final requestId = ++_loadedItemsRequestId;
 
-    emit(
-      currentState.copyWith(
-        loadedItemsStatus: LoadedItemsStatus.loading,
-      ),
-    );
+    emit(currentState.copyWith(loadedItemsStatus: LoadedItemsStatus.loading));
 
-    final result = await _loadedItemsUsecase.call(
-      tripId: trip.id,
-    );
+    final result = await _loadedItemsUsecase.call(tripId: trip.id);
 
     if (isClosed || requestId != _loadedItemsRequestId) {
       return;
@@ -123,12 +113,9 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
           return;
         }
 
-        if (data.trip.isNotEmpty &&
-            data.trip != trip.number) {
+        if (data.trip.isNotEmpty && data.trip != trip.number) {
           emit(
-            latestState.copyWith(
-              loadedItemsStatus: LoadedItemsStatus.failure,
-            ),
+            latestState.copyWith(loadedItemsStatus: LoadedItemsStatus.failure),
           );
           return;
         }
@@ -153,28 +140,20 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
     );
   }
 
-
-  Future<void> acceptTrip({
-    required File photo,
-  }) async {
+  Future<void> acceptTrip({required File photo}) async {
     if (isClosed) return;
 
     final currentState = state;
 
     if (currentState is! ReceiveTripSuccessState ||
         currentState.acceptTripStatus == AcceptTripStatus.loading ||
-        currentState.trip.acceptance?.status.toUpperCase() !=
-            'PENDING') {
+        currentState.trip.acceptance?.status.toUpperCase() != 'PENDING') {
       return;
     }
 
     final trip = currentState.trip;
 
-    emit(
-      currentState.copyWith(
-        acceptTripStatus: AcceptTripStatus.loading,
-      ),
-    );
+    emit(currentState.copyWith(acceptTripStatus: AcceptTripStatus.loading));
 
     try {
       // 1. Check the approved photo.
@@ -184,8 +163,7 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
       }
 
       // 2. Check location services.
-      final serviceEnabled =
-      await Geolocator.isLocationServiceEnabled();
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
       if (!serviceEnabled) {
         _emitAcceptFailure(trip.id, 'location_disabled');
@@ -201,10 +179,7 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
 
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        _emitAcceptFailure(
-          trip.id,
-          'location_permission_denied',
-        );
+        _emitAcceptFailure(trip.id, 'location_permission_denied');
         return;
       }
 
@@ -219,11 +194,9 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
       if (isClosed) return;
 
       // 5. Get persistent identifiers.
-      final deviceId =
-      await TripAcceptanceIdentifiers.getDeviceId();
+      final deviceId = await TripAcceptanceIdentifiers.getDeviceId();
 
-      final operationId =
-      await TripAcceptanceIdentifiers.getOperationId(
+      final operationId = await TripAcceptanceIdentifiers.getOperationId(
         trip.id,
       );
 
@@ -259,12 +232,10 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
       }
 
       // 7. Check business-level failure.
-      if (response is Map &&
-          response['success'] == false) {
+      if (response is Map && response['success'] == false) {
         _emitAcceptFailure(
           trip.id,
-          response['message']?.toString() ??
-              'trip_accept_failed',
+          response['message']?.toString() ?? 'trip_accept_failed',
         );
         return;
       }
@@ -272,20 +243,16 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
       // 8. Use server acceptance time if available.
       DateTime? acceptedAt;
 
-      if (response is Map &&
-          response['data'] is Map) {
+      if (response is Map && response['data'] is Map) {
         final data = response['data'] as Map;
 
-        acceptedAt = DateTime.tryParse(
-          data['accepted_at']?.toString() ?? '',
-        )?.toLocal();
+        acceptedAt = DateTime.tryParse(data['accepted_at']?.toString() ?? '')
+            ?.toLocal();
       }
 
       // 9. Clear operation ID only after success.
       try {
-        await TripAcceptanceIdentifiers.clearOperationId(
-          trip.id,
-        );
+        await TripAcceptanceIdentifiers.clearOperationId(trip.id);
       } catch (_) {
         // Acceptance has already succeeded.
         // Storage cleanup must not change that result.
@@ -307,22 +274,13 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
         ),
       );
     } on TimeoutException {
-      _emitAcceptFailure(
-        trip.id,
-        'location_timeout',
-      );
+      _emitAcceptFailure(trip.id, 'location_timeout');
     } catch (error) {
-      _emitAcceptFailure(
-        trip.id,
-        'trip_accept_failed',
-      );
+      _emitAcceptFailure(trip.id, 'trip_accept_failed');
     }
   }
 
-  void _emitAcceptFailure(
-      int tripId,
-      String message,
-      ) {
+  void _emitAcceptFailure(int tripId, String message) {
     if (isClosed) return;
 
     final currentState = state;
@@ -339,5 +297,4 @@ class ReceiveTripCubit extends Cubit<ReceiveTripState> {
       ),
     );
   }
-
 }

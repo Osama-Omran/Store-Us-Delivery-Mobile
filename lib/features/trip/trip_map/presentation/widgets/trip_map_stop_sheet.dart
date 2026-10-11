@@ -184,7 +184,6 @@ class TripMapStopSheet extends StatelessWidget {
                 child: SizedBox(
                   height: 70,
                   child: OutlinedButton(
-
                     onPressed: () {
                       final int? orderID = stop.order.apiId;
 
@@ -201,10 +200,7 @@ class TripMapStopSheet extends StatelessWidget {
 
                       GoRouter.of(context).push(
                         RoutesNames.orderDetails,
-                        extra: {
-                          'trip_id': tripApiId,
-                          'order_id': orderID,
-                        },
+                        extra: {'trip_id': tripApiId, 'order_id': orderID},
                       );
                     },
                     style: OutlinedButton.styleFrom(

@@ -8,7 +8,6 @@ abstract class OrderDetailsRepoInterface {
     required int orderId,
   });
 
-
   Future<ApiResult<dynamic>> updateOrderDeliveryLocation({
     required int tripId,
     required int orderId,

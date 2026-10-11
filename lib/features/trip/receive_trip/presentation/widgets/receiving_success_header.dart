@@ -24,16 +24,9 @@ class ReceivingSuccessHeader extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.green0,
-                width: 5,
-              ),
+              border: Border.all(color: AppColors.green0, width: 5),
             ),
-            child: Icon(
-              Icons.check_rounded,
-              size: 42,
-              color: AppColors.green0,
-            ),
+            child: Icon(Icons.check_rounded, size: 42, color: AppColors.green0),
           ),
         ),
         const Gap(24),
@@ -50,10 +43,7 @@ class ReceivingSuccessHeader extends StatelessWidget {
         Text(
           context.strings.trip_receiving_success_description,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            color: AppColors.grey4,
-          ),
+          style: TextStyle(fontSize: 16, color: AppColors.grey4),
         ),
       ],
     );

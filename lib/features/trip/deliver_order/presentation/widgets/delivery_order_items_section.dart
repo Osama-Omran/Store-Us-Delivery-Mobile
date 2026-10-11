@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,18 +34,12 @@ class DeliveryOrderItemsSection extends StatelessWidget {
             if (state.items.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  context.strings.order_details_no_items,
-                ),
+                child: Text(context.strings.order_details_no_items),
               ),
 
-            for (var index = 0;
-            index < state.items.length;
-            index++)
+            for (var index = 0; index < state.items.length; index++)
               DeliveryOrderItemCard(
-                key: ValueKey(
-                  '${state.items[index].itemCode}_$index',
-                ),
+                key: ValueKey('${state.items[index].itemCode}_$index'),
                 item: state.items[index],
                 index: index,
               ),

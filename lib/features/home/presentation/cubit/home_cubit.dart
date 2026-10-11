@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -12,10 +11,8 @@ class HomeCubit extends Cubit<HomeState> {
   final CurrentTripUsecase _currentTripUsecase;
   final GetTripOrdersUsecase _getTripOrdersUsecase;
 
-  HomeCubit(
-      this._currentTripUsecase,
-      this._getTripOrdersUsecase,
-      ) : super(HomeInitial());
+  HomeCubit(this._currentTripUsecase, this._getTripOrdersUsecase)
+    : super(HomeInitial());
 
   static HomeCubit get(BuildContext context) =>
       BlocProvider.of<HomeCubit>(context);
@@ -54,16 +51,11 @@ class HomeCubit extends Cubit<HomeState> {
         emit(HomeSuccessState(response.data!));
       },
       failure: (error) {
-        emit(
-          HomeFailureState(error.apiErrorModel.message),
-        );
+        emit(HomeFailureState(error.apiErrorModel.message));
       },
     );
 
-    if (activeTrip?.acceptance?.status
-        .trim()
-        .toUpperCase() ==
-        'ACCEPTED') {
+    if (activeTrip?.acceptance?.status.trim().toUpperCase() == 'ACCEPTED') {
       await getTripOrders();
     }
   }
@@ -90,16 +82,13 @@ class HomeCubit extends Cubit<HomeState> {
       ),
     );
 
-    final result = await _getTripOrdersUsecase.call(
-      tripId: trip.id,
-    );
+    final result = await _getTripOrdersUsecase.call(tripId: trip.id);
 
     if (isClosed || requestId != _ordersRequestId) return;
 
     final latestState = state;
 
-    if (latestState is! HomeSuccessState ||
-        latestState.trip.id != trip.id) {
+    if (latestState is! HomeSuccessState || latestState.trip.id != trip.id) {
       return;
     }
 

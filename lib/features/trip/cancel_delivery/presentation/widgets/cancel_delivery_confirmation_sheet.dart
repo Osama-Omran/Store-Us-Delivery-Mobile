@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -39,12 +38,10 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
 
               Text(
                 '${context.strings.cancel_delivery_confirm_description} '
-                    '$salesOrder\n'
-                    '${context.strings.cancel_delivery_reason_label}: $reason',
+                '$salesOrder\n'
+                '${context.strings.cancel_delivery_reason_label}: $reason',
                 textAlign: TextAlign.center,
-                style: Styles.textStyle14.copyWith(
-                  color: AppColors.grey4,
-                ),
+                style: Styles.textStyle14.copyWith(color: AppColors.grey4),
               ),
 
               Row(
@@ -54,16 +51,12 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
                     child: SizedBox(
                       height: 62,
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(false),
+                        onPressed: () => Navigator.of(context).pop(false),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.black1,
-                          side: BorderSide(
-                            color: AppColors.grey3,
-                          ),
+                          side: BorderSide(color: AppColors.grey3),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(23),
+                            borderRadius: BorderRadius.circular(23),
                           ),
                         ),
                         child: Text(
@@ -80,15 +73,13 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
                     child: SizedBox(
                       height: 62,
                       child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(true),
+                        onPressed: () => Navigator.of(context).pop(true),
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: AppColors.red1,
                           foregroundColor: AppColors.white0,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(23),
+                            borderRadius: BorderRadius.circular(23),
                           ),
                         ),
                         child: Text(

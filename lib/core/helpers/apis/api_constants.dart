@@ -40,4 +40,7 @@ class ApiConstants {
       '/trips/{tripId}/orders/{orderId}/delivery-location';
   static const String deliveryOutcome =
       '$trips/{tripId}/orders/{orderId}/delivery-outcome';
+  static const String confirmDelivery =
+      '$trips/{tripId}/orders/{orderId}/confirm-delivery';
+  static const String topRank = '/top-rank';
 }

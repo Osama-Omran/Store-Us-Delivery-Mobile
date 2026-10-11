@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
@@ -29,16 +28,11 @@ final class DeliveryDraftReady extends DeliveryDraftState {
     final deliverable = item.maxDeliverableQty;
 
     // Never assume unlimited stock when data is missing.
-    if (ordered == null ||
-        available == null ||
-        deliverable == null) {
+    if (ordered == null || available == null || deliverable == null) {
       return 0;
     }
 
-    final limit = math.min(
-      ordered,
-      math.min(available, deliverable),
-    );
+    final limit = math.min(ordered, math.min(available, deliverable));
 
     if (!limit.isFinite) return 0;
 
@@ -58,8 +52,7 @@ final class DeliveryDraftReady extends DeliveryDraftState {
   bool hasStockShortage(int index) {
     final item = items[index];
 
-    if (item.orderedQty == null ||
-        item.vehicleAvailableQty == null) {
+    if (item.orderedQty == null || item.vehicleAvailableQty == null) {
       return false;
     }
 
@@ -78,8 +71,7 @@ final class DeliveryDraftReady extends DeliveryDraftState {
     for (var i = 0; i < items.length; i++) {
       final ordered = items[i].orderedQty;
 
-      if (ordered == null ||
-          qtyFor(i) < ordered) {
+      if (ordered == null || qtyFor(i) < ordered) {
         return true;
       }
     }
@@ -108,9 +100,7 @@ final class DeliveryDraftReady extends DeliveryDraftState {
     return total;
   }
 
-  DeliveryDraftReady copyWith({
-    Map<int, num>? quantities,
-  }) {
+  DeliveryDraftReady copyWith({Map<int, num>? quantities}) {
     return DeliveryDraftReady(
       salesOrder: salesOrder,
       items: items,

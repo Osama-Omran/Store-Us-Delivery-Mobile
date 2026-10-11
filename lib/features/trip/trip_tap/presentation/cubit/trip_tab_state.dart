@@ -1,13 +1,7 @@
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 
-enum TripOrdersStatus {
-  initial,
-  loading,
-  success,
-  failure,
-}
+enum TripOrdersStatus { initial, loading, success, failure }
 
 sealed class TripTabState {}
 
@@ -23,11 +17,11 @@ final class TripTabSuccessState extends TripTabState {
   final String? ordersError;
 
   TripTabSuccessState(
-      this.trip, {
-        this.ordersStatus = TripOrdersStatus.initial,
-        this.orders = const [],
-        this.ordersError,
-      });
+    this.trip, {
+    this.ordersStatus = TripOrdersStatus.initial,
+    this.orders = const [],
+    this.ordersError,
+  });
 }
 
 final class TripTabEmptyState extends TripTabState {}

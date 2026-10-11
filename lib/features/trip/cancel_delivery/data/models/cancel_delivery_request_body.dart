@@ -1,8 +1,5 @@
-
 class CancelDeliveryRequestBody {
-  const CancelDeliveryRequestBody({
-    required this.reason,
-  });
+  const CancelDeliveryRequestBody({required this.reason});
 
   final String reason;
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -71,39 +70,6 @@ class CurrentTripScreen extends StatefulWidget {
 
 class _CurrentTripScreenState extends State<CurrentTripScreen> {
   TripOrdersFilter _selectedFilter = TripOrdersFilter.all;
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  // ======= Customer Directions ======= //
-  Future<void> _openDirections(TripOrderModel order) async {
-    if (!order.hasCoordinates) return;
-
-    if (widget.onOpenDirections != null) {
-      widget.onOpenDirections!(order);
-      return;
-    }
-
-    final uri = Uri.https('www.google.com', '/maps/dir/', {
-      'api': '1',
-      'destination': '${order.latitude},${order.longitude}',
-    });
-
-    try {
-      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-
-      if (!opened && mounted) {
-        _showMessage(context.strings.trip_action_unavailable);
-      }
-    } catch (_) {
-      if (mounted) {
-        _showMessage(context.strings.trip_action_unavailable);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,10 +153,8 @@ class _CurrentTripScreenState extends State<CurrentTripScreen> {
                           key: ValueKey(order.apiId ?? order.id),
                           order: order,
                           tripID: widget.trip.id,
-                          onOpenDirections: order.hasCoordinates
-                              ? () => _openDirections(order)
-                              : null,
                         ),
+
                         const SizedBox(height: 14),
                       ],
                   ],

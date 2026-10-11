@@ -13,10 +13,14 @@ class RoutesNames {
   //======= Orders =======//
   static const String orderDetails = '/orderDetailsScreen';
 
+  static const String deliveryResult = '/delivery-result';
+  static const String deliveryPayment = '/delivery-payment';
+  static const String deliveryProof = '/delivery-proof';
+  static const String deliverySuccess = '/delivery-success';
+
   //======= Account =======//
   static const String account = '/accountScreen';
   static const String deliverOrder = '/deliver-order';
   static const String rescheduleSuccess = '/reschedule-success';
-  static const String cancelDeliverySuccess =
-      '/cancel-delivery-success';
+  static const String cancelDeliverySuccess = '/cancel-delivery-success';
 }

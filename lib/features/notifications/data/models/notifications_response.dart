@@ -1,24 +1,17 @@
-
 class NotificationsResponse {
   final bool success;
   final NotificationsData? data;
   final String? message;
 
-  const NotificationsResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const NotificationsResponse({required this.success, this.data, this.message});
 
-  factory NotificationsResponse.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory NotificationsResponse.fromJson(Map<String, dynamic> json) {
     return NotificationsResponse(
       success: json['success'] == true,
       data: json['data'] is Map
           ? NotificationsData.fromJson(
-        Map<String, dynamic>.from(json['data'] as Map),
-      )
+              Map<String, dynamic>.from(json['data'] as Map),
+            )
           : null,
       message: json['message']?.toString(),
     );
@@ -34,18 +27,15 @@ class NotificationsData {
     required this.notifications,
   });
 
-  factory NotificationsData.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory NotificationsData.fromJson(Map<String, dynamic> json) {
     return NotificationsData(
       unreadCount: _toInt(json['unread_count']) ?? 0,
-      notifications:
-      (json['notifications'] as List<dynamic>? ?? [])
+      notifications: (json['notifications'] as List<dynamic>? ?? [])
           .map(
             (item) => NotificationItem.fromJson(
-          Map<String, dynamic>.from(item as Map),
-        ),
-      )
+              Map<String, dynamic>.from(item as Map),
+            ),
+          )
           .toList(),
     );
   }
@@ -86,9 +76,7 @@ class NotificationItem {
     this.createdAt,
   });
 
-  factory NotificationItem.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory NotificationItem.fromJson(Map<String, dynamic> json) {
     return NotificationItem(
       id: _toInt(json['id']) ?? 0,
       type: json['type']?.toString() ?? '',
@@ -100,33 +88,21 @@ class NotificationItem {
       warehouse: json['warehouse']?.toString(),
       resource: json['resource'] is Map
           ? NotificationResource.fromJson(
-        Map<String, dynamic>.from(
-          json['resource'] as Map,
-        ),
-      )
+              Map<String, dynamic>.from(json['resource'] as Map),
+            )
           : null,
       actionUrl: json['action_url']?.toString(),
       data: json['data'] is Map
           ? Map<String, dynamic>.from(json['data'] as Map)
           : const {},
-      readAt: DateTime.tryParse(
-        json['read_at']?.toString() ?? '',
-      ),
-      isRead: json['is_read'] == true ||
-          json['read_at'] != null,
-      resolvedAt: DateTime.tryParse(
-        json['resolved_at']?.toString() ?? '',
-      ),
-      createdAt: DateTime.tryParse(
-        json['created_at']?.toString() ?? '',
-      ),
+      readAt: DateTime.tryParse(json['read_at']?.toString() ?? ''),
+      isRead: json['is_read'] == true || json['read_at'] != null,
+      resolvedAt: DateTime.tryParse(json['resolved_at']?.toString() ?? ''),
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? ''),
     );
   }
 
-  NotificationItem copyWith({
-    bool? isRead,
-    DateTime? readAt,
-  }) {
+  NotificationItem copyWith({bool? isRead, DateTime? readAt}) {
     return NotificationItem(
       id: id,
       type: type,
@@ -151,14 +127,9 @@ class NotificationResource {
   final String? type;
   final int? id;
 
-  const NotificationResource({
-    this.type,
-    this.id,
-  });
+  const NotificationResource({this.type, this.id});
 
-  factory NotificationResource.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory NotificationResource.fromJson(Map<String, dynamic> json) {
     return NotificationResource(
       type: json['type']?.toString(),
       id: _toInt(json['id']),

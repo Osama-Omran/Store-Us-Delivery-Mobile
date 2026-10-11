@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -6,10 +5,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
 class CurrentTripSummaryCard extends StatelessWidget {
-  const CurrentTripSummaryCard({
-    super.key,
-    required this.trip,
-  });
+  const CurrentTripSummaryCard({super.key, required this.trip});
 
   final CurrentTripModel trip;
 
@@ -24,9 +20,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: AppColors.grey3,
-        ),
+        border: Border.all(color: AppColors.grey3),
         boxShadow: [
           BoxShadow(
             color: AppColors.black0.withValues(alpha: .04),
@@ -54,9 +48,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '${context.strings.van}:  ',
-                        style: TextStyle(
-                          color: AppColors.grey4,
-                        ),
+                        style: TextStyle(color: AppColors.grey4),
                       ),
                       TextSpan(
                         text: vehicleDisplay,
@@ -67,10 +59,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.5,
-                  ),
+                  style: const TextStyle(fontSize: 13, height: 1.5),
                 ),
               ),
             ],
@@ -139,10 +128,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
 
           // ======= Collected Amount ======= //
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 16,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
             decoration: BoxDecoration(
               color: AppColors.blue4,
               borderRadius: BorderRadius.circular(21),
@@ -171,10 +157,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
                 Text(
                   trip.collectedAmount == null
                       ? '—'
-                      : formatTripAmount(
-                    context,
-                    trip.collectedAmount!,
-                  ),
+                      : formatTripAmount(context, trip.collectedAmount!),
                   style: TextStyle(
                     color: AppColors.primary,
                     fontSize: 22,
@@ -192,13 +175,12 @@ class CurrentTripSummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  trip.handledOrders == null ||
-                      trip.totalOrders == null
+                  trip.handledOrders == null || trip.totalOrders == null
                       ? context.strings.trip_progress_unavailable
                       : '${trip.handledOrders} '
-                      '${context.strings.of_total} '
-                      '${trip.totalOrders} '
-                      '${context.strings.orders_handled}',
+                            '${context.strings.of_total} '
+                            '${trip.totalOrders} '
+                            '${context.strings.orders_handled}',
                   style: TextStyle(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w700,
@@ -207,9 +189,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                trip.progressPercent == null
-                    ? '—'
-                    : '${trip.progressPercent}%',
+                trip.progressPercent == null ? '—' : '${trip.progressPercent}%',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 13,
@@ -228,9 +208,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
               value: trip.progress ?? 0,
               minHeight: 12,
               backgroundColor: AppColors.grey5,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.primary,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
             ),
           ),
         ],
@@ -240,10 +218,7 @@ class CurrentTripSummaryCard extends StatelessWidget {
 }
 
 class _SummaryInfoLabel extends StatelessWidget {
-  const _SummaryInfoLabel({
-    required this.label,
-    required this.value,
-  });
+  const _SummaryInfoLabel({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -255,9 +230,7 @@ class _SummaryInfoLabel extends StatelessWidget {
         children: [
           TextSpan(
             text: '$label: ',
-            style: TextStyle(
-              color: AppColors.grey4,
-            ),
+            style: TextStyle(color: AppColors.grey4),
           ),
           TextSpan(
             text: value,
@@ -268,10 +241,7 @@ class _SummaryInfoLabel extends StatelessWidget {
           ),
         ],
       ),
-      style: const TextStyle(
-        fontSize: 13,
-        height: 1.45,
-      ),
+      style: const TextStyle(fontSize: 13, height: 1.45),
     );
   }
 }
@@ -295,9 +265,7 @@ class _SummaryStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 76,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 4,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(20),
@@ -317,10 +285,7 @@ class _SummaryStat extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: labelColor,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: labelColor, fontSize: 12),
           ),
         ],
       ),

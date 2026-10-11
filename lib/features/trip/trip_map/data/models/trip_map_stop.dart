@@ -3,10 +3,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 
 /// Coordinates must come from the order delivery location, not geocoded text.
 class TripMapStop {
-  const TripMapStop({
-    required this.order,
-    required this.location,
-  });
+  const TripMapStop({required this.order, required this.location});
 
   final TripOrderModel order;
   final LatLng location;

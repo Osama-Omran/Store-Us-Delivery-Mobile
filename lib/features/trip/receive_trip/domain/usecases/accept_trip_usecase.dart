@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -8,7 +7,6 @@ class AcceptTripUsecase {
   final ReceiveTripRepoInterface _repo;
 
   AcceptTripUsecase(this._repo);
-
 
   Future<ApiResult<dynamic>> call({
     required int tripId,
@@ -27,5 +25,4 @@ class AcceptTripUsecase {
       clientOperationId: clientOperationId,
     );
   }
-
 }

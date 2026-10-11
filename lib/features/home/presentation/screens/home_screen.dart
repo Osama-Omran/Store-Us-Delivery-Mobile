@@ -3,17 +3,17 @@ import 'package:storeus_delivery/features/home/presentation/widgets/home_previou
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_svg.dart';
-
 import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -70,7 +70,7 @@ class _HomeScreenBody extends StatelessWidget {
               },
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+                padding: const EdgeInsets.fromLTRB(24, 32, 24, 124),
                 children: [
                   // ======= Original Header ======= //
                   _HomeHeader(
@@ -198,7 +198,39 @@ class _HomeHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               border: Border.all(color: AppColors.grey3),
             ),
-            child: CustomSVG(assetName: AppAssets.notifications),
+            child: Stack(
+              children: [
+                CustomSVG(assetName: AppAssets.notifications),
+                BlocBuilder<NotificationsCubit, NotificationsState>(
+                  builder: (context, notificationState) {
+                    final unreadCount =
+                        notificationState is NotificationsSuccessState
+                        ? notificationState.unreadCount
+                        : 0;
+
+                    if (unreadCount <= 0) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return unreadCount > 0
+                        ? Container(
+                            width: 10,
+                            height: 10,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColors.red1,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: AppColors.white0,
+                                width: 1.5,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

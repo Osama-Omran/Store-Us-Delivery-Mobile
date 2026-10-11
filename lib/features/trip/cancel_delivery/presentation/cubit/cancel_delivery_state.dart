@@ -1,4 +1,3 @@
-
 sealed class CancelDeliveryState {}
 
 final class CancelDeliveryInitial extends CancelDeliveryState {}

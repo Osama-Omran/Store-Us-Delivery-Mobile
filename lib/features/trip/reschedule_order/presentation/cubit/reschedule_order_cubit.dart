@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,8 +8,7 @@ import 'package:storeus_delivery/features/trip/reschedule_order/domain/usecases/
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cubit/reschedule_order_state.dart';
 
 class RescheduleOrderCubit extends Cubit<RescheduleOrderState> {
-  RescheduleOrderCubit(this._usecase)
-      : super(RescheduleOrderInitial());
+  RescheduleOrderCubit(this._usecase) : super(RescheduleOrderInitial());
 
   final RescheduleOrderUsecase _usecase;
 
@@ -47,12 +45,10 @@ class RescheduleOrderCubit extends Cubit<RescheduleOrderState> {
       success: (response) {
         // The backend response model is not yet provided.
         // Handle an explicit business failure if present.
-        if (response is Map &&
-            response['success'] == false) {
+        if (response is Map && response['success'] == false) {
           emit(
             RescheduleOrderFailure(
-              response['message']?.toString() ??
-                  'reschedule_order_failed',
+              response['message']?.toString() ?? 'reschedule_order_failed',
             ),
           );
           return;
@@ -65,9 +61,7 @@ class RescheduleOrderCubit extends Cubit<RescheduleOrderState> {
 
         emit(
           RescheduleOrderFailure(
-            message.trim().isNotEmpty
-                ? message
-                : 'reschedule_order_failed',
+            message.trim().isNotEmpty ? message : 'reschedule_order_failed',
           ),
         );
       },

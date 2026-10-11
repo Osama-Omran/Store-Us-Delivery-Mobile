@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -8,10 +7,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_i
 abstract class ReceiveTripRepoInterface {
   Future<ApiResult<CurrentTripResponse>> getCurrentTrip();
 
-  Future<ApiResult<LoadedItemsResponse>> getLoadedItems({
-    required int tripId,
-  });
-
+  Future<ApiResult<LoadedItemsResponse>> getLoadedItems({required int tripId});
 
   Future<ApiResult<dynamic>> acceptTrip({
     required int tripId,

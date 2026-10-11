@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -8,10 +7,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_i
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/custom_trip_container.dart';
 
 class VanProducts extends StatefulWidget {
-  const VanProducts({
-    super.key,
-    required this.items,
-  });
+  const VanProducts({super.key, required this.items});
 
   final List<LoadedTripItem> items;
 
@@ -20,8 +16,7 @@ class VanProducts extends StatefulWidget {
 }
 
 class _VanProductsState extends State<VanProducts> {
-  final TextEditingController _searchController =
-  TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -62,26 +57,19 @@ class _VanProductsState extends State<VanProducts> {
               child: Text(
                 context.strings.loaded_items_no_search_results,
                 textAlign: TextAlign.center,
-                style: Styles.textStyle14.copyWith(
-                  color: AppColors.grey4,
-                ),
+                style: Styles.textStyle14.copyWith(color: AppColors.grey4),
               ),
             ),
           )
         else
-          ...visibleItems.map(
-                (item) => ProductWidget(product: item),
-          ),
+          ...visibleItems.map((item) => ProductWidget(product: item)),
       ],
     );
   }
 }
 
 class ProductWidget extends StatelessWidget {
-  const ProductWidget({
-    super.key,
-    required this.product,
-  });
+  const ProductWidget({super.key, required this.product});
 
   final LoadedTripItem product;
 
@@ -108,15 +96,11 @@ class ProductWidget extends StatelessWidget {
                   product.itemName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Styles.textStyle18.copyWith(
-                    color: AppColors.black1,
-                  ),
+                  style: Styles.textStyle18.copyWith(color: AppColors.black1),
                 ),
                 Text(
                   '${product.itemCode} • ${context.strings.unit}: ${product.uom ?? '—'}',
-                  style: Styles.textStyle14.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                 ),
                 if (sourceLabel.isNotEmpty)
                   Container(
@@ -145,15 +129,11 @@ class ProductWidget extends StatelessWidget {
             children: [
               Text(
                 context.strings.loaded_quantity,
-                style: Styles.textStyle12.copyWith(
-                  color: AppColors.grey4,
-                ),
+                style: Styles.textStyle12.copyWith(color: AppColors.grey4),
               ),
               Text(
                 product.loadedQty.toString(),
-                style: Styles.textStyle24.copyWith(
-                  color: AppColors.black1,
-                ),
+                style: Styles.textStyle24.copyWith(color: AppColors.black1),
               ),
             ],
           ),

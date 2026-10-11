@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,31 +34,21 @@ class DeliverOrderScreen extends StatelessWidget {
       providers: [
         // ======= Real Order Data ======= //
         BlocProvider<OrderDetailsCubit>(
-          create: (_) => getIt<OrderDetailsCubit>()
-            ..getOrderDetails(
-              tripId: tripId,
-              orderId: orderId,
-            ),
+          create: (_) =>
+              getIt<OrderDetailsCubit>()
+                ..getOrderDetails(tripId: tripId, orderId: orderId),
         ),
 
         // ======= Local Delivery Draft ======= //
-        BlocProvider<DeliveryDraftCubit>(
-          create: (_) => DeliveryDraftCubit(),
-        ),
+        BlocProvider<DeliveryDraftCubit>(create: (_) => DeliveryDraftCubit()),
       ],
-      child: _DeliverOrderBody(
-        tripId: tripId,
-        orderId: orderId,
-      ),
+      child: _DeliverOrderBody(tripId: tripId, orderId: orderId),
     );
   }
 }
 
 class _DeliverOrderBody extends StatelessWidget {
-  const _DeliverOrderBody({
-    required this.tripId,
-    required this.orderId,
-  });
+  const _DeliverOrderBody({required this.tripId, required this.orderId});
 
   final int tripId;
   final int orderId;
@@ -74,31 +63,26 @@ class _DeliverOrderBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<OrderDetailsCubit, OrderDetailsState>(
-      listenWhen: (_, current) =>
-      current is OrderDetailsSuccessState,
+      listenWhen: (_, current) => current is OrderDetailsSuccessState,
       listener: (context, state) {
         if (state is OrderDetailsSuccessState) {
-          context
-              .read<DeliveryDraftCubit>()
-              .initialize(state.order);
+          context.read<DeliveryDraftCubit>().initialize(state.order);
         }
       },
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: BlocBuilder<OrderDetailsCubit, OrderDetailsState>(
           builder: (context, state) {
-            final success =
-            state is OrderDetailsSuccessState
-                ? state
-                : null;
+            final success = state is OrderDetailsSuccessState ? state : null;
 
             final order = success?.order;
 
-            final deliveryStatus = (
-                success?.tripOrder?.deliveryStatus ??
-                    order?.deliveryStatus ??
-                    ''
-            ).trim().toUpperCase();
+            final deliveryStatus =
+                (success?.tripOrder?.deliveryStatus ??
+                        order?.deliveryStatus ??
+                        '')
+                    .trim()
+                    .toUpperCase();
 
             final isPending = deliveryStatus == 'PENDING';
 
@@ -110,79 +94,68 @@ class _DeliverOrderBody extends StatelessWidget {
                 bottom: false,
                 child: Column(
                   children: [
-                    DeliveryOrderHeader(
-                      salesOrder: order?.salesOrder,
-                    ),
+                    DeliveryOrderHeader(salesOrder: order?.salesOrder),
 
                     Expanded(
                       child: switch (state) {
-                        OrderDetailsInitial() ||
-                        OrderDetailsLoadingState() =>
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        OrderDetailsInitial() || OrderDetailsLoadingState() =>
+                          const Center(child: CircularProgressIndicator()),
 
-                        OrderDetailsFailureState() =>
-                            _DeliveryError(
-                              message:
-                              state.errorMessage?.isNotEmpty == true
-                                  ? state.errorMessage!
-                                  : context.strings
-                                  .order_details_load_failed,
-                              tripId: tripId,
-                              orderId: orderId,
-                            ),
+                        OrderDetailsFailureState() => _DeliveryError(
+                          message: state.errorMessage?.isNotEmpty == true
+                              ? state.errorMessage!
+                              : context.strings.order_details_load_failed,
+                          tripId: tripId,
+                          orderId: orderId,
+                        ),
 
                         OrderDetailsSuccessState() =>
-                        !isPending
-                            ? _DeliveryUnavailable(
-                          status: deliveryStatus,
-                        )
-                            : RefreshIndicator(
-                          color: AppColors.primary,
-                          onRefresh: () => _refresh(context),
-                          child: ListView(
-                            physics:
-                            const AlwaysScrollableScrollPhysics(),
-                            padding: const EdgeInsets.fromLTRB(
-                              20,
-                              20,
-                              20,
-                              28,
-                            ),
-                            children: [
-                              // ======= Customer Data ======= //
-                              OrderCustomerCard(
-                                tripId: tripId,
-                                orderId: orderId,
-                                location:
-                                OrderCustomerLocation.fromApi(
-                                  details: state.order,
-                                  tripOrder: state.tripOrder,
+                          !isPending
+                              ? _DeliveryUnavailable(status: deliveryStatus)
+                              : RefreshIndicator(
+                                  color: AppColors.primary,
+                                  onRefresh: () => _refresh(context),
+                                  child: ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      20,
+                                      20,
+                                      20,
+                                      28,
+                                    ),
+                                    children: [
+                                      // ======= Customer Data ======= //
+                                      OrderCustomerCard(
+                                        tripId: tripId,
+                                        orderId: orderId,
+                                        location: OrderCustomerLocation.fromApi(
+                                          details: state.order,
+                                          tripOrder: state.tripOrder,
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 20),
+
+                                      // ======= Original Total ======= //
+                                      OrderDetailsFinancialCard(
+                                        order: state.order,
+                                      ),
+
+                                      const SizedBox(height: 22),
+
+                                      // ======= Delivery Items ======= //
+                                      const DeliveryOrderItemsSection(),
+
+                                      const SizedBox(height: 28),
+
+                                      // ======= Additional Items ======= //
+                                      const DeliveryExtraProductsSection(),
+
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
                                 ),
-                              ),
-
-                              const SizedBox(height: 20),
-
-                              // ======= Original Total ======= //
-                              OrderDetailsFinancialCard(
-                                order: state.order,
-                              ),
-
-                              const SizedBox(height: 22),
-
-                              // ======= Delivery Items ======= //
-                              const DeliveryOrderItemsSection(),
-
-                              const SizedBox(height: 28),
-
-                              // ======= Additional Items ======= //
-                              const DeliveryExtraProductsSection(),
-
-                              const SizedBox(height: 20),
-                            ],
-                          ),
-                        ),
 
                         _ => const SizedBox.shrink(),
                       },
@@ -192,9 +165,8 @@ class _DeliverOrderBody extends StatelessWidget {
               ),
 
               // ======= Fixed Summary ======= //
-              bottomNavigationBar:
-              success != null && isPending
-                  ? const DeliverySummaryBar()
+              bottomNavigationBar: success != null && isPending
+                  ? DeliverySummaryBar(tripId: tripId, orderId: orderId)
                   : null,
             );
           },
@@ -228,30 +200,19 @@ class _DeliveryError extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 16,
           children: [
-            Icon(
-              Icons.error_outline_rounded,
-              size: 44,
-              color: AppColors.red1,
-            ),
+            Icon(Icons.error_outline_rounded, size: 44, color: AppColors.red1),
 
-            Text(
-              message,
-              textAlign: TextAlign.center,
-            ),
+            Text(message, textAlign: TextAlign.center),
 
             OutlinedButton.icon(
               onPressed: () {
-                context
-                    .read<OrderDetailsCubit>()
-                    .getOrderDetails(
+                context.read<OrderDetailsCubit>().getOrderDetails(
                   tripId: tripId,
                   orderId: orderId,
                 );
               },
               icon: const Icon(Icons.refresh_rounded),
-              label: Text(
-                context.strings.current_trip_retry,
-              ),
+              label: Text(context.strings.current_trip_retry),
             ),
           ],
         ),
@@ -265,9 +226,7 @@ class _DeliveryError extends StatelessWidget {
 // =====================================================
 
 class _DeliveryUnavailable extends StatelessWidget {
-  const _DeliveryUnavailable({
-    required this.status,
-  });
+  const _DeliveryUnavailable({required this.status});
 
   final String status;
 
@@ -295,18 +254,11 @@ class _DeliveryUnavailable extends StatelessWidget {
               ),
             ),
 
-            Text(
-              status,
-              style: TextStyle(
-                color: AppColors.grey4,
-              ),
-            ),
+            Text(status, style: TextStyle(color: AppColors.grey4)),
 
             OutlinedButton(
               onPressed: () => context.pop(),
-              child: Text(
-                context.strings.delivery_back_to_edit,
-              ),
+              child: Text(context.strings.delivery_back_to_edit),
             ),
           ],
         ),

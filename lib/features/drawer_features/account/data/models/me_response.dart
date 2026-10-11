@@ -1,37 +1,22 @@
-
 class MeResponse {
   final bool success;
   final AccountUser? data;
   final String? message;
 
-  const MeResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const MeResponse({required this.success, this.data, this.message});
 
-  factory MeResponse.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory MeResponse.fromJson(Map<String, dynamic> json) {
     return MeResponse(
       success: json['success'] as bool? ?? false,
       data: json['data'] is Map
-          ? AccountUser.fromJson(
-        Map<String, dynamic>.from(
-          json['data'] as Map,
-        ),
-      )
+          ? AccountUser.fromJson(Map<String, dynamic>.from(json['data'] as Map))
           : null,
       message: json['message']?.toString(),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data?.toJson(),
-      'message': message,
-    };
+    return {'success': success, 'data': data?.toJson(), 'message': message};
   }
 }
 
@@ -52,14 +37,11 @@ class AccountUser {
     required this.role,
   });
 
-  factory AccountUser.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory AccountUser.fromJson(Map<String, dynamic> json) {
     return AccountUser(
       id: (json['id'] as num).toInt(),
       name: json['name']?.toString() ?? '',
-      employeeId:
-      json['employee_id']?.toString() ?? '',
+      employeeId: json['employee_id']?.toString() ?? '',
       phone: json['phone']?.toString(),
       email: json['email']?.toString() ?? '',
       role: json['role']?.toString() ?? '',

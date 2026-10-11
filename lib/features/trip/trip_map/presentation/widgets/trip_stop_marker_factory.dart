@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -25,10 +26,10 @@ class TripStopMarkerFactory {
     final fill = cancelled
         ? AppColors.red1
         : partially
-            ? AppColors.orange0
-            : selected
-                ? primary
-                : AppColors.white0;
+        ? AppColors.orange0
+        : selected
+        ? primary
+        : AppColors.white0;
     final textColor = (cancelled || partially || selected)
         ? AppColors.white0
         : AppColors.black1;
@@ -57,7 +58,11 @@ class TripStopMarkerFactory {
         text: label,
         style: TextStyle(
           color: delivered ? AppColors.black1 : textColor,
-          fontSize: cancelled ? 31 : selected ? 21 : 18,
+          fontSize: cancelled
+              ? 31
+              : selected
+              ? 21
+              : 18,
           fontWeight: FontWeight.w800,
         ),
       ),

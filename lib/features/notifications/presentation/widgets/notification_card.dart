@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -92,9 +91,9 @@ class NotificationCard extends StatelessWidget {
   Future<void> _markAsRead(BuildContext context) async {
     if (notification.isRead || isMarking) return;
 
-    final error = await context
-        .read<NotificationsCubit>()
-        .markAsRead(notification.id);
+    final error = await context.read<NotificationsCubit>().markAsRead(
+      notification.id,
+    );
 
     if (!context.mounted || error == null) return;
 
@@ -125,16 +124,14 @@ class NotificationCard extends StatelessWidget {
       color: isRead ? AppColors.white0 : AppColors.blue2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(26),
-        side: BorderSide(
-          color: isRead ? AppColors.grey3 : AppColors.blue3,
-        ),
+        side: BorderSide(color: isRead ? AppColors.grey3 : AppColors.blue3),
       ),
       child: InkWell(
         onTap: isRead || isMarking
             ? null
             : () async {
-          await _markAsRead(context);
-        },
+                await _markAsRead(context);
+              },
         borderRadius: BorderRadius.circular(26),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 112),
@@ -147,10 +144,7 @@ class NotificationCard extends StatelessWidget {
                   spacing: 12,
                   children: [
                     // ======= Notification Icon ======= //
-                    _NotificationIcon(
-                      icon: _icon,
-                      isRead: isRead,
-                    ),
+                    _NotificationIcon(icon: _icon, isRead: isRead),
 
                     // ======= Notification Details ======= //
                     Expanded(
@@ -235,10 +229,7 @@ class NotificationCard extends StatelessWidget {
 // =====================================================
 
 class _NotificationIcon extends StatelessWidget {
-  const _NotificationIcon({
-    required this.icon,
-    required this.isRead,
-  });
+  const _NotificationIcon({required this.icon, required this.isRead});
 
   final IconData icon;
   final bool isRead;
@@ -249,17 +240,13 @@ class _NotificationIcon extends StatelessWidget {
       width: 55,
       height: 55,
       decoration: BoxDecoration(
-        color: isRead
-            ? AppColors.grey5
-            : AppColors.primary,
+        color: isRead ? AppColors.grey5 : AppColors.primary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Icon(
         icon,
         size: 25,
-        color: isRead
-            ? AppColors.grey4
-            : AppColors.white0,
+        color: isRead ? AppColors.grey4 : AppColors.white0,
       ),
     );
   }

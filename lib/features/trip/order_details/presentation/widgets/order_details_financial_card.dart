@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -8,10 +7,7 @@ import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/t
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
 class OrderDetailsFinancialCard extends StatelessWidget {
-  const OrderDetailsFinancialCard({
-    super.key,
-    required this.order,
-  });
+  const OrderDetailsFinancialCard({super.key, required this.order});
 
   final OrderDetailsData order;
 
@@ -29,19 +25,14 @@ class OrderDetailsFinancialCard extends StatelessWidget {
           Expanded(
             child: Text(
               context.strings.order_details_original_total,
-              style: Styles.textStyle16.copyWith(
-                color: AppColors.grey4,
-              ),
+              style: Styles.textStyle16.copyWith(color: AppColors.grey4),
             ),
           ),
 
           Text(
             order.originalTotal == null
                 ? '—'
-                : formatTripAmount(
-              context,
-              order.originalTotal!,
-            ),
+                : formatTripAmount(context, order.originalTotal!),
             style: Styles.textStyle24.copyWith(
               color: AppColors.black1,
               fontWeight: FontWeight.w800,

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
@@ -10,8 +9,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_items_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/domain/repo/receive_trip_repo_interface.dart';
 
-class ConcreteReceiveTripRepo
-    implements ReceiveTripRepoInterface {
+class ConcreteReceiveTripRepo implements ReceiveTripRepoInterface {
   final TripApiService _apiService;
 
   ConcreteReceiveTripRepo(this._apiService);
@@ -57,7 +55,6 @@ class ConcreteReceiveTripRepo
     }
   }
 
-
   @override
   Future<ApiResult<dynamic>> acceptTrip({
     required int tripId,
@@ -82,10 +79,7 @@ class ConcreteReceiveTripRepo
     } catch (error) {
       CustomLogger.logger?.f(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
-
 }

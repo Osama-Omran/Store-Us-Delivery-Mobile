@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
@@ -13,7 +12,6 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 
-
 class OrderAddressEditSheet extends StatefulWidget {
   const OrderAddressEditSheet({
     super.key,
@@ -27,12 +25,10 @@ class OrderAddressEditSheet extends StatefulWidget {
   final OrderCustomerLocation location;
 
   @override
-  State<OrderAddressEditSheet> createState() =>
-      _OrderAddressEditSheetState();
+  State<OrderAddressEditSheet> createState() => _OrderAddressEditSheetState();
 }
 
-class _OrderAddressEditSheetState
-    extends State<OrderAddressEditSheet> {
+class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
   late final TextEditingController _addressController;
   late final TextEditingController _notesController;
   late final TextEditingController _phoneController;
@@ -50,9 +46,7 @@ class _OrderAddressEditSheetState
   void initState() {
     super.initState();
 
-    _addressController = TextEditingController(
-      text: widget.location.address,
-    );
+    _addressController = TextEditingController(text: widget.location.address);
     _notesController = TextEditingController();
 
     if (widget.location.hasCoordinates) {
@@ -60,17 +54,11 @@ class _OrderAddressEditSheetState
       _longitude = widget.location.longitude;
     }
 
-
-    _phoneController = TextEditingController(
-      text: widget.location.phone,
-    );
+    _phoneController = TextEditingController(text: widget.location.phone);
 
     _cityController = TextEditingController();
 
-    _countryController = TextEditingController(
-      text: 'Egypt',
-    );
-
+    _countryController = TextEditingController(text: 'Egypt');
   }
 
   @override
@@ -82,7 +70,6 @@ class _OrderAddressEditSheetState
     _countryController.dispose();
     super.dispose();
   }
-
 
   Future<void> _showSaveErrorDialog(String message) async {
     if (!mounted) return;
@@ -117,18 +104,14 @@ class _OrderAddressEditSheetState
           content: Text(
             message,
             textDirection: TextDirection.rtl,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.black1,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.black1),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
-              child: Text(
-                context.strings.back,
-              ),
+              child: Text(context.strings.back),
             ),
           ],
         );
@@ -136,15 +119,12 @@ class _OrderAddressEditSheetState
     );
   }
 
-  bool get _hasPosition =>
-      _latitude != null && _longitude != null;
+  bool get _hasPosition => _latitude != null && _longitude != null;
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   // ======= Get Device Location ======= //
@@ -154,14 +134,11 @@ class _OrderAddressEditSheetState
     setState(() => _locating = true);
 
     try {
-      final enabled =
-      await Geolocator.isLocationServiceEnabled();
+      final enabled = await Geolocator.isLocationServiceEnabled();
 
       if (!enabled) {
         if (mounted) {
-          _showMessage(
-            context.strings.trip_accept_location_disabled,
-          );
+          _showMessage(context.strings.trip_accept_location_disabled);
         }
         return;
       }
@@ -174,18 +151,14 @@ class _OrderAddressEditSheetState
 
       if (permission == LocationPermission.deniedForever) {
         if (mounted) {
-          _showMessage(
-            context.strings.order_location_permission_required,
-          );
+          _showMessage(context.strings.order_location_permission_required);
         }
         return;
       }
 
       if (permission == LocationPermission.denied) {
         if (mounted) {
-          _showMessage(
-            context.strings.trip_accept_location_permission_denied,
-          );
+          _showMessage(context.strings.trip_accept_location_permission_denied);
         }
         return;
       }
@@ -206,9 +179,7 @@ class _OrderAddressEditSheetState
       });
     } catch (_) {
       if (mounted) {
-        _showMessage(
-          context.strings.order_location_fetch_failed,
-        );
+        _showMessage(context.strings.order_location_fetch_failed);
       }
     } finally {
       if (mounted) {
@@ -217,20 +188,15 @@ class _OrderAddressEditSheetState
     }
   }
 
-
-// ======= Review Before Save ======= //
+  // ======= Review Before Save ======= //
   void _goToReview() {
     if (_addressController.text.trim().isEmpty) {
-      _showMessage(
-        context.strings.order_address_required,
-      );
+      _showMessage(context.strings.order_address_required);
       return;
     }
 
     if (!_hasPosition) {
-      _showMessage(
-        context.strings.order_location_required,
-      );
+      _showMessage(context.strings.order_location_required);
       return;
     }
 
@@ -238,7 +204,6 @@ class _OrderAddressEditSheetState
       _review = true;
     });
   }
-
 
   Future<void> _confirmSave() async {
     if (_saving) return;
@@ -314,17 +279,13 @@ class _OrderAddressEditSheetState
     } catch (_) {
       if (!mounted) return;
 
-      await _showSaveErrorDialog(
-        context.strings.order_location_save_failed,
-      );
+      await _showSaveErrorDialog(context.strings.order_location_save_failed);
     } finally {
       if (mounted) {
         setState(() => _saving = false);
       }
     }
   }
-
-
 
   String _formatCoordinate(double? value) {
     return value?.toStringAsFixed(7) ?? '—';
@@ -340,16 +301,12 @@ class _OrderAddressEditSheetState
       child: Padding(
         padding: EdgeInsets.only(bottom: bottomInset),
         child: SizedBox(
-          height: (height - bottomInset)
-              .clamp(350.0, height)
-              .toDouble(),
+          height: (height - bottomInset).clamp(350.0, height).toDouble(),
           child: Column(
             children: [
               // ======= Header ======= //
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  20, 20, 20, 14,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
                 child: Row(
                   children: [
                     Expanded(
@@ -372,23 +329,16 @@ class _OrderAddressEditSheetState
               // ======= Content ======= //
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: _review
-                      ? _buildReview()
-                      : _buildEditor(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _review ? _buildReview() : _buildEditor(),
                 ),
               ),
 
               // ======= Fixed Actions ======= //
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  20, 12, 20, 20,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
                 child: Column(
                   children: [
-
                     SizedBox(
                       width: double.infinity,
                       height: 62,
@@ -401,18 +351,18 @@ class _OrderAddressEditSheetState
 
                         icon: _saving
                             ? SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            color: AppColors.white0,
-                            strokeWidth: 2,
-                          ),
-                        )
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white0,
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : Icon(
-                          _review
-                              ? Icons.check_circle_outline_rounded
-                              : Icons.save_outlined,
-                        ),
+                                _review
+                                    ? Icons.check_circle_outline_rounded
+                                    : Icons.save_outlined,
+                              ),
 
                         label: Text(
                           _saving
@@ -441,11 +391,9 @@ class _OrderAddressEditSheetState
                         onPressed: _saving
                             ? null
                             : () {
-                          setState(() => _review = false);
-                        },
-                        child: Text(
-                          context.strings.order_back_to_edit,
-                        ),
+                                setState(() => _review = false);
+                              },
+                        child: Text(context.strings.order_back_to_edit),
                       ),
                   ],
                 ),
@@ -468,9 +416,7 @@ class _OrderAddressEditSheetState
             children: [
               Text(
                 context.strings.order_current_saved_data,
-                style: Styles.textStyle14.copyWith(
-                  color: AppColors.grey4,
-                ),
+                style: Styles.textStyle14.copyWith(color: AppColors.grey4),
               ),
               const SizedBox(height: 6),
               Text(
@@ -486,11 +432,9 @@ class _OrderAddressEditSheetState
               Text(
                 widget.location.hasCoordinates
                     ? '${widget.location.latitude}, '
-                    '${widget.location.longitude}'
+                          '${widget.location.longitude}'
                     : context.strings.order_customer_gps_missing,
-                style: Styles.textStyle12.copyWith(
-                  color: AppColors.grey4,
-                ),
+                style: Styles.textStyle12.copyWith(color: AppColors.grey4),
               ),
             ],
           ),
@@ -504,12 +448,10 @@ class _OrderAddressEditSheetState
             onPressed: _locating ? null : _useCurrentLocation,
             icon: _locating
                 ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            )
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Icon(Icons.my_location_rounded),
             label: Text(
               _hasPosition
@@ -536,9 +478,7 @@ class _OrderAddressEditSheetState
             child: SizedBox(
               height: 180,
               child: GoogleMap(
-                key: ValueKey(
-                  '${_latitude}_$_longitude',
-                ),
+                key: ValueKey('${_latitude}_$_longitude'),
                 initialCameraPosition: CameraPosition(
                   target: LatLng(_latitude!, _longitude!),
                   zoom: 16,
@@ -589,11 +529,9 @@ class _OrderAddressEditSheetState
               padding: const EdgeInsets.only(top: 10),
               child: Text(
                 '${context.strings.order_location_accuracy} '
-                    '±${_accuracy!.toStringAsFixed(0)} '
-                    '${context.strings.order_meters}',
-                style: Styles.textStyle12.copyWith(
-                  color: AppColors.orange0,
-                ),
+                '±${_accuracy!.toStringAsFixed(0)} '
+                '${context.strings.order_meters}',
+                style: Styles.textStyle12.copyWith(color: AppColors.orange0),
               ),
             ),
 
@@ -619,10 +557,9 @@ class _OrderAddressEditSheetState
           decoration: _inputDecoration(),
         ),
 
-
         const SizedBox(height: 18),
 
-// ======= Shop Phone ======= //
+        // ======= Shop Phone ======= //
         Text(
           context.strings.order_delivery_phone,
           style: Styles.textStyle16.copyWith(
@@ -638,14 +575,12 @@ class _OrderAddressEditSheetState
           keyboardType: TextInputType.phone,
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.right,
-          decoration: _inputDecoration().copyWith(
-            hintText: '01XXXXXXXXX',
-          ),
+          decoration: _inputDecoration().copyWith(hintText: '01XXXXXXXXX'),
         ),
 
         const SizedBox(height: 18),
 
-// ======= City ======= //
+        // ======= City ======= //
         Text(
           context.strings.order_delivery_city,
           style: Styles.textStyle16.copyWith(
@@ -666,7 +601,7 @@ class _OrderAddressEditSheetState
 
         const SizedBox(height: 18),
 
-// ======= Country ======= //
+        // ======= Country ======= //
         Text(
           context.strings.order_delivery_country,
           style: Styles.textStyle16.copyWith(
@@ -681,9 +616,7 @@ class _OrderAddressEditSheetState
           controller: _countryController,
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.right,
-          decoration: _inputDecoration().copyWith(
-            hintText: 'Egypt',
-          ),
+          decoration: _inputDecoration().copyWith(hintText: 'Egypt'),
         ),
 
         const SizedBox(height: 18),
@@ -743,7 +676,7 @@ class _OrderAddressEditSheetState
                 _ReviewRow(
                   title: context.strings.order_location_accuracy,
                   value:
-                  '±${_accuracy!.toStringAsFixed(0)} '
+                      '±${_accuracy!.toStringAsFixed(0)} '
                       '${context.strings.order_meters}',
                 ),
 
@@ -782,9 +715,7 @@ class _OrderAddressEditSheetState
         Text(
           context.strings.order_confirm_location_warning,
           textAlign: TextAlign.center,
-          style: Styles.textStyle14.copyWith(
-            color: AppColors.grey4,
-          ),
+          style: Styles.textStyle14.copyWith(color: AppColors.grey4),
         ),
       ],
     );
@@ -820,10 +751,7 @@ class _OrderAddressEditSheetState
 }
 
 class _CoordinateValue extends StatelessWidget {
-  const _CoordinateValue({
-    required this.label,
-    required this.value,
-  });
+  const _CoordinateValue({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -837,9 +765,7 @@ class _CoordinateValue extends StatelessWidget {
         Text(
           value,
           textDirection: TextDirection.ltr,
-          style: Styles.textStyle14.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: Styles.textStyle14.copyWith(fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -847,10 +773,7 @@ class _CoordinateValue extends StatelessWidget {
 }
 
 class _ReviewRow extends StatelessWidget {
-  const _ReviewRow({
-    required this.title,
-    required this.value,
-  });
+  const _ReviewRow({required this.title, required this.value});
 
   final String title;
   final String value;
@@ -865,9 +788,7 @@ class _ReviewRow extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: Styles.textStyle14.copyWith(
-                color: AppColors.grey4,
-              ),
+              style: Styles.textStyle14.copyWith(color: AppColors.grey4),
             ),
           ),
           Expanded(

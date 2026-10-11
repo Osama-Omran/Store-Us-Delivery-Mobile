@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,12 +24,10 @@ class RescheduleOrderSheet extends StatefulWidget {
   final String address;
 
   @override
-  State<RescheduleOrderSheet> createState() =>
-      _RescheduleOrderSheetState();
+  State<RescheduleOrderSheet> createState() => _RescheduleOrderSheetState();
 }
 
-class _RescheduleOrderSheetState
-    extends State<RescheduleOrderSheet> {
+class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   String? _selectedReason;
@@ -92,16 +89,8 @@ class _RescheduleOrderSheetState
     final date = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? now,
-      firstDate: DateTime(
-        now.year,
-        now.month,
-        now.day,
-      ),
-      lastDate: DateTime(
-        now.year + 1,
-        now.month,
-        now.day,
-      ),
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(now.year + 1, now.month, now.day),
     );
 
     if (!mounted || date == null) return;
@@ -139,10 +128,7 @@ class _RescheduleOrderSheetState
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.red0,
-        ),
+        SnackBar(content: Text(message), backgroundColor: AppColors.red0),
       );
   }
 
@@ -158,7 +144,7 @@ class _RescheduleOrderSheetState
 
     return BlocConsumer<RescheduleOrderCubit, RescheduleOrderState>(
       listenWhen: (_, current) =>
-      current is RescheduleOrderSuccess ||
+          current is RescheduleOrderSuccess ||
           current is RescheduleOrderFailure,
       listener: (context, state) {
         if (state is RescheduleOrderFailure) {
@@ -223,9 +209,7 @@ class _RescheduleOrderSheetState
                   // ======= Scrollable Form ======= //
                   Expanded(
                     child: ListView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       children: [
                         // ======= Customer Summary ======= //
                         Container(
@@ -238,8 +222,7 @@ class _RescheduleOrderSheetState
                             spacing: 10,
                             children: [
                               _RescheduleInfoRow(
-                                label: context.strings
-                                    .order_customer_data,
+                                label: context.strings.order_customer_data,
                                 value: widget.customerName,
                               ),
                               _RescheduleInfoRow(
@@ -247,8 +230,7 @@ class _RescheduleOrderSheetState
                                 value: widget.salesOrder,
                               ),
                               _RescheduleInfoRow(
-                                label: context.strings
-                                    .order_correct_address,
+                                label: context.strings.order_correct_address,
                                 value: widget.address.isNotEmpty
                                     ? widget.address
                                     : '—',
@@ -265,13 +247,11 @@ class _RescheduleOrderSheetState
                           children: [
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 spacing: 8,
                                 children: [
                                   Text(
-                                    context.strings
-                                        .reschedule_new_date,
+                                    context.strings.reschedule_new_date,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       color: AppColors.black1,
@@ -279,21 +259,16 @@ class _RescheduleOrderSheetState
                                   ),
 
                                   OutlinedButton(
-                                    onPressed:
-                                    isLoading ? null : _selectDate,
+                                    onPressed: isLoading ? null : _selectDate,
                                     style: OutlinedButton.styleFrom(
-                                      minimumSize:
-                                      const Size.fromHeight(58),
+                                      minimumSize: const Size.fromHeight(58),
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 10,
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
-                                      side: BorderSide(
-                                        color: AppColors.grey3,
-                                      ),
+                                      side: BorderSide(color: AppColors.grey3),
                                     ),
                                     child: Row(
                                       children: [
@@ -301,11 +276,8 @@ class _RescheduleOrderSheetState
                                           child: Text(
                                             _selectedDate == null
                                                 ? 'dd/mm/yyyy'
-                                                : _formatDate(
-                                              _selectedDate!,
-                                            ),
-                                            textDirection:
-                                            TextDirection.ltr,
+                                                : _formatDate(_selectedDate!),
+                                            textDirection: TextDirection.ltr,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: AppColors.black1,
@@ -329,13 +301,11 @@ class _RescheduleOrderSheetState
 
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 spacing: 8,
                                 children: [
                                   Text(
-                                    context.strings
-                                        .reschedule_new_time,
+                                    context.strings.reschedule_new_time,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       color: AppColors.black1,
@@ -343,21 +313,16 @@ class _RescheduleOrderSheetState
                                   ),
 
                                   OutlinedButton(
-                                    onPressed:
-                                    isLoading ? null : _selectTime,
+                                    onPressed: isLoading ? null : _selectTime,
                                     style: OutlinedButton.styleFrom(
-                                      minimumSize:
-                                      const Size.fromHeight(58),
+                                      minimumSize: const Size.fromHeight(58),
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 10,
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
-                                      side: BorderSide(
-                                        color: AppColors.grey3,
-                                      ),
+                                      side: BorderSide(color: AppColors.grey3),
                                     ),
                                     child: Row(
                                       children: [
@@ -365,11 +330,11 @@ class _RescheduleOrderSheetState
                                           child: Text(
                                             _selectedTime == null
                                                 ? '--:--'
-                                                : MaterialLocalizations
-                                                .of(context)
-                                                .formatTimeOfDay(
-                                              _selectedTime!,
-                                            ),
+                                                : MaterialLocalizations.of(
+                                                    context,
+                                                  ).formatTimeOfDay(
+                                                    _selectedTime!,
+                                                  ),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: AppColors.black1,
@@ -394,14 +359,11 @@ class _RescheduleOrderSheetState
                         const SizedBox(height: 12),
 
                         if (_selectedDateTime != null &&
-                            !_selectedDateTime!.isAfter(
-                              DateTime.now(),
-                            ))
+                            !_selectedDateTime!.isAfter(DateTime.now()))
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Text(
-                              context.strings
-                                  .reschedule_date_must_be_future,
+                              context.strings.reschedule_date_must_be_future,
                               style: TextStyle(
                                 color: AppColors.red1,
                                 fontSize: 13,
@@ -434,10 +396,10 @@ class _RescheduleOrderSheetState
                                 onSelected: isLoading
                                     ? null
                                     : (_) {
-                                  setState(() {
-                                    _selectedReason = reason;
-                                  });
-                                },
+                                        setState(() {
+                                          _selectedReason = reason;
+                                        });
+                                      },
                                 selectedColor: AppColors.blue4,
                                 backgroundColor: AppColors.white0,
                                 side: BorderSide(
@@ -464,13 +426,12 @@ class _RescheduleOrderSheetState
                             enabled: !isLoading,
                             onChanged: (_) => setState(() {}),
                             decoration: InputDecoration(
-                              hintText: context.strings
-                                  .reschedule_other_reason_hint,
+                              hintText:
+                                  context.strings.reschedule_other_reason_hint,
                               filled: true,
                               fillColor: AppColors.grey0,
                               border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.circular(18),
+                                borderRadius: BorderRadius.circular(18),
                               ),
                             ),
                           ),
@@ -495,16 +456,12 @@ class _RescheduleOrderSheetState
                           minLines: 2,
                           maxLines: 3,
                           decoration: InputDecoration(
-                            hintText: context.strings
-                                .reschedule_notes_hint,
+                            hintText: context.strings.reschedule_notes_hint,
                             filled: true,
                             fillColor: AppColors.grey0,
                             border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: AppColors.grey3,
-                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: AppColors.grey3),
                             ),
                           ),
                         ),
@@ -526,24 +483,16 @@ class _RescheduleOrderSheetState
 
                   // ======= Fixed Confirm Button ======= //
                   Container(
-                    padding: const EdgeInsets.fromLTRB(
-                      20,
-                      12,
-                      20,
-                      16,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                     decoration: BoxDecoration(
                       color: AppColors.white0,
-                      border: Border(
-                        top: BorderSide(color: AppColors.grey3),
-                      ),
+                      border: Border(top: BorderSide(color: AppColors.grey3)),
                     ),
                     child: SizedBox(
                       height: 66,
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed:
-                        _canSubmit && !isLoading ? _submit : null,
+                        onPressed: _canSubmit && !isLoading ? _submit : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           disabledBackgroundColor: AppColors.blue0,
@@ -553,17 +502,14 @@ class _RescheduleOrderSheetState
                           ),
                         ),
                         child: isLoading
-                            ? CircularProgressIndicator(
-                          color: AppColors.white0,
-                        )
+                            ? CircularProgressIndicator(color: AppColors.white0)
                             : Text(
-                          context.strings
-                              .reschedule_confirm,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                                context.strings.reschedule_confirm,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -582,10 +528,7 @@ class _RescheduleOrderSheetState
 // =====================================================
 
 class _RescheduleInfoRow extends StatelessWidget {
-  const _RescheduleInfoRow({
-    required this.label,
-    required this.value,
-  });
+  const _RescheduleInfoRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -599,10 +542,7 @@ class _RescheduleInfoRow extends StatelessWidget {
           width: 82,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.grey4,
-            ),
+            style: TextStyle(fontSize: 13, color: AppColors.grey4),
           ),
         ),
 

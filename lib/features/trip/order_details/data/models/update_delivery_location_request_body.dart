@@ -1,4 +1,3 @@
-
 class UpdateDeliveryLocationBody {
   const UpdateDeliveryLocationBody({
     required this.address,

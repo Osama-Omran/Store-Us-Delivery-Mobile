@@ -1,24 +1,17 @@
-
 class LoadedItemsResponse {
   final bool success;
   final LoadedItemsData? data;
   final String? message;
 
-  const LoadedItemsResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const LoadedItemsResponse({required this.success, this.data, this.message});
 
-  factory LoadedItemsResponse.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory LoadedItemsResponse.fromJson(Map<String, dynamic> json) {
     return LoadedItemsResponse(
       success: json['success'] as bool? ?? false,
       data: json['data'] is Map
           ? LoadedItemsData.fromJson(
-        Map<String, dynamic>.from(json['data'] as Map),
-      )
+              Map<String, dynamic>.from(json['data'] as Map),
+            )
           : null,
       message: json['message']?.toString(),
     );
@@ -36,30 +29,23 @@ class LoadedItemsData {
   final List<LoadedTripItem> items;
   final LoadedItemsTotals? totals;
 
-  const LoadedItemsData({
-    required this.trip,
-    required this.items,
-    this.totals,
-  });
+  const LoadedItemsData({required this.trip, required this.items, this.totals});
 
-  factory LoadedItemsData.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory LoadedItemsData.fromJson(Map<String, dynamic> json) {
     final rawItems = json['items'] as List<dynamic>? ?? [];
 
     return LoadedItemsData(
       trip: json['trip']?.toString() ?? '',
       items: rawItems
           .map(
-            (item) => LoadedTripItem.fromJson(
-          Map<String, dynamic>.from(item as Map),
-        ),
-      )
+            (item) =>
+                LoadedTripItem.fromJson(Map<String, dynamic>.from(item as Map)),
+          )
           .toList(),
       totals: json['totals'] is Map
           ? LoadedItemsTotals.fromJson(
-        Map<String, dynamic>.from(json['totals'] as Map),
-      )
+              Map<String, dynamic>.from(json['totals'] as Map),
+            )
           : null,
     );
   }
@@ -86,9 +72,7 @@ class LoadedTripItem {
     required this.source,
   });
 
-  factory LoadedTripItem.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory LoadedTripItem.fromJson(Map<String, dynamic> json) {
     return LoadedTripItem(
       itemCode: json['item_code']?.toString() ?? '',
       itemName: json['item_name']?.toString() ?? '',
@@ -111,24 +95,16 @@ class LoadedItemsTotals {
   final int items;
   final num qty;
 
-  const LoadedItemsTotals({
-    required this.items,
-    required this.qty,
-  });
+  const LoadedItemsTotals({required this.items, required this.qty});
 
-  factory LoadedItemsTotals.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory LoadedItemsTotals.fromJson(Map<String, dynamic> json) {
     return LoadedItemsTotals(
       items: _parseQuantity(json['items']).toInt(),
       qty: _parseQuantity(json['qty']),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'items': items,
-    'qty': qty,
-  };
+  Map<String, dynamic> toJson() => {'items': items, 'qty': qty};
 }
 
 num _parseQuantity(dynamic value) {

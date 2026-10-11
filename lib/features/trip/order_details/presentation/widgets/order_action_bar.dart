@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,22 +27,18 @@ class OrderActionBar extends StatelessWidget {
   final int tripId;
   final int orderId;
 
-
-
-// ======= Open Cancel Delivery Sheet ======= //
-  Future<void> _openCancelDeliverySheet(
-      BuildContext context,
-      ) async {
+  // ======= Open Cancel Delivery Sheet ======= //
+  Future<void> _openCancelDeliverySheet(BuildContext context) async {
     final detailsCubit = context.read<OrderDetailsCubit>();
     final state = detailsCubit.state;
 
     if (state is! OrderDetailsSuccessState) return;
 
     // ======= Validate Order Status ======= //
-    final deliveryStatus = (
-        state.tripOrder?.deliveryStatus ??
-            state.order.deliveryStatus
-    ).trim().toUpperCase();
+    final deliveryStatus =
+        (state.tripOrder?.deliveryStatus ?? state.order.deliveryStatus)
+            .trim()
+            .toUpperCase();
 
     if (deliveryStatus != 'PENDING') return;
 
@@ -54,18 +49,14 @@ class OrderActionBar extends StatelessWidget {
     );
 
     // ======= Open Cancellation Form ======= //
-    final result =
-    await showModalBottomSheet<Map<String, dynamic>>(
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: AppColors.white0,
-      barrierColor:
-      AppColors.black1.withValues(alpha: 0.45),
+      barrierColor: AppColors.black1.withValues(alpha: 0.45),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (_) {
         return BlocProvider(
@@ -89,11 +80,8 @@ class OrderActionBar extends StatelessWidget {
     );
   }
 
-
-// ======= Open Reschedule Bottom Sheet ======= //
-  Future<void> _openRescheduleSheet(
-      BuildContext context,
-      ) async {
+  // ======= Open Reschedule Bottom Sheet ======= //
+  Future<void> _openRescheduleSheet(BuildContext context) async {
     final detailsCubit = context.read<OrderDetailsCubit>();
     final state = detailsCubit.state;
 
@@ -101,10 +89,10 @@ class OrderActionBar extends StatelessWidget {
       return;
     }
 
-    final deliveryStatus = (
-        state.tripOrder?.deliveryStatus ??
-            state.order.deliveryStatus
-    ).trim().toUpperCase();
+    final deliveryStatus =
+        (state.tripOrder?.deliveryStatus ?? state.order.deliveryStatus)
+            .trim()
+            .toUpperCase();
 
     if (deliveryStatus != 'PENDING') {
       return;
@@ -124,9 +112,7 @@ class OrderActionBar extends StatelessWidget {
       backgroundColor: AppColors.white0,
       barrierColor: AppColors.black1.withValues(alpha: 0.40),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (sheetContext) {
         return BlocProvider(
@@ -146,51 +132,26 @@ class OrderActionBar extends StatelessWidget {
     if (!context.mounted || result == null) return;
 
     // API success: navigate to confirmation screen.
-    await GoRouter.of(context).pushNamed(
-      RoutesNames.rescheduleSuccess,
-      extra: result,
-    );
+    await GoRouter.of(context)
+        .pushNamed(RoutesNames.rescheduleSuccess, extra: result);
 
     // Refresh if user returns to the original order details.
     if (!context.mounted || detailsCubit.isClosed) return;
 
-    await detailsCubit.getOrderDetails(
-      tripId: tripId,
-      orderId: orderId,
-    );
+    await detailsCubit.getOrderDetails(tripId: tripId, orderId: orderId);
   }
 
-
-  Future<void> _openDeliveryScreen(
-      BuildContext context,
-      ) async {
+  Future<void> _openDeliveryScreen(BuildContext context) async {
     final detailsCubit = context.read<OrderDetailsCubit>();
 
     await GoRouter.of(context).push(
       RoutesNames.deliverOrder,
-      extra: {
-        'trip_id': tripId,
-        'order_id': orderId,
-      },
+      extra: {'trip_id': tripId, 'order_id': orderId},
     );
 
     if (!context.mounted || detailsCubit.isClosed) return;
 
-    await detailsCubit.getOrderDetails(
-      tripId: tripId,
-      orderId: orderId,
-    );
-  }
-  void _notConnected(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            context.strings.order_operation_not_connected,
-          ),
-        ),
-      );
+    await detailsCubit.getOrderDetails(tripId: tripId, orderId: orderId);
   }
 
   @override
@@ -199,9 +160,7 @@ class OrderActionBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
       decoration: BoxDecoration(
         color: AppColors.white0,
-        border: Border(
-          top: BorderSide(color: AppColors.grey3),
-        ),
+        border: Border(top: BorderSide(color: AppColors.grey3)),
       ),
       child: SafeArea(
         top: false,
@@ -222,13 +181,9 @@ class OrderActionBar extends StatelessWidget {
               height: 76,
               width: double.infinity,
               child: ElevatedButton.icon(
-
                 onPressed: () => _openDeliveryScreen(context),
 
-                icon: const Icon(
-                  Icons.inventory_2_outlined,
-                  size: 28,
-                ),
+                icon: const Icon(Icons.inventory_2_outlined, size: 28),
                 label: Text(
                   context.strings.deliver_order,
                   style: Styles.textStyle20.copyWith(
@@ -254,17 +209,13 @@ class OrderActionBar extends StatelessWidget {
                   child: SizedBox(
                     height: 68,
                     child: OutlinedButton.icon(
-                      onPressed: () => _openRescheduleSheet(context),icon: const Icon(Icons.event_repeat),
-                      label: Text(
-                        context.strings.reschedule_delivery,
-                      ),
+                      onPressed: () => _openRescheduleSheet(context),
+                      icon: const Icon(Icons.event_repeat),
+                      label: Text(context.strings.reschedule_delivery),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
                         backgroundColor: AppColors.blue4,
-                        side: BorderSide(
-                          color: AppColors.blue3,
-                          width: 1.5,
-                        ),
+                        side: BorderSide(color: AppColors.blue3, width: 1.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
@@ -281,17 +232,12 @@ class OrderActionBar extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: () => _openCancelDeliverySheet(context),
                       icon: const Icon(Icons.block_outlined),
-                      label: Text(
-                        context.strings.cancel_delivery,
-                      ),
+                      label: Text(context.strings.cancel_delivery),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.red1,
-                        backgroundColor:
-                        AppColors.red1.withValues(alpha: .10),
+                        backgroundColor: AppColors.red1.withValues(alpha: .10),
                         side: BorderSide(
-                          color: AppColors.red1.withValues(
-                            alpha: .40,
-                          ),
+                          color: AppColors.red1.withValues(alpha: .40),
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(

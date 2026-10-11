@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,10 +10,7 @@ import 'package:storeus_delivery/features/home/presentation/cubit/home_history_c
 import 'package:storeus_delivery/features/home/presentation/cubit/home_history_state.dart';
 
 class HomePreviousTripsSection extends StatelessWidget {
-  const HomePreviousTripsSection({
-    super.key,
-    this.currentTripId,
-  });
+  const HomePreviousTripsSection({super.key, this.currentTripId});
 
   final int? currentTripId;
 
@@ -42,9 +38,7 @@ class HomePreviousTripsSection extends StatelessWidget {
                   state is HomeHistoryLoadingState) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 22),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
                 );
               }
 
@@ -55,8 +49,7 @@ class HomePreviousTripsSection extends StatelessWidget {
                       ? state.errorMessage!
                       : context.strings.home_history_load_failed,
                   onRetry: () {
-                    HomeHistoryCubit.get(context)
-                        .getTripHistory();
+                    HomeHistoryCubit.get(context).getTripHistory();
                   },
                 );
               }
@@ -77,16 +70,12 @@ class HomePreviousTripsSection extends StatelessWidget {
 
                   // Only trips with today's trip_date.
                   return trip.isOnDate(today);
-                }).toList()
-                  ..sort(
-                        (a, b) => b.id.compareTo(a.id),
-                  );
+                }).toList()..sort((a, b) => b.id.compareTo(a.id));
 
                 // ======= Empty Today ======= //
                 if (trips.isEmpty) {
                   return _HistoryMessage(
-                    message: context.strings
-                        .home_history_empty_today,
+                    message: context.strings.home_history_empty_today,
                   );
                 }
 
@@ -95,10 +84,7 @@ class HomePreviousTripsSection extends StatelessWidget {
                   spacing: 12,
                   children: [
                     for (final trip in trips)
-                      _PreviousTripCard(
-                        key: ValueKey(trip.id),
-                        trip: trip,
-                      ),
+                      _PreviousTripCard(key: ValueKey(trip.id), trip: trip),
                   ],
                 );
               }
@@ -117,21 +103,15 @@ class HomePreviousTripsSection extends StatelessWidget {
 // =====================================================
 
 class _PreviousTripCard extends StatelessWidget {
-  const _PreviousTripCard({
-    super.key,
-    required this.trip,
-  });
+  const _PreviousTripCard({super.key, required this.trip});
 
   final TripHistoryItem trip;
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted =
-        trip.normalizedStatus == 'COMPLETED';
+    final isCompleted = trip.normalizedStatus == 'COMPLETED';
 
-    final statusColor = isCompleted
-        ? AppColors.green0
-        : AppColors.red1;
+    final statusColor = isCompleted ? AppColors.green0 : AppColors.red1;
 
     final statusText = isCompleted
         ? context.strings.home_history_completed
@@ -142,22 +122,15 @@ class _PreviousTripCard extends StatelessWidget {
     final completedTime = completedAt == null
         ? null
         : MaterialLocalizations.of(context)
-        .formatTimeOfDay(
-      TimeOfDay.fromDateTime(completedAt),
-    );
+              .formatTimeOfDay(TimeOfDay.fromDateTime(completedAt));
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 18,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.grey3,
-        ),
+        border: Border.all(color: AppColors.grey3),
         boxShadow: [
           BoxShadow(
             color: AppColors.black0.withValues(alpha: .035),
@@ -192,7 +165,7 @@ class _PreviousTripCard extends StatelessWidget {
                   children: [
                     Text(
                       '${trip.totalOrders?.toString() ?? '—'} '
-                          '${context.strings.orders_plural}',
+                      '${context.strings.orders_plural}',
                       style: Styles.textStyle12.copyWith(
                         color: AppColors.grey4,
                       ),
@@ -201,7 +174,7 @@ class _PreviousTripCard extends StatelessWidget {
                     if (completedTime != null)
                       Text(
                         '— ${context.strings.completed_at} '
-                            '$completedTime',
+                        '$completedTime',
                         style: Styles.textStyle12.copyWith(
                           color: AppColors.grey4,
                         ),
@@ -244,10 +217,7 @@ class _PreviousTripCard extends StatelessWidget {
 // =====================================================
 
 class _HistoryMessage extends StatelessWidget {
-  const _HistoryMessage({
-    required this.message,
-    this.onRetry,
-  });
+  const _HistoryMessage({required this.message, this.onRetry});
 
   final String message;
   final VoidCallback? onRetry;
@@ -256,39 +226,26 @@ class _HistoryMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 24,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       decoration: BoxDecoration(
         color: AppColors.white0,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: AppColors.grey3,
-        ),
+        border: Border.all(color: AppColors.grey3),
       ),
       child: Column(
         spacing: 12,
         children: [
-          Icon(
-            Icons.history_rounded,
-            color: AppColors.grey4,
-            size: 35,
-          ),
+          Icon(Icons.history_rounded, color: AppColors.grey4, size: 35),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
           if (onRetry != null)
             OutlinedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
-              label: Text(
-                context.strings.current_trip_retry,
-              ),
+              label: Text(context.strings.current_trip_retry),
             ),
         ],
       ),

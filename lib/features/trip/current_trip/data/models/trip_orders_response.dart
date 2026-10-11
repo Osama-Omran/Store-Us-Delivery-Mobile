@@ -1,4 +1,3 @@
-
 class TripOrdersResponse {
   final bool success;
   final List<TripOrderData> data;
@@ -10,17 +9,14 @@ class TripOrdersResponse {
     this.message,
   });
 
-  factory TripOrdersResponse.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TripOrdersResponse.fromJson(Map<String, dynamic> json) {
     return TripOrdersResponse(
       success: json['success'] as bool? ?? false,
       data: (json['data'] as List<dynamic>? ?? [])
           .map(
-            (item) => TripOrderData.fromJson(
-          Map<String, dynamic>.from(item as Map),
-        ),
-      )
+            (item) =>
+                TripOrderData.fromJson(Map<String, dynamic>.from(item as Map)),
+          )
           .toList(),
       message: json['message']?.toString(),
     );
@@ -62,31 +58,23 @@ class TripOrderData {
     this.version,
   });
 
-  factory TripOrderData.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TripOrderData.fromJson(Map<String, dynamic> json) {
     return TripOrderData(
       id: _toNum(json['id'])?.toInt() ?? 0,
       salesOrder: json['sales_order']?.toString() ?? '',
       stopOrder: _toNum(json['stop_order'])?.toInt() ?? 0,
       customer: json['customer'] is Map
           ? TripOrderCustomer.fromJson(
-        Map<String, dynamic>.from(
-          json['customer'] as Map,
-        ),
-      )
+              Map<String, dynamic>.from(json['customer'] as Map),
+            )
           : null,
       address: json['address']?.toString(),
       latitude: _toNum(json['latitude'])?.toDouble(),
       longitude: _toNum(json['longitude'])?.toDouble(),
       orderTotal: _toNum(json['order_total']),
-      deliveryStatus:
-      json['delivery_status']?.toString() ?? '',
-      paymentStatus:
-      json['payment_status']?.toString() ?? '',
-      updatedAt: DateTime.tryParse(
-        json['updated_at']?.toString() ?? '',
-      ),
+      deliveryStatus: json['delivery_status']?.toString() ?? '',
+      paymentStatus: json['payment_status']?.toString() ?? '',
+      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? ''),
       version: _toNum(json['version'])?.toInt(),
     );
   }
@@ -112,15 +100,9 @@ class TripOrderCustomer {
   final String? name;
   final String? phone;
 
-  const TripOrderCustomer({
-    this.id,
-    this.name,
-    this.phone,
-  });
+  const TripOrderCustomer({this.id, this.name, this.phone});
 
-  factory TripOrderCustomer.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TripOrderCustomer.fromJson(Map<String, dynamic> json) {
     return TripOrderCustomer(
       id: json['id']?.toString(),
       name: json['name']?.toString(),
@@ -128,11 +110,7 @@ class TripOrderCustomer {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'phone': phone,
-  };
+  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'phone': phone};
 }
 
 num? _toNum(dynamic value) {

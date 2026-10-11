@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -13,10 +12,8 @@ class TripTabCubit extends Cubit<TripTabState> {
   final CurrentTripUsecase _currentTripUsecase;
   final GetTripOrdersUsecase _getTripOrdersUsecase;
 
-  TripTabCubit(
-      this._currentTripUsecase,
-      this._getTripOrdersUsecase,
-      ) : super(TripTabInitial());
+  TripTabCubit(this._currentTripUsecase, this._getTripOrdersUsecase)
+    : super(TripTabInitial());
 
   static TripTabCubit get(BuildContext context) =>
       BlocProvider.of<TripTabCubit>(context);
@@ -37,8 +34,7 @@ class TripTabCubit extends Cubit<TripTabState> {
 
     final result = await _currentTripUsecase.call();
 
-    if (isClosed ||
-        requestId != _currentTripRequestId) {
+    if (isClosed || requestId != _currentTripRequestId) {
       return;
     }
 
@@ -47,9 +43,7 @@ class TripTabCubit extends Cubit<TripTabState> {
     result.when(
       success: (response) {
         if (!response.success) {
-          emit(
-            TripTabFailureState(response.message),
-          );
+          emit(TripTabFailureState(response.message));
           return;
         }
 
@@ -62,19 +56,12 @@ class TripTabCubit extends Cubit<TripTabState> {
 
         emit(TripTabSuccessState(trip));
 
-        if (trip.acceptance?.status
-            .trim()
-            .toUpperCase() ==
-            'ACCEPTED') {
+        if (trip.acceptance?.status.trim().toUpperCase() == 'ACCEPTED') {
           acceptedTrip = trip;
         }
       },
       failure: (error) {
-        emit(
-          TripTabFailureState(
-            error.apiErrorModel.message,
-          ),
-        );
+        emit(TripTabFailureState(error.apiErrorModel.message));
       },
     );
 
@@ -90,17 +77,13 @@ class TripTabCubit extends Cubit<TripTabState> {
     final currentState = state;
 
     if (currentState is! TripTabSuccessState ||
-        currentState.ordersStatus ==
-            TripOrdersStatus.loading) {
+        currentState.ordersStatus == TripOrdersStatus.loading) {
       return;
     }
 
     final trip = currentState.trip;
 
-    if (trip.acceptance?.status
-        .trim()
-        .toUpperCase() !=
-        'ACCEPTED') {
+    if (trip.acceptance?.status.trim().toUpperCase() != 'ACCEPTED') {
       return;
     }
 
@@ -114,19 +97,15 @@ class TripTabCubit extends Cubit<TripTabState> {
       ),
     );
 
-    final result = await _getTripOrdersUsecase.call(
-      tripId: trip.id,
-    );
+    final result = await _getTripOrdersUsecase.call(tripId: trip.id);
 
-    if (isClosed ||
-        requestId != _ordersRequestId) {
+    if (isClosed || requestId != _ordersRequestId) {
       return;
     }
 
     final latestState = state;
 
-    if (latestState is! TripTabSuccessState ||
-        latestState.trip.id != trip.id) {
+    if (latestState is! TripTabSuccessState || latestState.trip.id != trip.id) {
       return;
     }
 
@@ -143,13 +122,8 @@ class TripTabCubit extends Cubit<TripTabState> {
           return;
         }
 
-        final orders = response.data
-            .map(TripOrderModel.fromApi)
-            .toList()
-          ..sort(
-                (a, b) =>
-                a.stopNumber.compareTo(b.stopNumber),
-          );
+        final orders = response.data.map(TripOrderModel.fromApi).toList()
+          ..sort((a, b) => a.stopNumber.compareTo(b.stopNumber));
 
         emit(
           TripTabSuccessState(
