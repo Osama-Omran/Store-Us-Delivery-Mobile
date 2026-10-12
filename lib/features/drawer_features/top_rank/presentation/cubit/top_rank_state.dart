@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_response.dart';
 
@@ -23,9 +22,7 @@ class TopRankState {
 
   TopRankEntry? get winner => category?.winner;
 
-  List<TopRankEntry> get entries =>
-      category?.ranked ?? const [];
+  List<TopRankEntry> get entries => category?.ranked ?? const [];
 
-  bool get isEmpty =>
-      !isLoading && error == null && entries.isEmpty;
+  bool get isEmpty => !isLoading && error == null && entries.isEmpty;
 }

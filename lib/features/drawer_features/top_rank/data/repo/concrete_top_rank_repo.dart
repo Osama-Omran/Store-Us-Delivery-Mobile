@@ -1,4 +1,3 @@
-
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/trip_api_service.dart';
@@ -42,18 +41,14 @@ class ConcreteTopRankRepo implements TopRankRepoInterface {
       );
 
       if (!response.success || response.data == null) {
-        throw StateError(
-          response.message ?? 'تعذر تحميل الترتيب',
-        );
+        throw StateError(response.message ?? 'تعذر تحميل الترتيب');
       }
 
       return ApiResult.success(response);
     } catch (error) {
       CustomLogger.logger?.e(error);
 
-      return ApiResult.failure(
-        ErrorHandler.handle(error),
-      );
+      return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
 }

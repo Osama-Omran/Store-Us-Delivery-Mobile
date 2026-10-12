@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -31,8 +30,7 @@ class TopRankList extends StatelessWidget {
       child: Column(
         children: [
           for (int index = 0; index < entries.length; index++) ...[
-            if (index > 0)
-              Divider(height: 1, color: AppColors.grey3),
+            if (index > 0) Divider(height: 1, color: AppColors.grey3),
             _TopRankRow(
               entry: entries[index],
               role: role,
@@ -84,11 +82,7 @@ class _TopRankRow extends StatelessWidget {
             ),
             const SizedBox(width: 8),
 
-            TopRankAvatar(
-              entry: entry,
-              role: role,
-              size: 42,
-            ),
+            TopRankAvatar(entry: entry, role: role, size: 42),
 
             const SizedBox(width: 10),
 
@@ -107,9 +101,7 @@ class _TopRankRow extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    entry.provisional
-                        ? 'تقييم مبدئي'
-                        : 'التقييم المعتمد',
+                    entry.provisional ? 'تقييم مبدئي' : 'التقييم المعتمد',
                     style: Styles.textStyle12.copyWith(
                       color: entry.provisional
                           ? AppColors.orange0
@@ -134,10 +126,7 @@ class _TopRankRow extends StatelessWidget {
                 TopRankMovement(movement: entry.movement),
               ],
             ),
-            Icon(
-              Icons.chevron_left_rounded,
-              color: AppColors.grey4,
-            ),
+            Icon(Icons.chevron_left_rounded, color: AppColors.grey4),
           ],
         ),
       ),

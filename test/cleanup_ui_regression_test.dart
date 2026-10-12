@@ -36,6 +36,7 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/screen
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_result_screen.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_address_edit_sheet.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_customer_card.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/domain/usecases/current_trip_usecase.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/receiving_proof_photo.dart';
@@ -268,14 +269,137 @@ void main() {
     },
   );
 
-  testWidgets('partial delivery result keeps item and financial presentation', (
-    tester,
-  ) async {
-    await _pump(tester, const DeliveryResultScreen(flow: _flow));
-    expect(find.text('صنف الاختبار'), findsOneWidget);
-    await _capture(tester, 'delivery-result');
-    await _unmount(tester);
-  });
+  testWidgets(
+    'payment confirmation preserves the request and retry identifier',
+    (tester) async {
+      final usecase = _ConfirmFixture();
+      final cubit = ConfirmDeliveryCubit(usecase);
+      addTearDown(cubit.close);
+      await _pump(
+        tester,
+        BlocProvider.value(
+          value: cubit,
+          child: const DeliveryPaymentScreen(flow: _flow),
+        ),
+      );
+      final strings = _strings(tester, DeliveryPaymentScreen);
+      final field = find.byType(TextField);
+      await tester.ensureVisible(field);
+      for (final invalid in ['-50', '50.001', 'abc', '49']) {
+        await tester.enterText(field, invalid);
+        await tester.pumpAndSettle();
+        expect(
+          _confirmationButton(
+            tester,
+            strings.delivery_confirm_button,
+          ).onPressed,
+          isNull,
+        );
+      }
+      await tester.enterText(field, '۵۰٫۰۰');
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      for (var attempt = 0; attempt < 2; attempt++) {
+        await tester.tap(
+          find.widgetWithText(ElevatedButton, strings.delivery_confirm_button),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(
+          find
+              .widgetWithText(ElevatedButton, strings.delivery_confirm_button)
+              .last,
+        );
+        await tester.pumpAndSettle();
+        expect(usecase.calls, attempt + 1);
+      }
+      expect(usecase.lastTripId, 12);
+      expect(usecase.lastOrderId, 34);
+      final bodies = usecase.bodies;
+      expect(bodies.last.toJson(), {
+        'client_operation_id': bodies.first.clientOperationId,
+        'items': [
+          {'line_id': 'line-1', 'item_code': 'ITEM-1', 'qty': 5},
+        ],
+        'extra_items': [],
+        'collected_amount': 50,
+        'payment_method': 'cash',
+      });
+      expect(bodies.first.clientOperationId, isNotEmpty);
+      expect(tester.widget<TextField>(field).controller?.text, '۵۰٫۰۰');
+      expect(find.text('fixture-error'), findsOneWidget);
+      await _unmount(tester);
+    },
+  );
+
+  for (final variant in ['missing', 'address', 'coordinates', 'complete']) {
+    testWidgets('customer card preserves $variant location presentation', (
+      tester,
+    ) async {
+      final hasAddress = variant == 'address' || variant == 'complete';
+      final hasCoordinates = variant == 'coordinates' || variant == 'complete';
+      await _pump(
+        tester,
+        Scaffold(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: OrderCustomerCard(
+                tripId: 12,
+                orderId: 34,
+                location: OrderCustomerLocation(
+                  name: 'متجر الاختبار',
+                  phone: '01000000000',
+                  address: hasAddress ? 'عنوان الاختبار' : '',
+                  latitude: hasCoordinates ? 30.1 : null,
+                  longitude: hasCoordinates ? 31.2 : null,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      final strings = _strings(tester, OrderCustomerCard);
+      final status = hasAddress && hasCoordinates
+          ? strings.order_address_defined
+          : hasAddress
+          ? strings.order_address_only
+          : hasCoordinates
+          ? strings.order_gps_only
+          : strings.order_address_undefined;
+      expect(find.text(status), findsOneWidget);
+      expect(find.text('متجر الاختبار'), findsOneWidget);
+      expect(
+        find.text(strings.order_set_location),
+        hasAddress && hasCoordinates ? findsNothing : findsOneWidget,
+      );
+      await _capture(tester, 'customer-$variant');
+      await _unmount(tester);
+    });
+  }
+
+  testWidgets(
+    'partial delivery result keeps quantities and financial presentation',
+    (tester) async {
+      await _pump(tester, const DeliveryResultScreen(flow: _flow));
+      final strings = _strings(tester, DeliveryResultScreen);
+      expect(find.text(strings.delivery_partial_draft), findsOneWidget);
+      expect(find.text(strings.delivery_ordered), findsOneWidget);
+      expect(find.text(strings.delivery_selected), findsOneWidget);
+      expect(find.text(strings.delivery_not_delivered), findsOneWidget);
+      expect(find.text('10'), findsOneWidget);
+      expect(find.text('5'), findsNWidgets(2));
+      expect(find.text(strings.order_details_original_total), findsOneWidget);
+      expect(find.text(strings.delivery_estimated_total), findsOneWidget);
+      expect(find.text('100 ${strings.egp_currency}'), findsOneWidget);
+      expect(find.text('50 ${strings.egp_currency}'), findsOneWidget);
+      expect(
+        find.text(strings.delivery_partial_reason_required),
+        findsOneWidget,
+      );
+      await _capture(tester, 'delivery-result');
+      await _unmount(tester);
+    },
+  );
 
   testWidgets(
     'reschedule reason and notes survive a rebuild without a request',
@@ -358,6 +482,57 @@ void main() {
       'سبب الاختبار',
     );
     expect(usecase.calls, 0);
+    await _unmount(tester);
+  });
+
+  testWidgets('confirmed cancellation preserves its reason-only request', (
+    tester,
+  ) async {
+    final usecase = _CancelFixture();
+    final cubit = CancelDeliveryCubit(usecase);
+    addTearDown(cubit.close);
+    await _pump(
+      tester,
+      BlocProvider.value(
+        value: cubit,
+        child: const Scaffold(
+          body: CancelDeliverySheet(
+            tripId: 12,
+            orderId: 34,
+            salesOrder: 'SO-0034',
+            customerName: 'متجر الاختبار',
+          ),
+        ),
+      ),
+    );
+    final strings = _strings(tester, CancelDeliverySheet);
+    final reason = find.widgetWithText(ChoiceChip, strings.cancel_reason_other);
+    await tester.ensureVisible(reason);
+    await tester.tap(reason);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byType(TextField).first);
+    await tester.enterText(find.byType(TextField).first, '  سبب الاختبار  ');
+    await tester.ensureVisible(find.byType(TextField).last);
+    await tester.enterText(find.byType(TextField).last, 'ملاحظات محلية فقط');
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byType(ElevatedButton).last);
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    expect(usecase.calls, 1);
+    expect(usecase.lastTripId, 12);
+    expect(usecase.lastOrderId, 34);
+    expect(usecase.lastBody?.toJson(), {
+      'outcome': 'CANCELLED',
+      'reason': 'سبب الاختبار',
+    });
+    expect(find.text('fixture-error'), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField).first).controller?.text,
+      '  سبب الاختبار  ',
+    );
     await _unmount(tester);
   });
 }
@@ -475,6 +650,9 @@ class _UnusedMarkRead implements MarkNotificationAsReadUsecase {
 
 class _ConfirmFixture implements ConfirmDeliveryUsecase {
   int calls = 0;
+  int? lastTripId;
+  int? lastOrderId;
+  final bodies = <ConfirmDeliveryRequestBody>[];
   @override
   Future<ApiResult<dynamic>> call({
     required int tripId,
@@ -482,6 +660,9 @@ class _ConfirmFixture implements ConfirmDeliveryUsecase {
     required ConfirmDeliveryRequestBody body,
   }) async {
     calls++;
+    lastTripId = tripId;
+    lastOrderId = orderId;
+    bodies.add(body);
     return const ApiResult.success({
       'success': false,
       'message': 'fixture-error',
@@ -507,6 +688,9 @@ class _RescheduleFixture implements RescheduleOrderUsecase {
 
 class _CancelFixture implements CancelDeliveryUsecase {
   int calls = 0;
+  int? lastTripId;
+  int? lastOrderId;
+  CancelDeliveryRequestBody? lastBody;
   @override
   Future<ApiResult<dynamic>> call({
     required int tripId,
@@ -514,6 +698,9 @@ class _CancelFixture implements CancelDeliveryUsecase {
     required CancelDeliveryRequestBody body,
   }) async {
     calls++;
+    lastTripId = tripId;
+    lastOrderId = orderId;
+    lastBody = body;
     return const ApiResult.success({
       'success': false,
       'message': 'fixture-error',

@@ -27,9 +27,7 @@ num? _number(dynamic value) {
 }
 
 Map<String, dynamic> _map(dynamic value) {
-  return value is Map
-      ? Map<String, dynamic>.from(value)
-      : <String, dynamic>{};
+  return value is Map ? Map<String, dynamic>.from(value) : <String, dynamic>{};
 }
 
 class TopRankMetric {
@@ -56,10 +54,7 @@ class TopRankMetric {
   bool get hasCalculatedPoints =>
       points != null && weight != null && weight! > 0;
 
-  factory TopRankMetric.fromJson(
-      String key,
-      Map<String, dynamic> json,
-      ) {
+  factory TopRankMetric.fromJson(String key, Map<String, dynamic> json) {
     return TopRankMetric(
       key: key,
       label: json['label']?.toString() ?? key,
@@ -75,8 +70,7 @@ class TopRankMetric {
   double get progress {
     if (!hasCalculatedPoints) return 0;
 
-    return (points!.toDouble() / weight!.toDouble())
-        .clamp(0.0, 1.0);
+    return (points!.toDouble() / weight!.toDouble()).clamp(0.0, 1.0);
   }
 }
 
@@ -93,9 +87,7 @@ class TopRankAdviceAction {
   final String? priority;
   final num? impact;
 
-  factory TopRankAdviceAction.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TopRankAdviceAction.fromJson(Map<String, dynamic> json) {
     return TopRankAdviceAction(
       message: json['message']?.toString() ?? '',
       metric: json['metric']?.toString(),
@@ -106,29 +98,21 @@ class TopRankAdviceAction {
 }
 
 class TopRankAdvice {
-  const TopRankAdvice({
-    this.actions = const [],
-    this.strengths = const [],
-  });
+  const TopRankAdvice({this.actions = const [], this.strengths = const []});
 
   final List<TopRankAdviceAction> actions;
   final List<String> strengths;
 
-  factory TopRankAdvice.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TopRankAdvice.fromJson(Map<String, dynamic> json) {
     return TopRankAdvice(
       actions: [
-        for (final item in json['actions'] is List
-            ? json['actions'] as List
-            : const [])
-          if (item is Map)
-            TopRankAdviceAction.fromJson(_map(item)),
+        for (final item
+            in json['actions'] is List ? json['actions'] as List : const [])
+          if (item is Map) TopRankAdviceAction.fromJson(_map(item)),
       ],
       strengths: [
-        for (final item in json['strengths'] is List
-            ? json['strengths'] as List
-            : const [])
+        for (final item
+            in json['strengths'] is List ? json['strengths'] as List : const [])
           if (item is String) item,
       ],
     );
@@ -177,8 +161,7 @@ class TopRankEntry {
 
   bool get hasPreviousRanking => previousRank != null;
 
-  List<TopRankMetric> get metrics =>
-      breakdown.values.toList(growable: false);
+  List<TopRankMetric> get metrics => breakdown.values.toList(growable: false);
 
   factory TopRankEntry.fromJson(Map<String, dynamic> json) {
     final rawBreakdown = _map(json['breakdown']);
@@ -198,15 +181,11 @@ class TopRankEntry {
       operations: _number(json['operations'])?.toInt(),
       breakdown: {
         for (final entry in rawBreakdown.entries)
-          entry.key: TopRankMetric.fromJson(
-            entry.key,
-            _map(entry.value),
-          ),
+          entry.key: TopRankMetric.fromJson(entry.key, _map(entry.value)),
       },
       missing: [
-        for (final value in json['missing'] is List
-            ? json['missing'] as List
-            : const [])
+        for (final value
+            in json['missing'] is List ? json['missing'] as List : const [])
           value.toString(),
       ],
       advice: TopRankAdvice.fromJson(_map(json['advice'])),

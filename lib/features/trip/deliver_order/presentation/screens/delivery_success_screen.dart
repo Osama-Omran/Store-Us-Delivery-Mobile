@@ -20,9 +20,8 @@ class DeliverySuccessScreen extends StatefulWidget {
     required this.paymentMethod,
   });
 
-  final DeliveryFlowData flow;
-  final num collectedAmount;
-  final String paymentMethod;
+  final DeliveryFlowData flow;final num? collectedAmount;
+  final String? paymentMethod;
 
   @override
   State<DeliverySuccessScreen> createState() => _DeliverySuccessScreenState();
@@ -180,16 +179,38 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
                           ? '—'
                           : formatTripAmount(context, flow.estimatedTotal!),
                     ),
+
                     _SuccessRow(
                       label: context.strings.delivery_collected_amount,
-                      value: formatTripAmount(context, widget.collectedAmount),
+                      value: widget.collectedAmount == null
+                          ? context.strings.delivery_not_collected
+                          : formatTripAmount(
+                        context,
+                        widget.collectedAmount!,
+                      ),
                     ),
                     _SuccessRow(
                       label: context.strings.delivery_payment_method,
-                      value: widget.paymentMethod == 'cash'
+                      value: widget.paymentMethod == null
+                          ? context.strings.delivery_not_applicable
+                          : widget.paymentMethod == 'cash'
                           ? context.strings.delivery_cash
-                          : widget.paymentMethod,
+                          : widget.paymentMethod!,
                     ),
+
+                    if (widget.collectedAmount == null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        context.strings.delivery_success_without_collection,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.orange0,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+
                   ],
                 ),
               ),

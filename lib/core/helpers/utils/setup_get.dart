@@ -283,22 +283,15 @@ void setupLocator() {
     () => ConfirmDeliveryCubit(getIt<ConfirmDeliveryUsecase>()),
   );
 
-
   getIt.registerLazySingleton<TopRankRepoInterface>(
-        () => ConcreteTopRankRepo(
-      getIt<TripApiService>(),
-    ),
+    () => ConcreteTopRankRepo(getIt<TripApiService>()),
   );
 
   getIt.registerLazySingleton<GetTopRankUsecase>(
-        () => GetTopRankUsecase(
-      getIt<TopRankRepoInterface>(),
-    ),
+    () => GetTopRankUsecase(getIt<TopRankRepoInterface>()),
   );
 
   getIt.registerFactory<TopRankCubit>(
-        () => TopRankCubit(
-      getIt<GetTopRankUsecase>(),
-    ),
+    () => TopRankCubit(getIt<GetTopRankUsecase>()),
   );
 }

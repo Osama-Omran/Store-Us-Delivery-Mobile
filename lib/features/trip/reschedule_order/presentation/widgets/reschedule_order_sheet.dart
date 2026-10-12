@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cubit/reschedule_order_cubit.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cubit/reschedule_order_state.dart';
+
+import 'reschedule_date_time_fields.dart';
+import 'reschedule_order_form.dart';
 
 class RescheduleOrderSheet extends StatefulWidget {
   const RescheduleOrderSheet({
@@ -208,276 +209,38 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
 
                   // ======= Scrollable Form ======= //
                   Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      children: [
-                        // ======= Customer Summary ======= //
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey5,
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          child: Column(
-                            spacing: 10,
-                            children: [
-                              _RescheduleInfoRow(
-                                label: context.strings.order_customer_data,
-                                value: widget.customerName,
-                              ),
-                              _RescheduleInfoRow(
-                                label: context.strings.order,
-                                value: widget.salesOrder,
-                              ),
-                              _RescheduleInfoRow(
-                                label: context.strings.order_correct_address,
-                                value: widget.address.isNotEmpty
-                                    ? widget.address
-                                    : '—',
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 22),
-
-                        // ======= Date & Time ======= //
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 8,
-                                children: [
-                                  Text(
-                                    context.strings.reschedule_new_date,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.black1,
-                                    ),
-                                  ),
-
-                                  OutlinedButton(
-                                    onPressed: isLoading ? null : _selectDate,
-                                    style: OutlinedButton.styleFrom(
-                                      minimumSize: const Size.fromHeight(58),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      side: BorderSide(color: AppColors.grey3),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            _selectedDate == null
-                                                ? 'dd/mm/yyyy'
-                                                : _formatDate(_selectedDate!),
-                                            textDirection: TextDirection.ltr,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: AppColors.black1,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          size: 19,
-                                          color: AppColors.black1,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(width: 10),
-
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 8,
-                                children: [
-                                  Text(
-                                    context.strings.reschedule_new_time,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.black1,
-                                    ),
-                                  ),
-
-                                  OutlinedButton(
-                                    onPressed: isLoading ? null : _selectTime,
-                                    style: OutlinedButton.styleFrom(
-                                      minimumSize: const Size.fromHeight(58),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      side: BorderSide(color: AppColors.grey3),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            _selectedTime == null
-                                                ? '--:--'
-                                                : MaterialLocalizations.of(
-                                                    context,
-                                                  ).formatTimeOfDay(
-                                                    _selectedTime!,
-                                                  ),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: AppColors.black1,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.access_time_outlined,
-                                          size: 19,
-                                          color: AppColors.black1,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        if (_selectedDateTime != null &&
-                            !_selectedDateTime!.isAfter(DateTime.now()))
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              context.strings.reschedule_date_must_be_future,
-                              style: TextStyle(
-                                color: AppColors.red1,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-
-                        const SizedBox(height: 16),
-
-                        // ======= Reason ======= //
-                        Text(
-                          context.strings.reschedule_reason,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.black1,
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        Wrap(
-                          spacing: 9,
-                          runSpacing: 10,
-                          children: [
-                            for (final reason in _reasons)
-                              ChoiceChip(
-                                label: Text(reason),
-                                selected: _selectedReason == reason,
-                                onSelected: isLoading
-                                    ? null
-                                    : (_) {
-                                        setState(() {
-                                          _selectedReason = reason;
-                                        });
-                                      },
-                                selectedColor: AppColors.blue4,
-                                backgroundColor: AppColors.white0,
-                                side: BorderSide(
-                                  color: _selectedReason == reason
-                                      ? AppColors.primary
-                                      : AppColors.grey3,
-                                ),
-                                showCheckmark: false,
-                                labelStyle: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: _selectedReason == reason
-                                      ? AppColors.primary
-                                      : AppColors.black1,
-                                ),
-                              ),
-                          ],
-                        ),
-
-                        if (_selectedReason == 'سبب آخر') ...[
-                          const SizedBox(height: 12),
-
-                          TextField(
-                            controller: _otherReasonController,
-                            enabled: !isLoading,
-                            onChanged: (_) => setState(() {}),
-                            decoration: InputDecoration(
-                              hintText:
-                                  context.strings.reschedule_other_reason_hint,
-                              filled: true,
-                              fillColor: AppColors.grey0,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                            ),
-                          ),
-                        ],
-
-                        const SizedBox(height: 22),
-
-                        // ======= Optional Notes ======= //
-                        Text(
-                          context.strings.order_optional_notes,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.black1,
-                          ),
-                        ),
-
-                        const SizedBox(height: 9),
-
-                        TextField(
-                          controller: _notesController,
-                          enabled: !isLoading,
-                          minLines: 2,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: context.strings.reschedule_notes_hint,
-                            filled: true,
-                            fillColor: AppColors.grey0,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: AppColors.grey3),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 6),
-
-                        Text(
-                          context.strings.reschedule_notes_not_sent,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.grey4,
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-                      ],
+                    child: RescheduleOrderForm(
+                      customerName: widget.customerName,
+                      salesOrder: widget.salesOrder,
+                      address: widget.address,
+                      dateTimeFields: RescheduleDateTimeFields(
+                        dateLabel: _selectedDate == null
+                            ? 'dd/mm/yyyy'
+                            : _formatDate(_selectedDate!),
+                        timeLabel: _selectedTime == null
+                            ? '--:--'
+                            : MaterialLocalizations.of(context)
+                                  .formatTimeOfDay(_selectedTime!),
+                        isLoading: isLoading,
+                        onSelectDate: _selectDate,
+                        onSelectTime: _selectTime,
+                      ),
+                      dateIsPast:
+                          _selectedDateTime != null &&
+                          !_selectedDateTime!.isAfter(DateTime.now()),
+                      reasons: _reasons,
+                      selectedReason: _selectedReason,
+                      otherReasonController: _otherReasonController,
+                      notesController: _notesController,
+                      isLoading: isLoading,
+                      onReasonSelected: (reason) {
+                        setState(() {
+                          _selectedReason = reason;
+                        });
+                      },
+                      onOtherReasonChanged: () {
+                        setState(() {});
+                      },
                     ),
                   ),
 
@@ -519,46 +282,6 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
           ),
         );
       },
-    );
-  }
-}
-
-// =====================================================
-// Customer Information Row
-// =====================================================
-
-class _RescheduleInfoRow extends StatelessWidget {
-  const _RescheduleInfoRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 82,
-          child: Text(
-            label,
-            style: TextStyle(fontSize: 13, color: AppColors.grey4),
-          ),
-        ),
-
-        const SizedBox(width: 8),
-
-        Expanded(
-          child: Text(
-            value.isNotEmpty ? value : '—',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-              color: AppColors.black1,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

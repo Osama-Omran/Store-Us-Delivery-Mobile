@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -43,12 +42,7 @@ class TopRankWinnerCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              TopRankAvatar(
-                entry: entry,
-                role: role,
-                size: 72,
-                isWinner: true,
-              ),
+              TopRankAvatar(entry: entry, role: role, size: 72, isWinner: true),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

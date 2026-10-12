@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -34,11 +33,7 @@ String formatRankMetric(TopRankMetric metric) {
 }
 
 class TopRankMetrics extends StatelessWidget {
-  const TopRankMetrics({
-    super.key,
-    required this.entry,
-    this.maxRows = 3,
-  });
+  const TopRankMetrics({super.key, required this.entry, this.maxRows = 3});
 
   final TopRankEntry entry;
   final int maxRows;
@@ -50,9 +45,7 @@ class TopRankMetrics extends StatelessWidget {
     if (metrics.isEmpty) {
       return Text(
         'لا توجد مؤشرات أداء متاحة',
-        style: Styles.textStyle14.copyWith(
-          color: AppColors.grey4,
-        ),
+        style: Styles.textStyle14.copyWith(color: AppColors.grey4),
       );
     }
 
@@ -67,9 +60,7 @@ class TopRankMetrics extends StatelessWidget {
                   metric.label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Styles.textStyle12.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
               ),
               const SizedBox(width: 10),
@@ -89,10 +80,7 @@ class TopRankMetrics extends StatelessWidget {
 }
 
 class TopRankMovement extends StatelessWidget {
-  const TopRankMovement({
-    super.key,
-    required this.movement,
-  });
+  const TopRankMovement({super.key, required this.movement});
 
   final int? movement;
 
@@ -101,18 +89,14 @@ class TopRankMovement extends StatelessWidget {
     if (movement == null) {
       return Text(
         'غير متاح',
-        style: Styles.textStyle12.copyWith(
-          color: AppColors.grey4,
-        ),
+        style: Styles.textStyle12.copyWith(color: AppColors.grey4),
       );
     }
 
     if (movement == 0) {
       return Text(
         'بدون تغيير',
-        style: Styles.textStyle12.copyWith(
-          color: AppColors.grey4,
-        ),
+        style: Styles.textStyle12.copyWith(color: AppColors.grey4),
       );
     }
 
@@ -122,9 +106,7 @@ class TopRankMovement extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
-          improved
-              ? Icons.arrow_upward_rounded
-              : Icons.arrow_downward_rounded,
+          improved ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
           color: improved ? AppColors.green0 : AppColors.red1,
           size: 16,
         ),

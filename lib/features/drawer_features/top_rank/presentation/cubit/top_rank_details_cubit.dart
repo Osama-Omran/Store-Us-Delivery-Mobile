@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -21,7 +20,7 @@ class TopRankDetailsState {
 
 class TopRankDetailsCubit extends Cubit<TopRankDetailsState> {
   TopRankDetailsCubit(this._usecase, TopRankEntry entry)
-      : super(TopRankDetailsState(entry: entry));
+    : super(TopRankDetailsState(entry: entry));
 
   final GetTopRankUsecase _usecase;
 
@@ -32,12 +31,7 @@ class TopRankDetailsCubit extends Cubit<TopRankDetailsState> {
   }) async {
     final fallback = state.entry;
 
-    emit(
-      TopRankDetailsState(
-        entry: fallback,
-        loading: true,
-      ),
-    );
+    emit(TopRankDetailsState(entry: fallback, loading: true));
 
     try {
       final result = await _usecase.call(
@@ -55,11 +49,8 @@ class TopRankDetailsCubit extends Cubit<TopRankDetailsState> {
 
           emit(
             TopRankDetailsState(
-              entry: detail != null && detail.id == entity
-                  ? detail
-                  : fallback,
-              loadedFromDetail:
-              detail != null && detail.id == entity,
+              entry: detail != null && detail.id == entity ? detail : fallback,
+              loadedFromDetail: detail != null && detail.id == entity,
             ),
           );
         },
@@ -75,12 +66,7 @@ class TopRankDetailsCubit extends Cubit<TopRankDetailsState> {
     } catch (_) {
       if (isClosed) return;
 
-      emit(
-        TopRankDetailsState(
-          entry: fallback,
-          error: 'تعذر تحديث التفاصيل',
-        ),
-      );
+      emit(TopRankDetailsState(entry: fallback, error: 'تعذر تحديث التفاصيل'));
     }
   }
 }

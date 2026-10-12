@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
-import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
+import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
+
+import 'order_address_fields.dart';
+import 'order_address_location_section.dart';
+import 'order_address_review.dart';
 
 class OrderAddressEditSheet extends StatefulWidget {
   const OrderAddressEditSheet({
@@ -330,7 +331,48 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _review ? _buildReview() : _buildEditor(),
+                  child: _review
+                      ? OrderAddressReview(
+                          address: _addressController.text.trim(),
+                          phone: _phoneController.text.trim(),
+                          city: _cityController.text.trim(),
+                          country: _countryController.text.trim(),
+                          notes: _notesController.text.trim(),
+                          latitudeText: _formatCoordinate(_latitude),
+                          longitudeText: _formatCoordinate(_longitude),
+                          accuracy: _accuracy,
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            OrderAddressLocationSection(
+                              location: widget.location,
+                              position: _hasPosition
+                                  ? LatLng(_latitude!, _longitude!)
+                                  : null,
+                              latitudeText: _formatCoordinate(_latitude),
+                              longitudeText: _formatCoordinate(_longitude),
+                              accuracy: _accuracy,
+                              locating: _locating,
+                              onUseCurrentLocation: _useCurrentLocation,
+                              onMapTap: (coordinate) {
+                                setState(() {
+                                  _latitude = coordinate.latitude;
+                                  _longitude = coordinate.longitude;
+                                  // Manual selection has no GPS accuracy value.
+                                  _accuracy = null;
+                                });
+                              },
+                            ),
+                            OrderAddressFields(
+                              addressController: _addressController,
+                              phoneController: _phoneController,
+                              cityController: _cityController,
+                              countryController: _countryController,
+                              notesController: _notesController,
+                            ),
+                          ],
+                        ),
                 ),
               ),
 
@@ -401,408 +443,6 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildEditor() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // ======= Existing Data ======= //
-        _panel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.strings.order_current_saved_data,
-                style: Styles.textStyle14.copyWith(color: AppColors.grey4),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                widget.location.hasAddress
-                    ? widget.location.address
-                    : context.strings.order_no_address,
-                style: Styles.textStyle16.copyWith(
-                  color: AppColors.black1,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                widget.location.hasCoordinates
-                    ? '${widget.location.latitude}, '
-                          '${widget.location.longitude}'
-                    : context.strings.order_customer_gps_missing,
-                style: Styles.textStyle12.copyWith(color: AppColors.grey4),
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 18),
-
-        SizedBox(
-          height: 62,
-          child: ElevatedButton.icon(
-            onPressed: _locating ? null : _useCurrentLocation,
-            icon: _locating
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.my_location_rounded),
-            label: Text(
-              _hasPosition
-                  ? context.strings.order_reselect_location
-                  : context.strings.order_use_current_location,
-            ),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              foregroundColor: AppColors.primary,
-              backgroundColor: AppColors.blue4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(22),
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // ======= Real Map Preview ======= //
-        if (_hasPosition) ...[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-            child: SizedBox(
-              height: 180,
-              child: GoogleMap(
-                key: ValueKey('${_latitude}_$_longitude'),
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(_latitude!, _longitude!),
-                  zoom: 16,
-                ),
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('customer_location'),
-                    position: LatLng(_latitude!, _longitude!),
-                  ),
-                },
-                zoomControlsEnabled: false,
-                myLocationButtonEnabled: false,
-                mapToolbarEnabled: false,
-                onTap: (coordinate) {
-                  setState(() {
-                    _latitude = coordinate.latitude;
-                    _longitude = coordinate.longitude;
-
-                    // Manual selection has no GPS accuracy value.
-                    _accuracy = null;
-                  });
-                },
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            children: [
-              Expanded(
-                child: _CoordinateValue(
-                  label: context.strings.order_latitude,
-                  value: _formatCoordinate(_latitude),
-                ),
-              ),
-              Expanded(
-                child: _CoordinateValue(
-                  label: context.strings.order_longitude,
-                  value: _formatCoordinate(_longitude),
-                ),
-              ),
-            ],
-          ),
-
-          if (_accuracy != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                '${context.strings.order_location_accuracy} '
-                '±${_accuracy!.toStringAsFixed(0)} '
-                '${context.strings.order_meters}',
-                style: Styles.textStyle12.copyWith(color: AppColors.orange0),
-              ),
-            ),
-
-          const SizedBox(height: 10),
-        ],
-
-        // ======= Address Field ======= //
-        Text(
-          context.strings.order_correct_address,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _addressController,
-          textDirection: TextDirection.rtl,
-          maxLines: 3,
-          minLines: 2,
-          decoration: _inputDecoration(),
-        ),
-
-        const SizedBox(height: 18),
-
-        // ======= Shop Phone ======= //
-        Text(
-          context.strings.order_delivery_phone,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _phoneController,
-          keyboardType: TextInputType.phone,
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.right,
-          decoration: _inputDecoration().copyWith(hintText: '01XXXXXXXXX'),
-        ),
-
-        const SizedBox(height: 18),
-
-        // ======= City ======= //
-        Text(
-          context.strings.order_delivery_city,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _cityController,
-          textDirection: TextDirection.rtl,
-          decoration: _inputDecoration().copyWith(
-            hintText: context.strings.order_delivery_city_hint,
-          ),
-        ),
-
-        const SizedBox(height: 18),
-
-        // ======= Country ======= //
-        Text(
-          context.strings.order_delivery_country,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _countryController,
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.right,
-          decoration: _inputDecoration().copyWith(hintText: 'Egypt'),
-        ),
-
-        const SizedBox(height: 18),
-
-        Text(
-          context.strings.order_optional_notes,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          controller: _notesController,
-          textDirection: TextDirection.rtl,
-          minLines: 2,
-          maxLines: 3,
-          decoration: _inputDecoration(),
-        ),
-
-        const SizedBox(height: 14),
-      ],
-    );
-  }
-
-  Widget _buildReview() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _panel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.strings.order_confirm_data_before_save,
-                style: Styles.textStyle14.copyWith(
-                  color: AppColors.grey4,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 14),
-              _ReviewRow(
-                title: context.strings.order_correct_address,
-                value: _addressController.text.trim(),
-              ),
-              _ReviewRow(
-                title: 'Latitude',
-                value: _formatCoordinate(_latitude),
-              ),
-              _ReviewRow(
-                title: 'Longitude',
-                value: _formatCoordinate(_longitude),
-              ),
-              if (_accuracy != null)
-                _ReviewRow(
-                  title: context.strings.order_location_accuracy,
-                  value:
-                      '±${_accuracy!.toStringAsFixed(0)} '
-                      '${context.strings.order_meters}',
-                ),
-
-              _ReviewRow(
-                title: context.strings.order_delivery_phone,
-                value: _phoneController.text.trim().isEmpty
-                    ? '—'
-                    : _phoneController.text.trim(),
-              ),
-
-              _ReviewRow(
-                title: context.strings.order_delivery_city,
-                value: _cityController.text.trim().isEmpty
-                    ? '—'
-                    : _cityController.text.trim(),
-              ),
-
-              _ReviewRow(
-                title: context.strings.order_delivery_country,
-                value: _countryController.text.trim().isEmpty
-                    ? '—'
-                    : _countryController.text.trim(),
-              ),
-
-              if (_notesController.text.trim().isNotEmpty)
-                _ReviewRow(
-                  title: context.strings.order_optional_notes,
-                  value: _notesController.text.trim(),
-                ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 18),
-
-        Text(
-          context.strings.order_confirm_location_warning,
-          textAlign: TextAlign.center,
-          style: Styles.textStyle14.copyWith(color: AppColors.grey4),
-        ),
-      ],
-    );
-  }
-
-  Widget _panel({required Widget child}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.grey5,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: child,
-    );
-  }
-
-  InputDecoration _inputDecoration() {
-    return InputDecoration(
-      filled: true,
-      fillColor: AppColors.grey0,
-      contentPadding: const EdgeInsets.all(16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(22),
-        borderSide: BorderSide(color: AppColors.grey3),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(22),
-        borderSide: BorderSide(color: AppColors.grey3),
-      ),
-    );
-  }
-}
-
-class _CoordinateValue extends StatelessWidget {
-  const _CoordinateValue({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(label, style: Styles.textStyle12),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          textDirection: TextDirection.ltr,
-          style: Styles.textStyle14.copyWith(fontWeight: FontWeight.w700),
-        ),
-      ],
-    );
-  }
-}
-
-class _ReviewRow extends StatelessWidget {
-  const _ReviewRow({required this.title, required this.value});
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: Styles.textStyle14.copyWith(color: AppColors.grey4),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: Styles.textStyle14.copyWith(
-                color: AppColors.black1,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

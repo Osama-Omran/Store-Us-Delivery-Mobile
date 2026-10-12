@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,12 +12,12 @@ import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/widgets/top_rank_metrics.dart';
 
 Future<void> showTopRankDetails(
-    BuildContext context,
-    TopRankEntry entry, {
-      required TopRankRole role,
-      required TopRankPeriod period,
-      TopRankEntry? leader,
-    }) {
+  BuildContext context,
+  TopRankEntry entry, {
+  required TopRankRole role,
+  required TopRankPeriod period,
+  TopRankEntry? leader,
+}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -28,32 +27,22 @@ Future<void> showTopRankDetails(
       maxHeight: MediaQuery.sizeOf(context).height * .9,
     ),
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(30),
-      ),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
     ),
     builder: (_) => BlocProvider(
-      create: (_) => TopRankDetailsCubit(
-        getIt<GetTopRankUsecase>(),
-        entry,
-      )..load(
-        range: period.apiValue,
-        category: role.apiValue,
-        entity: entry.id,
-      ),
-      child: _TopRankDetailsContent(
-        role: role,
-        leader: leader,
-      ),
+      create: (_) => TopRankDetailsCubit(getIt<GetTopRankUsecase>(), entry)
+        ..load(
+          range: period.apiValue,
+          category: role.apiValue,
+          entity: entry.id,
+        ),
+      child: _TopRankDetailsContent(role: role, leader: leader),
     ),
   );
 }
 
 class _TopRankDetailsContent extends StatelessWidget {
-  const _TopRankDetailsContent({
-    required this.role,
-    required this.leader,
-  });
+  const _TopRankDetailsContent({required this.role, required this.leader});
 
   final TopRankRole role;
   final TopRankEntry? leader;
@@ -77,11 +66,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                   // ======= Header ======= //
                   Row(
                     children: [
-                      TopRankAvatar(
-                        entry: entry,
-                        role: role,
-                        size: 68,
-                      ),
+                      TopRankAvatar(entry: entry, role: role, size: 68),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -93,8 +78,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(),
+                        onPressed: () => Navigator.of(context).pop(),
                         icon: const Icon(Icons.close_rounded),
                       ),
                     ],
@@ -105,17 +89,14 @@ class _TopRankDetailsContent extends StatelessWidget {
                       Expanded(
                         child: _SummaryTile(
                           label: 'الترتيب الحالي',
-                          value: entry.rank == null
-                              ? '—'
-                              : '#${entry.rank}',
+                          value: entry.rank == null ? '—' : '#${entry.rank}',
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _SummaryTile(
                           label: 'التقييم',
-                          value:
-                          '${formatRankNumber(entry.score)} / 100',
+                          value: '${formatRankNumber(entry.score)} / 100',
                         ),
                       ),
                     ],
@@ -123,27 +104,21 @@ class _TopRankDetailsContent extends StatelessWidget {
 
                   if (entry.provisional)
                     _InfoBanner(
-                      text:
-                      'هذا تقييم مبدئي بسبب نقص بعض بيانات الأداء.',
+                      text: 'هذا تقييم مبدئي بسبب نقص بعض بيانات الأداء.',
                     ),
 
                   if (state.loading)
-                    LinearProgressIndicator(
-                      color: AppColors.primary,
-                    ),
+                    LinearProgressIndicator(color: AppColors.primary),
 
                   if (state.error != null)
                     _InfoBanner(
-                      text:
-                      'تعذر تحديث التفاصيل. يتم عرض بيانات الترتيب المحمّلة.',
+                      text: 'تعذر تحديث التفاصيل. يتم عرض بيانات الترتيب المحمّلة.',
                     ),
 
                   // ======= Breakdown ======= //
                   Text(
                     'تفصيل النقاط',
-                    style: Styles.textStyle20.copyWith(
-                      color: AppColors.black1,
-                    ),
+                    style: Styles.textStyle20.copyWith(color: AppColors.black1),
                   ),
 
                   for (final metric in entry.metrics)
@@ -226,8 +201,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         spacing: 10,
                         children: [
                           Text(
@@ -242,8 +216,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                           ),
                           _CompareRow(
                             label: 'درجة الأول',
-                            value:
-                            formatRankNumber(leader!.score),
+                            value: formatRankNumber(leader!.score),
                           ),
                           _CompareRow(
                             label: 'الفرق',
@@ -263,10 +236,7 @@ class _TopRankDetailsContent extends StatelessWidget {
 }
 
 class _SummaryTile extends StatelessWidget {
-  const _SummaryTile({
-    required this.label,
-    required this.value,
-  });
+  const _SummaryTile({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -284,16 +254,12 @@ class _SummaryTile extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Styles.textStyle12.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle12.copyWith(color: AppColors.grey4),
           ),
           Text(
             value,
             textDirection: TextDirection.ltr,
-            style: Styles.textStyle20.copyWith(
-              color: AppColors.black1,
-            ),
+            style: Styles.textStyle20.copyWith(color: AppColors.black1),
           ),
         ],
       ),
@@ -331,9 +297,7 @@ class _MetricProgress extends StatelessWidget {
                   : 'غير متاح',
               textDirection: TextDirection.ltr,
               style: Styles.textStyle14.copyWith(
-                color: available
-                    ? AppColors.black1
-                    : AppColors.grey4,
+                color: available ? AppColors.black1 : AppColors.grey4,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -347,9 +311,7 @@ class _MetricProgress extends StatelessWidget {
             minHeight: 10,
             backgroundColor: AppColors.grey5,
             valueColor: AlwaysStoppedAnimation(
-              available
-                  ? AppColors.primary
-                  : AppColors.grey3,
+              available ? AppColors.primary : AppColors.grey3,
             ),
           ),
         ),
@@ -357,11 +319,9 @@ class _MetricProgress extends StatelessWidget {
         if (metric.value != null || metric.target != null)
           Text(
             'الحالي: ${formatRankMetric(metric)}'
-                '   |   الهدف: '
-                '${metric.target == null ? 'غير متاح' : formatRankNumber(metric.target)}',
-            style: Styles.textStyle12.copyWith(
-              color: AppColors.grey4,
-            ),
+            '   |   الهدف: '
+            '${metric.target == null ? 'غير متاح' : formatRankNumber(metric.target)}',
+            style: Styles.textStyle12.copyWith(color: AppColors.grey4),
           ),
       ],
     );
@@ -394,17 +354,13 @@ class _AdviceCard extends StatelessWidget {
                 isDataIssue
                     ? Icons.info_outline_rounded
                     : Icons.trending_up_rounded,
-                color: isDataIssue
-                    ? AppColors.orange0
-                    : AppColors.green0,
+                color: isDataIssue ? AppColors.orange0 : AppColors.green0,
                 size: 19,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  isDataIssue
-                      ? 'بيانات غير كافية'
-                      : 'فرصة للتحسين',
+                  isDataIssue ? 'بيانات غير كافية' : 'فرصة للتحسين',
                   style: Styles.textStyle14.copyWith(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w800,
@@ -423,9 +379,7 @@ class _AdviceCard extends StatelessWidget {
           ),
           Text(
             action.message,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.black1,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.black1),
           ),
         ],
       ),
@@ -448,19 +402,14 @@ class _InfoBanner extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: Styles.textStyle12.copyWith(
-          color: AppColors.orange0,
-        ),
+        style: Styles.textStyle12.copyWith(color: AppColors.orange0),
       ),
     );
   }
 }
 
 class _CompareRow extends StatelessWidget {
-  const _CompareRow({
-    required this.label,
-    required this.value,
-  });
+  const _CompareRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -472,9 +421,7 @@ class _CompareRow extends StatelessWidget {
         Expanded(child: Text(label)),
         Text(
           value,
-          style: Styles.textStyle16.copyWith(
-            color: AppColors.primary,
-          ),
+          style: Styles.textStyle16.copyWith(color: AppColors.primary),
         ),
       ],
     );

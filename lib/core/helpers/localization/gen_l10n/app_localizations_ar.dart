@@ -97,10 +97,6 @@ class AppLocalizationsAr extends AppLocalizations {
       'أؤكد أنني راجعت الشاحنة والبضاعة الموضحة أعلاه واستلمتها.';
 
   @override
-  String get confirm_receiving_warning =>
-      'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد';
-
-  @override
   String get loaded_quantity => 'الكمية المحملة';
 
   @override
@@ -209,51 +205,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get no_notifications => 'لا توجد إشعارات حالياً';
 
   @override
-  String get notification_new_trip_title => 'تم إسناد رحلة جديدة إليك';
-
-  @override
-  String get notification_new_trip_description =>
-      'رحلة 12 — TRIP-0025 طلب من مخزن 6 أكتوبر';
-
-  @override
-  String get notification_route_updated_title => 'تم تعديل ترتيب الرحلة';
-
-  @override
-  String get notification_route_updated_description =>
-      'تم تقديم محطة سوبر ماركت النور قبل ماركت الأمل';
-
-  @override
-  String get notification_order_updated_title => 'تم تحديث الطلب SO-00254';
-
-  @override
-  String get notification_order_updated_description =>
-      'تم تعديل كمية كوكاكولا 330 مل إلى 10 علب';
-
-  @override
-  String get notification_payment_received_title =>
-      'تم استلام المبلغ بواسطة المخزن';
-
-  @override
-  String get notification_payment_received_description =>
-      'تم تسوية رحلة TRIP-0024 — 6,200 ج.م';
-
-  @override
-  String get notification_trip_completed_title => 'تم إنهاء الرحلة';
-
-  @override
-  String get notification_trip_completed_description =>
-      'رحلة TRIP-0024 اكتملت بنجاح';
-
-  @override
-  String get two_hours_ago => 'منذ ساعتين';
-
-  @override
-  String get one_hour_ago => 'منذ ساعة';
-
-  @override
-  String get forty_five_minutes_ago => 'منذ 45 دقيقة';
-
-  @override
   String get yesterday => 'أمس';
 
   @override
@@ -339,6 +290,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get selfie_check_failed_error =>
       'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.';
+
+  @override
+  String get confirm_receiving_warning =>
+      'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد';
 
   @override
   String get face_not_detected =>
@@ -496,39 +451,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get please_enter_a_valid_email => 'من فضلك أدخل بريد إلكتروني صحيح';
 
   @override
-  String get trip_history_title => 'سجل الرحلات السابقة';
-
-  @override
-  String get trip_history_completed => 'مكتملة';
-
-  @override
-  String get trip_history_cancelled => 'ملغاة';
-
-  @override
-  String get trip_history_date => 'تاريخ الرحلة';
-
-  @override
-  String get trip_history_orders_total => 'إجمالي الطلبات';
-
-  @override
-  String get trip_history_acceptance => 'حالة الاستلام';
-
-  @override
-  String get trip_history_acceptance_pending => 'في انتظار الاستلام';
-
-  @override
-  String get trip_history_completed_at => 'وقت اكتمال الرحلة';
-
-  @override
-  String get trip_history_not_available => 'غير متاح';
-
-  @override
-  String get trip_history_retry => 'إعادة المحاولة';
-
-  @override
-  String get trip_history_empty => 'لا توجد رحلات سابقة';
-
-  @override
   String get trip_status => 'حالة الرحلة';
 
   @override
@@ -682,16 +604,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trip_tab_accepted => 'تم استلام الرحلة';
 
   @override
-  String get trip_tab_orders_not_loaded =>
-      'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.';
-
-  @override
   String get trip_progress_unavailable =>
       'بيانات إنجاز الطلبات غير متاحة حالياً';
 
   @override
   String get trip_map_wait_orders =>
       'خريطة الرحلة ستتاح بعد تحميل مواقع الطلبات.';
+
+  @override
+  String get trip_tab_orders_not_loaded =>
+      'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.';
 
   @override
   String get trip_orders_load_failed =>
@@ -990,36 +912,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get top_rank_dispatchers => 'الـ Dispatchers';
 
   @override
-  String get top_rank_best_representatives => 'أفضل المندوبين';
-
-  @override
-  String get top_rank_best_drivers => 'أفضل السائقين';
-
-  @override
-  String get top_rank_best_dispatchers => 'أفضل الـ Dispatchers';
-
-  @override
-  String get top_rank_best_representative => 'أفضل مندوب';
-
-  @override
-  String get top_rank_best_driver => 'أفضل سائق';
-
-  @override
-  String get top_rank_best_dispatcher => 'أفضل Dispatcher';
-
-  @override
-  String get top_rank_winner => 'الفائز';
-
-  @override
-  String get top_rank_delivery => 'التسليم';
-
-  @override
-  String get top_rank_collection => 'التحصيل';
-
-  @override
-  String get top_rank_extra_sales => 'Extra Sales';
-
-  @override
   String get top_rank_view_details => 'عرض التفاصيل';
 
   @override
@@ -1027,28 +919,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get top_rank_empty => 'لا توجد نتائج لهذه الفلاتر حالياً';
-
-  @override
-  String get top_rank_score => 'النتيجة';
-
-  @override
-  String get top_rank_position => 'الترتيب';
-
-  @override
-  String get top_rank_movement => 'تغير الترتيب';
-
-  @override
-  String get top_rank_unchanged => 'بدون تغيير';
-
-  @override
-  String top_rank_moved_up(int count) {
-    return 'صعد $count مركز';
-  }
-
-  @override
-  String top_rank_moved_down(int count) {
-    return 'تراجع $count مركز';
-  }
 
   @override
   String get delivery_order_title => 'تسليم الطلب';
@@ -1651,40 +1521,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get top_rank_data_notes => 'ملاحظات عن دقة البيانات';
 
   @override
-  String get top_rank_current_rank => 'الترتيب الحالي';
-
-  @override
-  String get top_rank_score_label => 'التقييم';
-
-  @override
-  String get top_rank_breakdown_title => 'تفصيل النقاط';
-
-  @override
-  String get top_rank_total_score => 'الإجمالي';
-
-  @override
-  String get top_rank_strengths_title => 'عمل إيه علشان وصل كده؟';
-
-  @override
-  String get top_rank_improvement_title => 'إعمل إيه علشان تحسن ترتيبك؟';
-
-  @override
-  String get top_rank_compare_leader => 'المقارنة مع الأول';
-
-  @override
-  String get top_rank_your_score => 'درجتك';
-
-  @override
-  String get top_rank_leader_score => 'درجة الأول';
-
-  @override
-  String get top_rank_gap => 'الفرق';
-
-  @override
   String get top_rank_unavailable => 'غير متاح';
-
-  @override
-  String get top_rank_unchanged_label => 'بدون تغيير';
 
   @override
   String get top_rank_approved_score => 'التقييم المعتمد';
@@ -1702,4 +1539,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get top_rank_improvement_opportunity => 'فرصة للتحسين';
+
+  @override
+  String get delivery_collection_question => 'هل ستقوم بتحصيل المبلغ الآن؟';
+
+  @override
+  String get delivery_with_collection => 'تسليم مع تحصيل';
+
+  @override
+  String get delivery_with_collection_hint =>
+      'تسليم المنتجات وتحصيل المبلغ من العميل';
+
+  @override
+  String get delivery_without_collection => 'تسليم بدون تحصيل';
+
+  @override
+  String get delivery_without_collection_hint =>
+      'تسليم المنتجات دون استلام أي مبلغ الآن';
+
+  @override
+  String get delivery_no_collection_notice =>
+      'سيتم تأكيد تسليم المنتجات دون تسجيل أي مبلغ محصل. التحصيل المالي يظل غير مكتمل لحين تسجيل الدفع لاحقًا.';
+
+  @override
+  String get delivery_collection_status => 'حالة التحصيل';
+
+  @override
+  String get delivery_not_collected => 'لم يتم التحصيل';
+
+  @override
+  String get delivery_not_applicable => 'لا ينطبق';
+
+  @override
+  String get delivery_confirm_without_collection => 'تأكيد التسليم بدون تحصيل';
+
+  @override
+  String get delivery_no_collection_warning =>
+      'تنبيه: سيتم تسجيل التسليم فقط، ولن يتم تسجيل تحصيل أي مبلغ.';
+
+  @override
+  String get delivery_success_without_collection =>
+      'تم تسجيل تسليم المنتجات بنجاح دون تحصيل أموال من العميل.';
+
+  @override
+  String get delivery_continue_finalization => 'متابعة — إتمام التسليم';
+
+  @override
+  String get delivery_finalize_title => 'تأكيد التسليم';
 }

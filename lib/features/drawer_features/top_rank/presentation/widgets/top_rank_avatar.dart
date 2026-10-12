@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -36,33 +35,29 @@ class TopRankAvatar extends StatelessWidget {
       width: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isWinner
-            ? AppColors.blue4
-            : AppColors.grey5,
+        color: isWinner ? AppColors.blue4 : AppColors.grey5,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isWinner
-              ? AppColors.primary
-              : AppColors.grey3,
+          color: isWinner ? AppColors.primary : AppColors.grey3,
           width: isWinner ? 2 : 1,
         ),
       ),
       child: isVehicle || isWarehouse
           ? Icon(
-        isVehicle
-            ? Icons.directions_car_outlined
-            : Icons.warehouse_outlined,
-        size: size * .44,
-        color: AppColors.primary,
-      )
+              isVehicle
+                  ? Icons.directions_car_outlined
+                  : Icons.warehouse_outlined,
+              size: size * .44,
+              color: AppColors.primary,
+            )
           : Text(
-        initials.isEmpty ? '?' : initials,
-        style: TextStyle(
-          color: AppColors.primary,
-          fontSize: size * .27,
-          fontWeight: FontWeight.w800,
-        ),
-      ),
+              initials.isEmpty ? '?' : initials,
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: size * .27,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
     );
   }
 }

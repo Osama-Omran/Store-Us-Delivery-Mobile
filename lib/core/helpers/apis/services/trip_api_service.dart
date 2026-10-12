@@ -97,12 +97,11 @@ abstract class TripApiService {
     @Body() ConfirmDeliveryRequestBody body,
   );
 
-
   @GET(ApiConstants.topRank)
   Future<dynamic> getTopRank(
-      @Header('Authorization') String authorization,
-      @Query('range') String range,
-      @Query('category') String? category,
-      @Query('entity') String? entity,
-      );
+    @Header('Authorization') String authorization,
+    @Query('range') String range,
+    @Query('category') String? category,
+    @Query('entity') String? entity,
+  );
 }

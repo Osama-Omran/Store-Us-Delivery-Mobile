@@ -1,12 +1,7 @@
-
 import 'top_rank_entry.dart';
 
 class TopRankResponse {
-  const TopRankResponse({
-    required this.success,
-    this.data,
-    this.message,
-  });
+  const TopRankResponse({required this.success, this.data, this.message});
 
   final bool success;
   final TopRankData? data;
@@ -16,9 +11,7 @@ class TopRankResponse {
     return TopRankResponse(
       success: json['success'] == true,
       data: json['data'] is Map
-          ? TopRankData.fromJson(
-        Map<String, dynamic>.from(json['data'] as Map),
-      )
+          ? TopRankData.fromJson(Map<String, dynamic>.from(json['data'] as Map))
           : null,
       message: json['message']?.toString(),
     );
@@ -64,9 +57,8 @@ class TopRankData {
       financialVisible: json['financial_visible'] == true,
       scope: json['scope']?.toString(),
       warnings: [
-        for (final value in json['warnings'] is List
-            ? json['warnings'] as List
-            : const [])
+        for (final value
+            in json['warnings'] is List ? json['warnings'] as List : const [])
           value.toString(),
       ],
     );
@@ -79,8 +71,7 @@ class TopRankData {
 
     final json = Map<String, dynamic>.from(raw);
 
-    if (json.containsKey('score') &&
-        json.containsKey('breakdown')) {
+    if (json.containsKey('score') && json.containsKey('breakdown')) {
       return TopRankEntry.fromJson(json);
     }
 
@@ -90,9 +81,7 @@ class TopRankData {
       if (value is Map &&
           value.containsKey('score') &&
           value.containsKey('breakdown')) {
-        return TopRankEntry.fromJson(
-          Map<String, dynamic>.from(value),
-        );
+        return TopRankEntry.fromJson(Map<String, dynamic>.from(value));
       }
     }
 
@@ -101,19 +90,13 @@ class TopRankData {
 }
 
 class TopRankPeriodData {
-  const TopRankPeriodData({
-    this.range,
-    this.from,
-    this.to,
-  });
+  const TopRankPeriodData({this.range, this.from, this.to});
 
   final String? range;
   final DateTime? from;
   final DateTime? to;
 
-  factory TopRankPeriodData.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TopRankPeriodData.fromJson(Map<String, dynamic> json) {
     return TopRankPeriodData(
       range: json['range']?.toString(),
       from: DateTime.tryParse(json['from']?.toString() ?? ''),
@@ -147,23 +130,18 @@ class TopRankCategory {
       winnerLabel: json['winner_label']?.toString() ?? '',
       winner: json['winner'] is Map
           ? TopRankEntry.fromJson(
-        Map<String, dynamic>.from(json['winner'] as Map),
-      )
+              Map<String, dynamic>.from(json['winner'] as Map),
+            )
           : null,
       ranked: [
-        for (final value in json['ranked'] is List
-            ? json['ranked'] as List
-            : const [])
+        for (final value
+            in json['ranked'] is List ? json['ranked'] as List : const [])
           if (value is Map)
-            TopRankEntry.fromJson(
-              Map<String, dynamic>.from(value),
-            ),
+            TopRankEntry.fromJson(Map<String, dynamic>.from(value)),
       ],
       pagination: TopRankPagination.fromJson(
         json['pagination'] is Map
-            ? Map<String, dynamic>.from(
-          json['pagination'] as Map,
-        )
+            ? Map<String, dynamic>.from(json['pagination'] as Map)
             : {},
       ),
     );
@@ -183,9 +161,7 @@ class TopRankPagination {
   final int total;
   final int lastPage;
 
-  factory TopRankPagination.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory TopRankPagination.fromJson(Map<String, dynamic> json) {
     int read(String key, int fallback) {
       final value = json[key];
       if (value is num) return value.toInt();

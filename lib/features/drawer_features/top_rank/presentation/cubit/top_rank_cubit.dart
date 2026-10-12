@@ -1,22 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/domain/usecases/get_top_rank_usecase.dart';
+
 import 'top_rank_state.dart';
 
 class TopRankCubit extends Cubit<TopRankState> {
-  TopRankCubit(this._usecase)
-      : super(const TopRankState());
+  TopRankCubit(this._usecase) : super(const TopRankState());
 
   final GetTopRankUsecase _usecase;
 
   int _requestId = 0;
 
-  static TopRankCubit get(BuildContext context) =>
-      context.read<TopRankCubit>();
+  static TopRankCubit get(BuildContext context) => context.read<TopRankCubit>();
 
   Future<void> load({
     TopRankPeriod? period,
@@ -29,19 +27,13 @@ class TopRankCubit extends Cubit<TopRankState> {
     final requestId = ++_requestId;
 
     emit(
-      TopRankState(
-        period: selectedPeriod,
-        role: selectedRole,
-        isLoading: true,
-      ),
+      TopRankState(period: selectedPeriod, role: selectedRole, isLoading: true),
     );
 
     try {
       final result = await _usecase.call(
         range: selectedPeriod.apiValue,
-        category: fetchAllCategories
-            ? null
-            : selectedRole.apiValue,
+        category: fetchAllCategories ? null : selectedRole.apiValue,
       );
 
       if (isClosed || requestId != _requestId) return;
@@ -49,8 +41,7 @@ class TopRankCubit extends Cubit<TopRankState> {
       result.when(
         success: (response) {
           final data = response.data;
-          final category =
-          data?.categories[selectedRole.apiValue];
+          final category = data?.categories[selectedRole.apiValue];
 
           if (data == null || category == null) {
             emit(
@@ -74,8 +65,7 @@ class TopRankCubit extends Cubit<TopRankState> {
           );
         },
         failure: (error) {
-          final message =
-          error.apiErrorModel.message.toString().trim();
+          final message = error.apiErrorModel.message.toString().trim();
 
           emit(
             TopRankState(

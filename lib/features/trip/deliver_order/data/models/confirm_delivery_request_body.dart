@@ -10,8 +10,8 @@ class ConfirmDeliveryRequestBody {
   final String clientOperationId;
   final List<ConfirmDeliveryItem> items;
   final List<ConfirmDeliveryExtraItem> extraItems;
-  final num collectedAmount;
-  final String paymentMethod;
+  final num? collectedAmount;
+  final String? paymentMethod;
 
   Map<String, dynamic> toJson() => {
     'client_operation_id': clientOperationId,

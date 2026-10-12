@@ -1,13 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_address_edit_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'order_customer_actions.dart';
+import 'order_customer_location_panel.dart';
 
 class OrderCustomerCard extends StatelessWidget {
   const OrderCustomerCard({
@@ -194,59 +196,7 @@ class OrderCustomerCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ======= Address & GPS ======= //
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.grey5,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.location_on_outlined, color: AppColors.grey4),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        hasAddress
-                            ? location.address
-                            : context.strings.order_no_address,
-                        style: Styles.textStyle16.copyWith(
-                          color: AppColors.black1,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 7),
-
-                Row(
-                  children: [
-                    Icon(
-                      Icons.my_location_outlined,
-                      size: 20,
-                      color: hasGPS ? AppColors.grey4 : AppColors.red1,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        hasGPS
-                            ? '${location.latitude!.toStringAsFixed(7)}, '
-                                  '${location.longitude!.toStringAsFixed(7)}'
-                            : context.strings.order_customer_gps_missing,
-                        style: Styles.textStyle12.copyWith(
-                          color: hasGPS ? AppColors.grey4 : AppColors.red1,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          OrderCustomerLocationPanel(location: location),
 
           if (!location.isComplete) ...[
             const SizedBox(height: 14),
@@ -283,7 +233,7 @@ class OrderCustomerCard extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  _FullAction(
+                  OrderCustomerFullAction(
                     title: context.strings.order_set_location,
                     icon: Icons.add_location_alt_outlined,
                     background: AppColors.orange0,
@@ -298,139 +248,13 @@ class OrderCustomerCard extends StatelessWidget {
           const SizedBox(height: 14),
 
           // ======= Contact / Location / Navigation ======= //
-          Row(
-            children: [
-              Expanded(
-                child: _SmallAction(
-                  title: context.strings.call_customer,
-                  icon: Icons.phone_outlined,
-                  background: AppColors.green1,
-                  foreground: AppColors.green0,
-                  onTap: () => _openPhone(context),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _SmallAction(
-                  title: context.strings.open_location,
-                  icon: Icons.location_on_outlined,
-                  background: AppColors.grey5,
-                  foreground: AppColors.black1,
-                  onTap: () => _openMap(context, directions: false),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _SmallAction(
-                  title: context.strings.start_navigation,
-                  icon: Icons.navigation_outlined,
-                  background: AppColors.blue4,
-                  foreground: AppColors.primary,
-                  onTap: () => _openMap(context, directions: true),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          OutlinedButton.icon(
-            onPressed: () => _editAddress(context),
-            icon: const Icon(Icons.sync_rounded),
-            label: Text(context.strings.order_update_address),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.blue3),
-              minimumSize: const Size.fromHeight(54),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
+          OrderCustomerActions(
+            onCall: () => _openPhone(context),
+            onOpenLocation: () => _openMap(context, directions: false),
+            onNavigate: () => _openMap(context, directions: true),
+            onEdit: () => _editAddress(context),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _FullAction extends StatelessWidget {
-  const _FullAction({
-    required this.title,
-    required this.icon,
-    required this.background,
-    required this.foreground,
-    required this.onTap,
-  });
-
-  final String title;
-  final IconData icon;
-  final Color background;
-  final Color foreground;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 58,
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: onTap,
-        icon: Icon(icon, color: foreground),
-        label: Text(title),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: background,
-          foregroundColor: foreground,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SmallAction extends StatelessWidget {
-  const _SmallAction({
-    required this.title,
-    required this.icon,
-    required this.background,
-    required this.foreground,
-    required this.onTap,
-  });
-
-  final String title;
-  final IconData icon;
-  final Color background;
-  final Color foreground;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: background,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: SizedBox(
-          height: 70,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: foreground, size: 24),
-              const SizedBox(height: 4),
-              Text(
-                title,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: Styles.textStyle12.copyWith(
-                  color: foreground,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

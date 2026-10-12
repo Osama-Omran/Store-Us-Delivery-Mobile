@@ -262,12 +262,6 @@ abstract class AppLocalizations {
   /// **'أؤكد أنني راجعت الشاحنة والبضاعة الموضحة أعلاه واستلمتها.'**
   String get confirm_receiving_description;
 
-  /// No description provided for @confirm_receiving_warning.
-  ///
-  /// In ar, this message translates to:
-  /// **'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد'**
-  String get confirm_receiving_warning;
-
   /// No description provided for @loaded_quantity.
   ///
   /// In ar, this message translates to:
@@ -478,84 +472,6 @@ abstract class AppLocalizations {
   /// **'لا توجد إشعارات حالياً'**
   String get no_notifications;
 
-  /// No description provided for @notification_new_trip_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم إسناد رحلة جديدة إليك'**
-  String get notification_new_trip_title;
-
-  /// No description provided for @notification_new_trip_description.
-  ///
-  /// In ar, this message translates to:
-  /// **'رحلة 12 — TRIP-0025 طلب من مخزن 6 أكتوبر'**
-  String get notification_new_trip_description;
-
-  /// No description provided for @notification_route_updated_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تعديل ترتيب الرحلة'**
-  String get notification_route_updated_title;
-
-  /// No description provided for @notification_route_updated_description.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تقديم محطة سوبر ماركت النور قبل ماركت الأمل'**
-  String get notification_route_updated_description;
-
-  /// No description provided for @notification_order_updated_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تحديث الطلب SO-00254'**
-  String get notification_order_updated_title;
-
-  /// No description provided for @notification_order_updated_description.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تعديل كمية كوكاكولا 330 مل إلى 10 علب'**
-  String get notification_order_updated_description;
-
-  /// No description provided for @notification_payment_received_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم استلام المبلغ بواسطة المخزن'**
-  String get notification_payment_received_title;
-
-  /// No description provided for @notification_payment_received_description.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تسوية رحلة TRIP-0024 — 6,200 ج.م'**
-  String get notification_payment_received_description;
-
-  /// No description provided for @notification_trip_completed_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم إنهاء الرحلة'**
-  String get notification_trip_completed_title;
-
-  /// No description provided for @notification_trip_completed_description.
-  ///
-  /// In ar, this message translates to:
-  /// **'رحلة TRIP-0024 اكتملت بنجاح'**
-  String get notification_trip_completed_description;
-
-  /// No description provided for @two_hours_ago.
-  ///
-  /// In ar, this message translates to:
-  /// **'منذ ساعتين'**
-  String get two_hours_ago;
-
-  /// No description provided for @one_hour_ago.
-  ///
-  /// In ar, this message translates to:
-  /// **'منذ ساعة'**
-  String get one_hour_ago;
-
-  /// No description provided for @forty_five_minutes_ago.
-  ///
-  /// In ar, this message translates to:
-  /// **'منذ 45 دقيقة'**
-  String get forty_five_minutes_ago;
-
   /// No description provided for @yesterday.
   ///
   /// In ar, this message translates to:
@@ -705,6 +621,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حدث خطأ أثناء فحص الصورة. حاول مرة أخرى.'**
   String get selfie_check_failed_error;
+
+  /// No description provided for @confirm_receiving_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقط صورة سيلفي واضحة واعتمدها أولاً لتفعيل التأكيد'**
+  String get confirm_receiving_warning;
 
   /// No description provided for @face_not_detected.
   ///
@@ -994,72 +916,6 @@ abstract class AppLocalizations {
   /// **'من فضلك أدخل بريد إلكتروني صحيح'**
   String get please_enter_a_valid_email;
 
-  /// No description provided for @trip_history_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'سجل الرحلات السابقة'**
-  String get trip_history_title;
-
-  /// No description provided for @trip_history_completed.
-  ///
-  /// In ar, this message translates to:
-  /// **'مكتملة'**
-  String get trip_history_completed;
-
-  /// No description provided for @trip_history_cancelled.
-  ///
-  /// In ar, this message translates to:
-  /// **'ملغاة'**
-  String get trip_history_cancelled;
-
-  /// No description provided for @trip_history_date.
-  ///
-  /// In ar, this message translates to:
-  /// **'تاريخ الرحلة'**
-  String get trip_history_date;
-
-  /// No description provided for @trip_history_orders_total.
-  ///
-  /// In ar, this message translates to:
-  /// **'إجمالي الطلبات'**
-  String get trip_history_orders_total;
-
-  /// No description provided for @trip_history_acceptance.
-  ///
-  /// In ar, this message translates to:
-  /// **'حالة الاستلام'**
-  String get trip_history_acceptance;
-
-  /// No description provided for @trip_history_acceptance_pending.
-  ///
-  /// In ar, this message translates to:
-  /// **'في انتظار الاستلام'**
-  String get trip_history_acceptance_pending;
-
-  /// No description provided for @trip_history_completed_at.
-  ///
-  /// In ar, this message translates to:
-  /// **'وقت اكتمال الرحلة'**
-  String get trip_history_completed_at;
-
-  /// No description provided for @trip_history_not_available.
-  ///
-  /// In ar, this message translates to:
-  /// **'غير متاح'**
-  String get trip_history_not_available;
-
-  /// No description provided for @trip_history_retry.
-  ///
-  /// In ar, this message translates to:
-  /// **'إعادة المحاولة'**
-  String get trip_history_retry;
-
-  /// No description provided for @trip_history_empty.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا توجد رحلات سابقة'**
-  String get trip_history_empty;
-
   /// No description provided for @trip_status.
   ///
   /// In ar, this message translates to:
@@ -1348,12 +1204,6 @@ abstract class AppLocalizations {
   /// **'تم استلام الرحلة'**
   String get trip_tab_accepted;
 
-  /// No description provided for @trip_tab_orders_not_loaded.
-  ///
-  /// In ar, this message translates to:
-  /// **'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.'**
-  String get trip_tab_orders_not_loaded;
-
   /// No description provided for @trip_progress_unavailable.
   ///
   /// In ar, this message translates to:
@@ -1365,6 +1215,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'خريطة الرحلة ستتاح بعد تحميل مواقع الطلبات.'**
   String get trip_map_wait_orders;
+
+  /// No description provided for @trip_tab_orders_not_loaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل طلبات الرحلة ستظهر بعد ربط خدمة الطلبات.'**
+  String get trip_tab_orders_not_loaded;
 
   /// No description provided for @trip_orders_load_failed.
   ///
@@ -1912,66 +1768,6 @@ abstract class AppLocalizations {
   /// **'الـ Dispatchers'**
   String get top_rank_dispatchers;
 
-  /// No description provided for @top_rank_best_representatives.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل المندوبين'**
-  String get top_rank_best_representatives;
-
-  /// No description provided for @top_rank_best_drivers.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل السائقين'**
-  String get top_rank_best_drivers;
-
-  /// No description provided for @top_rank_best_dispatchers.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل الـ Dispatchers'**
-  String get top_rank_best_dispatchers;
-
-  /// No description provided for @top_rank_best_representative.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل مندوب'**
-  String get top_rank_best_representative;
-
-  /// No description provided for @top_rank_best_driver.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل سائق'**
-  String get top_rank_best_driver;
-
-  /// No description provided for @top_rank_best_dispatcher.
-  ///
-  /// In ar, this message translates to:
-  /// **'أفضل Dispatcher'**
-  String get top_rank_best_dispatcher;
-
-  /// No description provided for @top_rank_winner.
-  ///
-  /// In ar, this message translates to:
-  /// **'الفائز'**
-  String get top_rank_winner;
-
-  /// No description provided for @top_rank_delivery.
-  ///
-  /// In ar, this message translates to:
-  /// **'التسليم'**
-  String get top_rank_delivery;
-
-  /// No description provided for @top_rank_collection.
-  ///
-  /// In ar, this message translates to:
-  /// **'التحصيل'**
-  String get top_rank_collection;
-
-  /// No description provided for @top_rank_extra_sales.
-  ///
-  /// In ar, this message translates to:
-  /// **'Extra Sales'**
-  String get top_rank_extra_sales;
-
   /// No description provided for @top_rank_view_details.
   ///
   /// In ar, this message translates to:
@@ -1989,42 +1785,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد نتائج لهذه الفلاتر حالياً'**
   String get top_rank_empty;
-
-  /// No description provided for @top_rank_score.
-  ///
-  /// In ar, this message translates to:
-  /// **'النتيجة'**
-  String get top_rank_score;
-
-  /// No description provided for @top_rank_position.
-  ///
-  /// In ar, this message translates to:
-  /// **'الترتيب'**
-  String get top_rank_position;
-
-  /// No description provided for @top_rank_movement.
-  ///
-  /// In ar, this message translates to:
-  /// **'تغير الترتيب'**
-  String get top_rank_movement;
-
-  /// No description provided for @top_rank_unchanged.
-  ///
-  /// In ar, this message translates to:
-  /// **'بدون تغيير'**
-  String get top_rank_unchanged;
-
-  /// No description provided for @top_rank_moved_up.
-  ///
-  /// In ar, this message translates to:
-  /// **'صعد {count} مركز'**
-  String top_rank_moved_up(int count);
-
-  /// No description provided for @top_rank_moved_down.
-  ///
-  /// In ar, this message translates to:
-  /// **'تراجع {count} مركز'**
-  String top_rank_moved_down(int count);
 
   /// No description provided for @delivery_order_title.
   ///
@@ -3172,77 +2932,11 @@ abstract class AppLocalizations {
   /// **'ملاحظات عن دقة البيانات'**
   String get top_rank_data_notes;
 
-  /// No description provided for @top_rank_current_rank.
-  ///
-  /// In ar, this message translates to:
-  /// **'الترتيب الحالي'**
-  String get top_rank_current_rank;
-
-  /// No description provided for @top_rank_score_label.
-  ///
-  /// In ar, this message translates to:
-  /// **'التقييم'**
-  String get top_rank_score_label;
-
-  /// No description provided for @top_rank_breakdown_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'تفصيل النقاط'**
-  String get top_rank_breakdown_title;
-
-  /// No description provided for @top_rank_total_score.
-  ///
-  /// In ar, this message translates to:
-  /// **'الإجمالي'**
-  String get top_rank_total_score;
-
-  /// No description provided for @top_rank_strengths_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'عمل إيه علشان وصل كده؟'**
-  String get top_rank_strengths_title;
-
-  /// No description provided for @top_rank_improvement_title.
-  ///
-  /// In ar, this message translates to:
-  /// **'إعمل إيه علشان تحسن ترتيبك؟'**
-  String get top_rank_improvement_title;
-
-  /// No description provided for @top_rank_compare_leader.
-  ///
-  /// In ar, this message translates to:
-  /// **'المقارنة مع الأول'**
-  String get top_rank_compare_leader;
-
-  /// No description provided for @top_rank_your_score.
-  ///
-  /// In ar, this message translates to:
-  /// **'درجتك'**
-  String get top_rank_your_score;
-
-  /// No description provided for @top_rank_leader_score.
-  ///
-  /// In ar, this message translates to:
-  /// **'درجة الأول'**
-  String get top_rank_leader_score;
-
-  /// No description provided for @top_rank_gap.
-  ///
-  /// In ar, this message translates to:
-  /// **'الفرق'**
-  String get top_rank_gap;
-
   /// No description provided for @top_rank_unavailable.
   ///
   /// In ar, this message translates to:
   /// **'غير متاح'**
   String get top_rank_unavailable;
-
-  /// No description provided for @top_rank_unchanged_label.
-  ///
-  /// In ar, this message translates to:
-  /// **'بدون تغيير'**
-  String get top_rank_unchanged_label;
 
   /// No description provided for @top_rank_approved_score.
   ///
@@ -3273,6 +2967,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فرصة للتحسين'**
   String get top_rank_improvement_opportunity;
+
+  /// No description provided for @delivery_collection_question.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل ستقوم بتحصيل المبلغ الآن؟'**
+  String get delivery_collection_question;
+
+  /// No description provided for @delivery_with_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم مع تحصيل'**
+  String get delivery_with_collection;
+
+  /// No description provided for @delivery_with_collection_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم المنتجات وتحصيل المبلغ من العميل'**
+  String get delivery_with_collection_hint;
+
+  /// No description provided for @delivery_without_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم بدون تحصيل'**
+  String get delivery_without_collection;
+
+  /// No description provided for @delivery_without_collection_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم المنتجات دون استلام أي مبلغ الآن'**
+  String get delivery_without_collection_hint;
+
+  /// No description provided for @delivery_no_collection_notice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم تأكيد تسليم المنتجات دون تسجيل أي مبلغ محصل. التحصيل المالي يظل غير مكتمل لحين تسجيل الدفع لاحقًا.'**
+  String get delivery_no_collection_notice;
+
+  /// No description provided for @delivery_collection_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التحصيل'**
+  String get delivery_collection_status;
+
+  /// No description provided for @delivery_not_collected.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم التحصيل'**
+  String get delivery_not_collected;
+
+  /// No description provided for @delivery_not_applicable.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا ينطبق'**
+  String get delivery_not_applicable;
+
+  /// No description provided for @delivery_confirm_without_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التسليم بدون تحصيل'**
+  String get delivery_confirm_without_collection;
+
+  /// No description provided for @delivery_no_collection_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه: سيتم تسجيل التسليم فقط، ولن يتم تسجيل تحصيل أي مبلغ.'**
+  String get delivery_no_collection_warning;
+
+  /// No description provided for @delivery_success_without_collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل تسليم المنتجات بنجاح دون تحصيل أموال من العميل.'**
+  String get delivery_success_without_collection;
+
+  /// No description provided for @delivery_continue_finalization.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة — إتمام التسليم'**
+  String get delivery_continue_finalization;
+
+  /// No description provided for @delivery_finalize_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التسليم'**
+  String get delivery_finalize_title;
 }
 
 class _AppLocalizationsDelegate

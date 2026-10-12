@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,18 +16,14 @@ import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/widgets/top_rank_winner_card.dart';
 
 class TopRankScreen extends StatelessWidget {
-  const TopRankScreen({
-    super.key,
-    required this.onBack,
-  });
+  const TopRankScreen({super.key, required this.onBack});
 
   final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<TopRankCubit>()
-        ..load(fetchAllCategories: true),
+      create: (_) => getIt<TopRankCubit>()..load(fetchAllCategories: true),
       child: _TopRankBody(onBack: onBack),
     );
   }
@@ -40,10 +35,10 @@ class _TopRankBody extends StatelessWidget {
   final VoidCallback onBack;
 
   void _openDetails(
-      BuildContext context,
-      TopRankState state,
-      TopRankEntry entry,
-      ) {
+    BuildContext context,
+    TopRankState state,
+    TopRankEntry entry,
+  ) {
     showTopRankDetails(
       context,
       entry,
@@ -75,12 +70,7 @@ class _TopRankBody extends StatelessWidget {
                     return RefreshIndicator(
                       onRefresh: () => cubit.load(),
                       child: ListView(
-                        padding: const EdgeInsets.fromLTRB(
-                          20,
-                          20,
-                          20,
-                          145,
-                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 145),
                         children: [
                           // ======= Intro ======= //
                           Container(
@@ -90,8 +80,7 @@ class _TopRankBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(26),
                             ),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               spacing: 6,
                               children: [
                                 Text(
@@ -124,12 +113,8 @@ class _TopRankBody extends StatelessWidget {
 
                           if (state.isLoading)
                             const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 40,
-                              ),
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              padding: EdgeInsets.symmetric(vertical: 40),
+                              child: Center(child: CircularProgressIndicator()),
                             )
                           else if (state.error != null)
                             _TopRankMessage(
@@ -137,117 +122,106 @@ class _TopRankBody extends StatelessWidget {
                               onRetry: cubit.retry,
                             )
                           else if (category == null)
+                            _TopRankMessage(
+                              message: context.strings.top_rank_empty,
+                            )
+                          else ...[
+                            // ======= Winner ======= //
+                            if (winner != null) ...[
+                              Text(
+                                'الفائز — ${category.winnerLabel}',
+                                style: Styles.textStyle20.copyWith(
+                                  color: AppColors.black1,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              TopRankWinnerCard(
+                                entry: winner,
+                                role: state.role,
+                                winnerLabel: category.winnerLabel,
+                                onDetails: () =>
+                                    _openDetails(context, state, winner),
+                              ),
+
+                              const SizedBox(height: 25),
+                            ],
+
+                            Row(
+                              children: [
+                                Icon(state.role.icon, color: AppColors.primary),
+                                const SizedBox(width: 9),
+                                Expanded(
+                                  child: Text(
+                                    category.label,
+                                    style: Styles.textStyle20.copyWith(
+                                      color: AppColors.black1,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  '${category.pagination.total}',
+                                  style: Styles.textStyle14.copyWith(
+                                    color: AppColors.grey4,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            if (state.entries.isEmpty)
                               _TopRankMessage(
                                 message: context.strings.top_rank_empty,
                               )
-                            else ...[
-                                // ======= Winner ======= //
-                                if (winner != null) ...[
-                                  Text(
-                                    'الفائز — ${category.winnerLabel}',
-                                    style: Styles.textStyle20.copyWith(
-                                      color: AppColors.black1,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
+                            else
+                              TopRankList(
+                                entries: state.entries,
+                                role: state.role,
+                                onDetails: (entry) =>
+                                    _openDetails(context, state, entry),
+                              ),
 
-                                  TopRankWinnerCard(
-                                    entry: winner,
-                                    role: state.role,
-                                    winnerLabel: category.winnerLabel,
-                                    onDetails: () => _openDetails(
-                                      context,
-                                      state,
-                                      winner,
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 25),
-                                ],
-
-                                Row(
-                                  children: [
-                                    Icon(
-                                      state.role.icon,
-                                      color: AppColors.primary,
-                                    ),
-                                    const SizedBox(width: 9),
-                                    Expanded(
-                                      child: Text(
-                                        category.label,
-                                        style: Styles.textStyle20.copyWith(
-                                          color: AppColors.black1,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${category.pagination.total}',
-                                      style: Styles.textStyle14.copyWith(
-                                        color: AppColors.grey4,
-                                      ),
-                                    ),
-                                  ],
+                            // ======= Pagination Information ======= //
+                            if (category.pagination.lastPage > 1) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                'تم عرض الصفحة '
+                                '${category.pagination.page} من '
+                                '${category.pagination.lastPage}',
+                                textAlign: TextAlign.center,
+                                style: Styles.textStyle12.copyWith(
+                                  color: AppColors.grey4,
                                 ),
+                              ),
+                            ],
 
-                                const SizedBox(height: 12),
-
-                                if (state.entries.isEmpty)
-                                  _TopRankMessage(
-                                    message: context.strings.top_rank_empty,
-                                  )
-                                else
-                                  TopRankList(
-                                    entries: state.entries,
-                                    role: state.role,
-                                    onDetails: (entry) => _openDetails(
-                                      context,
-                                      state,
-                                      entry,
-                                    ),
+                            // ======= API Data Warnings ======= //
+                            if (state.warnings.isNotEmpty) ...[
+                              const SizedBox(height: 20),
+                              ExpansionTile(
+                                title: Text(
+                                  context.strings.top_rank_data_notes,
+                                  style: Styles.textStyle14.copyWith(
+                                    color: AppColors.black1,
                                   ),
-
-                                // ======= Pagination Information ======= //
-                                if (category.pagination.lastPage > 1) ...[
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'تم عرض الصفحة '
-                                        '${category.pagination.page} من '
-                                        '${category.pagination.lastPage}',
-                                    textAlign: TextAlign.center,
-                                    style: Styles.textStyle12.copyWith(
-                                      color: AppColors.grey4,
-                                    ),
-                                  ),
-                                ],
-
-                                // ======= API Data Warnings ======= //
-                                if (state.warnings.isNotEmpty) ...[
-                                  const SizedBox(height: 20),
-                                  ExpansionTile(
-                                    title: Text(
-                                      context.strings.top_rank_data_notes,
-                                      style: Styles.textStyle14.copyWith(
-                                        color: AppColors.black1,
+                                ),
+                                children: [
+                                  for (final warning in state.warnings)
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Text(
+                                        warning,
+                                        style: Styles.textStyle12.copyWith(
+                                          color: AppColors.grey4,
+                                        ),
                                       ),
                                     ),
-                                    children: [
-                                      for (final warning in state.warnings)
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.all(12),
-                                          child: Text(
-                                            warning,
-                                            style:
-                                            Styles.textStyle12.copyWith(
-                                              color: AppColors.grey4,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
                                 ],
-                              ],
+                              ),
+                            ],
+                          ],
                         ],
                       ),
                     );
@@ -263,10 +237,7 @@ class _TopRankBody extends StatelessWidget {
 }
 
 class _TopRankMessage extends StatelessWidget {
-  const _TopRankMessage({
-    required this.message,
-    this.onRetry,
-  });
+  const _TopRankMessage({required this.message, this.onRetry});
 
   final String message;
   final VoidCallback? onRetry;
@@ -283,25 +254,17 @@ class _TopRankMessage extends StatelessWidget {
       child: Column(
         spacing: 14,
         children: [
-          Icon(
-            Icons.leaderboard_outlined,
-            color: AppColors.primary,
-            size: 43,
-          ),
+          Icon(Icons.leaderboard_outlined, color: AppColors.primary, size: 43),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
           if (onRetry != null)
             OutlinedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
-              label: Text(
-                context.strings.trip_tab_retry,
-              ),
+              label: Text(context.strings.trip_tab_retry),
             ),
         ],
       ),

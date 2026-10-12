@@ -237,6 +237,8 @@ class AppRouter {
       ),
 
       // ======= Delivery Success ======= //
+
+      // ======= Delivery Success ======= //
       GoRoute(
         name: RoutesNames.deliverySuccess,
         path: RoutesNames.deliverySuccess,
@@ -246,13 +248,14 @@ class AppRouter {
           return _fadePageBuilder(
             DeliverySuccessScreen(
               flow: args['flow'] as DeliveryFlowData,
-              collectedAmount: args['collected_amount'] as num,
-              paymentMethod: args['payment_method'] as String,
+              collectedAmount: args['collected_amount'] as num?,
+              paymentMethod: args['payment_method'] as String?,
             ),
             state,
           );
         },
       ),
+
     ],
   );
 

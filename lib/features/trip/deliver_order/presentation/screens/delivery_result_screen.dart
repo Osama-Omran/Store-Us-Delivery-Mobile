@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_flow_header.dart';
+
+import '../widgets/delivery_financial_result_card.dart';
+import '../widgets/delivery_result_summary_card.dart';
 
 class DeliveryResultScreen extends StatefulWidget {
   const DeliveryResultScreen({super.key, required this.flow});
@@ -86,70 +87,11 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                   padding: const EdgeInsets.all(20),
                   children: [
                     // ======= Delivery Status ======= //
-                    Container(
-                      padding: const EdgeInsets.all(17),
-                      decoration: BoxDecoration(
-                        color: partial ? AppColors.orange1 : AppColors.green1,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: partial ? AppColors.orange0 : AppColors.green0,
-                        ),
-                      ),
-                      child: Column(
-                        spacing: 13,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                partial
-                                    ? Icons.warning_amber_rounded
-                                    : Icons.check_circle_outline,
-                                color: partial
-                                    ? AppColors.orange0
-                                    : AppColors.green0,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  partial
-                                      ? context.strings.delivery_partial_draft
-                                      : context.strings.delivery_full_draft,
-                                  style: TextStyle(
-                                    color: partial
-                                        ? AppColors.orange0
-                                        : AppColors.green0,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              _QtyBox(
-                                title: context.strings.delivery_ordered,
-                                qty: flow.orderedQty,
-                              ),
-                              const SizedBox(width: 8),
-                              _QtyBox(
-                                title: context.strings.delivery_selected,
-                                qty: flow.deliveredQty,
-                              ),
-                              const SizedBox(width: 8),
-                              _QtyBox(
-                                title: context.strings.delivery_not_delivered,
-                                qty: flow.remainingQty,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    DeliveryResultSummaryCard(flow: flow),
 
                     const SizedBox(height: 18),
 
-                    _FinancialResult(
+                    DeliveryFinancialResultCard(
                       original: flow.originalTotal,
                       estimated: amount,
                     ),
@@ -257,7 +199,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                   ),
                 ),
                 child: Text(
-                  context.strings.delivery_continue_payment,
+                  context.strings.delivery_continue_finalization,
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 18,
@@ -267,96 +209,6 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _QtyBox extends StatelessWidget {
-  const _QtyBox({required this.title, required this.qty});
-
-  final String title;
-  final num qty;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColors.white0,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          spacing: 4,
-          children: [
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11),
-            ),
-            Text(
-              '$qty',
-              style: TextStyle(
-                color: AppColors.black1,
-                fontWeight: FontWeight.w800,
-                fontSize: 19,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FinancialResult extends StatelessWidget {
-  const _FinancialResult({required this.original, required this.estimated});
-
-  final num? original;
-  final num? estimated;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.white0,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.grey3),
-      ),
-      child: Column(
-        spacing: 16,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(context.strings.order_details_original_total),
-              ),
-              Text(
-                original == null ? '—' : formatTripAmount(context, original!),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  context.strings.delivery_estimated_total,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-              ),
-              Text(
-                estimated == null ? '—' : formatTripAmount(context, estimated!),
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 23,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

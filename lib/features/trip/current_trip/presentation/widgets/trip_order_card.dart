@@ -1,54 +1,13 @@
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
-import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
-import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
 
-// =====================================================
-// Open Order Details & Refresh On Return
-// =====================================================
-
-Future<void> _openOrderDetails(
-  BuildContext context, {
-  required int tripID,
-  required int? orderID,
-}) async {
-  // ======= Validate Order ID ======= //
-  if (orderID == null || orderID <= 0) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.strings.trip_order_details_unavailable)),
-    );
-    return;
-  }
-
-  // ======= Keep Cubit Reference ======= //
-  final tripCubit = context.read<TripTabCubit>();
-
-  // ======= Navigate To Order Details ======= //
-  await GoRouter.of(context).push(
-    RoutesNames.orderDetails,
-    extra: {'trip_id': tripID, 'order_id': orderID},
-  );
-
-  // ======= Check Widget & Cubit ======= //
-  if (!context.mounted || tripCubit.isClosed) {
-    return;
-  }
-
-  // ======= Refresh Orders After Returning ======= //
-  await tripCubit.getTripOrders();
-}
-
-// =====================================================
-// Trip Order Card
-// =====================================================
+import '../utils/trip_amount_formatter.dart';
+import '../utils/trip_order_navigation.dart';
+import 'trip_order_contact_line.dart';
+import 'trip_order_status.dart';
+import 'trip_pending_order_actions.dart';
 
 class TripOrderCard extends StatelessWidget {
   const TripOrderCard({
@@ -66,7 +25,7 @@ class TripOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = _StatusStyle.forOrder(context, order);
+    final status = TripOrderStatusStyle.forOrder(context, order);
 
     return Container(
       decoration: BoxDecoration(
@@ -144,13 +103,13 @@ class TripOrderCard extends StatelessWidget {
                           const SizedBox(height: 4),
 
                           if (order.address.trim().isNotEmpty)
-                            _OrderContactLine(
+                            TripOrderContactLine(
                               icon: Icons.location_on_outlined,
                               text: order.address,
                             ),
 
-                          if (_hasValidPhone(order.phoneNumber))
-                            _OrderContactLine(
+                          if (hasValidOrderPhone(order.phoneNumber))
+                            TripOrderContactLine(
                               icon: Icons.phone_outlined,
                               text: order.phoneNumber,
                               isPhone: true,
@@ -161,7 +120,7 @@ class TripOrderCard extends StatelessWidget {
 
                     const SizedBox(width: 6),
 
-                    _StatusBadge(style: status),
+                    TripOrderStatusBadge(style: status),
                   ],
                 ),
 
@@ -249,7 +208,7 @@ class TripOrderCard extends StatelessWidget {
 
           // ======= Bottom Actions ======= //
           if (order.isPending)
-            _PendingOrderActions(
+            TripPendingOrderActions(
               tripID: tripID,
               orderID: order.apiId,
               order: order,
@@ -258,7 +217,7 @@ class TripOrderCard extends StatelessWidget {
             SizedBox(
               height: 54,
               child: TextButton(
-                onPressed: () => _openOrderDetails(
+                onPressed: () => openTripOrderDetails(
                   context,
                   tripID: tripID,
                   orderID: order.apiId,
@@ -276,362 +235,5 @@ class TripOrderCard extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-// =====================================================
-// Order Contact Line
-// =====================================================
-
-class _OrderContactLine extends StatelessWidget {
-  const _OrderContactLine({
-    required this.icon,
-    required this.text,
-    this.isPhone = false,
-  });
-
-  final IconData icon;
-  final String text;
-  final bool isPhone;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 3),
-      child: InkWell(
-        onTap: isPhone ? () => _callCustomer(context, text) : null,
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isPhone ? AppColors.primary : AppColors.grey4,
-            ),
-
-            const SizedBox(width: 5),
-
-            Expanded(
-              child: Text(
-                text,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textDirection: isPhone ? TextDirection.ltr : null,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 13,
-                  height: 1.25,
-                  color: isPhone ? AppColors.primary : AppColors.grey4,
-                  fontWeight: isPhone ? FontWeight.w600 : FontWeight.w400,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// =====================================================
-// Pending Order Actions
-// =====================================================
-
-class _PendingOrderActions extends StatelessWidget {
-  const _PendingOrderActions({
-    required this.tripID,
-    required this.orderID,
-    required this.order,
-  });
-
-  final int tripID;
-  final int? orderID;
-  final TripOrderModel order;
-
-  @override
-  Widget build(BuildContext context) {
-    final bool hasLocation = order.hasCoordinates;
-    final bool hasPhone = _hasValidPhone(order.phoneNumber);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-      child: Row(
-        children: [
-          // ======= Open Order ======= //
-          Expanded(
-            child: SizedBox(
-              height: 58,
-              child: ElevatedButton(
-                onPressed: () => _openOrderDetails(
-                  context,
-                  tripID: tripID,
-                  orderID: orderID,
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 4,
-                  shadowColor: AppColors.primary.withValues(alpha: 0.22),
-                  foregroundColor: AppColors.white0,
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-                child: Text(
-                  context.strings.open_order,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // ======= Directions Button ======= //
-          if (hasLocation) ...[
-            const SizedBox(width: 9),
-
-            _SquareActionButton(
-              icon: Icons.near_me_outlined,
-              background: AppColors.blue4,
-              foreground: AppColors.primary,
-              onTap: () => _openOrderDirections(context, order),
-              tooltip: context.strings.open_directions,
-            ),
-          ],
-
-          // ======= Call Customer Button ======= //
-          if (hasPhone) ...[
-            const SizedBox(width: 9),
-
-            _SquareActionButton(
-              icon: Icons.phone_outlined,
-              background: AppColors.green1,
-              foreground: AppColors.green0,
-              onTap: () => _callCustomer(context, order.phoneNumber),
-              tooltip: context.strings.call_customer,
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-// =====================================================
-// Square Action Button
-// =====================================================
-
-class _SquareActionButton extends StatelessWidget {
-  const _SquareActionButton({
-    required this.icon,
-    required this.background,
-    required this.foreground,
-    required this.tooltip,
-    this.onTap,
-  });
-
-  final IconData icon;
-  final Color background;
-  final Color foreground;
-  final VoidCallback? onTap;
-  final String tooltip;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: Opacity(
-        opacity: onTap == null ? 0.45 : 1,
-        child: Material(
-          color: background,
-          borderRadius: BorderRadius.circular(20),
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
-            child: SizedBox(
-              height: 58,
-              width: 55,
-              child: Icon(icon, color: foreground, size: 25),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// =====================================================
-// Status Badge
-// =====================================================
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.style});
-
-  final _StatusStyle style;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 132),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: style.badgeBackground,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        style.title,
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        style: TextStyle(
-          fontSize: 12,
-          height: 1.2,
-          fontWeight: FontWeight.w800,
-          color: style.badgeForeground,
-        ),
-      ),
-    );
-  }
-}
-
-// =====================================================
-// Status Style
-// =====================================================
-
-class _StatusStyle {
-  const _StatusStyle({
-    required this.title,
-    required this.badgeBackground,
-    required this.badgeForeground,
-    required this.numberBackground,
-    required this.numberForeground,
-  });
-
-  final String title;
-  final Color badgeBackground;
-  final Color badgeForeground;
-  final Color numberBackground;
-  final Color numberForeground;
-
-  static _StatusStyle forOrder(BuildContext context, TripOrderModel order) {
-    switch (order.status) {
-      case TripOrderStatus.delivered:
-        return _StatusStyle(
-          title: context.strings.delivered_fully,
-          badgeBackground: AppColors.green1,
-          badgeForeground: AppColors.green0,
-          numberBackground: AppColors.green0,
-          numberForeground: AppColors.white0,
-        );
-
-      case TripOrderStatus.rescheduled:
-        return _StatusStyle(
-          title: context.strings.delivery_rescheduled,
-          badgeBackground: AppColors.blue4,
-          badgeForeground: AppColors.primary,
-          numberBackground: AppColors.blue4,
-          numberForeground: AppColors.primary,
-        );
-
-      case TripOrderStatus.partiallyDelivered:
-        return _StatusStyle(
-          title: context.strings.delivered_partially,
-          badgeBackground: AppColors.orange1,
-          badgeForeground: AppColors.orange0,
-          numberBackground: AppColors.orange0,
-          numberForeground: AppColors.white0,
-        );
-
-      case TripOrderStatus.pending:
-        return _StatusStyle(
-          title: context.strings.awaiting_delivery,
-          badgeBackground: AppColors.grey5,
-          badgeForeground: AppColors.black1,
-          numberBackground: AppColors.primary,
-          numberForeground: AppColors.white0,
-        );
-
-      case TripOrderStatus.cancelled:
-        return _StatusStyle(
-          title: context.strings.delivery_cancelled,
-          badgeBackground: AppColors.red1.withValues(alpha: 0.10),
-          badgeForeground: AppColors.red1,
-          numberBackground: AppColors.red1,
-          numberForeground: AppColors.white0,
-        );
-
-      case TripOrderStatus.unknown:
-        return _StatusStyle(
-          title: order.rawDeliveryStatus?.isNotEmpty == true
-              ? order.rawDeliveryStatus!
-              : context.strings.trip_tab_unknown_status,
-          badgeBackground: AppColors.grey5,
-          badgeForeground: AppColors.grey4,
-          numberBackground: AppColors.grey3,
-          numberForeground: AppColors.black1,
-        );
-    }
-  }
-}
-
-// ======= Check Phone ======= //
-bool _hasValidPhone(String phone) {
-  final value = phone.trim();
-
-  return value.isNotEmpty && value != '—' && value.toLowerCase() != 'null';
-}
-
-// ======= Call Customer ======= //
-Future<void> _callCustomer(BuildContext context, String phone) async {
-  if (!_hasValidPhone(phone)) return;
-
-  final number = phone.trim().replaceAll(RegExp(r'\s+'), '');
-
-  final uri = Uri(scheme: 'tel', path: number);
-
-  try {
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-
-    if (!opened && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.strings.trip_action_unavailable)),
-      );
-    }
-  } catch (_) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.strings.trip_action_unavailable)),
-      );
-    }
-  }
-}
-
-// ======= Open Google Maps Directions ======= //
-Future<void> _openOrderDirections(
-  BuildContext context,
-  TripOrderModel order,
-) async {
-  if (!order.hasCoordinates) return;
-
-  final uri = Uri.https('www.google.com', '/maps/dir/', {
-    'api': '1',
-    'destination': '${order.latitude},${order.longitude}',
-  });
-
-  try {
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-
-    if (!opened && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.strings.trip_action_unavailable)),
-      );
-    }
-  } catch (_) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.strings.trip_action_unavailable)),
-      );
-    }
   }
 }

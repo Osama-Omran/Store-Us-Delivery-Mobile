@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -8,42 +7,28 @@ import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/t
 
 extension TopRankPeriodLabels on TopRankPeriod {
   String label(BuildContext context) => switch (this) {
-    TopRankPeriod.month =>
-    context.strings.top_rank_this_month,
-    TopRankPeriod.last30Days =>
-    context.strings.top_rank_last_30_days,
+    TopRankPeriod.month => context.strings.top_rank_this_month,
+    TopRankPeriod.last30Days => context.strings.top_rank_last_30_days,
   };
 }
 
 extension TopRankRoleLabels on TopRankRole {
   String label(BuildContext context) => switch (this) {
-    TopRankRole.representatives =>
-    context.strings.top_rank_representatives,
-    TopRankRole.drivers =>
-    context.strings.top_rank_drivers,
-    TopRankRole.dispatchers =>
-    context.strings.top_rank_dispatchers,
-    TopRankRole.warehouses =>
-    context.strings.top_rank_warehouses,
-    TopRankRole.warehouseStaff =>
-    context.strings.top_rank_warehouse_staff,
-    TopRankRole.vehicles =>
-    context.strings.top_rank_vehicles,
+    TopRankRole.representatives => context.strings.top_rank_representatives,
+    TopRankRole.drivers => context.strings.top_rank_drivers,
+    TopRankRole.dispatchers => context.strings.top_rank_dispatchers,
+    TopRankRole.warehouses => context.strings.top_rank_warehouses,
+    TopRankRole.warehouseStaff => context.strings.top_rank_warehouse_staff,
+    TopRankRole.vehicles => context.strings.top_rank_vehicles,
   };
 
   IconData get icon => switch (this) {
-    TopRankRole.representatives =>
-    Icons.person_outline_rounded,
-    TopRankRole.drivers =>
-    Icons.local_shipping_outlined,
-    TopRankRole.dispatchers =>
-    Icons.assignment_outlined,
-    TopRankRole.warehouses =>
-    Icons.warehouse_outlined,
-    TopRankRole.warehouseStaff =>
-    Icons.manage_accounts_outlined,
-    TopRankRole.vehicles =>
-    Icons.directions_car_outlined,
+    TopRankRole.representatives => Icons.person_outline_rounded,
+    TopRankRole.drivers => Icons.local_shipping_outlined,
+    TopRankRole.dispatchers => Icons.assignment_outlined,
+    TopRankRole.warehouses => Icons.warehouse_outlined,
+    TopRankRole.warehouseStaff => Icons.manage_accounts_outlined,
+    TopRankRole.vehicles => Icons.directions_car_outlined,
   };
 }
 
@@ -87,10 +72,7 @@ class TopRankFilters extends StatelessWidget {
         // ======= Warehouse Filter Placeholder ======= //
         // No warehouse query/filter contract supplied by backend.
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: 15,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
           decoration: BoxDecoration(
             color: AppColors.white0,
             borderRadius: BorderRadius.circular(23),
@@ -101,9 +83,7 @@ class TopRankFilters extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.top_rank_all_warehouses,
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle16.copyWith(color: AppColors.grey4),
                 ),
               ),
               Icon(
@@ -154,24 +134,15 @@ class _RankChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected
-          ? AppColors.blue4
-          : AppColors.white0,
+      color: selected ? AppColors.blue4 : AppColors.white0,
       shape: StadiumBorder(
-        side: BorderSide(
-          color: selected
-              ? AppColors.blue3
-              : AppColors.grey3,
-        ),
+        side: BorderSide(color: selected ? AppColors.blue3 : AppColors.grey3),
       ),
       child: InkWell(
         onTap: onTap,
         customBorder: const StadiumBorder(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 17,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 12),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             spacing: 7,
@@ -180,17 +151,13 @@ class _RankChip extends StatelessWidget {
                 Icon(
                   icon,
                   size: 18,
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.grey4,
+                  color: selected ? AppColors.primary : AppColors.grey4,
                 ),
               Text(
                 title,
                 style: Styles.textStyle14.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.black1,
+                  color: selected ? AppColors.primary : AppColors.black1,
                 ),
               ),
             ],
