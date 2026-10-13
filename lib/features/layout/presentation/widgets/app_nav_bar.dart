@@ -11,6 +11,8 @@ import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_state.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/utils/trip_badge_counts.dart';
 
 class AppNavBar extends StatelessWidget {
   const AppNavBar({super.key});
@@ -84,6 +86,12 @@ class NavBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final menuBadgeCount = index == 3
+        ? context.select<TripTabCubit, int>(
+            (cubit) => getTripBadgeCounts(cubit.state).receiveVehicle,
+          )
+        : 0;
+
     return BlocBuilder<LayoutCubit, LayoutState>(
       builder: (context, state) {
         final cubit = LayoutCubit.get(context);
@@ -117,96 +125,130 @@ class NavBarItem extends StatelessWidget {
             children: [
               if (!isTrip) const Gap(10),
 
-              Container(
-                margin: isTrip ? null : const EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(
-                  horizontal: isTrip ? 20 : 16,
-                  vertical: isTrip ? 20 : 8,
-                ),
-                decoration: BoxDecoration(
-                  color: selected
-                      ? isTrip
-                            ? AppColors.primary
-                            : AppColors.lightPrimary
-                      : isTrip
-                      ? AppColors.lightPrimary
-                      : null,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    if (isTrip && selected)
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: .4),
-                        blurRadius: 3,
-                        offset: const Offset(0, 4),
-                        spreadRadius: 2,
-                      ),
-                  ],
-                ),
-
-                // ======= Icon + Real Notification Badge ======= //
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    CustomSVG(
-                      assetName: icon,
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    margin: isTrip ? null : const EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTrip ? 20 : 16,
+                      vertical: isTrip ? 20 : 8,
+                    ),
+                    decoration: BoxDecoration(
                       color: selected
                           ? isTrip
-                                ? AppColors.white0
-                                : AppColors.primary
+                                ? AppColors.primary
+                                : AppColors.lightPrimary
                           : isTrip
-                          ? AppColors.primary
-                          : AppColors.grey2,
-                      w: 24,
+                          ? AppColors.lightPrimary
+                          : null,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        if (isTrip && selected)
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: .4),
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                            spreadRadius: 2,
+                          ),
+                      ],
                     ),
 
-                    if (isNotifications)
-                      PositionedDirectional(
-                        top: -12,
-                        end: -14,
-                        child:
-                            BlocBuilder<NotificationsCubit, NotificationsState>(
-                              builder: (context, notificationState) {
-                                final unreadCount =
-                                    notificationState
-                                        is NotificationsSuccessState
-                                    ? notificationState.unreadCount
-                                    : 0;
+                    // ======= Icon + Real Notification Badge ======= //
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        CustomSVG(
+                          assetName: icon,
+                          color: selected
+                              ? isTrip
+                                    ? AppColors.white0
+                                    : AppColors.primary
+                              : isTrip
+                              ? AppColors.primary
+                              : AppColors.grey2,
+                          w: 24,
+                        ),
 
-                                if (unreadCount <= 0) {
-                                  return const SizedBox.shrink();
-                                }
+                        if (isNotifications)
+                          PositionedDirectional(
+                            top: -12,
+                            end: -14,
+                            child:
+                                BlocBuilder<
+                                  NotificationsCubit,
+                                  NotificationsState
+                                >(
+                                  builder: (context, notificationState) {
+                                    final unreadCount =
+                                        notificationState
+                                            is NotificationsSuccessState
+                                        ? notificationState.unreadCount
+                                        : 0;
 
-                                return Container(
-                                  constraints: const BoxConstraints(
-                                    minWidth: 20,
-                                    minHeight: 20,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                  ),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.red1,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: AppColors.white0,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    unreadCount > 99 ? '99+' : '$unreadCount',
-                                    style: Styles.textStyle10.copyWith(
-                                      color: AppColors.white0,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                                    if (unreadCount <= 0) {
+                                      return const SizedBox.shrink();
+                                    }
+
+                                    return Container(
+                                      constraints: const BoxConstraints(
+                                        minWidth: 20,
+                                        minHeight: 20,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                      ),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.red1,
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: AppColors.white0,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        unreadCount > 99
+                                            ? '99+'
+                                            : '$unreadCount',
+                                        style: Styles.textStyle10.copyWith(
+                                          color: AppColors.white0,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                          ),
+                      ],
+                    ),
+                  ),
+
+                  if (index == 3 && menuBadgeCount > 0)
+                    Positioned(
+                      top: 3,
+                      right: -5,
+                      child: Container(
+                        height: 20,
+                        constraints: const BoxConstraints(minWidth: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColors.red0,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '$menuBadgeCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
 
               // ======= Tab Title ======= //

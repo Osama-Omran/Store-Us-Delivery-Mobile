@@ -8,8 +8,15 @@ import 'package:storeus_delivery/features/drawer_features/treasury/presentation/
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/presentation/screens/stock_transfer_screen.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/presentation/screens/reports_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/screen/trip_screen.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/presentation/screens/contact_us_screen.dart';
 
-enum LayoutDrawerFeature { topRank, treasury, stockTransfer, reports }
+enum LayoutDrawerFeature {
+  topRank,
+  treasury,
+  stockTransfer,
+  reports,
+  contactUs,
+}
 
 class LayoutCubit extends Cubit<LayoutState> {
   LayoutCubit() : super(LayoutInitial());
@@ -73,6 +80,12 @@ class LayoutCubit extends Cubit<LayoutState> {
     selectTap(_previousTap);
   }
 
+  bool get isContactUs => drawerFeature == LayoutDrawerFeature.contactUs;
+
+  void openContactUs() {
+    _openDrawerFeature(LayoutDrawerFeature.contactUs);
+  }
+
   void _openDrawerFeature(LayoutDrawerFeature feature) {
     if (drawerFeature == feature) return;
     if (!isDrawerFeatureOpen) _previousTap = selectedTap;
@@ -85,6 +98,7 @@ class LayoutCubit extends Cubit<LayoutState> {
         onBack: closeDrawerFeature,
       ),
       LayoutDrawerFeature.reports => const ReportsScreen(),
+      LayoutDrawerFeature.contactUs => const ContactUsScreen(),
     };
     emit(LayoutInitial());
   }

@@ -20,6 +20,7 @@ class RoutesNames {
 
   //======= Account =======//
   static const String account = '/accountScreen';
+  static const String directSale = '/directSaleScreen';
   static const String deliverOrder = '/deliver-order';
   static const String rescheduleSuccess = '/reschedule-success';
   static const String cancelDeliverySuccess = '/cancel-delivery-success';

@@ -3051,6 +3051,496 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تأكيد التسليم'**
   String get delivery_finalize_title;
+
+  /// No description provided for @direct_sale_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'من بضاعة العربية'**
+  String get direct_sale_subtitle;
+
+  /// No description provided for @direct_sale_choose_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار العميل'**
+  String get direct_sale_choose_customer;
+
+  /// No description provided for @direct_sale_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get direct_sale_customer;
+
+  /// No description provided for @direct_sale_cash_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل نقدي'**
+  String get direct_sale_cash_customer;
+
+  /// No description provided for @direct_sale_cash_customer_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع سريع بدون إنشاء عميل جديد'**
+  String get direct_sale_cash_customer_hint;
+
+  /// No description provided for @direct_sale_new_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عميل جديد'**
+  String get direct_sale_new_customer;
+
+  /// No description provided for @direct_sale_new_customer_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء عميل وحفظ بياناته للاستخدام لاحقاً'**
+  String get direct_sale_new_customer_hint;
+
+  /// No description provided for @direct_sale_new_customer_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم حفظه للاستخدام لاحقاً'**
+  String get direct_sale_new_customer_subtitle;
+
+  /// No description provided for @direct_sale_quick.
+  ///
+  /// In ar, this message translates to:
+  /// **'سريع'**
+  String get direct_sale_quick;
+
+  /// No description provided for @direct_sale_saved.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفوظ'**
+  String get direct_sale_saved;
+
+  /// No description provided for @direct_sale_customer_guidance.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو البيع سريع ومش محتاج تحفظ بيانات العميل ← عميل نقدي\nلو العميل مهم وعايز تحتفظ ببياناته ← إضافة عميل جديد'**
+  String get direct_sale_customer_guidance;
+
+  /// No description provided for @direct_sale_continue_products.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة لاختيار المنتجات'**
+  String get direct_sale_continue_products;
+
+  /// No description provided for @direct_sale_change_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير العميل'**
+  String get direct_sale_change_customer;
+
+  /// No description provided for @direct_sale_name.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get direct_sale_name;
+
+  /// No description provided for @direct_sale_name_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: أحمد محمود'**
+  String get direct_sale_name_hint;
+
+  /// No description provided for @direct_sale_name_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم مطلوب'**
+  String get direct_sale_name_required;
+
+  /// No description provided for @direct_sale_phone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل'**
+  String get direct_sale_phone;
+
+  /// No description provided for @direct_sale_phone_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'01xxxxxxxxx'**
+  String get direct_sale_phone_hint;
+
+  /// No description provided for @direct_sale_phone_invalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل لازم يكون 11 رقم ويبدأ بـ 01'**
+  String get direct_sale_phone_invalid;
+
+  /// No description provided for @direct_sale_address.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get direct_sale_address;
+
+  /// No description provided for @direct_sale_area.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة'**
+  String get direct_sale_area;
+
+  /// No description provided for @direct_sale_notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get direct_sale_notes;
+
+  /// No description provided for @direct_sale_optional.
+  ///
+  /// In ar, this message translates to:
+  /// **'(اختياري)'**
+  String get direct_sale_optional;
+
+  /// No description provided for @direct_sale_current_location.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الموقع الحالي'**
+  String get direct_sale_current_location;
+
+  /// No description provided for @direct_sale_accuracy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدقة'**
+  String get direct_sale_accuracy;
+
+  /// No description provided for @direct_sale_location_disabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل خدمة الموقع ثم حاول مرة أخرى'**
+  String get direct_sale_location_disabled;
+
+  /// No description provided for @direct_sale_location_denied.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمح بالوصول إلى الموقع لاستخدام موقعك الحالي'**
+  String get direct_sale_location_denied;
+
+  /// No description provided for @direct_sale_location_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديد الموقع الحالي. حاول مرة أخرى'**
+  String get direct_sale_location_failed;
+
+  /// No description provided for @direct_sale_save_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ واستخدام العميل'**
+  String get direct_sale_save_customer;
+
+  /// No description provided for @direct_sale_customer_save_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ العملاء غير متاح حالياً. لم يتم حفظ هذه البيانات.'**
+  String get direct_sale_customer_save_unavailable;
+
+  /// No description provided for @direct_sale_choose_products.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار المنتجات'**
+  String get direct_sale_choose_products;
+
+  /// No description provided for @direct_sale_vehicle_only.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح على العربية فقط'**
+  String get direct_sale_vehicle_only;
+
+  /// No description provided for @direct_sale_inventory_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد العربية وأسعار البيع غير متاحة حالياً.'**
+  String get direct_sale_inventory_unavailable;
+
+  /// No description provided for @direct_sale_no_products.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات متاحة للبيع حالياً'**
+  String get direct_sale_no_products;
+
+  /// No description provided for @direct_sale_available.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح: {quantity}'**
+  String direct_sale_available(int quantity);
+
+  /// No description provided for @direct_sale_increase.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة الكمية'**
+  String get direct_sale_increase;
+
+  /// No description provided for @direct_sale_decrease.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقليل الكمية'**
+  String get direct_sale_decrease;
+
+  /// No description provided for @direct_sale_basket.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة ({count}) · {amount}'**
+  String direct_sale_basket(int count, String amount);
+
+  /// No description provided for @direct_sale_total_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي المطلوب'**
+  String get direct_sale_total_required;
+
+  /// No description provided for @direct_sale_counted_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المستلم بعد العد'**
+  String get direct_sale_counted_amount;
+
+  /// No description provided for @direct_sale_amount_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'0'**
+  String get direct_sale_amount_hint;
+
+  /// No description provided for @direct_sale_amount_matches.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ مطابق'**
+  String get direct_sale_amount_matches;
+
+  /// No description provided for @direct_sale_amount_mismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ غير مطابق — المطلوب {amount}'**
+  String direct_sale_amount_mismatch(String amount);
+
+  /// No description provided for @direct_sale_insta_pay.
+  ///
+  /// In ar, this message translates to:
+  /// **'InstaPay'**
+  String get direct_sale_insta_pay;
+
+  /// No description provided for @direct_sale_wallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة إلكترونية'**
+  String get direct_sale_wallet;
+
+  /// No description provided for @direct_sale_confirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد البيع والتحصيل'**
+  String get direct_sale_confirm;
+
+  /// No description provided for @direct_sale_confirmation_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد البيع والتحصيل غير متاح حالياً. لم يتم تسجيل عملية بيع.'**
+  String get direct_sale_confirmation_unavailable;
+
+  /// No description provided for @direct_sale_success.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم البيع بنجاح'**
+  String get direct_sale_success;
+
+  /// No description provided for @direct_sale_receipt_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{customer} · {amount} · {method}'**
+  String direct_sale_receipt_summary(
+    String customer,
+    String amount,
+    String method,
+  );
+
+  /// No description provided for @direct_sale_new_transaction.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملية بيع جديدة'**
+  String get direct_sale_new_transaction;
+
+  /// No description provided for @contact_help_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تحتاج إلى مساعدة؟'**
+  String get contact_help_title;
+
+  /// No description provided for @contact_help_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فريق عمليات ستوراس جاهز لمساعدتك'**
+  String get contact_help_subtitle;
+
+  /// No description provided for @contact_support_number.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الدعم'**
+  String get contact_support_number;
+
+  /// No description provided for @contact_working_hours.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد العمل'**
+  String get contact_working_hours;
+
+  /// No description provided for @contact_working_hours_value.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوميًا 8 ص — 10 م'**
+  String get contact_working_hours_value;
+
+  /// No description provided for @contact_call_support.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال بالدعم'**
+  String get contact_call_support;
+
+  /// No description provided for @contact_whatsapp.
+  ///
+  /// In ar, this message translates to:
+  /// **'واتساب'**
+  String get contact_whatsapp;
+
+  /// No description provided for @contact_send_message.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رسالة'**
+  String get contact_send_message;
+
+  /// No description provided for @contact_whatsapp_message.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحبًا، أحتاج إلى مساعدة من فريق Store Us Delivery.'**
+  String get contact_whatsapp_message;
+
+  /// No description provided for @contact_action_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح التطبيق المطلوب على هذا الجهاز'**
+  String get contact_action_unavailable;
+
+  /// No description provided for @receive_vehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام السيارة'**
+  String get receive_vehicle;
+
+  /// No description provided for @reports_status_pending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get reports_status_pending;
+
+  /// No description provided for @reports_status_rescheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة الجدولة'**
+  String get reports_status_rescheduled;
+
+  /// No description provided for @reports_status_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get reports_status_cancelled;
+
+  /// No description provided for @reports_distribution_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفصيل حالات الطلبات غير متاح لهذه الرحلة'**
+  String get reports_distribution_unavailable;
+
+  /// No description provided for @reports_financial_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملخص المالي'**
+  String get reports_financial_summary;
+
+  /// No description provided for @reports_invoiced_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الفواتير'**
+  String get reports_invoiced_amount;
+
+  /// No description provided for @reports_outstanding_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المستحق'**
+  String get reports_outstanding_amount;
+
+  /// No description provided for @reports_received_warehouse.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المُسلّم للمخزن'**
+  String get reports_received_warehouse;
+
+  /// No description provided for @reports_custody_balance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد العهدة'**
+  String get reports_custody_balance;
+
+  /// No description provided for @reports_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get reports_retry;
+
+  /// No description provided for @trip_acceptance_admin_override.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاعتماد بواسطة الإدارة'**
+  String get trip_acceptance_admin_override;
+
+  /// No description provided for @contact_subject.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان الرسالة'**
+  String get contact_subject;
+
+  /// No description provided for @contact_message.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الرسالة'**
+  String get contact_message;
+
+  /// No description provided for @contact_subject_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل عنوان الرسالة'**
+  String get contact_subject_required;
+
+  /// No description provided for @contact_message_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب تفاصيل الرسالة'**
+  String get contact_message_required;
+
+  /// No description provided for @contact_send.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get contact_send;
+
+  /// No description provided for @contact_send_success.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال رسالتك إلى الدعم بنجاح'**
+  String get contact_send_success;
+
+  /// No description provided for @contact_send_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إرسال الرسالة، حاول مرة أخرى'**
+  String get contact_send_error;
+
+  /// No description provided for @contact_load_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات الدعم حاليًا'**
+  String get contact_load_error;
+
+  /// No description provided for @contact_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get contact_retry;
 }
 
 class _AppLocalizationsDelegate

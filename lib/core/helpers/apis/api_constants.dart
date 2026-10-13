@@ -43,4 +43,7 @@ class ApiConstants {
   static const String confirmDelivery =
       '$trips/{tripId}/orders/{orderId}/confirm-delivery';
   static const String topRank = '/top-rank';
+  static const String reportsOverview = '/reports/overview';
+  static const String supportContact = '/support/contact';
+  static const String supportMessages = '/support/messages';
 }

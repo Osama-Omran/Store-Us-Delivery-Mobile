@@ -33,8 +33,8 @@ class AppMenuDrawer extends StatelessWidget {
     required this.userName,
     required this.userRole,
     this.isOnTrip = true,
-    this.pendingDeliveriesCount = 0,
-    this.pendingTransfersCount = 0,
+    this.pendingDeliveriesCount,
+    this.pendingTransfersCount,
     this.selectedSection = AppMenuSection.deliveries,
     this.onTopRankTap,
     this.onTreasuryTap,
@@ -46,15 +46,16 @@ class AppMenuDrawer extends StatelessWidget {
     this.onReportsTap,
     this.onContactUsTap,
     this.onReceiveCustodyTap,
+    this.canReceiveTrip = false,
   });
 
   final String userName;
   final String userRole;
   final bool isOnTrip;
-  final int pendingDeliveriesCount;
-  final int pendingTransfersCount;
+  final int? pendingDeliveriesCount;
+  final int? pendingTransfersCount;
   final AppMenuSection selectedSection;
-
+  final bool canReceiveTrip;
   final VoidCallback? onTopRankTap;
   final VoidCallback? onTreasuryTap;
   final VoidCallback? onDeliveriesTap;
@@ -181,13 +182,15 @@ class AppMenuDrawer extends StatelessWidget {
                     onTap: () => _handleTap(context, onContactUsTap),
                   ),
 
-                  AppMenuDrawerItem(
-                    title: context.strings.receive_custody,
-                    icon: Icons.local_shipping_outlined,
-                    isSelected:
-                        selectedSection == AppMenuSection.receiveCustody,
-                    onTap: () => _handleTap(context, onReceiveCustodyTap),
-                  ),
+                  if (canReceiveTrip)
+                    AppMenuDrawerItem(
+                      title: context.strings.receive_vehicle,
+                      icon: Icons.local_shipping_outlined,
+                      badgeCount: 1,
+                      isSelected:
+                          selectedSection == AppMenuSection.receiveCustody,
+                      onTap: () => _handleTap(context, onReceiveCustodyTap),
+                    ),
                 ],
               ),
             ),

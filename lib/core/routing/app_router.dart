@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/cubit/direct_sale_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/screens/direct_sale_screen.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/screens/account_screen.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
@@ -36,6 +38,17 @@ class AppRouter {
         : RoutesNames.login,
     navigatorKey: navigatorKey,
     routes: [
+      GoRoute(
+        name: RoutesNames.directSale,
+        path: RoutesNames.directSale,
+        pageBuilder: (_, state) => _slidePageBuilder(
+          BlocProvider(
+            create: (_) => getIt<DirectSaleCubit>(),
+            child: const DirectSaleScreen(),
+          ),
+          state,
+        ),
+      ),
       GoRoute(
         name: RoutesNames.login,
         path: RoutesNames.login,
@@ -255,7 +268,6 @@ class AppRouter {
           );
         },
       ),
-
     ],
   );
 

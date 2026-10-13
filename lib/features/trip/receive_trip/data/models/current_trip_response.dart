@@ -164,6 +164,14 @@ class TripAcceptance {
     'status': status,
     'accepted_at': acceptedAt?.toUtc().toIso8601String(),
   };
+
+  bool get isOperationallyAccepted {
+    final value = status.trim().toUpperCase();
+
+    return value == 'ACCEPTED' || value == 'OVERRIDDEN';
+  }
+
+  bool get requiresReceiving => status.trim().toUpperCase() == 'PENDING';
 }
 
 class TripOrdersSummary {

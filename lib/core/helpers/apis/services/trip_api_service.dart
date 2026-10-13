@@ -1,3 +1,5 @@
+import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/send_support_message_body.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/support_contact_response.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/data/models/cancel_delivery_request_body.dart';
 
@@ -104,4 +106,24 @@ abstract class TripApiService {
     @Query('category') String? category,
     @Query('entity') String? entity,
   );
+
+  @GET(ApiConstants.reportsOverview)
+  Future<dynamic> getReportsOverview(
+    @Header('Authorization') String authorization,
+    @Query('from') String from,
+    @Query('to') String to,
+  );
+
+
+  @GET(ApiConstants.supportContact)
+  Future<SupportContactResponse> getSupportContact(
+      @Header('Authorization') String authorization,
+      );
+
+  @POST(ApiConstants.supportMessages)
+  Future<dynamic> sendSupportMessage(
+      @Header('Authorization') String authorization,
+      @Body() SendSupportMessageBody body,
+      );
+
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_state.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/utils/trip_badge_counts.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_state.dart';
 
@@ -100,8 +101,24 @@ class _LayoutContentState extends State<_LayoutContent> {
             bottom: true,
             child: Scaffold(
               key: _scaffoldKey,
-              onDrawerChanged: (isOpen) =>
-                  setState(() => _isDrawerOpen = isOpen),
+              onDrawerChanged: (isOpen) {
+                setState(() => _isDrawerOpen = isOpen);
+
+                if (!isOpen) return;
+
+                final tripCubit = context.read<TripTabCubit>();
+                final tripState = tripCubit.state;
+
+                // Avoid reloading an already accepted trip and its orders.
+                final hasAcceptedTrip =
+                    tripState is TripTabSuccessState &&
+                    tripState.trip.acceptance?.status.trim().toUpperCase() ==
+                        'ACCEPTED';
+
+                if (!hasAcceptedTrip) {
+                  tripCubit.getCurrentTrip();
+                }
+              },
               backgroundColor: AppColors.white0,
 
               // ======= Original Stack ======= //
@@ -158,37 +175,57 @@ class _LayoutContentState extends State<_LayoutContent> {
                       ? user!.role
                       : '—';
 
-                  return AppMenuDrawer(
-                    userName: userName,
-                    userRole: userRole,
 
-                    // /me does not return trip acceptance status.
-                    isOnTrip: false,
+                  return BlocSelector<TripTabCubit, TripTabState, TripBadgeCounts>(
+                    selector: getTripBadgeCounts,
+                    builder: (context, counts) {
+                      return AppMenuDrawer(
+                        userName: userName,
+                        userRole: userRole,
 
-                    // No verified counters for these menu items yet.
-                    pendingDeliveriesCount: 0,
-                    pendingTransfersCount: 0,
+                        isOnTrip: false,
 
-                    selectedSection: layout.isTopRank
-                        ? AppMenuSection.topRank
-                        : layout.isTreasury
-                        ? AppMenuSection.treasury
-                        : layout.isStockTransfer
-                        ? AppMenuSection.stockTransfer
-                        : layout.isReports
-                        ? AppMenuSection.reports
-                        : AppMenuSection.deliveries,
+                        // Real pending orders count.
+                        pendingDeliveriesCount: counts.deliveries,
 
-                    onTopRankTap: layout.openTopRank,
-                    onTreasuryTap: layout.openTreasury,
-                    onDeliveriesTap: () {},
-                    onStockTransferTap: layout.openStockTransfer,
-                    onDirectSaleTap: () {},
-                    onCustomersTap: () {},
-                    onAreasTap: () {},
-                    onReportsTap: layout.openReports,
-                    onContactUsTap: () {},
-                    onReceiveCustodyTap: () {},
+                        // Pending stock transfers need their actual API.
+                        pendingTransfersCount: null,
+
+                        // Receiving is available for a SHIPPED, PENDING trip.
+                        canReceiveTrip: counts.receiveVehicle > 0,
+
+                        selectedSection: layout.isTopRank
+                            ? AppMenuSection.topRank
+                            : layout.isTreasury
+                            ? AppMenuSection.treasury
+                            : layout.isStockTransfer
+                            ? AppMenuSection.stockTransfer
+                            : layout.isReports
+                            ? AppMenuSection.reports
+                            : layout.isContactUs
+                            ? AppMenuSection.contactUs
+                            : AppMenuSection.deliveries,
+
+                        onTopRankTap: layout.openTopRank,
+                        onTreasuryTap: layout.openTreasury,
+                        onDeliveriesTap: () {},
+                        onStockTransferTap: layout.openStockTransfer,
+                        onDirectSaleTap: () =>
+                            context.pushNamed(RoutesNames.directSale),
+                        onCustomersTap: () {},
+                        onAreasTap: () {},
+                        onReportsTap: layout.openReports,
+                        onContactUsTap: layout.openContactUs,
+
+                        onReceiveCustodyTap: () async {
+                          await context.pushNamed(RoutesNames.receiveTrip);
+
+                          if (!context.mounted) return;
+
+                          await context.read<TripTabCubit>().getCurrentTrip();
+                        },
+                      );
+                    },
                   );
                 },
               ),

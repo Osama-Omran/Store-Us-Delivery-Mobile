@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 
@@ -26,26 +26,23 @@ class HomeCurrentTripCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trip = state.trip;
-
     final vehicleName = _nameOrId(trip.vehicle?.name, trip.vehicle?.id);
-
     final driverName = _nameOrId(trip.driver?.name, trip.driver?.id);
-
     final warehouseName = _nameOrId(trip.warehouse?.name, trip.warehouse?.id);
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [AppColors.blue2, AppColors.blue5],
+          colors: [AppColors.blue4, AppColors.white0],
         ),
         borderRadius: BorderRadius.circular(26),
         border: Border.all(color: AppColors.blue3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(alpha: .04),
+            color: AppColors.black0.withValues(alpha: .035),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -54,120 +51,126 @@ class HomeCurrentTripCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ======= Trip Header ======= //
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              Expanded(
                 child: Text(
                   context.strings.your_current_trip,
                   style: TextStyle(
-                    fontSize: 21,
+                    fontSize: 19,
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
                   ),
                 ),
               ),
-
-              const Gap(8),
-
+              const SizedBox(width: 8),
               Container(
+                constraints: const BoxConstraints(maxWidth: 160),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
+                  horizontal: 12,
                   vertical: 7,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(18),
                 ),
                 child: Text(
                   '#${trip.number}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   textDirection: TextDirection.ltr,
                   style: TextStyle(
                     color: AppColors.white0,
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
             ],
           ),
-
-          const Gap(20),
-
-          // ======= Trip Information ======= //
-          _TripInfoRow(
-            icon: Icons.local_shipping_outlined,
-            text: '${context.strings.van}: $vehicleName',
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 13,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.white0,
+              borderRadius: BorderRadius.circular(19),
+              border: Border.all(color: AppColors.grey3),
+            ),
+            child: Column(
+              children: [
+                _TripInfoRow(
+                  icon: Icons.local_shipping_outlined,
+                  text: '${context.strings.van}: $vehicleName',
+                ),
+                const SizedBox(height: 12),
+                _TripInfoRow(
+                  icon: Icons.person_outline_rounded,
+                  text: '${context.strings.driver}: $driverName',
+                ),
+                const SizedBox(height: 12),
+                _TripInfoRow(
+                  icon: Icons.location_on_outlined,
+                  text: warehouseName,
+                ),
+              ],
+            ),
           ),
-
-          const Gap(8),
-
-          _TripInfoRow(text: '${context.strings.driver}: $driverName'),
-
-          const Gap(8),
-
-          _TripInfoRow(icon: Icons.location_on_outlined, text: warehouseName),
-
-          const Gap(20),
-
-          // ======= Orders Statistics ======= //
+          const SizedBox(height: 16),
           HomeOrderStatistics(
             total: trip.ordersSummary?.total,
             delivered: state.deliveredOrders,
             remaining: state.remainingOrders,
           ),
-
           if (state.ordersStatus == HomeOrdersStatus.loading)
             const Padding(
-              padding: EdgeInsets.only(top: 12),
-              child: LinearProgressIndicator(minHeight: 3),
+              padding: EdgeInsets.only(top: 8),
+              child: Center(child: CustomLoadingIndicator(size: 44)),
             ),
-
           if (state.ordersStatus == HomeOrdersStatus.failure)
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
               child: TextButton.icon(
                 onPressed: onRetryOrders,
                 icon: const Icon(Icons.refresh_rounded),
                 label: Text(context.strings.home_retry_orders),
               ),
             ),
-
-          const Gap(14),
-
-          // ======= Collected Amount ======= //
+          const SizedBox(height: 14),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 14,
+            ),
             decoration: BoxDecoration(
               color: AppColors.white0,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: AppColors.grey3),
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.account_balance_wallet_outlined,
                   size: 21,
-                  color: AppColors.grey4,
+                  color: AppColors.primary,
                 ),
-
-                const Gap(8),
-
+                const SizedBox(width: 9),
                 Expanded(
                   child: Text(
                     context.strings.collected_amount,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: AppColors.grey4,
                     ),
                   ),
                 ),
-
                 Text(
                   '—',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 21,
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
                   ),
@@ -175,40 +178,34 @@ class HomeCurrentTripCard extends StatelessWidget {
               ],
             ),
           ),
-
-          const Gap(20),
-
-          // ======= Continue Trip ======= //
+          const SizedBox(height: 16),
           SizedBox(
-            height: 70,
+            height: 60,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                LayoutCubit.get(context).selectTap(1);
-              },
+              onPressed: () => LayoutCubit.get(context).selectTap(1),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white0,
-                elevation: 5,
-                shadowColor: AppColors.primary.withValues(alpha: .24),
+                elevation: 2,
+                shadowColor: AppColors.primary.withValues(alpha: .18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
-                spacing: 12,
                 children: [
                   Text(
                     context.strings.continue_trip,
                     style: const TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
-
-                  const Icon(Icons.arrow_forward_ios, size: 17),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                 ],
               ),
             ),
@@ -220,27 +217,36 @@ class HomeCurrentTripCard extends StatelessWidget {
 }
 
 class _TripInfoRow extends StatelessWidget {
-  const _TripInfoRow({required this.text, this.icon});
+  const _TripInfoRow({required this.text, required this.icon});
 
   final String text;
-  final IconData? icon;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 20,
-          child: icon == null
-              ? const SizedBox.shrink()
-              : Icon(icon, size: 19, color: AppColors.grey4),
+        Container(
+          width: 32,
+          height: 32,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: AppColors.blue4,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, size: 18, color: AppColors.primary),
         ),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 15, height: 1.4, color: AppColors.grey4),
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.45,
+              fontWeight: FontWeight.w600,
+              color: AppColors.black1,
+            ),
           ),
         ),
       ],

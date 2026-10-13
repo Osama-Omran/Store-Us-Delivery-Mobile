@@ -1,11 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/data/repo/concrete_contact_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/domain/repo/contact_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/domain/usecases/get_support_contact_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/domain/usecases/send_support_message_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/contact_us/presentation/cubit/contact_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/cubit/direct_sale_cubit.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/dio_factory.dart';
 import 'package:storeus_delivery/core/helpers/apis/environment_config.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/auth_api_service.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/trip_api_service.dart';
 import 'package:storeus_delivery/core/helpers/localization/locale_cubit.dart';
 import 'package:storeus_delivery/core/helpers/utils/force_update_services.dart';
+import 'package:storeus_delivery/features/drawer_features/reports/data/repo/concrete_reports_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/reports/domain/repo/reports_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/reports/domain/usecases/get_reports_overview_usecase.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/cubit/top_rank_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/cubit/treasury_cubit.dart';
@@ -95,9 +104,12 @@ void setupLocator() {
   getIt.registerFactory<LocaleCubit>(() => LocaleCubit());
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<LoginUsecase>()));
   getIt.registerFactory<LayoutCubit>(() => LayoutCubit());
+  getIt.registerFactory<DirectSaleCubit>(() => DirectSaleCubit());
   getIt.registerFactory<TreasuryCubit>(() => TreasuryCubit());
   getIt.registerFactory<StockTransferCubit>(() => StockTransferCubit());
-  getIt.registerFactory<ReportsCubit>(() => ReportsCubit());
+  getIt.registerFactory<ReportsCubit>(
+    () => ReportsCubit(getIt<GetReportsOverviewUsecase>()),
+  );
 
   getIt.registerLazySingleton<TripApiService>(
     () => TripApiService(getIt<Dio>()),
@@ -293,5 +305,32 @@ void setupLocator() {
 
   getIt.registerFactory<TopRankCubit>(
     () => TopRankCubit(getIt<GetTopRankUsecase>()),
+  );
+
+  getIt.registerLazySingleton<ReportsRepoInterface>(
+    () => ConcreteReportsRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetReportsOverviewUsecase>(
+    () => GetReportsOverviewUsecase(getIt<ReportsRepoInterface>()),
+  );
+
+  getIt.registerLazySingleton<ContactRepoInterface>(
+    () => ConcreteContactRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetSupportContactUsecase>(
+    () => GetSupportContactUsecase(getIt<ContactRepoInterface>()),
+  );
+
+  getIt.registerLazySingleton<SendSupportMessageUsecase>(
+    () => SendSupportMessageUsecase(getIt<ContactRepoInterface>()),
+  );
+
+  getIt.registerFactory<ContactCubit>(
+    () => ContactCubit(
+      getIt<GetSupportContactUsecase>(),
+      getIt<SendSupportMessageUsecase>(),
+    ),
   );
 }

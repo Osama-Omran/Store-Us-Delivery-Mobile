@@ -1,18 +1,17 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_history_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
+import 'package:storeus_delivery/features/home/presentation/widgets/home_current_trip_card.dart';
+import 'package:storeus_delivery/features/home/presentation/widgets/home_header.dart';
+import 'package:storeus_delivery/features/home/presentation/widgets/home_message.dart';
 import 'package:storeus_delivery/features/home/presentation/widgets/home_previous_trips_section.dart';
-
-import '../widgets/home_current_trip_card.dart';
-import '../widgets/home_header.dart';
-import '../widgets/home_message.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -60,7 +59,6 @@ class _HomeScreenBody extends StatelessWidget {
           builder: (context, state) {
             return RefreshIndicator(
               color: AppColors.primary,
-
               onRefresh: () async {
                 await Future.wait<void>([
                   HomeCubit.get(context).getCurrentTrip(),
@@ -69,23 +67,24 @@ class _HomeScreenBody extends StatelessWidget {
               },
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(24, 32, 24, 124),
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 124),
                 children: [
-                  // ======= Original Header ======= //
                   HomeHeader(
                     userName: userName,
                     tripBadge: _getTripBadge(context, state),
                   ),
-
-                  const Gap(24),
-
-                  // ======= Loading ======= //
+                  const SizedBox(height: 24),
                   if (state is HomeInitial || state is HomeLoadingState)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 80),
-                      child: Center(child: CircularProgressIndicator()),
+                    Container(
+                      height: 190,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.white0,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: AppColors.grey3),
+                      ),
+                      child: const CustomLoadingIndicator(size: 96),
                     )
-                  // ======= Failure ======= //
                   else if (state is HomeFailureState)
                     HomeMessage(
                       message: state.errorMessage?.isNotEmpty == true
@@ -93,22 +92,18 @@ class _HomeScreenBody extends StatelessWidget {
                           : context.strings.current_trip_load_failed,
                       onRetry: () => HomeCubit.get(context).getCurrentTrip(),
                     )
-                  // ======= No Current Trip ======= //
                   else if (state is HomeEmptyState)
                     HomeMessage(
                       message: context.strings.home_no_current_trip,
                       onRetry: () => HomeCubit.get(context).getCurrentTrip(),
                     )
-                  // ======= Current Trip ======= //
                   else if (state is HomeSuccessState)
                     HomeCurrentTripCard(
                       state: state,
                       onRetryOrders: () =>
                           HomeCubit.get(context).getTripOrders(),
                     ),
-
-                  const Gap(24),
-
+                  const SizedBox(height: 26),
                   HomePreviousTripsSection(
                     currentTripId: state is HomeSuccessState
                         ? state.trip.id

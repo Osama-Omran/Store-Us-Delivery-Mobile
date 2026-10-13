@@ -8,6 +8,7 @@ import 'package:storeus_delivery/core/helpers/localization/locale_cubit.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart';
 import 'package:storeus_delivery/core/theme/app_theme.dart';
+import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
 
 class AppBuilder extends StatelessWidget {
   const AppBuilder({super.key});
@@ -15,7 +16,12 @@ class AppBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => getIt<LocaleCubit>())],
+      providers: [
+        BlocProvider(create: (_) => getIt<LocaleCubit>()),
+        BlocProvider<TripTabCubit>(
+          create: (_) => getIt<TripTabCubit>()..getCurrentTrip(),
+        ),
+      ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (_, locale) {
           return OverlaySupport(

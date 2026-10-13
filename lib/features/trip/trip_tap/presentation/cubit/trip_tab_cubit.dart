@@ -56,7 +56,7 @@ class TripTabCubit extends Cubit<TripTabState> {
 
         emit(TripTabSuccessState(trip));
 
-        if (trip.acceptance?.status.trim().toUpperCase() == 'ACCEPTED') {
+        if (trip.acceptance?.isOperationallyAccepted == true) {
           acceptedTrip = trip;
         }
       },

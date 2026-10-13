@@ -11,29 +11,55 @@ class HomeMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 30),
       decoration: BoxDecoration(
         color: AppColors.white0,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.grey3),
       ),
       child: Column(
-        spacing: 18,
         children: [
-          Icon(
-            Icons.local_shipping_outlined,
-            size: 54,
-            color: AppColors.primary,
+          Container(
+            width: 78,
+            height: 78,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.blue4,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.local_shipping_outlined,
+              size: 38,
+              color: AppColors.primary,
+            ),
           ),
+          const SizedBox(height: 16),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.grey4, fontSize: 15),
+            style: TextStyle(
+              color: AppColors.grey4,
+              fontSize: 15,
+              height: 1.5,
+            ),
           ),
+          const SizedBox(height: 18),
           OutlinedButton.icon(
             onPressed: onRetry,
             icon: const Icon(Icons.refresh_rounded),
             label: Text(context.strings.current_trip_retry),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              side: BorderSide(color: AppColors.blue3),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 22,
+                vertical: 12,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
           ),
         ],
       ),

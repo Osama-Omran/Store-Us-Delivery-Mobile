@@ -41,6 +41,7 @@ class TripData extends StatelessWidget {
     return switch (status) {
       'PENDING' => context.strings.trip_acceptance_pending,
       'ACCEPTED' => context.strings.trip_tab_accepted,
+      'OVERRIDDEN' => context.strings.trip_acceptance_admin_override,
       null || '' => context.strings.trip_tab_unknown_status,
       final value => value,
     };

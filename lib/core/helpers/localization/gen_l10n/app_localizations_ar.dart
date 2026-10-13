@@ -1586,4 +1586,271 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get delivery_finalize_title => 'تأكيد التسليم';
+
+  @override
+  String get direct_sale_subtitle => 'من بضاعة العربية';
+
+  @override
+  String get direct_sale_choose_customer => 'اختار العميل';
+
+  @override
+  String get direct_sale_customer => 'العميل';
+
+  @override
+  String get direct_sale_cash_customer => 'عميل نقدي';
+
+  @override
+  String get direct_sale_cash_customer_hint => 'بيع سريع بدون إنشاء عميل جديد';
+
+  @override
+  String get direct_sale_new_customer => 'إضافة عميل جديد';
+
+  @override
+  String get direct_sale_new_customer_hint =>
+      'إنشاء عميل وحفظ بياناته للاستخدام لاحقاً';
+
+  @override
+  String get direct_sale_new_customer_subtitle => 'سيتم حفظه للاستخدام لاحقاً';
+
+  @override
+  String get direct_sale_quick => 'سريع';
+
+  @override
+  String get direct_sale_saved => 'محفوظ';
+
+  @override
+  String get direct_sale_customer_guidance =>
+      'لو البيع سريع ومش محتاج تحفظ بيانات العميل ← عميل نقدي\nلو العميل مهم وعايز تحتفظ ببياناته ← إضافة عميل جديد';
+
+  @override
+  String get direct_sale_continue_products => 'متابعة لاختيار المنتجات';
+
+  @override
+  String get direct_sale_change_customer => 'تغيير العميل';
+
+  @override
+  String get direct_sale_name => 'الاسم';
+
+  @override
+  String get direct_sale_name_hint => 'مثال: أحمد محمود';
+
+  @override
+  String get direct_sale_name_required => 'الاسم مطلوب';
+
+  @override
+  String get direct_sale_phone => 'رقم الموبايل';
+
+  @override
+  String get direct_sale_phone_hint => '01xxxxxxxxx';
+
+  @override
+  String get direct_sale_phone_invalid =>
+      'رقم الموبايل لازم يكون 11 رقم ويبدأ بـ 01';
+
+  @override
+  String get direct_sale_address => 'العنوان';
+
+  @override
+  String get direct_sale_area => 'المنطقة';
+
+  @override
+  String get direct_sale_notes => 'ملاحظات';
+
+  @override
+  String get direct_sale_optional => '(اختياري)';
+
+  @override
+  String get direct_sale_current_location => 'تحديد الموقع الحالي';
+
+  @override
+  String get direct_sale_accuracy => 'الدقة';
+
+  @override
+  String get direct_sale_location_disabled =>
+      'فعّل خدمة الموقع ثم حاول مرة أخرى';
+
+  @override
+  String get direct_sale_location_denied =>
+      'اسمح بالوصول إلى الموقع لاستخدام موقعك الحالي';
+
+  @override
+  String get direct_sale_location_failed =>
+      'تعذر تحديد الموقع الحالي. حاول مرة أخرى';
+
+  @override
+  String get direct_sale_save_customer => 'حفظ واستخدام العميل';
+
+  @override
+  String get direct_sale_customer_save_unavailable =>
+      'حفظ العملاء غير متاح حالياً. لم يتم حفظ هذه البيانات.';
+
+  @override
+  String get direct_sale_choose_products => 'اختيار المنتجات';
+
+  @override
+  String get direct_sale_vehicle_only => 'المتاح على العربية فقط';
+
+  @override
+  String get direct_sale_inventory_unavailable =>
+      'رصيد العربية وأسعار البيع غير متاحة حالياً.';
+
+  @override
+  String get direct_sale_no_products => 'لا توجد منتجات متاحة للبيع حالياً';
+
+  @override
+  String direct_sale_available(int quantity) {
+    return 'متاح: $quantity';
+  }
+
+  @override
+  String get direct_sale_increase => 'زيادة الكمية';
+
+  @override
+  String get direct_sale_decrease => 'تقليل الكمية';
+
+  @override
+  String direct_sale_basket(int count, String amount) {
+    return 'السلة ($count) · $amount';
+  }
+
+  @override
+  String get direct_sale_total_required => 'الإجمالي المطلوب';
+
+  @override
+  String get direct_sale_counted_amount => 'المبلغ المستلم بعد العد';
+
+  @override
+  String get direct_sale_amount_hint => '0';
+
+  @override
+  String get direct_sale_amount_matches => 'المبلغ مطابق';
+
+  @override
+  String direct_sale_amount_mismatch(String amount) {
+    return 'المبلغ غير مطابق — المطلوب $amount';
+  }
+
+  @override
+  String get direct_sale_insta_pay => 'InstaPay';
+
+  @override
+  String get direct_sale_wallet => 'محفظة إلكترونية';
+
+  @override
+  String get direct_sale_confirm => 'تأكيد البيع والتحصيل';
+
+  @override
+  String get direct_sale_confirmation_unavailable =>
+      'تأكيد البيع والتحصيل غير متاح حالياً. لم يتم تسجيل عملية بيع.';
+
+  @override
+  String get direct_sale_success => 'تم البيع بنجاح';
+
+  @override
+  String direct_sale_receipt_summary(
+    String customer,
+    String amount,
+    String method,
+  ) {
+    return '$customer · $amount · $method';
+  }
+
+  @override
+  String get direct_sale_new_transaction => 'عملية بيع جديدة';
+
+  @override
+  String get contact_help_title => 'هل تحتاج إلى مساعدة؟';
+
+  @override
+  String get contact_help_subtitle => 'فريق عمليات ستوراس جاهز لمساعدتك';
+
+  @override
+  String get contact_support_number => 'رقم الدعم';
+
+  @override
+  String get contact_working_hours => 'مواعيد العمل';
+
+  @override
+  String get contact_working_hours_value => 'يوميًا 8 ص — 10 م';
+
+  @override
+  String get contact_call_support => 'اتصال بالدعم';
+
+  @override
+  String get contact_whatsapp => 'واتساب';
+
+  @override
+  String get contact_send_message => 'إرسال رسالة';
+
+  @override
+  String get contact_whatsapp_message =>
+      'مرحبًا، أحتاج إلى مساعدة من فريق Store Us Delivery.';
+
+  @override
+  String get contact_action_unavailable =>
+      'تعذر فتح التطبيق المطلوب على هذا الجهاز';
+
+  @override
+  String get receive_vehicle => 'استلام السيارة';
+
+  @override
+  String get reports_status_pending => 'قيد الانتظار';
+
+  @override
+  String get reports_status_rescheduled => 'تمت إعادة الجدولة';
+
+  @override
+  String get reports_status_cancelled => 'ملغي';
+
+  @override
+  String get reports_distribution_unavailable =>
+      'تفصيل حالات الطلبات غير متاح لهذه الرحلة';
+
+  @override
+  String get reports_financial_summary => 'الملخص المالي';
+
+  @override
+  String get reports_invoiced_amount => 'قيمة الفواتير';
+
+  @override
+  String get reports_outstanding_amount => 'المبلغ المستحق';
+
+  @override
+  String get reports_received_warehouse => 'المبلغ المُسلّم للمخزن';
+
+  @override
+  String get reports_custody_balance => 'رصيد العهدة';
+
+  @override
+  String get reports_retry => 'إعادة المحاولة';
+
+  @override
+  String get trip_acceptance_admin_override => 'تم الاعتماد بواسطة الإدارة';
+
+  @override
+  String get contact_subject => 'عنوان الرسالة';
+
+  @override
+  String get contact_message => 'تفاصيل الرسالة';
+
+  @override
+  String get contact_subject_required => 'أدخل عنوان الرسالة';
+
+  @override
+  String get contact_message_required => 'اكتب تفاصيل الرسالة';
+
+  @override
+  String get contact_send => 'إرسال';
+
+  @override
+  String get contact_send_success => 'تم إرسال رسالتك إلى الدعم بنجاح';
+
+  @override
+  String get contact_send_error => 'تعذر إرسال الرسالة، حاول مرة أخرى';
+
+  @override
+  String get contact_load_error => 'تعذر تحميل بيانات الدعم حاليًا';
+
+  @override
+  String get contact_retry => 'إعادة المحاولة';
 }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/screens/current_trip_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
@@ -12,20 +11,19 @@ import 'package:storeus_delivery/features/trip/trip_tap/presentation/widgets/emp
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/widgets/trip_status_placeholder.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 
-class TripScreen extends StatelessWidget {
+class TripScreen extends StatefulWidget {
   const TripScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<TripTabCubit>()..getCurrentTrip(),
-      child: const _TripScreenBody(),
-    );
-  }
+  State<TripScreen> createState() => _TripScreenState();
 }
 
-class _TripScreenBody extends StatelessWidget {
-  const _TripScreenBody();
+class _TripScreenState extends State<TripScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TripTabCubit.get(context).getCurrentTrip();
+  }
 
   void _openOrderDetails(
     BuildContext context,
@@ -84,8 +82,9 @@ class _TripScreenBody extends StatelessWidget {
 
           final acceptanceStatus = trip.acceptance?.status.trim().toUpperCase();
 
-          // ======= Pending ======= //
-          if (acceptanceStatus == 'PENDING') {
+
+// ======= Pending Receiving ======= //
+          if (trip.acceptance?.requiresReceiving == true) {
             return EmptyTrips(
               tripNumber: trip.number,
               warehouseName: trip.warehouse?.name ?? trip.warehouse?.id ?? '—',
@@ -93,33 +92,32 @@ class _TripScreenBody extends StatelessWidget {
             );
           }
 
-          // ======= Accepted ======= //
-          if (acceptanceStatus == 'ACCEPTED') {
-            if (acceptanceStatus == 'ACCEPTED') {
-              final ordersLoaded =
-                  state.ordersStatus == TripOrdersStatus.success;
+// ======= Accepted By User Or Administration ======= //
+          if (trip.acceptance?.isOperationallyAccepted == true) {
+            final ordersLoaded =
+                state.ordersStatus == TripOrdersStatus.success;
 
-              return CurrentTripScreen.fromApi(
-                trip: trip,
-                orders: ordersLoaded ? state.orders : null,
-                ordersLoading: state.ordersStatus == TripOrdersStatus.loading,
-                ordersError: state.ordersStatus == TripOrdersStatus.failure
-                    ? state.ordersError ??
-                          context.strings.trip_orders_load_failed
-                    : null,
-                onRetryOrders: () => TripTabCubit.get(context).getTripOrders(),
+            return CurrentTripScreen.fromApi(
+              trip: trip,
+              orders: ordersLoaded ? state.orders : null,
+              ordersLoading:
+              state.ordersStatus == TripOrdersStatus.loading,
+              ordersError:
+              state.ordersStatus == TripOrdersStatus.failure
+                  ? state.ordersError ??
+                  context.strings.trip_orders_load_failed
+                  : null,
+              onRetryOrders: () =>
+                  TripTabCubit.get(context).getTripOrders(),
 
-                // ======= Open Order ======= //
-                onOpenOrder: (order) {
-                  _openOrderDetails(context, trip.id, order);
-                },
+              onOpenOrder: (order) {
+                _openOrderDetails(context, trip.id, order);
+              },
 
-                // ======= View Delivery Details ======= //
-                onShowDeliveryDetails: (order) {
-                  _openOrderDetails(context, trip.id, order);
-                },
-              );
-            }
+              onShowDeliveryDetails: (order) {
+                _openOrderDetails(context, trip.id, order);
+              },
+            );
           }
 
           // ======= Other Status ======= //

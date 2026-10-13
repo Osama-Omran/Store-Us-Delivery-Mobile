@@ -131,7 +131,10 @@ class ReportsFilters extends StatelessWidget {
             ),
             onSelected: cubit.selectTrip,
             itemBuilder: (_) => [
-              for (final trip in [allReportTrips, ...reportTripNumbers])
+              for (final trip in [
+                allReportTrips,
+                ...?state.data?.tripPerformance.map((trip) => trip.tripNumber),
+              ])
                 PopupMenuItem(
                   value: trip,
                   padding: EdgeInsets.zero,

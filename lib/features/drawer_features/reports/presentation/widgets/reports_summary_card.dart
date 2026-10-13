@@ -7,6 +7,11 @@ import 'package:storeus_delivery/features/drawer_features/reports/presentation/w
 import 'package:storeus_delivery/features/drawer_features/reports/presentation/widgets/reports_filters.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
+String formatReportPercentage(num number) {
+  final value = number.toDouble().clamp(0, 100);
+  return '${value.toStringAsFixed(1).replaceFirst(RegExp(r'\.0$'), '')}%';
+}
+
 class ReportsSummaryCard extends StatelessWidget {
   const ReportsSummaryCard({
     super.key,
@@ -20,12 +25,6 @@ class ReportsSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final amount = formatTripAmount(context, summary.collectedAmount);
-    final collectedAmount = context.isArabic
-        ? amount.replaceAllMapped(
-            RegExp(r'[0-9]'),
-            (match) => '٠١٢٣٤٥٦٧٨٩'[int.parse(match[0]!)],
-          )
-        : amount;
     return ReportsCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -56,8 +55,9 @@ class ReportsSummaryCard extends StatelessWidget {
               ),
               FittedBox(
                 fit: BoxFit.scaleDown,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  collectedAmount,
+                  amount,
                   style: Styles.textStyle24.copyWith(
                     color: AppColors.primary,
                     fontSize: 28,
@@ -76,10 +76,7 @@ class ReportsSummaryCard extends StatelessWidget {
           }
           return Row(
             spacing: 20,
-            children: [
-              ring,
-              Expanded(child: details),
-            ],
+            children: [ring, Expanded(child: details)],
           );
         },
       ),
@@ -90,43 +87,41 @@ class ReportsSummaryCard extends StatelessWidget {
 class _DeliveryRateRing extends StatelessWidget {
   const _DeliveryRateRing({required this.percentage, required this.size});
 
-  final int percentage;
+  final num percentage;
   final double size;
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: context.strings.reports_delivery_rate,
-      value: '$percentage%',
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned.fill(
-              child: CircularProgressIndicator(
-                key: const ValueKey('reports-delivery-ring'),
-                value: percentage / 100,
-                strokeWidth: 12,
-                color: AppColors.green0,
-                backgroundColor: AppColors.grey5,
-                strokeAlign: BorderSide.strokeAlignInside,
-                strokeCap: StrokeCap.butt,
-                trackGap: 0,
+  Widget build(BuildContext context) => Semantics(
+        label: context.strings.reports_delivery_rate,
+        value: formatReportPercentage(percentage),
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned.fill(
+                child: CircularProgressIndicator(
+                  key: const ValueKey('reports-delivery-ring'),
+                  value: (percentage.toDouble() / 100).clamp(0.0, 1.0),
+                  strokeWidth: 12,
+                  color: AppColors.green0,
+                  backgroundColor: AppColors.grey5,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                  strokeCap: StrokeCap.butt,
+                  trackGap: 0,
+                ),
               ),
-            ),
-            Text(
-              '$percentage%',
-              textDirection: TextDirection.ltr,
-              style: Styles.textStyle24.copyWith(
-                fontSize: 28,
-                color: AppColors.black1,
+              Text(
+                formatReportPercentage(percentage),
+                textDirection: TextDirection.ltr,
+                style: Styles.textStyle24.copyWith(
+                  fontSize: 28,
+                  color: AppColors.black1,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
