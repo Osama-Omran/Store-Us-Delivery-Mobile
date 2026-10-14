@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/screens/current_trip_screen.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
@@ -58,7 +58,9 @@ class _TripScreenState extends State<TripScreen> {
     return BlocBuilder<TripTabCubit, TripTabState>(
       builder: (context, state) {
         if (state is TripTabInitial || state is TripTabLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CustomLoadingIndicator(size: 96, primaryColor: true),
+          );
         }
 
         if (state is TripTabFailureState) {
@@ -82,8 +84,7 @@ class _TripScreenState extends State<TripScreen> {
 
           final acceptanceStatus = trip.acceptance?.status.trim().toUpperCase();
 
-
-// ======= Pending Receiving ======= //
+          // ======= Pending Receiving ======= //
           if (trip.acceptance?.requiresReceiving == true) {
             return EmptyTrips(
               tripNumber: trip.number,
@@ -92,23 +93,18 @@ class _TripScreenState extends State<TripScreen> {
             );
           }
 
-// ======= Accepted By User Or Administration ======= //
+          // ======= Accepted By User Or Administration ======= //
           if (trip.acceptance?.isOperationallyAccepted == true) {
-            final ordersLoaded =
-                state.ordersStatus == TripOrdersStatus.success;
+            final ordersLoaded = state.ordersStatus == TripOrdersStatus.success;
 
             return CurrentTripScreen.fromApi(
               trip: trip,
               orders: ordersLoaded ? state.orders : null,
-              ordersLoading:
-              state.ordersStatus == TripOrdersStatus.loading,
-              ordersError:
-              state.ordersStatus == TripOrdersStatus.failure
-                  ? state.ordersError ??
-                  context.strings.trip_orders_load_failed
+              ordersLoading: state.ordersStatus == TripOrdersStatus.loading,
+              ordersError: state.ordersStatus == TripOrdersStatus.failure
+                  ? state.ordersError ?? context.strings.trip_orders_load_failed
                   : null,
-              onRetryOrders: () =>
-                  TripTabCubit.get(context).getTripOrders(),
+              onRetryOrders: () => TripTabCubit.get(context).getTripOrders(),
 
               onOpenOrder: (order) {
                 _openOrderDetails(context, trip.id, order);

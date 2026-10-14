@@ -11,30 +11,100 @@ class NotificationsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 22, 16, 14),
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 18, 20, 20),
       decoration: BoxDecoration(
-        color: AppColors.grey0,
-        border: Border(bottom: BorderSide(color: AppColors.grey3)),
+        color: AppColors.white0,
+        border: Border(
+          bottom: BorderSide(color: AppColors.grey3.withValues(alpha: 0.85)),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black1.withValues(alpha: 0.025),
+            blurRadius: 18,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
-      child: Column(
-        spacing: 2,
+      child: Row(
         children: [
-          Text(
-            context.strings.notifications,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 23,
-              fontWeight: FontWeight.w800,
-              color: AppColors.black1,
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [AppColors.primary, AppColors.blue0],
+              ),
+              borderRadius: BorderRadius.circular(17),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.16),
+                  blurRadius: 13,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.notifications_active_outlined,
+              color: AppColors.white0,
+              size: 26,
             ),
           ),
-          if (unreadCount != null)
-            Text(
-              '$unreadCount '
-              '${context.strings.unread_notifications}',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: AppColors.grey4),
+          const SizedBox(width: 13),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.strings.notifications,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 23,
+                    height: 1.2,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.black1,
+                  ),
+                ),
+                if (unreadCount != null) ...[
+                  const SizedBox(height: 5),
+                  Text(
+                    '$unreadCount ${context.strings.unread_notifications}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      height: 1.25,
+                      color: AppColors.grey4,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ],
             ),
+          ),
+          if (unreadCount != null && unreadCount! > 0) ...[
+            const SizedBox(width: 10),
+            Container(
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              decoration: BoxDecoration(
+                color: AppColors.blue2,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.blue3),
+              ),
+              child: Text(
+                '$unreadCount',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

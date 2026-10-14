@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -80,64 +79,64 @@ class AccountDashboardSections extends StatelessWidget {
         ),
 
         // ======= Sync Status ======= //
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: _cardDecoration(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 18,
-            children: [
-              Text(
-                context.strings.account_sync_status,
-                style: Styles.textStyle18.copyWith(color: AppColors.black1),
-              ),
-              Row(
-                spacing: 10,
-                children: [
-                  Icon(
-                    Icons.info_outline_rounded,
-                    color: AppColors.grey4,
-                    size: 22,
-                  ),
-                  Expanded(
-                    child: Text(
-                      context.strings.account_sync_unavailable,
-                      style: Styles.textStyle14.copyWith(
-                        color: AppColors.grey4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.grey5,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.wifi_off_rounded, color: AppColors.black1),
-                    const Gap(12),
-                    Expanded(
-                      child: Text(
-                        context.strings.account_offline_preview,
-                        style: Styles.textStyle16.copyWith(
-                          color: AppColors.black1,
-                        ),
-                      ),
-                    ),
-                    const Switch.adaptive(value: false, onChanged: null),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   width: double.infinity,
+        //   padding: const EdgeInsets.all(20),
+        //   decoration: _cardDecoration(),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     spacing: 18,
+        //     children: [
+        //       Text(
+        //         context.strings.account_sync_status,
+        //         style: Styles.textStyle18.copyWith(color: AppColors.black1),
+        //       ),
+        //       Row(
+        //         spacing: 10,
+        //         children: [
+        //           Icon(
+        //             Icons.info_outline_rounded,
+        //             color: AppColors.grey4,
+        //             size: 22,
+        //           ),
+        //           Expanded(
+        //             child: Text(
+        //               context.strings.account_sync_unavailable,
+        //               style: Styles.textStyle14.copyWith(
+        //                 color: AppColors.grey4,
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       Container(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 14,
+        //           vertical: 10,
+        //         ),
+        //         decoration: BoxDecoration(
+        //           color: AppColors.grey5,
+        //           borderRadius: BorderRadius.circular(20),
+        //         ),
+        //         child: Row(
+        //           children: [
+        //             Icon(Icons.wifi_off_rounded, color: AppColors.black1),
+        //             const Gap(12),
+        //             Expanded(
+        //               child: Text(
+        //                 context.strings.account_offline_preview,
+        //                 style: Styles.textStyle16.copyWith(
+        //                   color: AppColors.black1,
+        //                 ),
+        //               ),
+        //             ),
+        //             const Switch.adaptive(value: false, onChanged: null),
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

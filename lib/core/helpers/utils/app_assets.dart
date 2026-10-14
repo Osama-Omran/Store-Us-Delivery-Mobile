@@ -18,6 +18,7 @@ class AppAssets {
   //======= Animations =======//
   static const String animationsPath = 'assets/animations';
   static const String loading = '$animationsPath/loading.json';
+  static const String loadingPrimary = '$animationsPath/loading_primary.json';
 
   //======= Assets To Be Deleted =======//
   // static const String assetsToBeDeletedPath = 'assets/assets_to_be_deleted';

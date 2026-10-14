@@ -70,7 +70,7 @@ class TripOrdersFilters extends StatelessWidget {
               isSelected: filter == value,
               onTap: () => onChanged(filter),
             ),
-            const SizedBox(width: 9),
+            const SizedBox(width: 8),
           ],
         ],
       ),
@@ -91,24 +91,40 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: isSelected ? AppColors.primary : AppColors.white0,
-      shape: StadiumBorder(
-        side: BorderSide(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        color: isSelected ? AppColors.primary : AppColors.white0,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
           color: isSelected ? AppColors.primary : AppColors.grey3,
         ),
+        boxShadow: isSelected
+            ? [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : null,
       ),
-      child: InkWell(
-        customBorder: const StadiumBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-              color: isSelected ? AppColors.white0 : AppColors.grey4,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
+                color: isSelected ? AppColors.white0 : AppColors.grey4,
+              ),
             ),
           ),
         ),

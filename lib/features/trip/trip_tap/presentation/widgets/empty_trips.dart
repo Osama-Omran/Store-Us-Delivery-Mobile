@@ -24,79 +24,141 @@ class EmptyTrips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        padding: const EdgeInsets.fromLTRB(18, 28, 18, 124),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.orange1,
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Icon(
-                Icons.lock_outline_rounded,
-                color: AppColors.orange0,
-                size: 80,
+            Center(
+              child: Container(
+                width: 116,
+                height: 116,
+                decoration: BoxDecoration(
+                  color: AppColors.orange1.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(36),
+                  border: Border.all(
+                    color: AppColors.orange0.withValues(alpha: 0.15),
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(
+                      Icons.local_shipping_outlined,
+                      color: AppColors.orange0,
+                      size: 61,
+                    ),
+                    PositionedDirectional(
+                      bottom: 20,
+                      end: 18,
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: AppColors.white0,
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Icon(
+                          Icons.lock_outline_rounded,
+                          color: AppColors.orange0,
+                          size: 19,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-
-            const Gap(30),
-
+            const Gap(23),
             Text(
               context.strings.trip_orders_are_unavailable,
               textAlign: TextAlign.center,
-              style: Styles.textStyle20,
+              style: Styles.textStyle20.copyWith(
+                color: AppColors.black1,
+                fontWeight: FontWeight.w900,
+                height: 1.35,
+              ),
             ),
-
-            const Gap(12),
-
+            const Gap(10),
             Text(
               context.strings.you_must_confirm_receiving_van_and_goods_first,
               textAlign: TextAlign.center,
-            ),
-
-            const Gap(30),
-
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.orange1,
-                border: Border.all(color: AppColors.orange0),
-                borderRadius: BorderRadius.circular(16),
+              style: Styles.textStyle14.copyWith(
+                color: AppColors.grey4,
+                height: 1.55,
               ),
-              padding: const EdgeInsets.all(16),
+            ),
+            const Gap(25),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: AppColors.white0,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: AppColors.grey3),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black1.withValues(alpha: 0.035),
+                    blurRadius: 17,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 8,
                 children: [
                   Row(
-                    spacing: 6,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.timelapse, color: AppColors.orange0),
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.orange1,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.schedule_rounded,
+                          color: AppColors.orange0,
+                          size: 21,
+                        ),
+                      ),
+                      const SizedBox(width: 11),
                       Expanded(
                         child: Text(
                           context
                               .strings
                               .you_have_a_new_trip_awaiting_for_receiving_confirmation,
                           style: Styles.textStyle16.copyWith(
-                            color: AppColors.orange0,
-                            fontWeight: FontWeight.w900,
+                            color: AppColors.black1,
+                            fontWeight: FontWeight.w800,
+                            height: 1.4,
                           ),
                         ),
                       ),
                     ],
                   ),
-
-                  Text(
-                    'رحلة $tripNumber • $warehouseName',
-                    style: Styles.textStyle12,
+                  const Gap(15),
+                  Divider(height: 1, color: AppColors.grey3),
+                  const Gap(13),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.route_outlined, color: AppColors.grey4, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'رحلة $tripNumber • $warehouseName',
+                          style: Styles.textStyle14.copyWith(
+                            color: AppColors.grey4,
+                            height: 1.45,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-
-            const Gap(30),
-
+            const Gap(24),
             CustomButton(
               text: context.strings.review_and_receive_van,
               icon: const CustomSVG(assetName: AppAssets.van),

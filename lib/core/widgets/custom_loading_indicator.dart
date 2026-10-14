@@ -3,8 +3,13 @@ import 'package:lottie/lottie.dart';
 import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
 
 class CustomLoadingIndicator extends StatelessWidget {
-  const CustomLoadingIndicator({super.key, this.size});
+  const CustomLoadingIndicator({
+    super.key,
+    this.size,
+    this.primaryColor = false,
+  });
   final double? size;
+  final bool primaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,7 @@ class CustomLoadingIndicator extends StatelessWidget {
       width: size,
       height: size,
       child: LottieBuilder.asset(
-        AppAssets.loading,
+        primaryColor ? AppAssets.loadingPrimary : AppAssets.loading,
         frameRate: const FrameRate(900),
       ),
     );

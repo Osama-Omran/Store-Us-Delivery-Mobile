@@ -30,12 +30,30 @@ class AppNavBar extends StatelessWidget {
               height: 80,
               decoration: BoxDecoration(
                 color: AppColors.white0,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(22),
+                ),
                 border: Border(
                   top: BorderSide(
-                    color: AppColors.grey1.withValues(alpha: .7),
-                    width: .3,
+                    color: AppColors.grey1.withValues(alpha: 0.45),
+                    width: 0.5,
+                  ),
+                  left: BorderSide(
+                    color: AppColors.grey1.withValues(alpha: 0.45),
+                    width: 0.5,
+                  ),
+                  right: BorderSide(
+                    color: AppColors.grey1.withValues(alpha: 0.45),
+                    width: 0.5,
                   ),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black1.withValues(alpha: 0.06),
+                    blurRadius: 16,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
               ),
             ),
           ],
@@ -128,7 +146,9 @@ class NavBarItem extends StatelessWidget {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Container(
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 190),
+                    curve: Curves.easeOutCubic,
                     margin: isTrip ? null : const EdgeInsets.only(top: 10),
                     padding: EdgeInsets.symmetric(
                       horizontal: isTrip ? 20 : 16,
@@ -146,10 +166,9 @@ class NavBarItem extends StatelessWidget {
                       boxShadow: [
                         if (isTrip && selected)
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: .4),
-                            blurRadius: 3,
+                            color: AppColors.primary.withValues(alpha: 0.22),
+                            blurRadius: 12,
                             offset: const Offset(0, 4),
-                            spreadRadius: 2,
                           ),
                       ],
                     ),
@@ -254,9 +273,11 @@ class NavBarItem extends StatelessWidget {
               // ======= Tab Title ======= //
               Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Styles.textStyle14.copyWith(
-                  color: selected ? AppColors.primary : null,
-                  fontWeight: FontWeight.w700,
+                  color: selected ? AppColors.primary : AppColors.grey4,
+                  fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                 ),
               ),
             ],

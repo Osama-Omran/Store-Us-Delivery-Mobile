@@ -1853,4 +1853,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get contact_retry => 'إعادة المحاولة';
+
+  @override
+  String get stock_transfer_awaiting_acceptance => 'بانتظار القبول';
+
+  @override
+  String get stock_transfer_load_failed =>
+      'تعذر تحميل النقل المخزني، حاول مرة أخرى';
+
+  @override
+  String get stock_transfer_retry => 'إعادة المحاولة';
+
+  @override
+  String get stock_transfer_other => 'حالات أخرى';
+
+  @override
+  String get stock_transfer_more_pages_notice =>
+      'توجد تحويلات إضافية لم يتم تحميلها بعد؛ الأعداد الحالية خاصة بالبيانات المعروضة فقط';
 }

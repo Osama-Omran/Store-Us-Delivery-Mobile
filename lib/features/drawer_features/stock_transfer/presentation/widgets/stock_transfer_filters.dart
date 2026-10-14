@@ -7,12 +7,11 @@ import 'package:storeus_delivery/features/drawer_features/stock_transfer/present
 
 extension StockTransferFilterLabels on StockTransferFilter {
   String label(BuildContext context) => switch (this) {
-    StockTransferFilter.awaitingReceipt =>
-      context.strings.stock_transfer_awaiting_receipt,
+    StockTransferFilter.awaitingReceipt => context.strings.stock_transfer_awaiting_acceptance,
     StockTransferFilter.onVehicle => context.strings.stock_transfer_on_vehicle,
-    StockTransferFilter.awaitingWarehouse =>
-      context.strings.stock_transfer_awaiting_warehouse,
+    StockTransferFilter.awaitingWarehouse => context.strings.stock_transfer_awaiting_warehouse,
     StockTransferFilter.completed => context.strings.stock_transfer_completed,
+    StockTransferFilter.other => context.strings.stock_transfer_other,
   };
 }
 
@@ -28,6 +27,10 @@ class StockTransferFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filters = [
+      ...StockTransferFilter.values.where((filter) => filter != StockTransferFilter.other),
+      if (state.countFor(StockTransferFilter.other) > 0) StockTransferFilter.other,
+    ];
     return SingleChildScrollView(
       key: const ValueKey('stock-transfer-filters'),
       scrollDirection: Axis.horizontal,
@@ -35,20 +38,16 @@ class StockTransferFilters extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
-          for (final filter in StockTransferFilter.values)
+          for (final filter in filters)
             Semantics(
               selected: filter == state.filter,
               button: true,
               child: Material(
-                color: filter == state.filter
-                    ? AppColors.primary
-                    : AppColors.white0,
+                color: filter == state.filter ? AppColors.primary : AppColors.white0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28),
                   side: BorderSide(
-                    color: filter == state.filter
-                        ? AppColors.primary
-                        : AppColors.grey3,
+                    color: filter == state.filter ? AppColors.primary : AppColors.grey3,
                   ),
                 ),
                 child: InkWell(
@@ -56,16 +55,11 @@ class StockTransferFilters extends StatelessWidget {
                   borderRadius: BorderRadius.circular(28),
                   onTap: () => onChanged(filter),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 9,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
                     child: Text(
                       '${filter.label(context)} (${state.countFor(filter)})',
                       style: Styles.textStyle18.copyWith(
-                        color: filter == state.filter
-                            ? AppColors.white0
-                            : AppColors.black1,
+                        color: filter == state.filter ? AppColors.white0 : AppColors.black1,
                         height: 1.5,
                       ),
                     ),

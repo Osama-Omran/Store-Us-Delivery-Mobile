@@ -90,10 +90,7 @@ class HomeCurrentTripCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 13,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
               color: AppColors.white0,
               borderRadius: BorderRadius.circular(19),
@@ -127,7 +124,9 @@ class HomeCurrentTripCard extends StatelessWidget {
           if (state.ordersStatus == HomeOrdersStatus.loading)
             const Padding(
               padding: EdgeInsets.only(top: 8),
-              child: Center(child: CustomLoadingIndicator(size: 44)),
+              child: Center(
+                child: CustomLoadingIndicator(size: 44, primaryColor: true),
+              ),
             ),
           if (state.ordersStatus == HomeOrdersStatus.failure)
             Align(
@@ -140,10 +139,7 @@ class HomeCurrentTripCard extends StatelessWidget {
             ),
           const SizedBox(height: 14),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 14,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.white0,
               borderRadius: BorderRadius.circular(18),

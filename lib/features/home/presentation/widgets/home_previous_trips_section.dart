@@ -62,7 +62,7 @@ class HomePreviousTripsSection extends StatelessWidget {
                     border: Border.all(color: AppColors.grey3),
                   ),
                   child: const Center(
-                    child: CustomLoadingIndicator(size: 72),
+                    child: CustomLoadingIndicator(size: 72, primaryColor: true),
                   ),
                 );
               }
@@ -72,8 +72,7 @@ class HomePreviousTripsSection extends StatelessWidget {
                   message: state.errorMessage?.isNotEmpty == true
                       ? state.errorMessage!
                       : context.strings.home_history_load_failed,
-                  onRetry: () =>
-                      HomeHistoryCubit.get(context).getTripHistory(),
+                  onRetry: () => HomeHistoryCubit.get(context).getTripHistory(),
                 );
               }
 
@@ -171,17 +170,13 @@ class _PreviousTripCard extends StatelessWidget {
                 Text(
                   '${trip.totalOrders?.toString() ?? '—'} '
                   '${context.strings.orders_plural}',
-                  style: Styles.textStyle12.copyWith(
-                    color: AppColors.grey4,
-                  ),
+                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
                 if (completedTime != null) ...[
                   const SizedBox(height: 4),
                   Text(
                     '${context.strings.completed_at} $completedTime',
-                    style: Styles.textStyle12.copyWith(
-                      color: AppColors.grey4,
-                    ),
+                    style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                   ),
                 ],
               ],

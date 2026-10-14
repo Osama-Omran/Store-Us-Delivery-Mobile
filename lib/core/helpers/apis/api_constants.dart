@@ -46,4 +46,5 @@ class ApiConstants {
   static const String reportsOverview = '/reports/overview';
   static const String supportContact = '/support/contact';
   static const String supportMessages = '/support/messages';
+  static const String warehouseTransfers = '/warehouse-transfers';
 }

@@ -1,5 +1,6 @@
 import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/send_support_message_body.dart';
 import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/support_contact_response.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/models/stock_transfers_response.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/data/models/cancel_delivery_request_body.dart';
 
@@ -126,4 +127,8 @@ abstract class TripApiService {
       @Body() SendSupportMessageBody body,
       );
 
+  @GET(ApiConstants.warehouseTransfers)
+  Future<StockTransfersResponse> getWarehouseTransfers(
+      @Header('Authorization') String authorization,
+      );
 }

@@ -29,43 +29,42 @@ class AppMenuDrawerHeader extends StatelessWidget {
           end: Alignment.bottomLeft,
           colors: [AppColors.blue4, AppColors.blue5],
         ),
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.primary.withValues(alpha: 0.08),
+          ),
+        ),
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ======= Top Actions ======= //
+              // ======= Brand Mark & Close ======= //
               Row(
                 children: [
                   Container(
-                    width: 46,
-                    height: 46,
+                    width: 44,
+                    height: 44,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.20),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      color: AppColors.primary.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.09),
+                      ),
                     ),
                     child: Icon(
                       Icons.local_shipping_outlined,
-                      color: AppColors.white0,
+                      color: AppColors.primary,
                       size: 24,
                     ),
                   ),
-
                   const Spacer(),
-
                   Material(
-                    color: AppColors.white0,
+                    color: AppColors.white0.withValues(alpha: 0.88),
                     shape: const CircleBorder(),
                     child: InkWell(
                       customBorder: const CircleBorder(),
@@ -76,56 +75,63 @@ class AppMenuDrawerHeader extends StatelessWidget {
                         child: Icon(
                           Icons.close_rounded,
                           color: AppColors.black1,
-                          size: 26,
+                          size: 23,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // ======= User Information ======= //
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 72,
-                    height: 72,
+                    width: 66,
+                    height: 66,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(21),
+                      border: Border.all(
+                        color: AppColors.white0.withValues(alpha: 0.9),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.16),
+                          blurRadius: 12,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                     ),
                     child: Text(
                       initial,
                       style: Styles.textStyle24.copyWith(
-                        fontSize: 32,
+                        fontSize: 30,
                         color: AppColors.white0,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
-
-                  const SizedBox(width: 16),
-
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 3,
                       children: [
                         Text(
                           userName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Styles.textStyle20.copyWith(
-                            fontSize: 22,
+                            fontSize: 21,
                             color: AppColors.black1,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-
+                        const SizedBox(height: 5),
                         Text(
                           userRole,
                           maxLines: 1,
@@ -134,28 +140,29 @@ class AppMenuDrawerHeader extends StatelessWidget {
                             color: AppColors.grey4,
                           ),
                         ),
-
-                        if (isOnTrip)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 4,
+                        if (isOnTrip) ...[
+                          const SizedBox(height: 9),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 11,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.10),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.12),
                               ),
-                              decoration: BoxDecoration(
+                            ),
+                            child: Text(
+                              context.strings.currently_on_trip,
+                              style: Styles.textStyle12.copyWith(
                                 color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                context.strings.currently_on_trip,
-                                style: Styles.textStyle12.copyWith(
-                                  color: AppColors.white0,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
+                        ],
                       ],
                     ),
                   ),

@@ -83,7 +83,10 @@ class _HomeScreenBody extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(color: AppColors.grey3),
                       ),
-                      child: const CustomLoadingIndicator(size: 96),
+                      child: const CustomLoadingIndicator(
+                        size: 96,
+                        primaryColor: true,
+                      ),
                     )
                   else if (state is HomeFailureState)
                     HomeMessage(

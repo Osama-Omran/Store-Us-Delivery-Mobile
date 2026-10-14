@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
 
@@ -16,41 +17,41 @@ class NotificationCard extends StatelessWidget {
   final NotificationItem notification;
   final bool isMarking;
 
-  // ======= Notification Icon ======= //
+  // Keep the current notification-type mapping unchanged.
   IconData get _icon {
     final type = notification.type.toLowerCase();
 
     if (type.startsWith('warehouse_transfer.')) {
       return Icons.swap_horiz_rounded;
     }
-
     if (type.contains('cancelled')) {
       return Icons.cancel_outlined;
     }
-
     if (type.contains('completed')) {
       return Icons.check_circle_outline_rounded;
     }
-
     if (type.startsWith('trip.')) {
       return Icons.local_shipping_outlined;
     }
-
     if (type.startsWith('order.')) {
       return Icons.inventory_2_outlined;
     }
-
     if (type.startsWith('payment.')) {
       return Icons.account_balance_wallet_outlined;
     }
-
     return Icons.notifications_none_rounded;
   }
 
-  // ======= Notification Time ======= //
+  Color get _iconColor {
+    final type = notification.type.toLowerCase();
+    if (type.contains('cancelled')) return AppColors.red1;
+    if (type.contains('completed')) return AppColors.green0;
+    return AppColors.primary;
+  }
+
+  // Keep the original relative-date behavior.
   String _formatTime(BuildContext context) {
     final createdAt = notification.createdAt;
-
     if (createdAt == null) return '—';
 
     final date = createdAt.toLocal();
@@ -60,34 +61,28 @@ class NotificationCard extends StatelessWidget {
       if (difference.inMinutes < 1) {
         return context.strings.notification_just_now;
       }
-
       if (difference.inMinutes < 60) {
         return '${difference.inMinutes} '
             '${context.strings.notification_minutes_ago}';
       }
-
       if (difference.inHours < 24) {
         return '${difference.inHours} '
             '${context.strings.notification_hours_ago}';
       }
-
       if (difference.inDays == 1) {
         return context.strings.yesterday;
       }
     }
 
     final localization = MaterialLocalizations.of(context);
-
     final formattedDate = localization.formatMediumDate(date);
-
     final formattedTime = localization.formatTimeOfDay(
       TimeOfDay.fromDateTime(date),
     );
-
     return '$formattedDate - $formattedTime';
   }
 
-  // ======= Mark As Read ======= //
+  // Keep the existing mark-as-read operation and error handling.
   Future<void> _markAsRead(BuildContext context) async {
     if (notification.isRead || isMarking) return;
 
@@ -115,72 +110,130 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isRead = notification.isRead;
-
     final description = notification.message.trim().isNotEmpty
         ? notification.message
         : notification.body;
+    final accent = _iconColor;
 
-    return Material(
-      color: isRead ? AppColors.white0 : AppColors.blue2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(26),
-        side: BorderSide(color: isRead ? AppColors.grey3 : AppColors.blue3),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOutCubic,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: isRead ? AppColors.white0 : AppColors.blue5,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isRead ? AppColors.grey3 : AppColors.blue3,
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black1.withValues(alpha: isRead ? 0.02 : 0.055),
+            blurRadius: isRead ? 9 : 17,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
-      child: InkWell(
-        onTap: isRead || isMarking
-            ? null
-            : () async {
-                await _markAsRead(context);
-              },
-        borderRadius: BorderRadius.circular(26),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 112),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isRead || isMarking ? null : () => _markAsRead(context),
+          borderRadius: BorderRadius.circular(22),
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 17, 16, 17),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 12,
                   children: [
-                    // ======= Notification Icon ======= //
-                    _NotificationIcon(icon: _icon, isRead: isRead),
-
-                    // ======= Notification Details ======= //
+                    _NotificationIcon(
+                      icon: _icon,
+                      iconColor: accent,
+                      isRead: isRead,
+                    ),
+                    const SizedBox(width: 13),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 4,
                         children: [
-                          Text(
-                            notification.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.black1,
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  notification.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    height: 1.35,
+                                    fontWeight:
+                                        isRead ? FontWeight.w700 : FontWeight.w800,
+                                    color: AppColors.black1,
+                                  ),
+                                ),
+                              ),
+                              if (isMarking) ...[
+                                const SizedBox(width: 7),
+                                const CustomLoadingIndicator(
+                                  size: 42,
+                                  primaryColor: true,
+                                ),
+                              ] else if (!isRead) ...[
+                                const SizedBox(width: 10),
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  margin: const EdgeInsets.only(top: 6),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primary
+                                            .withValues(alpha: 0.18),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
-
+                          const SizedBox(height: 7),
                           Text(
                             description,
-                            maxLines: 2,
+                            maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 14,
-                              height: 1.3,
-                              color: AppColors.grey4,
+                              fontSize: 13.5,
+                              height: 1.55,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.grey1,
                             ),
                           ),
-
-                          Text(
-                            _formatTime(context),
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.grey4,
-                            ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.schedule_rounded,
+                                color: AppColors.grey4,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(
+                                  _formatTime(context),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.grey4,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -188,31 +241,16 @@ class NotificationCard extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // ======= Unread Indicator / Loading ======= //
-              if (isMarking)
+              if (!isRead)
                 PositionedDirectional(
-                  end: 20,
-                  top: 25,
-                  child: SizedBox(
-                    width: 17,
-                    height: 17,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                )
-              else if (!isRead)
-                PositionedDirectional(
-                  end: 20,
-                  top: 27,
+                  start: 0,
+                  top: 21,
+                  bottom: 21,
                   child: Container(
-                    width: 13,
-                    height: 13,
+                    width: 3,
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(9),
                     ),
                   ),
                 ),
@@ -224,29 +262,36 @@ class NotificationCard extends StatelessWidget {
   }
 }
 
-// =====================================================
-// Notification Icon
-// =====================================================
-
 class _NotificationIcon extends StatelessWidget {
-  const _NotificationIcon({required this.icon, required this.isRead});
+  const _NotificationIcon({
+    required this.icon,
+    required this.iconColor,
+    required this.isRead,
+  });
 
   final IconData icon;
+  final Color iconColor;
   final bool isRead;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 55,
-      height: 55,
+      width: 52,
+      height: 52,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isRead ? AppColors.grey5 : AppColors.primary,
-        borderRadius: BorderRadius.circular(20),
+        color: isRead ? AppColors.grey5 : iconColor.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isRead
+              ? AppColors.grey3.withValues(alpha: 0.6)
+              : iconColor.withValues(alpha: 0.12),
+        ),
       ),
       child: Icon(
         icon,
         size: 25,
-        color: isRead ? AppColors.grey4 : AppColors.white0,
+        color: isRead ? AppColors.grey4 : iconColor,
       ),
     );
   }

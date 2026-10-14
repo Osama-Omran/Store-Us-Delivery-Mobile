@@ -16,7 +16,7 @@ class CurrentTripHeader extends StatelessWidget {
 
   final String tripNumber;
 
-  // ======= Open Trip Map ======= //
+  // ======= Open Trip Map: original navigation and validation ======= //
   void _openTripMap(BuildContext context) {
     final state = context.read<TripTabCubit>().state;
 
@@ -28,7 +28,6 @@ class CurrentTripHeader extends StatelessWidget {
       return;
     }
 
-    // ======= Build Real Map Stops ======= //
     final stops =
         state.orders
             .where((order) => order.hasCoordinates)
@@ -41,7 +40,6 @@ class CurrentTripHeader extends StatelessWidget {
             .toList()
           ..sort((a, b) => a.number.compareTo(b.number));
 
-    // ======= Navigate To Trip Map ======= //
     GoRouter.of(context).push(
       RoutesNames.tripMap,
       extra: {
@@ -55,58 +53,85 @@ class CurrentTripHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<TripTabCubit>().state;
-
     final displayTripNumber = state is TripTabSuccessState
         ? state.trip.number
         : tripNumber;
 
     return Container(
       width: double.infinity,
-      height: 90,
+      constraints: const BoxConstraints(minHeight: 98),
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 13, 20, 13),
       decoration: BoxDecoration(
-        color: AppColors.grey0,
+        color: AppColors.white0,
         border: Border(bottom: BorderSide(color: AppColors.grey3)),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.strings.my_current_trip,
-                style: TextStyle(
-                  color: AppColors.black1,
-                  fontSize: 23,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                '${context.strings.trip_label} '
-                '\u2066#$displayTripNumber\u2069',
-                style: TextStyle(fontSize: 13, color: AppColors.grey4),
-              ),
-            ],
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black1.withValues(alpha: 0.025),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
-
-          // ======= Open Map Button ======= //
-          PositionedDirectional(
-            end: 22,
-            child: Material(
-              color: AppColors.white0,
-              shape: CircleBorder(side: BorderSide(color: AppColors.grey3)),
-              child: InkWell(
-                onTap: () => _openTripMap(context),
-                customBorder: const CircleBorder(),
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.location_on_outlined,
-                    color: AppColors.primary,
-                    size: 27,
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: AppColors.blue5,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              Icons.route_outlined,
+              color: AppColors.primary,
+              size: 23,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.strings.my_current_trip,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppColors.black1,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
                   ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  '${context.strings.trip_label} '
+                  '\u2066#$displayTripNumber\u2069',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.grey4,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Material(
+            color: AppColors.blue4,
+            borderRadius: BorderRadius.circular(15),
+            child: InkWell(
+              onTap: () => _openTripMap(context),
+              borderRadius: BorderRadius.circular(15),
+              child: SizedBox(
+                width: 48,
+                height: 48,
+                child: Icon(
+                  Icons.location_on_outlined,
+                  color: AppColors.primary,
+                  size: 25,
                 ),
               ),
             ),

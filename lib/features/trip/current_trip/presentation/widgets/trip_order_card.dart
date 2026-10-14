@@ -28,50 +28,49 @@ class TripOrderCard extends StatelessWidget {
     final status = TripOrderStatusStyle.forOrder(context, order);
 
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.white0,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(23),
         border: Border.all(color: AppColors.grey3),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black0.withValues(alpha: 0.035),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            color: AppColors.black1.withValues(alpha: 0.035),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 15),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ======= Customer & Order ======= //
+                // ======= Stop & Customer ======= //
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: 49,
+                      height: 49,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: status.numberBackground,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
                         '${order.stopNumber}',
                         style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w900,
                           color: status.numberForeground,
                         ),
                       ),
                     ),
-
-                    const SizedBox(width: 10),
-
+                    const SizedBox(width: 11),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,132 +80,131 @@ class TripOrderCard extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 18,
-                              height: 1.25,
+                              fontSize: 17,
+                              height: 1.3,
                               color: AppColors.black1,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
-
-                          const SizedBox(height: 2),
-
+                          const SizedBox(height: 5),
                           Text(
                             order.id,
                             textDirection: TextDirection.ltr,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: AppColors.primary,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-
-                          const SizedBox(height: 4),
-
-                          if (order.address.trim().isNotEmpty)
-                            TripOrderContactLine(
-                              icon: Icons.location_on_outlined,
-                              text: order.address,
-                            ),
-
-                          if (hasValidOrderPhone(order.phoneNumber))
-                            TripOrderContactLine(
-                              icon: Icons.phone_outlined,
-                              text: order.phoneNumber,
-                              isPhone: true,
-                            ),
                         ],
                       ),
                     ),
-
-                    const SizedBox(width: 6),
-
-                    TripOrderStatusBadge(style: status),
                   ],
                 ),
 
+                const SizedBox(height: 12),
+                // Status stays a separately readable chip on narrow screens.
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TripOrderStatusBadge(style: status),
+                ),
+
+                if (order.address.trim().isNotEmpty ||
+                    hasValidOrderPhone(order.phoneNumber)) ...[
+                  const SizedBox(height: 13),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey5.withValues(alpha: 0.65),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      children: [
+                        if (order.address.trim().isNotEmpty)
+                          TripOrderContactLine(
+                            icon: Icons.location_on_outlined,
+                            text: order.address,
+                          ),
+                        if (hasValidOrderPhone(order.phoneNumber)) ...[
+                          if (order.address.trim().isNotEmpty)
+                            const SizedBox(height: 7),
+                          TripOrderContactLine(
+                            icon: Icons.phone_outlined,
+                            text: order.phoneNumber,
+                            isPhone: true,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+
                 const SizedBox(height: 14),
-
                 // ======= Order Amount ======= //
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 70),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              context.strings.order_value,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.grey4,
-                              ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.strings.order_value,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.grey4,
                             ),
-
-                            const SizedBox(height: 4),
-
-                            Text(
-                              order.orderAmount == null
-                                  ? '—'
-                                  : formatTripAmount(
-                                      context,
-                                      order.orderAmount!,
-                                    ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 23,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.black1,
-                              ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            order.orderAmount == null
+                                ? '—'
+                                : formatTripAmount(context, order.orderAmount!),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.black1,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (order.isPaymentCollected) ...[
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: _PaymentTag(
+                          title: context.strings.payment_collected,
+                          color: AppColors.green0,
+                          background: AppColors.green1,
                         ),
                       ),
-
-                      // ======= Payment Status ======= //
-                      if (order.isPaymentCollected) ...[
-                        const SizedBox(width: 6),
-
-                        Flexible(
-                          child: Text(
-                            '✓ ${context.strings.payment_collected}',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.green0,
-                            ),
-                          ),
+                    ] else if (order.collectedAmount > 0) ...[
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: _PaymentTag(
+                          title: '${context.strings.amount_collected} '
+                              '${formatTripAmount(context, order.collectedAmount)}',
+                          color: AppColors.orange0,
+                          background: AppColors.orange1,
                         ),
-                      ] else if (order.collectedAmount > 0) ...[
-                        const SizedBox(width: 6),
-
-                        Flexible(
-                          child: Text(
-                            '${context.strings.amount_collected} '
-                            '${formatTripAmount(context, order.collectedAmount)}',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.orange0,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               ],
             ),
           ),
-
           Divider(height: 1, thickness: 1, color: AppColors.grey3),
 
-          // ======= Bottom Actions ======= //
+          // ======= Original Bottom Actions ======= //
           if (order.isPending)
             TripPendingOrderActions(
               tripID: tripID,
@@ -214,25 +212,69 @@ class TripOrderCard extends StatelessWidget {
               order: order,
             )
           else
-            SizedBox(
-              height: 54,
-              child: TextButton(
-                onPressed: () => openTripOrderDetails(
-                  context,
-                  tripID: tripID,
-                  orderID: order.apiId,
-                ),
-                style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-                child: Text(
-                  context.strings.view_delivery_details,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: SizedBox(
+                height: 45,
+                child: TextButton.icon(
+                  onPressed: () => openTripOrderDetails(
+                    context,
+                    tripID: tripID,
+                    orderID: order.apiId,
+                  ),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    backgroundColor: AppColors.blue5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.receipt_long_outlined, size: 19),
+                  label: Text(
+                    context.strings.view_delivery_details,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _PaymentTag extends StatelessWidget {
+  const _PaymentTag({
+    required this.title,
+    required this.color,
+    required this.background,
+  });
+
+  final String title;
+  final Color color;
+  final Color background;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontWeight: FontWeight.w800,
+          color: color,
+          fontSize: 11,
+        ),
       ),
     );
   }

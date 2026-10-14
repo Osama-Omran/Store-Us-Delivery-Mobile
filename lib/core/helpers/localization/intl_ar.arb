@@ -606,6 +606,12 @@
 "contact_send_success": "تم إرسال رسالتك إلى الدعم بنجاح",
 "contact_send_error": "تعذر إرسال الرسالة، حاول مرة أخرى",
 "contact_load_error": "تعذر تحميل بيانات الدعم حاليًا",
-"contact_retry": "إعادة المحاولة"
+"contact_retry": "إعادة المحاولة",
+
+"stock_transfer_awaiting_acceptance": "بانتظار القبول",
+"stock_transfer_load_failed": "تعذر تحميل النقل المخزني، حاول مرة أخرى",
+"stock_transfer_retry": "إعادة المحاولة",
+"stock_transfer_other": "حالات أخرى",
+"stock_transfer_more_pages_notice": "توجد تحويلات إضافية لم يتم تحميلها بعد؛ الأعداد الحالية خاصة بالبيانات المعروضة فقط"
 
 }

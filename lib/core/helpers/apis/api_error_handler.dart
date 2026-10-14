@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart';
 
@@ -127,6 +128,11 @@ class ErrorHandler implements Exception {
 }
 
 ApiErrorModel _handleError(DioException error) {
+  // Queued is NOT a confirmed server success. Surface a dedicated message.
+  if (error.error is OfflineQueuedException) {
+    const message = 'تم حفظ العملية على الجهاز، وسيتم إرسالها تلقائيًا عند عودة الإنترنت';
+    return ApiErrorModel(message: message, errors: {'general': [message]});
+  }
   final data = error.response?.data;
   final statusCode = error.response?.statusCode;
 

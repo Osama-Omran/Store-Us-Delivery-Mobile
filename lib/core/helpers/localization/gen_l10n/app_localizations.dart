@@ -3541,6 +3541,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إعادة المحاولة'**
   String get contact_retry;
+
+  /// No description provided for @stock_transfer_awaiting_acceptance.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار القبول'**
+  String get stock_transfer_awaiting_acceptance;
+
+  /// No description provided for @stock_transfer_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل النقل المخزني، حاول مرة أخرى'**
+  String get stock_transfer_load_failed;
+
+  /// No description provided for @stock_transfer_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get stock_transfer_retry;
+
+  /// No description provided for @stock_transfer_other.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالات أخرى'**
+  String get stock_transfer_other;
+
+  /// No description provided for @stock_transfer_more_pages_notice.
+  ///
+  /// In ar, this message translates to:
+  /// **'توجد تحويلات إضافية لم يتم تحميلها بعد؛ الأعداد الحالية خاصة بالبيانات المعروضة فقط'**
+  String get stock_transfer_more_pages_notice;
 }
 
 class _AppLocalizationsDelegate

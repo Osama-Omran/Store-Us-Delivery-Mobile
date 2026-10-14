@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/utils/bloc_observer.dart';
+import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_service.dart';
+import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_connectivity.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/helpers/utils/remote_config_services.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
@@ -16,6 +18,8 @@ class Initializer {
     token = await PreferencesHelper.getToken();
     setupLocator();
     await getIt.allReady();
+    await OfflineCacheConnectivity.instance.start();
+    await OfflineSyncService.instance.start();
     await RemoteConfigServices.init();
 
     if (kDebugMode) Bloc.observer = MyBlocObserver();

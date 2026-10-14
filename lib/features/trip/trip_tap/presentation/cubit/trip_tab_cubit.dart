@@ -83,7 +83,9 @@ class TripTabCubit extends Cubit<TripTabState> {
 
     final trip = currentState.trip;
 
-    if (trip.acceptance?.status.trim().toUpperCase() != 'ACCEPTED') {
+    // A trip can be accepted by the driver or overridden by administration.
+    // Keep this gate consistent with getCurrentTrip() and TripScreen.
+    if (trip.acceptance?.isOperationallyAccepted != true) {
       return;
     }
 

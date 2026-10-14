@@ -23,43 +23,42 @@ class TripPendingOrderActions extends StatelessWidget {
     final bool hasPhone = hasValidOrderPhone(order.phoneNumber);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      padding: const EdgeInsets.fromLTRB(12, 11, 12, 13),
       child: Row(
         children: [
-          // ======= Open Order ======= //
           Expanded(
             child: SizedBox(
-              height: 58,
-              child: ElevatedButton(
+              height: 52,
+              child: ElevatedButton.icon(
                 onPressed: () => openTripOrderDetails(
                   context,
                   tripID: tripID,
                   orderID: orderID,
                 ),
                 style: ElevatedButton.styleFrom(
-                  elevation: 4,
-                  shadowColor: AppColors.primary.withValues(alpha: 0.22),
+                  elevation: 0,
                   foregroundColor: AppColors.white0,
                   backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                child: Text(
+                icon: const Icon(Icons.arrow_outward_rounded, size: 19),
+                label: Text(
                   context.strings.open_order,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
             ),
           ),
-
-          // ======= Directions Button ======= //
           if (hasLocation) ...[
-            const SizedBox(width: 9),
-
+            const SizedBox(width: 8),
             _SquareActionButton(
               icon: Icons.near_me_outlined,
               background: AppColors.blue4,
@@ -68,11 +67,8 @@ class TripPendingOrderActions extends StatelessWidget {
               tooltip: context.strings.open_directions,
             ),
           ],
-
-          // ======= Call Customer Button ======= //
           if (hasPhone) ...[
-            const SizedBox(width: 9),
-
+            const SizedBox(width: 8),
             _SquareActionButton(
               icon: Icons.phone_outlined,
               background: AppColors.green1,
@@ -110,14 +106,14 @@ class _SquareActionButton extends StatelessWidget {
         opacity: onTap == null ? 0.45 : 1,
         child: Material(
           color: background,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
             child: SizedBox(
-              height: 58,
-              width: 55,
-              child: Icon(icon, color: foreground, size: 25),
+              height: 52,
+              width: 49,
+              child: Icon(icon, color: foreground, size: 23),
             ),
           ),
         ),

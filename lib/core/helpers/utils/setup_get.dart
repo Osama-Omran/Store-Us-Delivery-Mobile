@@ -15,6 +15,9 @@ import 'package:storeus_delivery/core/helpers/utils/force_update_services.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/data/repo/concrete_reports_repo.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/domain/repo/reports_repo_interface.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/domain/usecases/get_reports_overview_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/repo/concrete_stock_transfer_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/domain/repo/stock_transfer_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/stock_transfer/domain/usecases/get_stock_transfers_usecase.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/cubit/top_rank_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/cubit/treasury_cubit.dart';
@@ -106,7 +109,6 @@ void setupLocator() {
   getIt.registerFactory<LayoutCubit>(() => LayoutCubit());
   getIt.registerFactory<DirectSaleCubit>(() => DirectSaleCubit());
   getIt.registerFactory<TreasuryCubit>(() => TreasuryCubit());
-  getIt.registerFactory<StockTransferCubit>(() => StockTransferCubit());
   getIt.registerFactory<ReportsCubit>(
     () => ReportsCubit(getIt<GetReportsOverviewUsecase>()),
   );
@@ -332,5 +334,17 @@ void setupLocator() {
       getIt<GetSupportContactUsecase>(),
       getIt<SendSupportMessageUsecase>(),
     ),
+  );
+
+  getIt.registerLazySingleton<StockTransferRepoInterface>(
+    () => ConcreteStockTransferRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetStockTransfersUsecase>(
+    () => GetStockTransfersUsecase(getIt<StockTransferRepoInterface>()),
+  );
+
+  getIt.registerFactory<StockTransferCubit>(
+    () => StockTransferCubit(getIt<GetStockTransfersUsecase>()),
   );
 }
