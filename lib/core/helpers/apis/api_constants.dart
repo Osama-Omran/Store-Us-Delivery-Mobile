@@ -47,4 +47,9 @@ class ApiConstants {
   static const String supportContact = '/support/contact';
   static const String supportMessages = '/support/messages';
   static const String warehouseTransfers = '/warehouse-transfers';
+  static const String retryCollection =
+      '$trips/{tripId}/orders/{orderId}/retry-collection';
+
+  //======= Treasury / Wallet =======//
+  static const String tripWallet = '$trips/{tripId}/wallet';
 }

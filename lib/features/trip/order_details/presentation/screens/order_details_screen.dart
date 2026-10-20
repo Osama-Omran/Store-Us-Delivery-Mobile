@@ -15,6 +15,9 @@ import 'package:storeus_delivery/features/trip/order_details/presentation/widget
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_details_items_card.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_details_financial_card.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_action_bar.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_collection_action_bar.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_collection_status_card.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_retry_collection_sheet.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({
@@ -50,6 +53,48 @@ class _OrderDetailsBody extends StatelessWidget {
     );
   }
 
+  Future<void> _openRetryCollection(
+    BuildContext context,
+    OrderDetailsSuccessState state,
+  ) async {
+    final order = state.tripOrder;
+    if (order == null ||
+        !order.canRetryCollection ||
+        !order.pendingCollections.any(
+          (p) => p.clientOperationId.trim().isNotEmpty,
+        )) {
+      return;
+    }
+
+    final cubit = context.read<OrderDetailsCubit>();
+    final sent = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      enableDrag: false,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (_) => OrderRetryCollectionSheet(
+        cubit: cubit,
+        tripId: tripId,
+        order: order,
+        salesOrder: state.order.salesOrder,
+        orderTotal: order.orderTotal ?? state.order.originalTotal,
+      ),
+    );
+    if (!context.mounted || sent == null) return;
+    if (sent) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text('تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.'),
+          ),
+        );
+    }
+    await _reload(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailsCubit, OrderDetailsState>(
@@ -71,6 +116,21 @@ class _OrderDetailsBody extends StatelessWidget {
                 .toUpperCase();
 
         final isPending = deliveryStatus == 'PENDING';
+        final collection = success?.tripOrder;
+        final payment = collection?.paymentStatus.trim().toUpperCase() ?? '';
+        final isPaid = const {
+          'PAID',
+          'COLLECTED',
+          'FULLY_PAID',
+        }.contains(payment);
+        final showCollectionAction =
+            success != null &&
+            collection != null &&
+            collection.canRetryCollection &&
+            !isPaid &&
+            collection.pendingCollections.any(
+              (item) => item.clientOperationId.trim().isNotEmpty,
+            );
 
         final isDelivered = const {
           'DELIVERED',
@@ -182,6 +242,12 @@ class _OrderDetailsBody extends StatelessWidget {
                           // ======= Original Order Value ======= //
                           OrderDetailsFinancialCard(order: order!),
 
+                          if (collection != null &&
+                              collection.paymentStatus.trim().isNotEmpty) ...[
+                            const SizedBox(height: 14),
+                            OrderCollectionStatusCard(order: collection),
+                          ],
+
                           const SizedBox(height: 20),
 
                           // ======= Ordered Items ======= //
@@ -236,6 +302,10 @@ class _OrderDetailsBody extends StatelessWidget {
           // ======= Order Actions ======= //
           bottomNavigationBar: success != null && isPending
               ? OrderActionBar(tripId: tripId, orderId: orderId)
+              : showCollectionAction
+              ? OrderCollectionActionBar(
+                  onPressed: () => _openRetryCollection(context, success),
+                )
               : null,
         );
       },

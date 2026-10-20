@@ -19,23 +19,27 @@ final class OrderDetailsSuccessState extends OrderDetailsState {
 
   final bool isSavingLocation;
   final bool locationUpdated;
+  final bool isSubmittingCollection;
 
   OrderDetailsSuccessState(
     this.order, {
     this.tripOrder,
     this.isSavingLocation = false,
     this.locationUpdated = false,
+    this.isSubmittingCollection = false,
   });
 
   OrderDetailsSuccessState copyWith({
     bool? isSavingLocation,
     bool? locationUpdated,
+    bool? isSubmittingCollection,
   }) {
     return OrderDetailsSuccessState(
       order,
       tripOrder: tripOrder,
       isSavingLocation: isSavingLocation ?? this.isSavingLocation,
       locationUpdated: locationUpdated ?? this.locationUpdated,
+      isSubmittingCollection: isSubmittingCollection ?? this.isSubmittingCollection,
     );
   }
 }

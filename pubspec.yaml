@@ -105,6 +105,7 @@ flutter:
 
   # To add custom fonts to your application, add a fonts section here,
   assets:
+    - assets/images/
     - assets/icons/
     - assets/animations/
 

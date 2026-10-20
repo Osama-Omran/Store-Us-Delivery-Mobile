@@ -11,6 +11,7 @@ import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit
 import 'package:storeus_delivery/features/layout/presentation/screens/layout_screen.dart';
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
 import 'package:storeus_delivery/features/login/presentation/screens/login_screen.dart';
+import 'package:storeus_delivery/features/splash/presentation/screens/splash_screen.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/screens/cancel_delivery_success_screen.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/deliver_order_screen.dart';
@@ -33,11 +34,21 @@ String? token;
 
 class AppRouter {
   static final routes = GoRouter(
-    initialLocation: token?.trim().isNotEmpty == true
-        ? RoutesNames.layout
-        : RoutesNames.login,
+    initialLocation: RoutesNames.splash,
     navigatorKey: navigatorKey,
     routes: [
+      GoRoute(
+        name: RoutesNames.splash,
+        path: RoutesNames.splash,
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: SplashScreen(
+            nextRoute: token?.trim().isNotEmpty == true
+                ? RoutesNames.layout
+                : RoutesNames.login,
+          ),
+        ),
+      ),
       GoRoute(
         name: RoutesNames.directSale,
         path: RoutesNames.directSale,

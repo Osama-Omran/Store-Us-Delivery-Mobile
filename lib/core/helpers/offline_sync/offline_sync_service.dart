@@ -24,14 +24,13 @@ class OfflineSyncService with WidgetsBindingObserver {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('storeus_offline_api_base_url', ApiConstants.baseUrl);
     await OfflineSyncScheduler.init();
-    await OfflineSyncNotifications.instance.init(askPermission: true);
+    await OfflineSyncNotifications.instance.init();
     _started = true;
     WidgetsBinding.instance.addObserver(this);
     _timer = Timer.periodic(
       const Duration(seconds: 25),
       (_) => unawaited(check()),
     );
-    await check();
   }
 
   @override

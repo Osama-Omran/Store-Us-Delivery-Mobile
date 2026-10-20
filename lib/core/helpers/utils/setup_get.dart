@@ -18,6 +18,9 @@ import 'package:storeus_delivery/features/drawer_features/reports/domain/usecase
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/repo/concrete_stock_transfer_repo.dart';
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/domain/repo/stock_transfer_repo_interface.dart';
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/domain/usecases/get_stock_transfers_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/treasury/data/repo/concrete_treasury_wallet_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/treasury/domain/repo/treasury_wallet_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/treasury/domain/usecases/get_treasury_wallet_usecase.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/cubit/top_rank_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/cubit/treasury_cubit.dart';
@@ -108,7 +111,27 @@ void setupLocator() {
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<LoginUsecase>()));
   getIt.registerFactory<LayoutCubit>(() => LayoutCubit());
   getIt.registerFactory<DirectSaleCubit>(() => DirectSaleCubit());
-  getIt.registerFactory<TreasuryCubit>(() => TreasuryCubit());
+
+  // ========== Treasury / Wallet ========== //
+
+  // Repository
+  getIt.registerLazySingleton<TreasuryWalletRepoInterface>(
+    () => ConcreteTreasuryWalletRepo(getIt<TripApiService>()),
+  );
+
+  // UseCase
+  getIt.registerLazySingleton<GetTreasuryWalletUsecase>(
+    () => GetTreasuryWalletUsecase(getIt<TreasuryWalletRepoInterface>()),
+  );
+
+  // Cubit
+  getIt.registerFactory<TreasuryCubit>(
+    () => TreasuryCubit(
+      getIt<CurrentTripUsecase>(),
+      getIt<GetTreasuryWalletUsecase>(),
+    ),
+  );
+
   getIt.registerFactory<ReportsCubit>(
     () => ReportsCubit(getIt<GetReportsOverviewUsecase>()),
   );

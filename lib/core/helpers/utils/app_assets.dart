@@ -1,7 +1,7 @@
 class AppAssets {
   //======= Images =======//
-  // static const String imagesPath = 'assets/images';
-  // static const String uaeLogo = '$imagesPath/uae_logo.svg';
+  static const String imagesPath = 'assets/images';
+  static const String logo = '$imagesPath/logo.png';
 
   //======= Icons =======//
   static const String iconsPath = 'assets/icons';

@@ -11,7 +11,7 @@ import 'package:storeus_delivery/features/drawer_features/treasury/presentation/
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_header.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_inventory_widgets.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_selectors.dart';
-import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_wallet_cards.dart';
+import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_wallet_live.dart';
 
 class TreasuryScreen extends StatelessWidget {
   const TreasuryScreen({super.key});
@@ -19,7 +19,7 @@ class TreasuryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<TreasuryCubit>(),
+      create: (_) => getIt<TreasuryCubit>()..loadWallet(),
       child: const _TreasuryBody(),
     );
   }
@@ -70,52 +70,12 @@ class _TreasuryBodyState extends State<_TreasuryBody> {
                       ),
                       const SizedBox(height: 20),
 
-                      // ======= Wallet ======= //
-                      if (state.tab == TreasuryTab.wallet) ...[
-                        TreasuryPreviewSelector(
-                          value: state.preview,
-                          onChanged: cubit.selectPreview,
+                      // ======= Wallet: backend only, no preview filters ======= //
+                      if (state.tab == TreasuryTab.wallet)
+                        TreasuryWalletLive(
+                          state: state,
+                          onRefresh: cubit.loadWallet,
                         ),
-                        const SizedBox(height: 16),
-                        if (!state.hasTrip)
-                          const TreasuryEmptyWallet()
-                        else ...[
-                          TreasuryTripStrip(data: state.data),
-                          const SizedBox(height: 16),
-                          TreasuryBalanceCard(balance: state.custodyBalance),
-                          const SizedBox(height: 16),
-                          if (state.preview == TreasuryPreview.settled) ...[
-                            TreasurySettlementNotice(
-                              preview: state.preview,
-                              balance: state.custodyBalance,
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-                          TreasuryWalletStatistics(data: state.data),
-                          const SizedBox(height: 28),
-                          Text(
-                            context.strings.treasury_collection_details,
-                            style: Styles.textStyle24.copyWith(
-                              color: AppColors.black1,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          for (final collection in state.collections) ...[
-                            TreasuryCollectionCard(
-                              key: ValueKey(
-                                'treasury-collection-${collection.orderNumber}',
-                              ),
-                              collection: collection,
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-                          if (state.preview == TreasuryPreview.activeTrip)
-                            TreasurySettlementNotice(
-                              preview: state.preview,
-                              balance: state.custodyBalance,
-                            ),
-                        ],
-                      ],
 
                       // ======= Vehicle Goods ======= //
                       if (state.tab == TreasuryTab.vehicleGoods) ...[

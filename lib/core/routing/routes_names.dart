@@ -1,4 +1,7 @@
 class RoutesNames {
+  //======= Splash =======//
+  static const String splash = '/splashScreen';
+
   //======= Authentication =======//
   static const String login = '/loginScreen';
 

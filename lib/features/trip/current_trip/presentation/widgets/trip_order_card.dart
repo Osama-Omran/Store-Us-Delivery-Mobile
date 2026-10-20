@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
-
 import '../utils/trip_amount_formatter.dart';
 import '../utils/trip_order_navigation.dart';
 import 'trip_order_contact_line.dart';
@@ -26,6 +25,7 @@ class TripOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = TripOrderStatusStyle.forOrder(context, order);
+    final paymentTag = _PaymentTagData.forOrder(context, order);
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -177,23 +177,13 @@ class TripOrderCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (order.isPaymentCollected) ...[
+                    if (paymentTag != null) ...[
                       const SizedBox(width: 8),
                       Flexible(
                         child: _PaymentTag(
-                          title: context.strings.payment_collected,
-                          color: AppColors.green0,
-                          background: AppColors.green1,
-                        ),
-                      ),
-                    ] else if (order.collectedAmount > 0) ...[
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: _PaymentTag(
-                          title: '${context.strings.amount_collected} '
-                              '${formatTripAmount(context, order.collectedAmount)}',
-                          color: AppColors.orange0,
-                          background: AppColors.orange1,
+                          title: paymentTag.title,
+                          color: paymentTag.color,
+                          background: paymentTag.background,
                         ),
                       ),
                     ],
@@ -243,6 +233,94 @@ class TripOrderCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Visual presentation only: payment collection is independent of delivery.
+/// Never infer full collection from delivery_status or operation_completed.
+class _PaymentTagData {
+  const _PaymentTagData({
+    required this.title,
+    required this.color,
+    required this.background,
+  });
+
+  final String title;
+  final Color color;
+  final Color background;
+
+  static _PaymentTagData? forOrder(BuildContext context, TripOrderModel order) {
+    final paymentStatus = order.paymentStatus
+        ?.trim()
+        .toUpperCase()
+        .replaceAll('-', '_')
+        .replaceAll(' ', '_');
+
+    if (paymentStatus == null || paymentStatus.isEmpty) {
+      // Unknown is not the same as "not collected".
+      return null;
+    }
+
+    switch (paymentStatus) {
+      case 'PAID':
+      case 'COLLECTED':
+      case 'FULLY_PAID':
+      case 'FULLY_COLLECTED':
+        return _PaymentTagData(
+          title: context.strings.payment_collected,
+          color: AppColors.green0,
+          background: AppColors.green1,
+        );
+
+      case 'PARTIAL':
+      case 'PARTIALLY_PAID':
+      case 'PARTIAL_PAID':
+      case 'PARTIALLY_COLLECTED':
+      case 'PARTIAL_COLLECTION':
+      case 'PARTIAL_PAYMENT':
+        return _PaymentTagData(
+          title: 'لم يكتمل التحصيل',
+          color: AppColors.orange0,
+          background: AppColors.orange1,
+        );
+
+      case 'PENDING':
+      case 'UNPAID':
+      case 'NOT_PAID':
+      case 'NOT_COLLECTED':
+      case 'PAYMENT_PENDING':
+      case 'COLLECTION_PENDING':
+        // If we know some cash was collected, avoid saying "none".
+        if (order.collectedAmount > 0) {
+          return _PaymentTagData(
+            title: 'لم يكتمل التحصيل',
+            color: AppColors.orange0,
+            background: AppColors.orange1,
+          );
+        }
+        return _PaymentTagData(
+          title: 'لم يتم التحصيل',
+          color: AppColors.red1,
+          background: AppColors.red1.withValues(alpha: 0.10),
+        );
+
+      case 'FAILED':
+      case 'PAYMENT_FAILED':
+      case 'COLLECTION_FAILED':
+        return _PaymentTagData(
+          title: 'فشل التحصيل',
+          color: AppColors.red1,
+          background: AppColors.red1.withValues(alpha: 0.10),
+        );
+
+      default:
+        // Do not claim payment is complete or pending for unknown statuses.
+        return _PaymentTagData(
+          title: 'حالة التحصيل غير محددة',
+          color: AppColors.grey4,
+          background: AppColors.grey5,
+        );
+    }
   }
 }
 

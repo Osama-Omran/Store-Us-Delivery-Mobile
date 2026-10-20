@@ -3571,6 +3571,186 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'توجد تحويلات إضافية لم يتم تحميلها بعد؛ الأعداد الحالية خاصة بالبيانات المعروضة فقط'**
   String get stock_transfer_more_pages_notice;
+
+  /// No description provided for @retry_collection_confirm_full_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد تحصيل المبلغ بالكامل'**
+  String get retry_collection_confirm_full_amount;
+
+  /// No description provided for @retry_collection_order_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب'**
+  String get retry_collection_order_label;
+
+  /// No description provided for @retry_collection_required_amount_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المطلوب'**
+  String get retry_collection_required_amount_label;
+
+  /// No description provided for @retry_collection_confirm_notice.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُرجى التأكد من استلام المبلغ بالكامل، دون زيادة أو نقصان. سيتم تسجيل التحصيل فقط دون إعادة تسليم الطلب.'**
+  String get retry_collection_confirm_notice;
+
+  /// No description provided for @retry_collection_cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get retry_collection_cancel;
+
+  /// No description provided for @retry_collection_confirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التحصيل'**
+  String get retry_collection_confirm;
+
+  /// No description provided for @retry_collection_close.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق'**
+  String get retry_collection_close;
+
+  /// No description provided for @retry_collection_screen_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال تحصيل الطلب'**
+  String get retry_collection_screen_title;
+
+  /// No description provided for @retry_collection_full_amount_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المطلوب تحصيله بالكامل'**
+  String get retry_collection_full_amount_label;
+
+  /// No description provided for @retry_collection_amount_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ غير متاح'**
+  String get retry_collection_amount_unavailable;
+
+  /// No description provided for @retry_collection_full_amount_notice.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يُسمح بالتحصيل الجزئي أو بمبلغ أكبر من المطلوب. يجب استلام المبلغ كاملًا قبل التأكيد.'**
+  String get retry_collection_full_amount_notice;
+
+  /// No description provided for @retry_collection_amount_missing_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديد المبلغ المطلوب. حدّث بيانات الطلب قبل التحصيل.'**
+  String get retry_collection_amount_missing_error;
+
+  /// No description provided for @retry_collection_no_pending_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عملية تحصيل معلقة صالحة. حدّث بيانات الطلب.'**
+  String get retry_collection_no_pending_error;
+
+  /// No description provided for @retry_collection_multiple_pending_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'توجد أكثر من عملية تحصيل معلقة، ولا تتوفر قيمة مستقلة لكل عملية. يلزم تحديد المبلغ المطلوب لكل فاتورة من الخادم قبل التحصيل.'**
+  String get retry_collection_multiple_pending_error;
+
+  /// No description provided for @retry_collection_notes_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات التحصيل (اختياري)'**
+  String get retry_collection_notes_label;
+
+  /// No description provided for @retry_collection_notes_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: تحصيل بعد إعادة التحصيل'**
+  String get retry_collection_notes_hint;
+
+  /// No description provided for @retry_collection_close_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق وتحديث حالة الطلب'**
+  String get retry_collection_close_refresh;
+
+  /// No description provided for @treasury_wallet_no_data.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات محفظة متاحة حاليًا'**
+  String get treasury_wallet_no_data;
+
+  /// No description provided for @treasury_wallet_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات المحفظة. تحقق من الاتصال وحاول مرة أخرى.'**
+  String get treasury_wallet_load_failed;
+
+  /// No description provided for @treasury_wallet_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث المحفظة'**
+  String get treasury_wallet_refresh;
+
+  /// No description provided for @treasury_wallet_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get treasury_wallet_retry;
+
+  /// No description provided for @treasury_wallet_balance_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'العهدة النقدية الحالية بعد خصم ما تم استلامه في المخزن'**
+  String get treasury_wallet_balance_description;
+
+  /// No description provided for @treasury_wallet_received_warehouse.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم في المخزن'**
+  String get treasury_wallet_received_warehouse;
+
+  /// No description provided for @treasury_wallet_no_transactions.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عمليات تحصيل في هذه الرحلة'**
+  String get treasury_wallet_no_transactions;
+
+  /// No description provided for @treasury_wallet_partially_settled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت التسوية جزئيًا'**
+  String get treasury_wallet_partially_settled;
+
+  /// No description provided for @treasury_wallet_status_unknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التسوية غير متاحة'**
+  String get treasury_wallet_status_unknown;
+
+  /// No description provided for @treasury_wallet_collected_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المحصل'**
+  String get treasury_wallet_collected_amount;
+
+  /// No description provided for @treasury_wallet_payment_entry.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الدفع'**
+  String get treasury_wallet_payment_entry;
+
+  /// No description provided for @splash_tagline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتك تبدأ من هنا'**
+  String get splash_tagline;
+
+  /// No description provided for @splash_loading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تجهيز رحلتك...'**
+  String get splash_loading;
 }
 
 class _AppLocalizationsDelegate

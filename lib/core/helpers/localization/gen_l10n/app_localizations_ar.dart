@@ -1870,4 +1870,104 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get stock_transfer_more_pages_notice =>
       'توجد تحويلات إضافية لم يتم تحميلها بعد؛ الأعداد الحالية خاصة بالبيانات المعروضة فقط';
+
+  @override
+  String get retry_collection_confirm_full_amount =>
+      'تأكيد تحصيل المبلغ بالكامل';
+
+  @override
+  String get retry_collection_order_label => 'الطلب';
+
+  @override
+  String get retry_collection_required_amount_label => 'المبلغ المطلوب';
+
+  @override
+  String get retry_collection_confirm_notice =>
+      'يُرجى التأكد من استلام المبلغ بالكامل، دون زيادة أو نقصان. سيتم تسجيل التحصيل فقط دون إعادة تسليم الطلب.';
+
+  @override
+  String get retry_collection_cancel => 'إلغاء';
+
+  @override
+  String get retry_collection_confirm => 'تأكيد التحصيل';
+
+  @override
+  String get retry_collection_close => 'إغلاق';
+
+  @override
+  String get retry_collection_screen_title => 'إكمال تحصيل الطلب';
+
+  @override
+  String get retry_collection_full_amount_label =>
+      'المبلغ المطلوب تحصيله بالكامل';
+
+  @override
+  String get retry_collection_amount_unavailable => 'المبلغ غير متاح';
+
+  @override
+  String get retry_collection_full_amount_notice =>
+      'لا يُسمح بالتحصيل الجزئي أو بمبلغ أكبر من المطلوب. يجب استلام المبلغ كاملًا قبل التأكيد.';
+
+  @override
+  String get retry_collection_amount_missing_error =>
+      'تعذر تحديد المبلغ المطلوب. حدّث بيانات الطلب قبل التحصيل.';
+
+  @override
+  String get retry_collection_no_pending_error =>
+      'لا توجد عملية تحصيل معلقة صالحة. حدّث بيانات الطلب.';
+
+  @override
+  String get retry_collection_multiple_pending_error =>
+      'توجد أكثر من عملية تحصيل معلقة، ولا تتوفر قيمة مستقلة لكل عملية. يلزم تحديد المبلغ المطلوب لكل فاتورة من الخادم قبل التحصيل.';
+
+  @override
+  String get retry_collection_notes_label => 'ملاحظات التحصيل (اختياري)';
+
+  @override
+  String get retry_collection_notes_hint => 'مثال: تحصيل بعد إعادة التحصيل';
+
+  @override
+  String get retry_collection_close_refresh => 'إغلاق وتحديث حالة الطلب';
+
+  @override
+  String get treasury_wallet_no_data => 'لا توجد بيانات محفظة متاحة حاليًا';
+
+  @override
+  String get treasury_wallet_load_failed =>
+      'تعذر تحميل بيانات المحفظة. تحقق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get treasury_wallet_refresh => 'تحديث المحفظة';
+
+  @override
+  String get treasury_wallet_retry => 'إعادة المحاولة';
+
+  @override
+  String get treasury_wallet_balance_description =>
+      'العهدة النقدية الحالية بعد خصم ما تم استلامه في المخزن';
+
+  @override
+  String get treasury_wallet_received_warehouse => 'المستلم في المخزن';
+
+  @override
+  String get treasury_wallet_no_transactions =>
+      'لا توجد عمليات تحصيل في هذه الرحلة';
+
+  @override
+  String get treasury_wallet_partially_settled => 'تمت التسوية جزئيًا';
+
+  @override
+  String get treasury_wallet_status_unknown => 'حالة التسوية غير متاحة';
+
+  @override
+  String get treasury_wallet_collected_amount => 'المبلغ المحصل';
+
+  @override
+  String get treasury_wallet_payment_entry => 'قيد الدفع';
+
+  @override
+  String get splash_tagline => 'رحلتك تبدأ من هنا';
+
+  @override
+  String get splash_loading => 'جاري تجهيز رحلتك...';
 }
