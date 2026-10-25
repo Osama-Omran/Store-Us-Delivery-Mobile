@@ -1,4 +1,4 @@
-package com.example.storeus_delivery
+package com.storeus.storeusDelivery
 
 import io.flutter.embedding.android.FlutterActivity
 
