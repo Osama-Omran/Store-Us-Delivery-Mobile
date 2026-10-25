@@ -1,1 +1,8 @@
-CFBundleDisplayName = "ستور أص دليڤري";
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Swilam on 25/10/2026.
+  
+*/
+"CFBundleDisplayName" = "ستور أص دليڤري";

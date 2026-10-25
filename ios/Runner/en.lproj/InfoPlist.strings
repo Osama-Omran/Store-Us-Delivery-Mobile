@@ -1,1 +1,8 @@
-CFBundleDisplayName = "Store Us Delivery";
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Swilam on 25/10/2026.
+  
+*/
+"CFBundleDisplayName" = "StoreUs Delivery";
