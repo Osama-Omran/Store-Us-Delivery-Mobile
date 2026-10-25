@@ -8,6 +8,7 @@ import 'package:flutter_alice/alice.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
+import 'package:storeus_delivery/core/helpers/apis/dio/auth_error_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/locale_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_interceptor.dart';
@@ -80,6 +81,7 @@ class DioFactory {
     dio.interceptors.add(OfflineCacheInterceptor());
     // Opt-in durable outbox for JSON mutations. Does not change ordinary API calls.
     dio.interceptors.add(OfflineSyncInterceptor());
+    dio.interceptors.add(AuthErrorInterceptor());
 
     if (kDebugMode) {
       dio.interceptors.add(
