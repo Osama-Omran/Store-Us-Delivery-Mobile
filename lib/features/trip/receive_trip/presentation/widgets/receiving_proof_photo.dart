@@ -10,6 +10,8 @@ import 'receiving_photo_actions.dart';
 import 'receiving_photo_placeholder.dart';
 import 'receiving_photo_preview.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class ReceivingProofPhoto extends StatefulWidget {
   const ReceivingProofPhoto({
     super.key,
@@ -139,16 +141,16 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
               children: [
                 TextSpan(
                   text: context.strings.receiving_proof_photo,
-                  style: TextStyle(color: AppColors.black1),
+                  style: Styles.base.copyWith(color: AppColors.black1),
                 ),
                 TextSpan(
                   text: ' *',
-                  style: TextStyle(color: AppColors.red0),
+                  style: Styles.base.copyWith(color: AppColors.red0),
                 ),
               ],
             ),
             textAlign: TextAlign.start,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: Styles.textStyle18,
           ),
 
           if (proof == null) ...[
@@ -164,9 +166,8 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(
+                      style: Styles.textStyle13.copyWith(
                         color: AppColors.red0,
-                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

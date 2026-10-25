@@ -73,7 +73,7 @@ class _OrderDetailsBody extends StatelessWidget {
       useSafeArea: true,
       enableDrag: false,
       isDismissible: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (_) => OrderRetryCollectionSheet(
         cubit: cubit,
         tripId: tripId,

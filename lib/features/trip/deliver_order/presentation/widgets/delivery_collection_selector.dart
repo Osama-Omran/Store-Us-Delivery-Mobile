@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryCollectionSelector extends StatelessWidget {
   const DeliveryCollectionSelector({
@@ -22,8 +22,7 @@ class DeliveryCollectionSelector extends StatelessWidget {
       children: [
         Text(
           context.strings.delivery_collection_question,
-          style: TextStyle(
-            fontSize: 17,
+          style: Styles.textStyle17.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.black1,
           ),
@@ -83,9 +82,7 @@ class _CollectionOption extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: selected
-                    ? AppColors.primary
-                    : AppColors.grey3,
+                color: selected ? AppColors.primary : AppColors.grey3,
                 width: selected ? 1.7 : 1,
               ),
             ),
@@ -93,9 +90,7 @@ class _CollectionOption extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.grey4,
+                  color: selected ? AppColors.primary : AppColors.grey4,
                   size: 25,
                 ),
                 const SizedBox(width: 12),
@@ -105,16 +100,15 @@ class _CollectionOption extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
+                        style: Styles.textStyle15.copyWith(
                           color: AppColors.black1,
                           fontWeight: FontWeight.w800,
-                          fontSize: 15,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: TextStyle(
+                        style: Styles.base.copyWith(
                           color: AppColors.grey4,
                           fontSize: 12,
                         ),
@@ -126,9 +120,7 @@ class _CollectionOption extends StatelessWidget {
                   selected
                       ? Icons.radio_button_checked
                       : Icons.radio_button_off,
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.grey2,
+                  color: selected ? AppColors.primary : AppColors.grey2,
                 ),
               ],
             ),

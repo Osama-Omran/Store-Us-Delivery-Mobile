@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingSuccessDetails extends StatelessWidget {
   const ReceivingSuccessDetails({
@@ -60,13 +61,12 @@ class _DetailRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       spacing: 12,
       children: [
-        Text(title, style: TextStyle(fontSize: 15, color: AppColors.grey4)),
+        Text(title, style: Styles.textStyle15.copyWith(color: AppColors.grey4)),
         Flexible(
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: TextStyle(
-              fontSize: 16,
+            style: Styles.textStyle16.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.black1,
             ),

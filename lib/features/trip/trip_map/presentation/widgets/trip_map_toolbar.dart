@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class TripMapToolbar extends StatelessWidget {
   const TripMapToolbar({
@@ -64,10 +65,9 @@ class TripMapToolbar extends StatelessWidget {
                     '${context.strings.trip_map_title} \u2066#$tripId\u2069',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: Styles.textStyle15.copyWith(
                       color: AppColors.black1,
                       fontWeight: FontWeight.w800,
-                      fontSize: 15,
                     ),
                   ),
                 ),

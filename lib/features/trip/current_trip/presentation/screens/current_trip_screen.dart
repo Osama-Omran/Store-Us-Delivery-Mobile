@@ -130,9 +130,8 @@ class _CurrentTripScreenState extends State<CurrentTripScreen> {
                             child: Text(
                               '${visibleOrders.length}',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: Styles.textStyle12.copyWith(
                                 color: AppColors.primary,
-                                fontSize: 12,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),

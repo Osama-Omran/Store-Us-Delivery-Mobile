@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class RescheduleOrderForm extends StatelessWidget {
   const RescheduleOrderForm({
@@ -71,7 +72,7 @@ class RescheduleOrderForm extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8),
           child: Text(
             context.strings.reschedule_date_must_be_future,
-            style: TextStyle(color: AppColors.red1, fontSize: 13),
+            style: Styles.textStyle13.copyWith(color: AppColors.red1),
           ),
         ),
 
@@ -80,8 +81,7 @@ class RescheduleOrderForm extends StatelessWidget {
       // ======= Reason ======= //
       Text(
         context.strings.reschedule_reason,
-        style: TextStyle(
-          fontSize: 16,
+        style: Styles.textStyle16.copyWith(
           fontWeight: FontWeight.w800,
           color: AppColors.black1,
         ),
@@ -106,7 +106,7 @@ class RescheduleOrderForm extends StatelessWidget {
                     : AppColors.grey3,
               ),
               showCheckmark: false,
-              labelStyle: TextStyle(
+              labelStyle: Styles.base.copyWith(
                 fontWeight: FontWeight.w700,
                 color: selectedReason == reason
                     ? AppColors.primary
@@ -137,7 +137,10 @@ class RescheduleOrderForm extends StatelessWidget {
       // ======= Optional Notes ======= //
       Text(
         context.strings.order_optional_notes,
-        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.black1),
+        style: Styles.base.copyWith(
+          fontWeight: FontWeight.w800,
+          color: AppColors.black1,
+        ),
       ),
 
       const SizedBox(height: 9),
@@ -162,7 +165,7 @@ class RescheduleOrderForm extends StatelessWidget {
 
       Text(
         context.strings.reschedule_notes_not_sent,
-        style: TextStyle(fontSize: 12, color: AppColors.grey4),
+        style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
       ),
 
       const SizedBox(height: 16),
@@ -185,7 +188,7 @@ class _RescheduleInfoRow extends StatelessWidget {
           width: 82,
           child: Text(
             label,
-            style: TextStyle(fontSize: 13, color: AppColors.grey4),
+            style: Styles.textStyle13.copyWith(color: AppColors.grey4),
           ),
         ),
 
@@ -194,8 +197,7 @@ class _RescheduleInfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             value.isNotEmpty ? value : '—',
-            style: TextStyle(
-              fontSize: 15,
+            style: Styles.textStyle15.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.black1,
             ),

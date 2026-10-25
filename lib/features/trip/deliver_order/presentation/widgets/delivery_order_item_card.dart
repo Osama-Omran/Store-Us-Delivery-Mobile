@@ -8,6 +8,7 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_state.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_qty_format.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryOrderItemCard extends StatelessWidget {
   const DeliveryOrderItemCard({
@@ -58,8 +59,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                       children: [
                         Text(
                           item.itemName,
-                          style: TextStyle(
-                            fontSize: 18,
+                          style: Styles.textStyle18.copyWith(
                             fontWeight: FontWeight.w800,
                             color: AppColors.black1,
                           ),
@@ -69,7 +69,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                           '${context.strings.delivery_item_code}: '
                           '${item.itemCode} • '
                           '${context.strings.unit}: ${item.uom}',
-                          style: TextStyle(
+                          style: Styles.base.copyWith(
                             fontSize: 12,
                             color: AppColors.grey4,
                           ),
@@ -84,8 +84,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                     item.rate == null
                         ? '—'
                         : formatTripAmount(context, item.rate!),
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: Styles.textStyle14.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.grey4,
                     ),
@@ -146,10 +145,8 @@ class DeliveryOrderItemCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           context.strings.delivery_insufficient_stock,
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: Styles.textStyle12.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.orange0,
                           ),
                         ),
                       ),
@@ -172,8 +169,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         context.strings.delivery_selected_quantity,
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: Styles.textStyle14.copyWith(
                           fontWeight: FontWeight.w800,
                           color: AppColors.black1,
                         ),
@@ -192,8 +188,7 @@ class DeliveryOrderItemCard extends StatelessWidget {
                       child: Text(
                         formatDeliveryQty(selectedQty),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 21,
+                        style: Styles.textStyle21.copyWith(
                           fontWeight: FontWeight.w800,
                           color: AppColors.black1,
                         ),
@@ -279,12 +274,11 @@ class _QuantityInfoTile extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: color),
+            style: Styles.base.copyWith(fontSize: 12, color: color),
           ),
           Text(
             formatDeliveryQty(quantity),
-            style: TextStyle(
-              fontSize: 23,
+            style: Styles.textStyle23.copyWith(
               fontWeight: FontWeight.w800,
               color: color,
             ),
@@ -366,10 +360,13 @@ class _DifferenceValue extends StatelessWidget {
     return Column(
       spacing: 4,
       children: [
-        Text(label, style: TextStyle(fontSize: 11, color: AppColors.orange0)),
+        Text(
+          label,
+          style: Styles.textStyle11.copyWith(color: AppColors.orange0),
+        ),
         Text(
           formatDeliveryQty(value),
-          style: TextStyle(
+          style: Styles.base.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.orange0,
           ),

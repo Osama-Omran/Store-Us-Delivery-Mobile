@@ -6,6 +6,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_state.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_order_item_card.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryOrderItemsSection extends StatelessWidget {
   const DeliveryOrderItemsSection({super.key});
@@ -24,8 +25,7 @@ class DeliveryOrderItemsSection extends StatelessWidget {
           children: [
             Text(
               context.strings.order_products,
-              style: TextStyle(
-                fontSize: 19,
+              style: Styles.textStyle19.copyWith(
                 fontWeight: FontWeight.w800,
                 color: AppColors.black1,
               ),

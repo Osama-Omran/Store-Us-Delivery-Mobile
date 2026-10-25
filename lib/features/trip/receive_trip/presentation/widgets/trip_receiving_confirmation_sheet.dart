@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 Future<bool?> showTripReceivingConfirmationSheet({
   required BuildContext context,
@@ -41,8 +42,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
             Text(
               context.strings.confirm_receiving_dialog_title,
               textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 24,
+              style: Styles.textStyle24.copyWith(
                 fontWeight: FontWeight.w800,
                 color: AppColors.black1,
               ),
@@ -52,7 +52,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
               '${context.strings.confirm_receiving_dialog_description} '
               '\u2066$tripNumber\u2069.',
               textAlign: TextAlign.start,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 fontSize: 16,
                 height: 1.6,
                 color: AppColors.grey4,
@@ -79,8 +79,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                       ),
                       child: Text(
                         context.strings.back,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: Styles.textStyle20.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -106,8 +105,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                       child: Text(
                         context.strings.yes_confirm_receiving,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: Styles.textStyle20.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),

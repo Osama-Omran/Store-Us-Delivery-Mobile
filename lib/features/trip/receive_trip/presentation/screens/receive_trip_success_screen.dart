@@ -5,6 +5,7 @@ import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/receiving_success_header.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/receiving_success_details.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceiveTripSuccessScreen extends StatelessWidget {
   const ReceiveTripSuccessScreen({
@@ -58,8 +59,7 @@ class ReceiveTripSuccessScreen extends StatelessWidget {
                           ),
                           child: Text(
                             context.strings.show_trip_orders,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: Styles.textStyle20.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),

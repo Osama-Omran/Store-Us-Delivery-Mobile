@@ -1,17 +1,15 @@
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 class OfflineSyncNotifications {
   OfflineSyncNotifications._();
 
-  static final OfflineSyncNotifications instance =
-  OfflineSyncNotifications._();
+  static final OfflineSyncNotifications instance = OfflineSyncNotifications._();
 
   final FlutterLocalNotificationsPlugin _plugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
 
@@ -19,15 +17,11 @@ class OfflineSyncNotifications {
   static const int _successNotificationId = 90211;
   static const int _errorNotificationId = 90212;
 
-  static const Color _primaryColor = Color(0xFF0462D2);
-
   Future<void> init({bool askPermission = false}) async {
     if (!_initialized) {
       await _plugin.initialize(
         settings: const InitializationSettings(
-          android: AndroidInitializationSettings(
-            '@mipmap/ic_launcher',
-          ),
+          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
           iOS: DarwinInitializationSettings(
             requestAlertPermission: false,
             requestBadgePermission: false,
@@ -42,17 +36,15 @@ class OfflineSyncNotifications {
     if (askPermission) {
       await _plugin
           .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.requestNotificationsPermission();
 
       await _plugin
           .resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
     }
   }
 
@@ -70,12 +62,10 @@ class OfflineSyncNotifications {
           channelDescription: 'حالة إرسال العمليات المحفوظة',
           importance: Importance.low,
           priority: Priority.low,
-          color: _primaryColor,
+          color: AppColors.primary,
           onlyAlertOnce: true,
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-        ),
+        iOS: DarwinNotificationDetails(presentAlert: true),
       ),
     );
   }
@@ -94,16 +84,14 @@ class OfflineSyncNotifications {
           channelDescription: 'حالة إرسال العمليات المحفوظة',
           importance: Importance.low,
           priority: Priority.low,
-          color: _primaryColor,
+          color: AppColors.primary,
           ongoing: true,
           autoCancel: false,
           onlyAlertOnce: true,
           showProgress: true,
           indeterminate: true,
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-        ),
+        iOS: DarwinNotificationDetails(presentAlert: true),
       ),
     );
   }
@@ -124,11 +112,9 @@ class OfflineSyncNotifications {
           channelDescription: 'نتائج إرسال العمليات المحفوظة',
           importance: Importance.high,
           priority: Priority.high,
-          color: _primaryColor,
+          color: AppColors.primary,
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-        ),
+        iOS: DarwinNotificationDetails(presentAlert: true),
       ),
     );
   }
@@ -149,11 +135,9 @@ class OfflineSyncNotifications {
           channelDescription: 'نتائج إرسال العمليات المحفوظة',
           importance: Importance.high,
           priority: Priority.high,
-          color: Color(0xFFE53935),
+          color: AppColors.syncError,
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-        ),
+        iOS: DarwinNotificationDetails(presentAlert: true),
       ),
     );
   }
@@ -165,8 +149,8 @@ class OfflineSyncNotifications {
       msg: 'اكتملت المزامنة: $title',
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: _primaryColor,
-      textColor: Colors.white,
+      backgroundColor: AppColors.primary,
+      textColor: AppColors.white0,
     );
   }
 }

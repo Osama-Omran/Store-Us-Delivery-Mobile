@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationsHeader extends StatelessWidget {
   const NotificationsHeader({super.key, this.unreadCount});
@@ -60,8 +61,7 @@ class NotificationsHeader extends StatelessWidget {
                   context.strings.notifications,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 23,
+                  style: Styles.textStyle23.copyWith(
                     height: 1.2,
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
@@ -73,8 +73,7 @@ class NotificationsHeader extends StatelessWidget {
                     '$unreadCount ${context.strings.unread_notifications}',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12.5,
+                    style: Styles.textStyle12_5.copyWith(
                       height: 1.25,
                       color: AppColors.grey4,
                       fontWeight: FontWeight.w500,
@@ -97,8 +96,7 @@ class NotificationsHeader extends StatelessWidget {
               ),
               child: Text(
                 '$unreadCount',
-                style: TextStyle(
-                  fontSize: 14,
+                style: Styles.textStyle14.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.primary,
                 ),

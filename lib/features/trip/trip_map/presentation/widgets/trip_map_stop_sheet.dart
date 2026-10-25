@@ -66,9 +66,8 @@ class TripMapStopSheet extends StatelessWidget {
           Text(
             '${isNextStop ? context.strings.trip_map_next_stop : context.strings.trip_map_selected_stop}'
             ' · ${stop.number} ${context.strings.trip_map_out_of} $totalStops',
-            style: TextStyle(
+            style: Styles.textStyle14.copyWith(
               color: AppColors.primary,
-              fontSize: 14,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -77,9 +76,8 @@ class TripMapStopSheet extends StatelessWidget {
             stop.name,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: Styles.textStyle25.copyWith(
               color: AppColors.black1,
-              fontSize: 25,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -98,7 +96,7 @@ class TripMapStopSheet extends StatelessWidget {
                   stop.address,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: AppColors.grey4, fontSize: 15),
+                  style: Styles.textStyle15.copyWith(color: AppColors.grey4),
                 ),
               ),
             ],
@@ -137,7 +135,7 @@ class TripMapStopSheet extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   context.strings.trip_map_calculating_route,
-                  style: TextStyle(color: AppColors.grey4),
+                  style: Styles.base.copyWith(color: AppColors.grey4),
                 ),
               ],
             )
@@ -148,7 +146,7 @@ class TripMapStopSheet extends StatelessWidget {
                   : routeError
                   ? context.strings.trip_map_route_unavailable
                   : context.strings.trip_map_route_not_connected,
-              style: TextStyle(color: AppColors.grey4, fontSize: 13),
+              style: Styles.textStyle13.copyWith(color: AppColors.grey4),
             ),
           const SizedBox(height: 20),
           Row(
@@ -162,8 +160,7 @@ class TripMapStopSheet extends StatelessWidget {
                     icon: const Icon(Icons.navigation_outlined, size: 24),
                     label: Text(
                       context.strings.trip_map_start_navigation,
-                      style: const TextStyle(
-                        fontSize: 17,
+                      style: Styles.textStyle17.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -251,9 +248,8 @@ class _InfoChip extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             label,
-            style: TextStyle(
+            style: Styles.textStyle12.copyWith(
               color: AppColors.black1,
-              fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
           ),

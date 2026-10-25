@@ -58,7 +58,11 @@ class StockTransferCard extends StatelessWidget {
             spacing: 10,
             runSpacing: 4,
             children: [
-              Icon(Icons.warehouse_outlined, color: AppColors.primary, size: 20),
+              Icon(
+                Icons.warehouse_outlined,
+                color: AppColors.primary,
+                size: 20,
+              ),
               Text(
                 transfer.sourceWarehouse,
                 style: Styles.textStyle18.copyWith(color: AppColors.black1),
@@ -107,8 +111,8 @@ class StockTransferCard extends StatelessWidget {
                       value: transfer.representative.isNotEmpty
                           ? transfer.representative
                           : transfer.representativeId == null
-                              ? '—'
-                              : '#${transfer.representativeId}',
+                          ? '—'
+                          : '#${transfer.representativeId}',
                     ),
                     _TransferField(
                       label: context.strings.stock_transfer_total_quantity,
@@ -118,8 +122,10 @@ class StockTransferCard extends StatelessWidget {
                     if (transfer.expectedArrival != null)
                       _TransferField(
                         label: context.strings.stock_transfer_expected_arrival,
-                        value: DateFormat('dd/MM/yyyy', 'en')
-                            .format(transfer.expectedArrival!),
+                        value: DateFormat(
+                          'dd/MM/yyyy',
+                          'en',
+                        ).format(transfer.expectedArrival!),
                       ),
                   ],
                 ),
@@ -152,7 +158,10 @@ class _TransferField extends StatelessWidget {
           TextSpan(
             text: value.trim().isEmpty ? '—' : value,
             style: emphasizeValue
-                ? TextStyle(color: AppColors.black1, fontWeight: FontWeight.w700)
+                ? Styles.base.copyWith(
+                    color: AppColors.black1,
+                    fontWeight: FontWeight.w700,
+                  )
                 : null,
           ),
         ],

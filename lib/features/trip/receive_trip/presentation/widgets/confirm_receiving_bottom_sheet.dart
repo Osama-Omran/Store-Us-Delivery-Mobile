@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ConfirmReceivingBottomSheet extends StatelessWidget {
   const ConfirmReceivingBottomSheet({
@@ -37,16 +38,15 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                 Text(
                   context.strings.confirm_receiving,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.black1,
-                  ),
+                  style: Styles.textStyle18.copyWith(color: AppColors.black1),
                 ),
                 Text(
                   context.strings.confirm_receiving_description,
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 14, color: AppColors.grey4),
+                  style: Styles.base.copyWith(
+                    fontSize: 14,
+                    color: AppColors.grey4,
+                  ),
                 ),
               ],
             ),
@@ -77,8 +77,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                       )
                     : Text(
                         context.strings.confirm_receiving_van,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: Styles.textStyle20.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -88,8 +87,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
               Text(
                 context.strings.confirm_receiving_warning,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13,
+                style: Styles.textStyle13.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.orange0,
                 ),

@@ -17,6 +17,7 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/widget
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_order_items_section.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_extra_products_section.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_summary_bar.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliverOrderScreen extends StatelessWidget {
   const DeliverOrderScreen({
@@ -248,13 +249,13 @@ class _DeliveryUnavailable extends StatelessWidget {
             Text(
               context.strings.delivery_order_not_pending,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 color: AppColors.black1,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            Text(status, style: TextStyle(color: AppColors.grey4)),
+            Text(status, style: Styles.base.copyWith(color: AppColors.grey4)),
 
             OutlinedButton(
               onPressed: () => context.pop(),

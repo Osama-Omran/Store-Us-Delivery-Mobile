@@ -14,6 +14,8 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/widget
 import '../widgets/delivery_payment_confirmation_sheet.dart';
 import '../widgets/delivery_payment_content.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class DeliveryPaymentScreen extends StatefulWidget {
   const DeliveryPaymentScreen({super.key, required this.flow});
 
@@ -32,6 +34,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
       _collectPayment = value;
     });
   }
+
   DeliveryProofDraft? _proof;
 
   Future<void> _openProof() async {
@@ -94,8 +97,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
   }
 
   bool get _canConfirm {
-    if (widget.flow.hasMissingLineIds ||
-        widget.flow.apiItems.isEmpty) {
+    if (widget.flow.hasMissingLineIds || widget.flow.apiItems.isEmpty) {
       return false;
     }
 
@@ -144,12 +146,8 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
       tripId: widget.flow.tripId,
       orderId: widget.flow.orderId,
       items: widget.flow.apiItems,
-      collectedAmount: _collectPayment
-          ? _enteredAmount
-          : null,
-      paymentMethod: _collectPayment
-          ? _paymentMethod
-          : null,
+      collectedAmount: _collectPayment ? _enteredAmount : null,
+      paymentMethod: _collectPayment ? _paymentMethod : null,
     );
   }
 
@@ -186,12 +184,8 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
             RoutesNames.deliverySuccess,
             extra: {
               'flow': widget.flow,
-              'collected_amount': _collectPayment
-                  ? _enteredAmount
-                  : null,
-              'payment_method': _collectPayment
-                  ? _paymentMethod
-                  : null,
+              'collected_amount': _collectPayment ? _enteredAmount : null,
+              'payment_method': _collectPayment ? _paymentMethod : null,
             },
           );
         }
@@ -224,7 +218,8 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                         amountController: _amountController,
                         isLoading: isLoading,
                         amountMatches: _amountMatches,
-                        showMismatch: _collectPayment &&
+                        showMismatch:
+                            _collectPayment &&
                             entered != null &&
                             entered > 0 &&
                             !_amountMatches,
@@ -258,18 +253,17 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                         ),
                       ),
                       child: isLoading
-                          ? CircularProgressIndicator(
-                        color: AppColors.white0,
-                      )
+                          ? CircularProgressIndicator(color: AppColors.white0)
                           : Text(
-                        _collectPayment
-                            ? context.strings.delivery_confirm_button
-                            : context.strings.delivery_confirm_without_collection,
-                        style: const TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                              _collectPayment
+                                  ? context.strings.delivery_confirm_button
+                                  : context
+                                        .strings
+                                        .delivery_confirm_without_collection,
+                              style: Styles.textStyle19.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
                     ),
                   ),
                 ),

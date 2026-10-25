@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 enum TripOrdersFilter {
   all,
@@ -111,7 +112,7 @@ class _FilterChip extends StatelessWidget {
             : null,
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
@@ -120,9 +121,8 @@ class _FilterChip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
             child: Text(
               title,
-              style: TextStyle(
+              style: Styles.textStyle13.copyWith(
                 fontWeight: FontWeight.w800,
-                fontSize: 13,
                 color: isSelected ? AppColors.white0 : AppColors.grey4,
               ),
             ),

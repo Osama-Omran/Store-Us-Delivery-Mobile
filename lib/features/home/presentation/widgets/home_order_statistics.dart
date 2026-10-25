@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class HomeOrderStatistics extends StatelessWidget {
   const HomeOrderStatistics({
@@ -82,8 +83,7 @@ class _OrderStatCard extends StatelessWidget {
         children: [
           Text(
             count?.toString() ?? '—',
-            style: TextStyle(
-              fontSize: 27,
+            style: Styles.textStyle27.copyWith(
               fontWeight: FontWeight.w800,
               color: countColor,
             ),
@@ -94,7 +94,11 @@ class _OrderStatCard extends StatelessWidget {
             maxLines: 2,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12, height: 1.3, color: labelColor),
+            style: Styles.base.copyWith(
+              fontSize: 12,
+              height: 1.3,
+              color: labelColor,
+            ),
           ),
         ],
       ),

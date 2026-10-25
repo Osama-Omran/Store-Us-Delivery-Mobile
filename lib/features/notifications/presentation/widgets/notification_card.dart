@@ -6,6 +6,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({
@@ -135,7 +136,7 @@ class NotificationCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: isRead || isMarking ? null : () => _markAsRead(context),
           borderRadius: BorderRadius.circular(22),
@@ -164,11 +165,11 @@ class NotificationCard extends StatelessWidget {
                                   notification.title,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: Styles.textStyle16.copyWith(
                                     height: 1.35,
-                                    fontWeight:
-                                        isRead ? FontWeight.w700 : FontWeight.w800,
+                                    fontWeight: isRead
+                                        ? FontWeight.w700
+                                        : FontWeight.w800,
                                     color: AppColors.black1,
                                   ),
                                 ),
@@ -190,8 +191,9 @@ class NotificationCard extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.18),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.18,
+                                        ),
                                         blurRadius: 8,
                                       ),
                                     ],
@@ -205,8 +207,7 @@ class NotificationCard extends StatelessWidget {
                             description,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.5,
+                            style: Styles.textStyle13_5.copyWith(
                               height: 1.55,
                               fontWeight: FontWeight.w400,
                               color: AppColors.grey1,
@@ -226,9 +227,7 @@ class NotificationCard extends StatelessWidget {
                                   _formatTime(context),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                  style: Styles.textStyle12.copyWith(
                                     color: AppColors.grey4,
                                   ),
                                 ),
@@ -288,11 +287,7 @@ class _NotificationIcon extends StatelessWidget {
               : iconColor.withValues(alpha: 0.12),
         ),
       ),
-      child: Icon(
-        icon,
-        size: 25,
-        color: isRead ? AppColors.grey4 : iconColor,
-      ),
+      child: Icon(icon, size: 25, color: isRead ? AppColors.grey4 : iconColor),
     );
   }
 }

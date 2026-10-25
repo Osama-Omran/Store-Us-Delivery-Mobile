@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
+
 import 'delivery_collection_selector.dart';
 import 'delivery_payment_amount_field.dart';
 import 'delivery_payment_summary_card.dart';
+
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryPaymentContent extends StatelessWidget {
   const DeliveryPaymentContent({
@@ -17,7 +20,8 @@ class DeliveryPaymentContent extends StatelessWidget {
     required this.showMismatch,
     required this.onAmountChanged,
     required this.hasProof,
-    required this.onOpenProof,required this.collectPayment,
+    required this.onOpenProof,
+    required this.collectPayment,
     required this.onCollectionChanged,
   });
 
@@ -29,7 +33,8 @@ class DeliveryPaymentContent extends StatelessWidget {
   final bool showMismatch;
   final ValueChanged<String> onAmountChanged;
   final bool hasProof;
-  final VoidCallback onOpenProof;final bool collectPayment;
+  final VoidCallback onOpenProof;
+  final bool collectPayment;
   final ValueChanged<bool> onCollectionChanged;
 
   @override
@@ -52,15 +57,10 @@ class DeliveryPaymentContent extends StatelessWidget {
 
       const SizedBox(height: 22),
 
-
-
       if (collectPayment) ...[
         Text(
           context.strings.delivery_collected_amount,
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w800,
-          ),
+          style: Styles.textStyle17.copyWith(fontWeight: FontWeight.w800),
         ),
 
         const SizedBox(height: 10),
@@ -90,9 +90,8 @@ class DeliveryPaymentContent extends StatelessWidget {
 
         Text(
           context.strings.delivery_payment_method,
-          style: TextStyle(
+          style: Styles.textStyle17.copyWith(
             color: AppColors.black1,
-            fontSize: 17,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -134,10 +133,7 @@ class DeliveryPaymentContent extends StatelessWidget {
 
         Text(
           context.strings.delivery_payment_not_supported,
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.grey4,
-          ),
+          style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
         ),
       ] else ...[
         Container(
@@ -149,15 +145,12 @@ class DeliveryPaymentContent extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.info_outline_rounded,
-                color: AppColors.orange0,
-              ),
+              Icon(Icons.info_outline_rounded, color: AppColors.orange0),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   context.strings.delivery_no_collection_notice,
-                  style: TextStyle(
+                  style: Styles.base.copyWith(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w600,
                     height: 1.5,
@@ -178,7 +171,6 @@ class DeliveryPaymentContent extends StatelessWidget {
       ],
 
       const SizedBox(height: 20),
-
 
       const SizedBox(height: 10),
       DeliveryPaymentAmountField(
@@ -214,9 +206,8 @@ class DeliveryPaymentContent extends StatelessWidget {
 
       Text(
         context.strings.delivery_payment_method,
-        style: TextStyle(
+        style: Styles.textStyle17.copyWith(
           color: AppColors.black1,
-          fontSize: 17,
           fontWeight: FontWeight.w800,
         ),
       ),
@@ -258,7 +249,7 @@ class DeliveryPaymentContent extends StatelessWidget {
 
       Text(
         context.strings.delivery_payment_not_supported,
-        style: TextStyle(fontSize: 12, color: AppColors.grey4),
+        style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
       ),
 
       const SizedBox(height: 20),
@@ -301,7 +292,7 @@ class _StatusMessage extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: TextStyle(
+        style: Styles.base.copyWith(
           color: success ? AppColors.green0 : AppColors.red1,
           fontWeight: FontWeight.w700,
         ),
@@ -343,10 +334,9 @@ class _PaymentMethodTile extends StatelessWidget {
             Icon(icon, color: selected ? AppColors.primary : AppColors.grey4),
             Text(
               title,
-              style: TextStyle(
+              style: Styles.textStyle12.copyWith(
                 color: selected ? AppColors.primary : AppColors.black1,
                 fontWeight: FontWeight.w700,
-                fontSize: 12,
               ),
             ),
           ],

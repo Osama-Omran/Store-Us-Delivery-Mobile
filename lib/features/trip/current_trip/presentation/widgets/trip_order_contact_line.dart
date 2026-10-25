@@ -3,6 +3,8 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 import '../utils/trip_order_navigation.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class TripOrderContactLine extends StatelessWidget {
   const TripOrderContactLine({
     super.key,
@@ -18,7 +20,7 @@ class TripOrderContactLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: isPhone ? () => callOrderCustomer(context, text) : null,
         borderRadius: BorderRadius.circular(9),
@@ -48,8 +50,7 @@ class TripOrderContactLine extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textDirection: isPhone ? TextDirection.ltr : null,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: Styles.textStyle12.copyWith(
                     height: 1.35,
                     color: isPhone ? AppColors.primary : AppColors.grey4,
                     fontWeight: isPhone ? FontWeight.w700 : FontWeight.w500,

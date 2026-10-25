@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/localization/gen_l10n/app_localizations.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 
 import 'delivery_payment_summary_card.dart';
+
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryPaymentConfirmationSheet extends StatelessWidget {
   const DeliveryPaymentConfirmationSheet({
@@ -36,11 +37,7 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
             // ======= Confirmation Title ======= //
             Text(
               strings.delivery_confirmation_summary,
-              style: TextStyle(
-                color: AppColors.black1,
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-              ),
+              style: Styles.textStyle22,
             ),
 
             // ======= Customer Name ======= //
@@ -104,9 +101,8 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
                     Expanded(
                       child: Text(
                         strings.delivery_no_collection_warning,
-                        style: TextStyle(
+                        style: Styles.textStyle13.copyWith(
                           color: AppColors.black1,
-                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           height: 1.5,
                         ),
@@ -120,9 +116,8 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
             // ======= Confirmation Warning ======= //
             Text(
               strings.delivery_confirmation_warning,
-              style: TextStyle(
+              style: Styles.textStyle13.copyWith(
                 color: AppColors.grey4,
-                fontSize: 13,
                 height: 1.5,
               ),
             ),
@@ -149,7 +144,7 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
                           ? strings.delivery_confirm_button
                           : strings.delivery_confirm_without_collection,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: Styles.base.copyWith(
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
                       ),
@@ -173,9 +168,8 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
                     ),
                     child: Text(
                       strings.back,
-                      style: const TextStyle(
+                      style: Styles.textStyle15.copyWith(
                         fontWeight: FontWeight.w700,
-                        fontSize: 15,
                       ),
                     ),
                   ),

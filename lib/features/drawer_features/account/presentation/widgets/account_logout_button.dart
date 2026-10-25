@@ -28,7 +28,7 @@ Future<bool> showAccountLogoutConfirmation(BuildContext context) async {
             },
             child: Text(
               context.strings.logout,
-              style: TextStyle(color: AppColors.red1),
+              style: Styles.base.copyWith(color: AppColors.red1),
             ),
           ),
         ],

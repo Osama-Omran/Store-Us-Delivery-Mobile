@@ -7,6 +7,8 @@ import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit
 
 import 'home_order_statistics.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class HomeCurrentTripCard extends StatelessWidget {
   const HomeCurrentTripCard({
     super.key,
@@ -56,8 +58,7 @@ class HomeCurrentTripCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.your_current_trip,
-                  style: TextStyle(
-                    fontSize: 19,
+                  style: Styles.textStyle19.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
                   ),
@@ -79,9 +80,8 @@ class HomeCurrentTripCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textDirection: TextDirection.ltr,
-                  style: TextStyle(
+                  style: Styles.textStyle12.copyWith(
                     color: AppColors.white0,
-                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -156,8 +156,7 @@ class HomeCurrentTripCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.strings.collected_amount,
-                    style: TextStyle(
-                      fontSize: 15,
+                    style: Styles.textStyle15.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.grey4,
                     ),
@@ -165,8 +164,7 @@ class HomeCurrentTripCard extends StatelessWidget {
                 ),
                 Text(
                   '—',
-                  style: TextStyle(
-                    fontSize: 21,
+                  style: Styles.textStyle21.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
                   ),
@@ -195,8 +193,7 @@ class HomeCurrentTripCard extends StatelessWidget {
                 children: [
                   Text(
                     context.strings.continue_trip,
-                    style: const TextStyle(
-                      fontSize: 17,
+                    style: Styles.textStyle17.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -237,8 +234,7 @@ class _TripInfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 14,
+            style: Styles.textStyle14.copyWith(
               height: 1.45,
               fontWeight: FontWeight.w600,
               color: AppColors.black1,

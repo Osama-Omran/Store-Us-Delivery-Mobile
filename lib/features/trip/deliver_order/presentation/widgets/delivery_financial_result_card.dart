@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryFinancialResultCard extends StatelessWidget {
   const DeliveryFinancialResultCard({
@@ -40,14 +41,13 @@ class DeliveryFinancialResultCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.delivery_estimated_total,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
+                  style: Styles.base.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
               Text(
                 estimated == null ? '—' : formatTripAmount(context, estimated!),
-                style: TextStyle(
+                style: Styles.textStyle23.copyWith(
                   color: AppColors.primary,
-                  fontSize: 23,
                   fontWeight: FontWeight.w800,
                 ),
               ),

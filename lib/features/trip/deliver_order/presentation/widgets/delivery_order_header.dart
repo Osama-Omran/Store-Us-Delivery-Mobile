@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryOrderHeader extends StatelessWidget {
   const DeliveryOrderHeader({super.key, this.salesOrder});
@@ -27,8 +28,7 @@ class DeliveryOrderHeader extends StatelessWidget {
             children: [
               Text(
                 context.strings.delivery_order_title,
-                style: TextStyle(
-                  fontSize: 23,
+                style: Styles.textStyle23.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.black1,
                 ),
@@ -36,7 +36,7 @@ class DeliveryOrderHeader extends StatelessWidget {
               Text(
                 salesOrder ?? '—',
                 textDirection: TextDirection.ltr,
-                style: TextStyle(fontSize: 13, color: AppColors.grey4),
+                style: Styles.textStyle13.copyWith(color: AppColors.grey4),
               ),
             ],
           ),

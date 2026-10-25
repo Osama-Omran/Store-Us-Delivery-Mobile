@@ -10,6 +10,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_cubit.dart';
 import 'package:storeus_delivery/features/trip/trip_tap/presentation/cubit/trip_tab_state.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class CurrentTripHeader extends StatelessWidget {
   const CurrentTripHeader({super.key, required this.tripNumber});
@@ -97,11 +98,7 @@ class CurrentTripHeader extends StatelessWidget {
                   context.strings.my_current_trip,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppColors.black1,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: Styles.textStyle20.copyWith(color: AppColors.black1),
                 ),
                 const SizedBox(height: 5),
                 Text(
@@ -109,11 +106,7 @@ class CurrentTripHeader extends StatelessWidget {
                   '\u2066#$displayTripNumber\u2069',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.grey4,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
               ],
             ),

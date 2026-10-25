@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class RescheduleDateTimeFields extends StatelessWidget {
   const RescheduleDateTimeFields({
@@ -29,7 +30,7 @@ class RescheduleDateTimeFields extends StatelessWidget {
           children: [
             Text(
               context.strings.reschedule_new_date,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 fontWeight: FontWeight.w800,
                 color: AppColors.black1,
               ),
@@ -52,7 +53,10 @@ class RescheduleDateTimeFields extends StatelessWidget {
                       dateLabel,
                       textDirection: TextDirection.ltr,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.black1, fontSize: 14),
+                      style: Styles.base.copyWith(
+                        color: AppColors.black1,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   Icon(
@@ -76,7 +80,7 @@ class RescheduleDateTimeFields extends StatelessWidget {
           children: [
             Text(
               context.strings.reschedule_new_time,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 fontWeight: FontWeight.w800,
                 color: AppColors.black1,
               ),
@@ -98,7 +102,10 @@ class RescheduleDateTimeFields extends StatelessWidget {
                     child: Text(
                       timeLabel,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.black1, fontSize: 14),
+                      style: Styles.base.copyWith(
+                        color: AppColors.black1,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   Icon(

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingPhotoPlaceholder extends StatelessWidget {
   const ReceivingPhotoPlaceholder({
@@ -43,8 +44,7 @@ class ReceivingPhotoPlaceholder extends StatelessWidget {
                       Text(
                         context.strings.open_camera_and_capture,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 19,
+                        style: Styles.textStyle19.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
                         ),
@@ -52,8 +52,7 @@ class ReceivingPhotoPlaceholder extends StatelessWidget {
                       Text(
                         context.strings.proof_photo_auto_details,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 13,
+                        style: Styles.textStyle13.copyWith(
                           color: AppColors.primary,
                         ),
                       ),

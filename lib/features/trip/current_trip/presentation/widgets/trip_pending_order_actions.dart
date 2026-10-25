@@ -5,6 +5,8 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 
 import '../utils/trip_order_navigation.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class TripPendingOrderActions extends StatelessWidget {
   const TripPendingOrderActions({
     super.key,
@@ -49,7 +51,7 @@ class TripPendingOrderActions extends StatelessWidget {
                   context.strings.open_order,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: Styles.base.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),

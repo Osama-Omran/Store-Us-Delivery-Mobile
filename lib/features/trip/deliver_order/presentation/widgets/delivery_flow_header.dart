@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryFlowHeader extends StatelessWidget {
   const DeliveryFlowHeader({
@@ -32,15 +33,14 @@ class DeliveryFlowHeader extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: Styles.textStyle23.copyWith(
                   color: AppColors.black1,
-                  fontSize: 23,
                   fontWeight: FontWeight.w800,
                 ),
               ),
               Text(
                 subtitle,
-                style: TextStyle(color: AppColors.grey4, fontSize: 13),
+                style: Styles.textStyle13.copyWith(color: AppColors.grey4),
               ),
             ],
           ),

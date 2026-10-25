@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingPhotoPreview extends StatelessWidget {
   const ReceivingPhotoPreview({
@@ -56,17 +57,15 @@ class ReceivingPhotoPreview extends StatelessWidget {
                     children: [
                       Text(
                         '$formattedDate - $formattedTime',
-                        style: TextStyle(
+                        style: Styles.textStyle13.copyWith(
                           color: AppColors.white0,
-                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(
                         tripNumber,
-                        style: TextStyle(
+                        style: Styles.textStyle12.copyWith(
                           color: AppColors.white0,
-                          fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -95,9 +94,8 @@ class ReceivingPhotoPreview extends StatelessWidget {
                     children: [
                       Text(
                         context.strings.photo_approved,
-                        style: TextStyle(
+                        style: Styles.textStyle13.copyWith(
                           color: AppColors.white0,
-                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

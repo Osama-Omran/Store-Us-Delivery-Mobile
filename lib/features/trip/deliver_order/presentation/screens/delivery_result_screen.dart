@@ -9,6 +9,8 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/widget
 import '../widgets/delivery_financial_result_card.dart';
 import '../widgets/delivery_result_summary_card.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class DeliveryResultScreen extends StatefulWidget {
   const DeliveryResultScreen({super.key, required this.flow});
 
@@ -101,8 +103,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                     if (partial) ...[
                       Text(
                         context.strings.delivery_partial_reason_required,
-                        style: TextStyle(
-                          fontSize: 17,
+                        style: Styles.textStyle17.copyWith(
                           fontWeight: FontWeight.w800,
                           color: AppColors.black1,
                         ),
@@ -122,7 +123,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                               },
                               selectedColor: AppColors.primary,
                               backgroundColor: AppColors.white0,
-                              labelStyle: TextStyle(
+                              labelStyle: Styles.base.copyWith(
                                 color: _reasonIndex == i
                                     ? AppColors.white0
                                     : AppColors.black1,
@@ -148,8 +149,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
 
                     Text(
                       context.strings.delivery_notes_title,
-                      style: TextStyle(
-                        fontSize: 17,
+                      style: Styles.textStyle17.copyWith(
                         fontWeight: FontWeight.w800,
                         color: AppColors.black1,
                       ),
@@ -172,7 +172,10 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                     const SizedBox(height: 12),
                     Text(
                       context.strings.delivery_reason_not_sent,
-                      style: TextStyle(fontSize: 12, color: AppColors.grey4),
+                      style: Styles.base.copyWith(
+                        fontSize: 12,
+                        color: AppColors.grey4,
+                      ),
                     ),
                   ],
                 ),
@@ -200,9 +203,8 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                 ),
                 child: Text(
                   context.strings.delivery_continue_finalization,
-                  style: const TextStyle(
+                  style: Styles.textStyle18.copyWith(
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
                   ),
                 ),
               ),

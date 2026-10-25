@@ -25,7 +25,7 @@ class AppNavBar extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(color: Colors.transparent, height: 14),
+            Container(color: AppColors.transparent, height: 14),
             Container(
               height: 80,
               decoration: BoxDecoration(
@@ -259,9 +259,8 @@ class NavBarItem extends StatelessWidget {
                         ),
                         child: Text(
                           '$menuBadgeCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
+                          style: Styles.textStyle11.copyWith(
+                            color: AppColors.white0,
                             fontWeight: FontWeight.w800,
                           ),
                         ),

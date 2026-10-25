@@ -14,6 +14,7 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_state.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliverySummaryBar extends StatelessWidget {
   const DeliverySummaryBar({
@@ -108,8 +109,7 @@ class DeliverySummaryBar extends StatelessWidget {
                     Expanded(
                       child: Text(
                         context.strings.delivery_estimated_total,
-                        style: TextStyle(
-                          fontSize: 15,
+                        style: Styles.textStyle15.copyWith(
                           fontWeight: FontWeight.w800,
                           color: AppColors.black1,
                         ),
@@ -119,8 +119,7 @@ class DeliverySummaryBar extends StatelessWidget {
                       estimatedValue == null
                           ? '—'
                           : formatTripAmount(context, estimatedValue),
-                      style: TextStyle(
-                        fontSize: 26,
+                      style: Styles.textStyle26.copyWith(
                         fontWeight: FontWeight.w800,
                         color: AppColors.primary,
                       ),
@@ -154,8 +153,7 @@ class DeliverySummaryBar extends StatelessWidget {
                       Expanded(
                         child: Text(
                           statusText,
-                          style: TextStyle(
-                            fontSize: 15,
+                          style: Styles.textStyle15.copyWith(
                             fontWeight: FontWeight.w800,
                             color: state.isPartial
                                 ? AppColors.orange0
@@ -165,7 +163,9 @@ class DeliverySummaryBar extends StatelessWidget {
                       ),
                       Text(
                         context.strings.delivery_auto_calculated,
-                        style: TextStyle(fontSize: 11, color: AppColors.grey4),
+                        style: Styles.textStyle11.copyWith(
+                          color: AppColors.grey4,
+                        ),
                       ),
                     ],
                   ),
@@ -189,8 +189,7 @@ class DeliverySummaryBar extends StatelessWidget {
                     ),
                     child: Text(
                       context.strings.delivery_continue,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: Styles.textStyle20.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -218,14 +217,13 @@ class _SummaryRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(fontSize: 14, color: AppColors.grey4),
+            style: Styles.base.copyWith(fontSize: 14, color: AppColors.grey4),
           ),
         ),
 
         Text(
           amount == null ? '—' : formatTripAmount(context, amount!),
-          style: TextStyle(
-            fontSize: 17,
+          style: Styles.textStyle17.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.black1,
           ),

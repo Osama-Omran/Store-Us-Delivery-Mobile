@@ -3,6 +3,7 @@ import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/current_trip_model.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class CurrentTripSummaryCard extends StatelessWidget {
   const CurrentTripSummaryCard({super.key, required this.trip});
@@ -65,10 +66,8 @@ class CurrentTripSummaryCard extends StatelessWidget {
                     children: [
                       Text(
                         context.strings.van,
-                        style: TextStyle(
+                        style: Styles.textStyle12.copyWith(
                           color: AppColors.grey4,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -76,9 +75,8 @@ class CurrentTripSummaryCard extends StatelessWidget {
                         vehicleDisplay,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: Styles.textStyle17.copyWith(
                           color: AppColors.black1,
-                          fontSize: 17,
                           fontWeight: FontWeight.w800,
                           height: 1.3,
                         ),
@@ -175,10 +173,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           context.strings.collected_so_far,
-                          style: TextStyle(
+                          style: Styles.textStyle13.copyWith(
                             color: AppColors.black1,
                             fontWeight: FontWeight.w700,
-                            fontSize: 13,
                           ),
                         ),
                       ),
@@ -186,13 +183,15 @@ class CurrentTripSummaryCard extends StatelessWidget {
                         child: Text(
                           trip.collectedAmount == null
                               ? '—'
-                              : formatTripAmount(context, trip.collectedAmount!),
+                              : formatTripAmount(
+                                  context,
+                                  trip.collectedAmount!,
+                                ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: Styles.textStyle19.copyWith(
                             color: AppColors.primary,
-                            fontSize: 19,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -213,10 +212,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                                   '${context.strings.of_total} '
                                   '${trip.totalOrders} '
                                   '${context.strings.orders_handled}',
-                        style: TextStyle(
+                        style: Styles.textStyle13.copyWith(
                           color: AppColors.black1,
                           fontWeight: FontWeight.w700,
-                          fontSize: 13,
                         ),
                       ),
                     ),
@@ -225,9 +223,8 @@ class CurrentTripSummaryCard extends StatelessWidget {
                       trip.progressPercent == null
                           ? '—'
                           : '${trip.progressPercent}%',
-                      style: TextStyle(
+                      style: Styles.textStyle14.copyWith(
                         color: AppColors.primary,
-                        fontSize: 14,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -240,7 +237,9 @@ class CurrentTripSummaryCard extends StatelessWidget {
                     value: trip.progress ?? 0,
                     minHeight: 9,
                     backgroundColor: AppColors.grey5,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primary,
+                    ),
                   ),
                 ),
               ],
@@ -272,16 +271,15 @@ class _TripInfoRow extends StatelessWidget {
         const SizedBox(width: 9),
         Text(
           '$label: ',
-          style: TextStyle(color: AppColors.grey4, fontSize: 13),
+          style: Styles.textStyle13.copyWith(color: AppColors.grey4),
         ),
         Expanded(
           child: Text(
             value,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: Styles.textStyle13.copyWith(
               color: AppColors.black1,
-              fontSize: 13,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -322,8 +320,7 @@ class _SummaryStat extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             count?.toString() ?? '—',
-            style: TextStyle(
-              fontSize: 25,
+            style: Styles.textStyle25.copyWith(
               fontWeight: FontWeight.w900,
               color: foreground,
               height: 1.1,
@@ -335,10 +332,9 @@ class _SummaryStat extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: Styles.textStyle11.copyWith(
               color: foreground,
               fontWeight: FontWeight.w600,
-              fontSize: 11,
               height: 1.25,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryResultSummaryCard extends StatelessWidget {
   const DeliveryResultSummaryCard({super.key, required this.flow});
@@ -37,10 +38,9 @@ class DeliveryResultSummaryCard extends StatelessWidget {
                   partial
                       ? context.strings.delivery_partial_draft
                       : context.strings.delivery_full_draft,
-                  style: TextStyle(
+                  style: Styles.textStyle18.copyWith(
                     color: partial ? AppColors.orange0 : AppColors.green0,
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
                   ),
                 ),
               ),
@@ -88,17 +88,12 @@ class _QtyBox extends StatelessWidget {
         child: Column(
           spacing: 4,
           children: [
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11),
-            ),
+            Text(title, textAlign: TextAlign.center, style: Styles.textStyle11),
             Text(
               '$qty',
-              style: TextStyle(
+              style: Styles.textStyle19.copyWith(
                 color: AppColors.black1,
                 fontWeight: FontWeight.w800,
-                fontSize: 19,
               ),
             ),
           ],

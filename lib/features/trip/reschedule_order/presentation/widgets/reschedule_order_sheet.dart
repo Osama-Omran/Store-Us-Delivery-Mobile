@@ -8,6 +8,8 @@ import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cub
 import 'reschedule_date_time_fields.dart';
 import 'reschedule_order_form.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class RescheduleOrderSheet extends StatefulWidget {
   const RescheduleOrderSheet({
     super.key,
@@ -198,8 +200,7 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
 
                   Text(
                     context.strings.reschedule_order_title,
-                    style: TextStyle(
-                      fontSize: 23,
+                    style: Styles.textStyle23.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.black1,
                     ),
@@ -268,8 +269,7 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
                             ? CircularProgressIndicator(color: AppColors.white0)
                             : Text(
                                 context.strings.reschedule_confirm,
-                                style: const TextStyle(
-                                  fontSize: 18,
+                                style: Styles.textStyle18.copyWith(
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),

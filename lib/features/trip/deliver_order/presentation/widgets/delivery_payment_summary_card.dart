@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryPaymentSummaryCard extends StatelessWidget {
   const DeliveryPaymentSummaryCard({
     super.key,
     required this.originalTotal,
-    required this.expected,this.collectPayment = true,
+    required this.expected,
+    this.collectPayment = true,
   });
   final bool collectPayment;
   final num? originalTotal;
@@ -44,12 +46,11 @@ class DeliveryPaymentSummaryCard extends StatelessWidget {
                 : context.strings.delivery_collection_status,
             value: collectPayment
                 ? expected == null
-                ? '—'
-                : formatTripAmount(context, expected)
+                      ? '—'
+                      : formatTripAmount(context, expected)
                 : context.strings.delivery_not_collected,
             highlighted: true,
           ),
-
         ],
       ),
     );
@@ -75,7 +76,7 @@ class DeliveryPaymentReviewRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
+            style: Styles.base.copyWith(
               color: highlighted ? AppColors.black1 : AppColors.grey4,
               fontWeight: highlighted ? FontWeight.w800 : FontWeight.w400,
             ),
@@ -85,7 +86,7 @@ class DeliveryPaymentReviewRow extends StatelessWidget {
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: TextStyle(
+            style: Styles.base.copyWith(
               color: highlighted ? AppColors.primary : AppColors.black1,
               fontSize: highlighted ? 22 : 16,
               fontWeight: FontWeight.w800,
