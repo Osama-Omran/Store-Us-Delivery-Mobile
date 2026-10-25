@@ -1,7 +1,7 @@
 class AppAssets {
   //======= Images =======//
-  // static const String imagesPath = 'assets/images';
-  // static const String uaeLogo = '$imagesPath/uae_logo.svg';
+  static const String imagesPath = 'assets/images';
+  static const String logo = '$imagesPath/logo.png';
 
   //======= Icons =======//
   static const String iconsPath = 'assets/icons';
@@ -9,15 +9,16 @@ class AppAssets {
   static const String home = '$iconsPath/home.svg';
   static const String notifications = '$iconsPath/notifications.svg';
   static const String menu = '$iconsPath/menu.svg';
+  static const String rankCrown = '$iconsPath/rank_crown.svg';
 
   //======= Audio =======//
   // static const String audioPath = 'assets/audio';
   // static const String welcome = '$audioPath/welcome.mp3';
 
   //======= Animations =======//
-  // static const String animationsPath = 'assets/animations';
-  // static const String fire = '$animationsPath/fire.json';
-  // static const String emptyLottie = '$animationsPath/empty.json';
+  static const String animationsPath = 'assets/animations';
+  static const String loading = '$animationsPath/loading.json';
+  static const String loadingPrimary = '$animationsPath/loading_primary.json';
 
   //======= Assets To Be Deleted =======//
   // static const String assetsToBeDeletedPath = 'assets/assets_to_be_deleted';
