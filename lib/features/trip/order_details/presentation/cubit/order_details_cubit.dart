@@ -10,6 +10,7 @@ import 'package:storeus_delivery/features/trip/order_details/data/models/update_
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/get_order_details_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/update_delivery_location_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_state.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   OrderDetailsCubit(
@@ -126,6 +127,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     final current = state;
     if (current is! OrderDetailsSuccessState ||
         current.tripOrder?.canRetryCollection != true ||
+        !OrderCollectionPolicy.showCollectButton(current.tripOrder?.paymentStatus) ||
         !current.tripOrder!.pendingCollections.any(
           (p) => p.clientOperationId == clientOperationId,
         )) {

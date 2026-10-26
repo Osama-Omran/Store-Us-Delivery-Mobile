@@ -5,6 +5,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 /// Result: true = accepted by backend; false = refresh required; null = cancelled.
 class OrderRetryCollectionSheet extends StatefulWidget {
@@ -59,7 +60,10 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
   }
 
   bool get _canCollect =>
-      _requiredAmount != null && _pendingOperations.length == 1;
+      widget.order.canRetryCollection &&
+      OrderCollectionPolicy.showCollectButton(widget.order.paymentStatus) &&
+      _requiredAmount != null &&
+      _pendingOperations.length == 1;
 
   Future<void> _send() async {
     if (_submitting || _mustRefreshBeforeRetry || !_canCollect) return;

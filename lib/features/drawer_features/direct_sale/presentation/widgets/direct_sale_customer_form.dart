@@ -44,8 +44,20 @@ class DirectSaleCustomerForm extends StatelessWidget {
             controller: cubit.addressController,
           ),
           _CustomerField(
-            label: context.strings.direct_sale_area,
+            label: context.strings.direct_sale_territory,
             controller: cubit.areaController,
+            required: true,
+            hint: context.strings.direct_sale_territory_hint,
+            validator: (value) => value?.trim().isNotEmpty == true
+                ? null
+                : context.strings.direct_sale_territory_required,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(
+              context.strings.direct_sale_customer_defaults,
+              style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+            ),
           ),
           _CustomerField(
             label: context.strings.direct_sale_notes,

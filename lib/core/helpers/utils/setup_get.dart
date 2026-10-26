@@ -5,6 +5,13 @@ import 'package:storeus_delivery/features/drawer_features/contact_us/domain/repo
 import 'package:storeus_delivery/features/drawer_features/contact_us/domain/usecases/get_support_contact_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/contact_us/domain/usecases/send_support_message_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/contact_us/presentation/cubit/contact_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/customers/data/repo/concrete_trip_customers_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/customers/domain/repo/trip_customers_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/customers/domain/usecases/get_trip_customers_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/customers/presentation/cubit/trip_customers_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/repo/concrete_create_customer_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/repo/create_customer_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/create_customer_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/cubit/direct_sale_cubit.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/dio_factory.dart';
 import 'package:storeus_delivery/core/helpers/apis/environment_config.dart';
@@ -110,7 +117,21 @@ void setupLocator() {
   getIt.registerFactory<LocaleCubit>(() => LocaleCubit());
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<LoginUsecase>()));
   getIt.registerFactory<LayoutCubit>(() => LayoutCubit());
-  getIt.registerFactory<DirectSaleCubit>(() => DirectSaleCubit());
+  // Repository
+  getIt.registerLazySingleton<CreateCustomerRepoInterface>(
+    () => ConcreteCreateCustomerRepo(getIt<TripApiService>()),
+  );
+
+  // UseCase
+  getIt.registerLazySingleton<CreateCustomerUsecase>(
+    () => CreateCustomerUsecase(getIt<CreateCustomerRepoInterface>()),
+  );
+
+  // Cubit — replace the old registration
+  getIt.registerFactory<DirectSaleCubit>(
+    () =>
+        DirectSaleCubit(createCustomerUsecase: getIt<CreateCustomerUsecase>()),
+  );
 
   // ========== Treasury / Wallet ========== //
 
@@ -369,5 +390,20 @@ void setupLocator() {
 
   getIt.registerFactory<StockTransferCubit>(
     () => StockTransferCubit(getIt<GetStockTransfersUsecase>()),
+  );
+
+  getIt.registerLazySingleton<TripCustomersRepoInterface>(
+    () => ConcreteTripCustomersRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTripCustomersUsecase>(
+    () => GetTripCustomersUsecase(getIt<TripCustomersRepoInterface>()),
+  );
+
+  getIt.registerFactory<TripCustomersCubit>(
+    () => TripCustomersCubit(
+      getIt<CurrentTripUsecase>(),
+      getIt<GetTripCustomersUsecase>(),
+    ),
   );
 }

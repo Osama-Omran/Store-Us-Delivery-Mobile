@@ -218,14 +218,18 @@ class _LayoutContentState extends State<_LayoutContent> {
                       ? user!.role
                       : '—';
 
-                  // ======= Trip Badge Counts ======= //
+                  // ======= Current Trip Availability And Badge Counts ======= //
                   return BlocSelector<
                     TripTabCubit,
                     TripTabState,
-                    TripBadgeCounts
+                    ({TripBadgeCounts counts, bool hasCurrentTrip})
                   >(
-                    selector: getTripBadgeCounts,
-                    builder: (context, counts) {
+                    selector: (state) => (
+                      counts: getTripBadgeCounts(state),
+                      hasCurrentTrip: state is TripTabSuccessState,
+                    ),
+                    builder: (context, tripMenu) {
+                      final counts = tripMenu.counts;
                       // ======= Stock Transfer Badge Count ======= //
                       return BlocSelector<
                         StockTransferCubit,
@@ -238,6 +242,7 @@ class _LayoutContentState extends State<_LayoutContent> {
                             // ======= User Data ======= //
                             userName: userName,
                             userRole: userRole,
+                            hasCurrentTrip: tripMenu.hasCurrentTrip,
                             isOnTrip: false,
 
                             // ======= Real Badge Counts ======= //
@@ -258,6 +263,8 @@ class _LayoutContentState extends State<_LayoutContent> {
                                 ? AppMenuSection.reports
                                 : layout.isContactUs
                                 ? AppMenuSection.contactUs
+                                : layout.isCustomers
+                                ? AppMenuSection.customers
                                 : AppMenuSection.deliveries,
 
                             // ======= Drawer Navigation ======= //
@@ -273,7 +280,7 @@ class _LayoutContentState extends State<_LayoutContent> {
                               context.pushNamed(RoutesNames.directSale);
                             },
 
-                            onCustomersTap: () {},
+                            onCustomersTap: layout.openCustomerScreen,
 
                             onAreasTap: () {},
 

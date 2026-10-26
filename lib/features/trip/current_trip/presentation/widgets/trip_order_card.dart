@@ -309,10 +309,16 @@ class _PaymentTagData {
           background: AppColors.red1.withValues(alpha: 0.10),
         );
 
-      default:
-        // Do not claim payment is complete or pending for unknown statuses.
+      case 'NOT_STARTED':
         return _PaymentTagData(
-          title: 'حالة التحصيل غير محددة',
+          title: 'لم يبدأ التحصيل',
+          color: AppColors.red1,
+          background: AppColors.red1.withValues(alpha: 0.10),
+        );
+
+      default:
+        return _PaymentTagData(
+          title: paymentStatus,
           color: AppColors.grey4,
           background: AppColors.grey5,
         );

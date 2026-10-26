@@ -52,4 +52,9 @@ class ApiConstants {
 
   //======= Treasury / Wallet =======//
   static const String tripWallet = '$trips/{tripId}/wallet';
+
+  //======= Customers =======//
+  static const String customers = '/customers';
+
+  static const String tripCustomers = '$trips/{tripId}/customers';
 }

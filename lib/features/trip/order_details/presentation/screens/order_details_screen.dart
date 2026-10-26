@@ -18,6 +18,7 @@ import 'package:storeus_delivery/features/trip/order_details/presentation/widget
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_collection_action_bar.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_collection_status_card.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_retry_collection_sheet.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   const OrderDetailsScreen({
@@ -59,10 +60,32 @@ class _OrderDetailsBody extends StatelessWidget {
   ) async {
     final order = state.tripOrder;
     if (order == null ||
-        !order.canRetryCollection ||
+        !OrderCollectionPolicy.showCollectButton(order.paymentStatus)) {
+      return;
+    }
+
+    // Displaying the CTA is a UI rule. Submitting a financial transaction
+    // requires explicit backend permission and the ORIGINAL operation ID.
+    if (!order.canRetryCollection ||
         !order.pendingCollections.any(
           (p) => p.clientOperationId.trim().isNotEmpty,
         )) {
+      final message = !order.canRetryCollection
+          ? context.strings.order_collection_not_ready
+          : context.strings.order_collection_missing_operation;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(message),
+            action: SnackBarAction(
+              label: context.strings.order_collection_refresh,
+              onPressed: () {
+                if (context.mounted) _reload(context);
+              },
+            ),
+          ),
+        );
       return;
     }
 
@@ -87,8 +110,8 @@ class _OrderDetailsBody extends StatelessWidget {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-            content: Text('تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.'),
+          SnackBar(
+            content: Text(context.strings.order_collection_sent),
           ),
         );
     }
@@ -117,20 +140,12 @@ class _OrderDetailsBody extends StatelessWidget {
 
         final isPending = deliveryStatus == 'PENDING';
         final collection = success?.tripOrder;
-        final payment = collection?.paymentStatus.trim().toUpperCase() ?? '';
-        final isPaid = const {
-          'PAID',
-          'COLLECTED',
-          'FULLY_PAID',
-        }.contains(payment);
+        // Only payment_status decides if the collection button is visible.
+        // Backend retry flags are checked on tap and again in the Cubit.
         final showCollectionAction =
             success != null &&
             collection != null &&
-            collection.canRetryCollection &&
-            !isPaid &&
-            collection.pendingCollections.any(
-              (item) => item.clientOperationId.trim().isNotEmpty,
-            );
+            OrderCollectionPolicy.showCollectButton(collection.paymentStatus);
 
         final isDelivered = const {
           'DELIVERED',
@@ -242,8 +257,7 @@ class _OrderDetailsBody extends StatelessWidget {
                           // ======= Original Order Value ======= //
                           OrderDetailsFinancialCard(order: order!),
 
-                          if (collection != null &&
-                              collection.paymentStatus.trim().isNotEmpty) ...[
+                          if (collection != null) ...[
                             const SizedBox(height: 14),
                             OrderCollectionStatusCard(order: collection),
                           ],
@@ -300,13 +314,34 @@ class _OrderDetailsBody extends StatelessWidget {
           ),
 
           // ======= Order Actions ======= //
-          bottomNavigationBar: success != null && isPending
-              ? OrderActionBar(tripId: tripId, orderId: orderId)
-              : showCollectionAction
-              ? OrderCollectionActionBar(
-                  onPressed: () => _openRetryCollection(context, success),
-                )
-              : null,
+          bottomNavigationBar: success == null
+              ? null
+              : isPending && showCollectionAction
+                  // Keep all original delivery actions and show collection too.
+                  // Remove inner bottom padding to avoid duplicated safe areas.
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        MediaQuery.removePadding(
+                          context: context,
+                          removeBottom: true,
+                          child: OrderActionBar(
+                            tripId: tripId,
+                            orderId: orderId,
+                          ),
+                        ),
+                        OrderCollectionActionBar(
+                          onPressed: () => _openRetryCollection(context, success),
+                        ),
+                      ],
+                    )
+                  : isPending
+                      ? OrderActionBar(tripId: tripId, orderId: orderId)
+                      : showCollectionAction
+                          ? OrderCollectionActionBar(
+                              onPressed: () => _openRetryCollection(context, success),
+                            )
+                          : null,
         );
       },
     );

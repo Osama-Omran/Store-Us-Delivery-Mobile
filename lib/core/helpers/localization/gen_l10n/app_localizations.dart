@@ -3751,6 +3751,264 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جاري تجهيز رحلتك...'**
   String get splash_loading;
+
+  /// No description provided for @show_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار كلمة المرور'**
+  String get show_password;
+
+  /// No description provided for @hide_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء كلمة المرور'**
+  String get hide_password;
+
+  /// No description provided for @direct_sale_territory.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة المسجلة بالنظام'**
+  String get direct_sale_territory;
+
+  /// No description provided for @direct_sale_territory_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: Sheikh Zayed'**
+  String get direct_sale_territory_hint;
+
+  /// No description provided for @direct_sale_territory_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة مطلوبة لإضافة العميل'**
+  String get direct_sale_territory_required;
+
+  /// No description provided for @direct_sale_customer_defaults.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع العميل: Individual   •   مجموعة العملاء: Retail'**
+  String get direct_sale_customer_defaults;
+
+  /// No description provided for @direct_sale_customer_unsupported_fields.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان والملاحظات والموقع الحالي غير مدعومين في API إضافة العميل الحالية، ولن يتم حفظهم على الخادم.'**
+  String get direct_sale_customer_unsupported_fields;
+
+  /// No description provided for @direct_sale_customer_saving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ حفظ العميل...'**
+  String get direct_sale_customer_saving;
+
+  /// No description provided for @direct_sale_customer_invalid_fields.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكد من الاسم ورقم الهاتف والمنطقة.'**
+  String get direct_sale_customer_invalid_fields;
+
+  /// No description provided for @direct_sale_customer_create_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء العميل، راجع البيانات وحاول مرة أخرى.'**
+  String get direct_sale_customer_create_failed;
+
+  /// No description provided for @direct_sale_customer_missing_id.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخادم أكد الاستجابة لكنه لم يرجع معرّف العميل. تحقّق من إنشاء العميل قبل المتابعة.'**
+  String get direct_sale_customer_missing_id;
+
+  /// No description provided for @direct_sale_customer_verify_before_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة طلب الإنشاء غير مؤكدة. تحقق من وجود العميل على الخادم قبل إعادة المحاولة لتجنب التكرار.'**
+  String get direct_sale_customer_verify_before_retry;
+
+  /// No description provided for @trip_customers_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملاء الرحلة'**
+  String get trip_customers_title;
+
+  /// No description provided for @trip_customers_in_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل في الرحلة'**
+  String get trip_customers_in_trip;
+
+  /// No description provided for @trip_customers_search_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث باسم العميل أو رقم الهاتف'**
+  String get trip_customers_search_hint;
+
+  /// No description provided for @trip_customers_back.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرجوع'**
+  String get trip_customers_back;
+
+  /// No description provided for @trip_customers_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث العملاء'**
+  String get trip_customers_refresh;
+
+  /// No description provided for @trip_customers_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get trip_customers_retry;
+
+  /// No description provided for @trip_customers_loading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل العملاء...'**
+  String get trip_customers_loading;
+
+  /// No description provided for @trip_customers_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل عملاء الرحلة'**
+  String get trip_customers_load_failed;
+
+  /// No description provided for @trip_customers_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد عملاء في هذه الرحلة'**
+  String get trip_customers_empty;
+
+  /// No description provided for @trip_customers_no_results.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج مطابقة للبحث'**
+  String get trip_customers_no_results;
+
+  /// No description provided for @trip_customers_orders_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب'**
+  String get trip_customers_orders_count;
+
+  /// No description provided for @trip_customers_orders_button.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات'**
+  String get trip_customers_orders_button;
+
+  /// No description provided for @trip_customers_call.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال'**
+  String get trip_customers_call;
+
+  /// No description provided for @trip_customers_whatsapp.
+  ///
+  /// In ar, this message translates to:
+  /// **'واتساب'**
+  String get trip_customers_whatsapp;
+
+  /// No description provided for @trip_customers_location.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get trip_customers_location;
+
+  /// No description provided for @trip_customers_action_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح التطبيق المطلوب'**
+  String get trip_customers_action_unavailable;
+
+  /// No description provided for @trip_customers_delivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم'**
+  String get trip_customers_delivered;
+
+  /// No description provided for @trip_customers_partial.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم جزئيًا'**
+  String get trip_customers_partial;
+
+  /// No description provided for @trip_customers_rescheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة الجدولة'**
+  String get trip_customers_rescheduled;
+
+  /// No description provided for @trip_customers_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء التسليم'**
+  String get trip_customers_cancelled;
+
+  /// No description provided for @trip_customers_pending.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار التسليم'**
+  String get trip_customers_pending;
+
+  /// No description provided for @trip_customers_unknown_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التوصيل غير متاحة'**
+  String get trip_customers_unknown_status;
+
+  /// No description provided for @trip_customers_customer_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات العميل'**
+  String get trip_customers_customer_orders;
+
+  /// No description provided for @trip_customers_orders_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل طلبات العميل'**
+  String get trip_customers_orders_load_failed;
+
+  /// No description provided for @trip_customers_no_matched_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات مؤكدة مرتبطة بهذا العميل'**
+  String get trip_customers_no_matched_orders;
+
+  /// No description provided for @trip_customers_name_match_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط الطلبات قائم على الاسم والعنوان بسبب عدم توفر معرّف العميل ورقم هاتفه. يُرجى مراجعة الطلبات قبل أي إجراء.'**
+  String get trip_customers_name_match_warning;
+
+  /// No description provided for @order_collection_button.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل'**
+  String get order_collection_button;
+
+  /// No description provided for @order_collection_not_ready.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الطلب تحتاج إلى تأكيد من السيرفر قبل التحصيل. حدّث الطلب أو تواصل مع الإدارة.'**
+  String get order_collection_not_ready;
+
+  /// No description provided for @order_collection_missing_operation.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرّف عملية التحصيل الأصلية غير متاح. حدّث بيانات الطلب قبل المحاولة.'**
+  String get order_collection_missing_operation;
+
+  /// No description provided for @order_collection_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث الطلب'**
+  String get order_collection_refresh;
+
+  /// No description provided for @order_collection_sent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.'**
+  String get order_collection_sent;
 }
 
 class _AppLocalizationsDelegate

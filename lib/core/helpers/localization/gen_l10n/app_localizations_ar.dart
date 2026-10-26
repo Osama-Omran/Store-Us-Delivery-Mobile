@@ -1970,4 +1970,144 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get splash_loading => 'جاري تجهيز رحلتك...';
+
+  @override
+  String get show_password => 'إظهار كلمة المرور';
+
+  @override
+  String get hide_password => 'إخفاء كلمة المرور';
+
+  @override
+  String get direct_sale_territory => 'المنطقة المسجلة بالنظام';
+
+  @override
+  String get direct_sale_territory_hint => 'مثال: Sheikh Zayed';
+
+  @override
+  String get direct_sale_territory_required => 'المنطقة مطلوبة لإضافة العميل';
+
+  @override
+  String get direct_sale_customer_defaults =>
+      'نوع العميل: Individual   •   مجموعة العملاء: Retail';
+
+  @override
+  String get direct_sale_customer_unsupported_fields =>
+      'العنوان والملاحظات والموقع الحالي غير مدعومين في API إضافة العميل الحالية، ولن يتم حفظهم على الخادم.';
+
+  @override
+  String get direct_sale_customer_saving => 'جارٍ حفظ العميل...';
+
+  @override
+  String get direct_sale_customer_invalid_fields =>
+      'تأكد من الاسم ورقم الهاتف والمنطقة.';
+
+  @override
+  String get direct_sale_customer_create_failed =>
+      'تعذر إنشاء العميل، راجع البيانات وحاول مرة أخرى.';
+
+  @override
+  String get direct_sale_customer_missing_id =>
+      'الخادم أكد الاستجابة لكنه لم يرجع معرّف العميل. تحقّق من إنشاء العميل قبل المتابعة.';
+
+  @override
+  String get direct_sale_customer_verify_before_retry =>
+      'نتيجة طلب الإنشاء غير مؤكدة. تحقق من وجود العميل على الخادم قبل إعادة المحاولة لتجنب التكرار.';
+
+  @override
+  String get trip_customers_title => 'عملاء الرحلة';
+
+  @override
+  String get trip_customers_in_trip => 'عميل في الرحلة';
+
+  @override
+  String get trip_customers_search_hint => 'بحث باسم العميل أو رقم الهاتف';
+
+  @override
+  String get trip_customers_back => 'الرجوع';
+
+  @override
+  String get trip_customers_refresh => 'تحديث العملاء';
+
+  @override
+  String get trip_customers_retry => 'إعادة المحاولة';
+
+  @override
+  String get trip_customers_loading => 'جاري تحميل العملاء...';
+
+  @override
+  String get trip_customers_load_failed => 'تعذر تحميل عملاء الرحلة';
+
+  @override
+  String get trip_customers_empty => 'لا يوجد عملاء في هذه الرحلة';
+
+  @override
+  String get trip_customers_no_results => 'لا توجد نتائج مطابقة للبحث';
+
+  @override
+  String get trip_customers_orders_count => 'طلب';
+
+  @override
+  String get trip_customers_orders_button => 'الطلبات';
+
+  @override
+  String get trip_customers_call => 'اتصال';
+
+  @override
+  String get trip_customers_whatsapp => 'واتساب';
+
+  @override
+  String get trip_customers_location => 'الموقع';
+
+  @override
+  String get trip_customers_action_unavailable => 'تعذر فتح التطبيق المطلوب';
+
+  @override
+  String get trip_customers_delivered => 'تم التسليم';
+
+  @override
+  String get trip_customers_partial => 'تم التسليم جزئيًا';
+
+  @override
+  String get trip_customers_rescheduled => 'تمت إعادة الجدولة';
+
+  @override
+  String get trip_customers_cancelled => 'تم إلغاء التسليم';
+
+  @override
+  String get trip_customers_pending => 'في انتظار التسليم';
+
+  @override
+  String get trip_customers_unknown_status => 'حالة التوصيل غير متاحة';
+
+  @override
+  String get trip_customers_customer_orders => 'طلبات العميل';
+
+  @override
+  String get trip_customers_orders_load_failed => 'تعذر تحميل طلبات العميل';
+
+  @override
+  String get trip_customers_no_matched_orders =>
+      'لا توجد طلبات مؤكدة مرتبطة بهذا العميل';
+
+  @override
+  String get trip_customers_name_match_warning =>
+      'ربط الطلبات قائم على الاسم والعنوان بسبب عدم توفر معرّف العميل ورقم هاتفه. يُرجى مراجعة الطلبات قبل أي إجراء.';
+
+  @override
+  String get order_collection_button => 'تحصيل';
+
+  @override
+  String get order_collection_not_ready =>
+      'حالة الطلب تحتاج إلى تأكيد من السيرفر قبل التحصيل. حدّث الطلب أو تواصل مع الإدارة.';
+
+  @override
+  String get order_collection_missing_operation =>
+      'معرّف عملية التحصيل الأصلية غير متاح. حدّث بيانات الطلب قبل المحاولة.';
+
+  @override
+  String get order_collection_refresh => 'تحديث الطلب';
+
+  @override
+  String get order_collection_sent =>
+      'تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.';
 }

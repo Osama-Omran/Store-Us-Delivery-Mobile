@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 /// Separate payment state from delivery state: DELIVERED != PAID.
 class OrderCollectionStatusCard extends StatelessWidget {
@@ -11,11 +12,9 @@ class OrderCollectionStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final payment = order.paymentStatus.trim().toUpperCase();
-    final paid = const {'PAID', 'COLLECTED', 'FULLY_PAID'}.contains(payment);
-    final partial = const {
-      'PARTIAL', 'PARTIALLY_PAID', 'PARTIAL_PAID', 'PARTIALLY_COLLECTED',
-    }.contains(payment);
+    final payment = OrderCollectionPolicy.normalize(order.paymentStatus);
+    final paid = OrderCollectionPolicy.isFullyCollected(payment);
+    final partial = OrderCollectionPolicy.isPartiallyCollected(payment);
     final noPayment = const {
       'PENDING', 'UNPAID', 'NOT_PAID', 'PAYMENT_PENDING',
     }.contains(payment) || order.operationStatus.toUpperCase() == 'PAYMENT_PENDING';
@@ -76,11 +75,13 @@ class OrderCollectionStatusCard extends StatelessWidget {
               ))),
             ]),
           ),
-          if (!paid && order.canRetryCollection && order.pendingCollections.isNotEmpty) ...[
+          if (OrderCollectionPolicy.showCollectButton(payment) &&
+              order.canRetryCollection &&
+              order.pendingCollections.any((p) => p.clientOperationId.trim().isNotEmpty)) ...[
             const SizedBox(height: 9),
             Text('يمكن إكمال التحصيل من الزر الموجود أسفل الشاشة، من غير إعادة تسليم الطلب.',
               style: Styles.textStyle14.copyWith(color: AppColors.grey4)),
-          ] else if (!paid && noPayment) ...[
+          ] else if (OrderCollectionPolicy.showCollectButton(payment) && noPayment) ...[
             const SizedBox(height: 9),
             Text('إكمال التحصيل غير متاح حاليًا. اسحب لتحديث حالة الطلب أو تواصل مع الإدارة.',
               style: Styles.textStyle14.copyWith(color: AppColors.grey4)),
