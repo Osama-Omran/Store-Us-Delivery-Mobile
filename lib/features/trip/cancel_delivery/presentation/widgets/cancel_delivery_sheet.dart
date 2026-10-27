@@ -100,7 +100,10 @@ class _CancelDeliverySheetState extends State<CancelDeliverySheet> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.red0),
+        SnackBar(
+          content: Text(context.localizedErrorMessage(message)),
+          backgroundColor: AppColors.red0,
+        ),
       );
   }
 

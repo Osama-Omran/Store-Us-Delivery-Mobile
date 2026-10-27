@@ -22,7 +22,6 @@ class ReceiveTripSuccessScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.grey0,
       body: SafeArea(
-        bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
@@ -33,7 +32,7 @@ class ReceiveTripSuccessScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Gap(110),
+                      Gap((constraints.maxHeight * .1).clamp(24.0, 72.0)),
                       const ReceivingSuccessHeader(),
                       const Gap(30),
                       ReceivingSuccessDetails(
@@ -41,24 +40,27 @@ class ReceiveTripSuccessScreen extends StatelessWidget {
                         receivedAt: receivedAt,
                       ),
                       const Gap(40),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 70,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minWidth: double.infinity,
+                          minHeight: 56,
+                        ),
                         child: ElevatedButton(
                           onPressed: () => GoRouter.of(context).pop(),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: AppColors.white0,
-                            elevation: 5,
+                            elevation: 0,
                             shadowColor: AppColors.primary.withValues(
                               alpha: 0.25,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(18),
                             ),
                           ),
                           child: Text(
                             context.strings.show_trip_orders,
+                            textAlign: TextAlign.center,
                             style: Styles.textStyle20.copyWith(
                               fontWeight: FontWeight.w700,
                             ),

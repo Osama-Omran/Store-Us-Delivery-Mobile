@@ -63,12 +63,12 @@ class NotificationCard extends StatelessWidget {
         return context.strings.notification_just_now;
       }
       if (difference.inMinutes < 60) {
-        return '${difference.inMinutes} '
-            '${context.strings.notification_minutes_ago}';
+        return context.strings.notification_minutes_ago_count(
+          difference.inMinutes,
+        );
       }
       if (difference.inHours < 24) {
-        return '${difference.inHours} '
-            '${context.strings.notification_hours_ago}';
+        return context.strings.notification_hours_ago_count(difference.inHours);
       }
       if (difference.inDays == 1) {
         return context.strings.yesterday;
@@ -101,7 +101,7 @@ class NotificationCard extends StatelessWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text(message),
+          content: Text(context.localizedErrorMessage(message)),
           backgroundColor: AppColors.red0,
           behavior: SnackBarBehavior.floating,
         ),
@@ -122,16 +122,16 @@ class NotificationCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: isRead ? AppColors.white0 : AppColors.blue5,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isRead ? AppColors.grey3 : AppColors.blue3,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black1.withValues(alpha: isRead ? 0.02 : 0.055),
-            blurRadius: isRead ? 9 : 17,
-            offset: const Offset(0, 5),
+            color: AppColors.black1.withValues(alpha: isRead ? 0.02 : 0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -139,7 +139,7 @@ class NotificationCard extends StatelessWidget {
         color: AppColors.transparent,
         child: InkWell(
           onTap: isRead || isMarking ? null : () => _markAsRead(context),
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
               Padding(
@@ -189,14 +189,6 @@ class NotificationCard extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: AppColors.primary,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.primary.withValues(
-                                          alpha: 0.18,
-                                        ),
-                                        blurRadius: 8,
-                                      ),
-                                    ],
                                   ),
                                 ),
                               ],

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -36,13 +37,15 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
         '${hex.substring(20)}';
   }
 
-
   Future<void> confirmDelivery({
     required int tripId,
     required int orderId,
     required List<ConfirmDeliveryItem> items,
-    required num? collectedAmount,
-    required String? paymentMethod,
+    required num collectedAmount,
+    required num expectedAmount,
+
+    // Optional receipt image path
+    String? receiptPhotoPath,
   }) async {
     if (isClosed ||
         state is ConfirmDeliveryLoading ||
@@ -53,8 +56,8 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
     // ======= Validate Delivery Items ======= //
     if (items.isEmpty ||
         items.any(
-              (item) =>
-          item.lineId.trim().isEmpty ||
+          (item) =>
+              item.lineId.trim().isEmpty ||
               item.itemCode.trim().isEmpty ||
               item.qty <= 0,
         )) {
@@ -62,48 +65,41 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
       return;
     }
 
-    // ======= Optional Collection ======= //
-    final hasCollection =
-        collectedAmount != null || paymentMethod != null;
-
-    if (hasCollection) {
-      // Both fields must be present when collecting money.
-      if (collectedAmount == null ||
-          paymentMethod == null ||
-          !collectedAmount.isFinite ||
-          collectedAmount <= 0) {
-        emit(ConfirmDeliveryFailure('delivery_invalid_amount'));
-        return;
-      }
-
-      if (paymentMethod != 'cash') {
-        emit(
-          ConfirmDeliveryFailure(
-            'delivery_payment_not_supported',
-          ),
-        );
-        return;
-      }
+    // ======= Validate Full Collection ======= //
+    // Cash only - No partial or unpaid delivery.
+    if (!expectedAmount.isFinite ||
+        expectedAmount <= 0 ||
+        !collectedAmount.isFinite ||
+        collectedAmount <= 0 ||
+        (collectedAmount * 100).round() != (expectedAmount * 100).round()) {
+      emit(ConfirmDeliveryFailure('delivery_invalid_amount'));
+      return;
     }
 
-    // No collection:
-    // collectedAmount == null
-    // paymentMethod == null
-
+    // ======= Generate Operation ID ======= //
     _operationId ??= _generateOperationId();
 
+    // ======= Optional Receipt Photo ======= //
+    final imagePath = receiptPhotoPath?.trim();
+
+    final File? receiptPhoto = imagePath != null && imagePath.isNotEmpty
+        ? File(imagePath)
+        : null;
+
+    // ======= Create Request Body ======= //
     final body = ConfirmDeliveryRequestBody(
       clientOperationId: _operationId!,
       items: items,
       extraItems: const [],
       collectedAmount: collectedAmount,
-      paymentMethod: paymentMethod,
+      receiptPhoto: receiptPhoto,
     );
 
     emit(ConfirmDeliveryLoading());
 
     try {
-      final result = await _usecase.call(
+      // ======= Call API ======= //
+      final ApiResult<dynamic> result = await _usecase.call(
         tripId: tripId,
         orderId: orderId,
         body: body,
@@ -113,12 +109,10 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
 
       result.when(
         success: (response) {
-          if (response is Map &&
-              response['success'] == false) {
+          if (response is Map && response['success'] == false) {
             emit(
               ConfirmDeliveryFailure(
-                response['message']?.toString() ??
-                    'delivery_confirm_failed',
+                response['message']?.toString() ?? 'delivery_confirm_failed',
               ),
             );
             return;
@@ -131,20 +125,14 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
 
           emit(
             ConfirmDeliveryFailure(
-              message.trim().isNotEmpty
-                  ? message
-                  : 'delivery_confirm_failed',
+              message.trim().isNotEmpty ? message : 'delivery_confirm_failed',
             ),
           );
         },
       );
     } catch (_) {
       if (!isClosed) {
-        emit(
-          ConfirmDeliveryFailure(
-            'delivery_confirm_failed',
-          ),
-        );
+        emit(ConfirmDeliveryFailure('delivery_confirm_failed'));
       }
     }
   }

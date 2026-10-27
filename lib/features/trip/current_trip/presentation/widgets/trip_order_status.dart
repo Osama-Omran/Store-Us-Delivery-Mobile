@@ -99,9 +99,7 @@ class TripOrderStatusStyle {
 
       case TripOrderStatus.unknown:
         return TripOrderStatusStyle(
-          title: order.rawDeliveryStatus?.isNotEmpty == true
-              ? order.rawDeliveryStatus!
-              : context.strings.trip_tab_unknown_status,
+          title: context.strings.trip_customers_unknown_status,
           badgeBackground: AppColors.grey5,
           badgeForeground: AppColors.grey4,
           numberBackground: AppColors.grey3,

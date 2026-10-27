@@ -60,7 +60,9 @@ class OrderAddressFields extends StatelessWidget {
         keyboardType: TextInputType.phone,
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.right,
-        decoration: _inputDecoration().copyWith(hintText: '01XXXXXXXXX'),
+        decoration: _inputDecoration().copyWith(
+          hintText: context.strings.order_phone_hint,
+        ),
       ),
 
       const SizedBox(height: 18),
@@ -101,7 +103,9 @@ class OrderAddressFields extends StatelessWidget {
         controller: countryController,
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.right,
-        decoration: _inputDecoration().copyWith(hintText: 'Egypt'),
+        decoration: _inputDecoration().copyWith(
+          hintText: context.strings.order_country_hint,
+        ),
       ),
 
       const SizedBox(height: 18),

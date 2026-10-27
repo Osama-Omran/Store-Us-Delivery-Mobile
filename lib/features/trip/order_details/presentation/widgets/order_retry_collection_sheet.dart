@@ -78,16 +78,18 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(context.strings.order_number_label(widget.salesOrder)),
+            const SizedBox(height: 8),
             Text(
-              '${context.strings.retry_collection_order_label}: ${widget.salesOrder}',
+              context.strings.order_required_amount_label(
+                formatTripAmount(context, requiredAmount),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
-              '${context.strings.retry_collection_required_amount_label}: ${formatTripAmount(context, requiredAmount)}',
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${context.strings.delivery_payment_method}: ${context.strings.delivery_cash}',
+              context.strings.payment_method_label(
+                context.strings.delivery_cash,
+              ),
             ),
             const SizedBox(height: 12),
             Text(context.strings.retry_collection_confirm_notice),
@@ -322,7 +324,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Text(
-                        _error!,
+                        context.localizedErrorMessage(_error!),
                         style: Styles.base.copyWith(
                           color: AppColors.red1,
                           fontWeight: FontWeight.w700,

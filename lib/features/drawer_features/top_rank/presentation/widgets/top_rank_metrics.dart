@@ -1,3 +1,4 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -32,6 +33,14 @@ String formatRankMetric(TopRankMetric metric) {
   return '$number $unit';
 }
 
+/// Keep genuine backend labels, but never expose a missing label's machine key.
+String rankMetricLabel(BuildContext context, TopRankMetric metric) {
+  final label = metric.label.trim();
+  return label.isEmpty || label == metric.key
+      ? context.strings.top_rank_metric_unknown
+      : metric.label;
+}
+
 class TopRankMetrics extends StatelessWidget {
   const TopRankMetrics({super.key, required this.entry, this.maxRows = 3});
 
@@ -44,7 +53,7 @@ class TopRankMetrics extends StatelessWidget {
 
     if (metrics.isEmpty) {
       return Text(
-        'لا توجد مؤشرات أداء متاحة',
+        context.strings.top_rank_no_metrics,
         style: Styles.textStyle14.copyWith(color: AppColors.grey4),
       );
     }
@@ -53,26 +62,38 @@ class TopRankMetrics extends StatelessWidget {
       spacing: 5,
       children: [
         for (final metric in metrics)
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  metric.label,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final label = Text(
+                rankMetricLabel(context, metric),
+                style: Styles.textStyle12.copyWith(color: AppColors.grey4),
+              );
+              final value = Text(
                 formatRankMetric(metric),
                 textDirection: TextDirection.ltr,
+                textAlign: TextAlign.end,
                 style: Styles.textStyle14.copyWith(
                   color: AppColors.black1,
                   fontWeight: FontWeight.w800,
                 ),
-              ),
-            ],
+              );
+              if (constraints.maxWidth < 300 ||
+                  MediaQuery.textScalerOf(context).scale(16) > 20) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 4,
+                  children: [label, value],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 10,
+                children: [
+                  Expanded(child: label),
+                  Flexible(child: value),
+                ],
+              );
+            },
           ),
       ],
     );
@@ -88,14 +109,14 @@ class TopRankMovement extends StatelessWidget {
   Widget build(BuildContext context) {
     if (movement == null) {
       return Text(
-        'غير متاح',
+        context.strings.top_rank_unavailable,
         style: Styles.textStyle12.copyWith(color: AppColors.grey4),
       );
     }
 
     if (movement == 0) {
       return Text(
-        'بدون تغيير',
+        context.strings.top_rank_no_movement,
         style: Styles.textStyle12.copyWith(color: AppColors.grey4),
       );
     }

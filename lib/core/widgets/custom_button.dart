@@ -113,8 +113,10 @@ class _CustomButtonState extends State<CustomButton> {
               ? widget.padding
               : widget.padding is num
               ? EdgeInsets.all(widget.padding.toDouble())
-              : null,
-          height: widget.height ?? 56,
+              : widget.circular == true
+              ? null
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          constraints: BoxConstraints(minHeight: widget.height ?? 56),
           width: widget.shrink == true ? null : widget.width ?? double.infinity,
           decoration: BoxDecoration(
             color: widget.isActive == false
@@ -135,10 +137,9 @@ class _CustomButtonState extends State<CustomButton> {
             boxShadow: [
               if (widget.withShadow == true)
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: .3),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 4), // changes position of shadow
+                  color: AppColors.primary.withValues(alpha: .10),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
             ],
           ),
@@ -151,17 +152,22 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildChild() => Center(
+    heightFactor: 1,
     child: Row(
+      mainAxisSize: widget.shrink == true ? MainAxisSize.min : MainAxisSize.max,
       spacing: widget.spacing ?? 8,
       mainAxisAlignment: widget.alignment ?? MainAxisAlignment.center,
       children: [
         if (widget.icon != null && widget.icon1st == true) widget.icon!,
         if (widget.text != null)
-          Text(
-            widget.text!,
-            style:
-                widget.textStyle ??
-                Styles.textStyle16.copyWith(color: AppColors.white0),
+          Flexible(
+            child: Text(
+              widget.text!,
+              textAlign: TextAlign.center,
+              style:
+                  widget.textStyle ??
+                  Styles.textStyle16.copyWith(color: AppColors.white0),
+            ),
           ),
         if (widget.icon != null && widget.icon1st != true) widget.icon!,
       ],

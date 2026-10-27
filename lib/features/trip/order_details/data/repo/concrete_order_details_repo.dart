@@ -63,7 +63,7 @@ class ConcreteOrderDetailsRepo implements OrderDetailsRepoInterface {
         }
       } else if (error.response == null) {
         handler.apiErrorModel = ApiErrorModel(
-          message: 'تعذر تأكيد نتيجة التحصيل بسبب الاتصال. حدّث حالة الطلب قبل المحاولة مرة أخرى.',
+          message: 'order_collection_connection_uncertain',
         );
       }
       return ApiResult.failure(handler);

@@ -31,8 +31,12 @@ class DeliveryFinancialResultCard extends StatelessWidget {
               Expanded(
                 child: Text(context.strings.order_details_original_total),
               ),
-              Text(
-                original == null ? '—' : formatTripAmount(context, original!),
+              const SizedBox(width: 12),
+              Flexible(
+                child: Text(
+                  original == null ? '—' : formatTripAmount(context, original!),
+                  textAlign: TextAlign.end,
+                ),
               ),
             ],
           ),
@@ -44,11 +48,17 @@ class DeliveryFinancialResultCard extends StatelessWidget {
                   style: Styles.base.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
-              Text(
-                estimated == null ? '—' : formatTripAmount(context, estimated!),
-                style: Styles.textStyle23.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w800,
+              const SizedBox(width: 12),
+              Flexible(
+                child: Text(
+                  estimated == null
+                      ? '—'
+                      : formatTripAmount(context, estimated!),
+                  textAlign: TextAlign.end,
+                  style: Styles.textStyle23.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],

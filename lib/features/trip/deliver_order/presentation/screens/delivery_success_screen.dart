@@ -98,8 +98,9 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
     setState(() => _loading = false);
 
     if (error != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error!)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.localizedErrorMessage(error))),
+      );
       return;
     }
 

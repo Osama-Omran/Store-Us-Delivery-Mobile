@@ -74,8 +74,9 @@ class DirectSaleLocationCard extends StatelessWidget {
               children: [
                 _LocationValue(
                   label: context.strings.direct_sale_accuracy,
-                  value:
-                      '±${position.accuracy.toStringAsFixed(0)} ${context.strings.trip_map_meters}',
+                  value: context.strings.location_accuracy_meters(
+                    position.accuracy.toStringAsFixed(0),
+                  ),
                 ),
                 _LocationValue(
                   label: context.strings.order_longitude,

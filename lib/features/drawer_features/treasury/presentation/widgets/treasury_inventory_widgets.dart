@@ -180,7 +180,10 @@ class TreasuryInventoryCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${item.code} · ${context.strings.treasury_product_unit}: ${item.unit}',
+                      context.strings.treasury_product_code_unit(
+                        item.code,
+                        item.unit,
+                      ),
                       style: Styles.textStyle12.copyWith(
                         color: AppColors.grey4,
                         fontWeight: FontWeight.w400,

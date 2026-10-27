@@ -99,7 +99,10 @@ class ProductWidget extends StatelessWidget {
                   style: Styles.textStyle18.copyWith(color: AppColors.black1),
                 ),
                 Text(
-                  '${product.itemCode} • ${context.strings.unit}: ${product.uom ?? '—'}',
+                  context.strings.product_code_unit(
+                    product.itemCode,
+                    product.uom ?? '—',
+                  ),
                   style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                 ),
                 if (sourceLabel.isNotEmpty)

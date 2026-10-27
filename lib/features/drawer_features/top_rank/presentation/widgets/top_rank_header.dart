@@ -27,7 +27,7 @@ class TopRankHeader extends StatelessWidget {
               spacing: 2,
               children: [
                 Text(
-                  context.strings.top_rank_title,
+                  context.strings.top_rank,
                   textAlign: TextAlign.center,
                   style: Styles.textStyle24.copyWith(color: AppColors.rankNavy),
                 ),

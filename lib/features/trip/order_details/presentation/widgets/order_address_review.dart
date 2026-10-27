@@ -46,14 +46,20 @@ class OrderAddressReview extends StatelessWidget {
                 title: context.strings.order_correct_address,
                 value: address,
               ),
-              _ReviewRow(title: 'Latitude', value: latitudeText),
-              _ReviewRow(title: 'Longitude', value: longitudeText),
+              _ReviewRow(
+                title: context.strings.order_latitude,
+                value: latitudeText,
+              ),
+              _ReviewRow(
+                title: context.strings.order_longitude,
+                value: longitudeText,
+              ),
               if (accuracy != null)
                 _ReviewRow(
                   title: context.strings.order_location_accuracy,
-                  value:
-                      '±${accuracy!.toStringAsFixed(0)} '
-                      '${context.strings.order_meters}',
+                  value: context.strings.location_accuracy_meters(
+                    accuracy!.toStringAsFixed(0),
+                  ),
                 ),
 
               _ReviewRow(

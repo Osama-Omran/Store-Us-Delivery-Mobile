@@ -37,6 +37,10 @@ import 'package:storeus_delivery/features/login/data/repo/concrete_login_repo.da
 import 'package:storeus_delivery/features/login/domain/repo/login_repo_interface.dart';
 import 'package:storeus_delivery/features/login/domain/usecases/login_usecase.dart';
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/repo/concrete_delivery_outcome_repo.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/repo/delivery_outcome_repo_interface.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/usecases/submit_delivery_outcome_usecase.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/update_delivery_location_usecase.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/repo/concrete_receive_trip_repo.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/domain/repo/receive_trip_repo_interface.dart';
@@ -405,5 +409,17 @@ void setupLocator() {
       getIt<CurrentTripUsecase>(),
       getIt<GetTripCustomersUsecase>(),
     ),
+  );
+
+  getIt.registerLazySingleton<DeliveryOutcomeRepoInterface>(
+    () => ConcreteDeliveryOutcomeRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<SubmitDeliveryOutcomeUsecase>(
+    () => SubmitDeliveryOutcomeUsecase(getIt<DeliveryOutcomeRepoInterface>()),
+  );
+
+  getIt.registerFactory<DeliveryOutcomeCubit>(
+    () => DeliveryOutcomeCubit(getIt<SubmitDeliveryOutcomeUsecase>()),
   );
 }

@@ -75,127 +75,157 @@ class DeliverySummaryBar extends StatelessWidget {
             ? context.strings.delivery_partial_draft
             : context.strings.delivery_full_draft;
 
-        return Container(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
-          decoration: BoxDecoration(
-            color: AppColors.white0,
-            border: Border(top: BorderSide(color: AppColors.grey3)),
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * .55,
           ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 12,
-              children: [
-                _SummaryRow(
-                  label: context.strings.order_details_original_total,
-                  amount: state.originalTotal,
-                ),
-
-                _SummaryRow(
-                  label: context.strings.delivery_selected_items_value,
-                  amount: estimatedValue,
-                ),
-
-                _SummaryRow(
-                  label: context.strings.delivery_extra_products,
-                  amount: 0,
-                ),
-
-                Divider(color: AppColors.grey3, height: 1),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        context.strings.delivery_estimated_total,
-                        style: Styles.textStyle15.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.black1,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      estimatedValue == null
-                          ? '—'
-                          : formatTripAmount(context, estimatedValue),
-                      style: Styles.textStyle26.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-
-                // ======= Calculated Delivery Status ======= //
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 13,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: state.isPartial
-                        ? AppColors.orange1
-                        : AppColors.green1,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        state.isPartial
-                            ? Icons.warning_amber_rounded
-                            : Icons.check_circle_outline_rounded,
-                        color: state.isPartial
-                            ? AppColors.orange0
-                            : AppColors.green0,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          statusText,
-                          style: Styles.textStyle15.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: state.isPartial
-                                ? AppColors.orange0
-                                : AppColors.green0,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            decoration: BoxDecoration(
+              color: AppColors.white0,
+              border: Border(top: BorderSide(color: AppColors.grey3)),
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 8,
+                children: [
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
+                        children: [
+                          _SummaryRow(
+                            label: context.strings.order_details_original_total,
+                            amount: state.originalTotal,
                           ),
-                        ),
-                      ),
-                      Text(
-                        context.strings.delivery_auto_calculated,
-                        style: Styles.textStyle11.copyWith(
-                          color: AppColors.grey4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
 
-                // ======= Continue ======= //
-                SizedBox(
-                  height: 68,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: !state.hasSelectedItems
-                        ? null
-                        : () => _openDeliveryResult(context, state),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white0,
-                      disabledBackgroundColor: AppColors.grey3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: Text(
-                      context.strings.delivery_continue,
-                      style: Styles.textStyle20.copyWith(
-                        fontWeight: FontWeight.w800,
+                          _SummaryRow(
+                            label:
+                                context.strings.delivery_selected_items_value,
+                            amount: estimatedValue,
+                          ),
+
+                          _SummaryRow(
+                            label: context.strings.delivery_extra_products,
+                            amount: 0,
+                          ),
+
+                          Divider(color: AppColors.grey3, height: 1),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  context.strings.delivery_estimated_total,
+                                  style: Styles.textStyle15.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.black1,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Flexible(
+                                child: Text(
+                                  estimatedValue == null
+                                      ? '—'
+                                      : formatTripAmount(
+                                          context,
+                                          estimatedValue,
+                                        ),
+                                  textAlign: TextAlign.end,
+                                  style: Styles.textStyle26.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          // ======= Calculated Delivery Status ======= //
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 13,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: state.isPartial
+                                  ? AppColors.orange1
+                                  : AppColors.green1,
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  state.isPartial
+                                      ? Icons.warning_amber_rounded
+                                      : Icons.check_circle_outline_rounded,
+                                  color: state.isPartial
+                                      ? AppColors.orange0
+                                      : AppColors.green0,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    statusText,
+                                    style: Styles.textStyle15.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: state.isPartial
+                                          ? AppColors.orange0
+                                          : AppColors.green0,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    context.strings.delivery_auto_calculated,
+                                    textAlign: TextAlign.end,
+                                    style: Styles.textStyle11.copyWith(
+                                      color: AppColors.grey4,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+
+                  // ======= Continue ======= //
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minHeight: 56,
+                      minWidth: double.infinity,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: !state.hasSelectedItems
+                          ? null
+                          : () => _openDeliveryResult(context, state),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white0,
+                        disabledBackgroundColor: AppColors.grey3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text(
+                        context.strings.delivery_continue,
+                        textAlign: TextAlign.center,
+                        style: Styles.textStyle18.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -221,11 +251,15 @@ class _SummaryRow extends StatelessWidget {
           ),
         ),
 
-        Text(
-          amount == null ? '—' : formatTripAmount(context, amount!),
-          style: Styles.textStyle17.copyWith(
-            fontWeight: FontWeight.w800,
-            color: AppColors.black1,
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            amount == null ? '—' : formatTripAmount(context, amount!),
+            textAlign: TextAlign.end,
+            style: Styles.textStyle17.copyWith(
+              fontWeight: FontWeight.w800,
+              color: AppColors.black1,
+            ),
           ),
         ),
       ],

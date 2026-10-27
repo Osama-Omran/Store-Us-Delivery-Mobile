@@ -70,6 +70,8 @@ class _OrderStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScaler = MediaQuery.textScalerOf(context);
+
     return Container(
       constraints: const BoxConstraints(minHeight: 94),
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
@@ -81,23 +83,37 @@ class _OrderStatCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            count?.toString() ?? '—',
-            style: Styles.textStyle27.copyWith(
-              fontWeight: FontWeight.w800,
-              color: countColor,
+          SizedBox(
+            height: textScaler.scale(27) * 1.2,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                count?.toString() ?? '—',
+                maxLines: 1,
+                softWrap: false,
+                style: Styles.textStyle27.copyWith(
+                  height: 1.2,
+                  fontWeight: FontWeight.w800,
+                  color: countColor,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 3),
-          Text(
-            label,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            style: Styles.base.copyWith(
-              fontSize: 12,
-              height: 1.3,
-              color: labelColor,
+          SizedBox(
+            height: textScaler.scale(12) * 1.3 * 2,
+            child: Center(
+              child: Text(
+                label,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: Styles.base.copyWith(
+                  fontSize: 12,
+                  height: 1.3,
+                  color: labelColor,
+                ),
+              ),
             ),
           ),
         ],

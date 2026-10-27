@@ -208,10 +208,10 @@ class CurrentTripSummaryCard extends StatelessWidget {
                       child: Text(
                         trip.handledOrders == null || trip.totalOrders == null
                             ? context.strings.trip_progress_unavailable
-                            : '${trip.handledOrders} '
-                                  '${context.strings.of_total} '
-                                  '${trip.totalOrders} '
-                                  '${context.strings.orders_handled}',
+                            : context.strings.trip_handled_orders_summary(
+                                trip.handledOrders!,
+                                trip.totalOrders!,
+                              ),
                         style: Styles.textStyle13.copyWith(
                           color: AppColors.black1,
                           fontWeight: FontWeight.w700,
@@ -270,7 +270,7 @@ class _TripInfoRow extends StatelessWidget {
         Icon(icon, size: 18, color: AppColors.grey4),
         const SizedBox(width: 9),
         Text(
-          '$label: ',
+          context.strings.label_with_colon(label),
           style: Styles.textStyle13.copyWith(color: AppColors.grey4),
         ),
         Expanded(

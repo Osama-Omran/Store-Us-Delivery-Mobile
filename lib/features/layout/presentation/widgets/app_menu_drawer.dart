@@ -117,7 +117,7 @@ class AppMenuDrawer extends StatelessWidget {
                   ),
 
                   AppMenuDrawerItem(
-                    title: '${context.strings.top_rank} · Top Rank',
+                    title: context.strings.top_rank,
                     icon: Icons.emoji_events_outlined,
                     isSelected: selectedSection == AppMenuSection.topRank,
                     onTap: () => _handleTap(context, onTopRankTap),

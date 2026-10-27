@@ -154,7 +154,7 @@ class _TransferField extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: '$label: '),
+          TextSpan(text: context.strings.label_with_colon(label)),
           TextSpan(
             text: value.trim().isEmpty ? '—' : value,
             style: emphasizeValue

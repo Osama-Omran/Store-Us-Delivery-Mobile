@@ -66,9 +66,10 @@ class DeliveryOrderItemCard extends StatelessWidget {
                         ),
 
                         Text(
-                          '${context.strings.delivery_item_code}: '
-                          '${item.itemCode} • '
-                          '${context.strings.unit}: ${item.uom}',
+                          context.strings.delivery_item_code_unit(
+                            item.itemCode,
+                            item.uom,
+                          ),
                           style: Styles.base.copyWith(
                             fontSize: 12,
                             color: AppColors.grey4,
@@ -80,13 +81,16 @@ class DeliveryOrderItemCard extends StatelessWidget {
 
                   const SizedBox(width: 8),
 
-                  Text(
-                    item.rate == null
-                        ? '—'
-                        : formatTripAmount(context, item.rate!),
-                    style: Styles.textStyle14.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.grey4,
+                  Flexible(
+                    child: Text(
+                      item.rate == null
+                          ? '—'
+                          : formatTripAmount(context, item.rate!),
+                      textAlign: TextAlign.end,
+                      style: Styles.textStyle14.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.grey4,
+                      ),
                     ),
                   ),
                 ],
@@ -164,44 +168,58 @@ class DeliveryOrderItemCard extends StatelessWidget {
                   color: AppColors.grey0,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        context.strings.delivery_selected_quantity,
-                        style: Styles.textStyle14.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.black1,
-                        ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final label = Text(
+                      context.strings.delivery_selected_quantity,
+                      style: Styles.textStyle14.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.black1,
                       ),
-                    ),
-
-                    _StepperButton(
-                      index: index,
-                      icon: Icons.remove,
-                      enabled: selectedQty > 0,
-                      primary: false,
-                    ),
-
-                    SizedBox(
-                      width: 48,
-                      child: Text(
-                        formatDeliveryQty(selectedQty),
-                        textAlign: TextAlign.center,
-                        style: Styles.textStyle21.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.black1,
+                    );
+                    final stepper = Row(
+                      children: [
+                        _StepperButton(
+                          index: index,
+                          icon: Icons.remove,
+                          enabled: selectedQty > 0,
+                          primary: false,
                         ),
-                      ),
-                    ),
 
-                    _StepperButton(
-                      index: index,
-                      icon: Icons.add,
-                      enabled: selectedQty < maxQty,
-                      primary: true,
-                    ),
-                  ],
+                        Expanded(
+                          child: Text(
+                            formatDeliveryQty(selectedQty),
+                            textAlign: TextAlign.center,
+                            style: Styles.textStyle21.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.black1,
+                            ),
+                          ),
+                        ),
+
+                        _StepperButton(
+                          index: index,
+                          icon: Icons.add,
+                          enabled: selectedQty < maxQty,
+                          primary: true,
+                        ),
+                      ],
+                    );
+                    if (constraints.maxWidth < 280 ||
+                        MediaQuery.textScalerOf(context).scale(14) > 18) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [label, const SizedBox(height: 8), stepper],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(child: label),
+                        const SizedBox(width: 8),
+                        SizedBox(width: 168, child: stepper),
+                      ],
+                    );
+                  },
                 ),
               ),
 
@@ -219,17 +237,23 @@ class DeliveryOrderItemCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _DifferenceValue(
-                        label: context.strings.delivery_ordered,
-                        value: item.orderedQty,
+                      Expanded(
+                        child: _DifferenceValue(
+                          label: context.strings.delivery_ordered,
+                          value: item.orderedQty,
+                        ),
                       ),
-                      _DifferenceValue(
-                        label: context.strings.delivery_selected,
-                        value: selectedQty,
+                      Expanded(
+                        child: _DifferenceValue(
+                          label: context.strings.delivery_selected,
+                          value: selectedQty,
+                        ),
                       ),
-                      _DifferenceValue(
-                        label: context.strings.delivery_not_delivered,
-                        value: shortfall,
+                      Expanded(
+                        child: _DifferenceValue(
+                          label: context.strings.delivery_not_delivered,
+                          value: shortfall,
+                        ),
                       ),
                     ],
                   ),
@@ -262,12 +286,14 @@ class _QuantityInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 76,
+      constraints: const BoxConstraints(minHeight: 76),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 3,
         children: [
@@ -278,6 +304,7 @@ class _QuantityInfoTile extends StatelessWidget {
           ),
           Text(
             formatDeliveryQty(quantity),
+            textAlign: TextAlign.center,
             style: Styles.textStyle23.copyWith(
               fontWeight: FontWeight.w800,
               color: color,
@@ -308,36 +335,41 @@ class _StepperButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: primary ? AppColors.primary : AppColors.white0,
-      borderRadius: BorderRadius.circular(17),
-      child: InkWell(
-        onTap: !enabled
-            ? null
-            : () {
-                if (primary) {
-                  context.read<DeliveryDraftCubit>().increment(index);
-                } else {
-                  context.read<DeliveryDraftCubit>().decrement(index);
-                }
-              },
+    return Tooltip(
+      message: primary
+          ? context.strings.direct_sale_increase
+          : context.strings.direct_sale_decrease,
+      child: Material(
+        color: primary ? AppColors.primary : AppColors.white0,
         borderRadius: BorderRadius.circular(17),
-        child: Container(
-          width: 52,
-          height: 52,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17),
-            border: primary ? null : Border.all(color: AppColors.grey3),
-          ),
-          child: Icon(
-            icon,
-            color: enabled
-                ? primary
-                      ? AppColors.white0
-                      : AppColors.black1
-                : AppColors.grey2,
-            size: 24,
+        child: InkWell(
+          onTap: !enabled
+              ? null
+              : () {
+                  if (primary) {
+                    context.read<DeliveryDraftCubit>().increment(index);
+                  } else {
+                    context.read<DeliveryDraftCubit>().decrement(index);
+                  }
+                },
+          borderRadius: BorderRadius.circular(17),
+          child: Container(
+            width: 52,
+            height: 52,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(17),
+              border: primary ? null : Border.all(color: AppColors.grey3),
+            ),
+            child: Icon(
+              icon,
+              color: enabled
+                  ? primary
+                        ? AppColors.white0
+                        : AppColors.black1
+                  : AppColors.grey2,
+              size: 24,
+            ),
           ),
         ),
       ),
@@ -362,10 +394,12 @@ class _DifferenceValue extends StatelessWidget {
       children: [
         Text(
           label,
+          textAlign: TextAlign.center,
           style: Styles.textStyle11.copyWith(color: AppColors.orange0),
         ),
         Text(
           formatDeliveryQty(value),
+          textAlign: TextAlign.center,
           style: Styles.base.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.orange0,

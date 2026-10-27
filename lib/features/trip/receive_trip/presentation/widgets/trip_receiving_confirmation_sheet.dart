@@ -33,7 +33,7 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 26, 24, 30),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -49,8 +49,9 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
             ),
             const Gap(12),
             Text(
-              '${context.strings.confirm_receiving_dialog_description} '
-              '\u2066$tripNumber\u2069.',
+              context.strings.confirm_receiving_trip_description(
+                '\u2066$tripNumber\u2069',
+              ),
               textAlign: TextAlign.start,
               style: Styles.base.copyWith(
                 fontSize: 16,
@@ -63,8 +64,8 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
               spacing: 10,
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 70,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
                     child: OutlinedButton(
                       onPressed: () {
                         Navigator.of(context).pop(false);
@@ -88,8 +89,8 @@ class TripReceivingConfirmationSheet extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: SizedBox(
-                    height: 70,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop(true);

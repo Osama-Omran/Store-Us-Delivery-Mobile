@@ -12,7 +12,7 @@ class RescheduleOrderForm extends StatelessWidget {
     required this.dateTimeFields,
     required this.dateIsPast,
     required this.reasons,
-    required this.selectedReason,
+    required this.selectedReasonIndex,
     required this.otherReasonController,
     required this.notesController,
     required this.isLoading,
@@ -26,11 +26,11 @@ class RescheduleOrderForm extends StatelessWidget {
   final Widget dateTimeFields;
   final bool dateIsPast;
   final List<String> reasons;
-  final String? selectedReason;
+  final int? selectedReasonIndex;
   final TextEditingController otherReasonController;
   final TextEditingController notesController;
   final bool isLoading;
-  final ValueChanged<String> onReasonSelected;
+  final ValueChanged<int> onReasonSelected;
   final VoidCallback onOtherReasonChanged;
 
   @override
@@ -93,22 +93,22 @@ class RescheduleOrderForm extends StatelessWidget {
         spacing: 9,
         runSpacing: 10,
         children: [
-          for (final reason in reasons)
+          for (var index = 0; index < reasons.length; index++)
             ChoiceChip(
-              label: Text(reason),
-              selected: selectedReason == reason,
-              onSelected: isLoading ? null : (_) => onReasonSelected(reason),
+              label: Text(reasons[index]),
+              selected: selectedReasonIndex == index,
+              onSelected: isLoading ? null : (_) => onReasonSelected(index),
               selectedColor: AppColors.blue4,
               backgroundColor: AppColors.white0,
               side: BorderSide(
-                color: selectedReason == reason
+                color: selectedReasonIndex == index
                     ? AppColors.primary
                     : AppColors.grey3,
               ),
               showCheckmark: false,
               labelStyle: Styles.base.copyWith(
                 fontWeight: FontWeight.w700,
-                color: selectedReason == reason
+                color: selectedReasonIndex == index
                     ? AppColors.primary
                     : AppColors.black1,
               ),
@@ -116,7 +116,7 @@ class RescheduleOrderForm extends StatelessWidget {
         ],
       ),
 
-      if (selectedReason == 'سبب آخر') ...[
+      if (selectedReasonIndex == 6) ...[
         const SizedBox(height: 12),
 
         TextField(

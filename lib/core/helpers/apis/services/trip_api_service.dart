@@ -7,12 +7,13 @@ import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/mo
 import 'package:storeus_delivery/features/drawer_features/treasury/data/models/treasury_wallet_response.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/data/models/cancel_delivery_request_body.dart';
+
 import 'dart:io';
+
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/data/models/confirm_delivery_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/retry_collection_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
@@ -78,28 +79,29 @@ abstract class TripApiService {
     @Body() UpdateDeliveryLocationBody body,
   );
 
-  @POST(ApiConstants.deliveryOutcome)
-  Future<dynamic> rescheduleOrder(
-    @Path('tripId') int tripId,
-    @Path('orderId') int orderId,
-    @Header('Authorization') String authorization,
-    @Body() RescheduleOrderRequestBody body,
-  );
 
   @POST(ApiConstants.deliveryOutcome)
   Future<dynamic> cancelDelivery(
-    @Path('tripId') int tripId,
-    @Path('orderId') int orderId,
-    @Header('Authorization') String authorization,
-    @Body() CancelDeliveryRequestBody body,
-  );
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() CancelDeliveryRequestBody body,
+      );
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> rescheduleOrder(
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() RescheduleOrderRequestBody body,
+      );
 
   @POST(ApiConstants.confirmDelivery)
   Future<dynamic> confirmDelivery(
     @Path('tripId') int tripId,
     @Path('orderId') int orderId,
     @Header('Authorization') String authorization,
-    @Body() ConfirmDeliveryRequestBody body,
+    @Body() FormData body,
   );
 
   @GET(ApiConstants.topRank)
@@ -155,7 +157,17 @@ abstract class TripApiService {
 
   @GET(ApiConstants.tripCustomers)
   Future<TripCustomersResponse> getTripCustomers(
+    @Path('tripId') int tripId,
+    @Header('Authorization') String authorization,
+  );
+
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> submitDeliveryOutcome(
       @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
       @Header('Authorization') String authorization,
+      @Body() Map<String, dynamic> body,
       );
+
 }

@@ -12,18 +12,19 @@ class OrderCollectionActionBar extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
     top: false,
     child: Container(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
       decoration: BoxDecoration(
         color: AppColors.white0,
         border: Border(top: BorderSide(color: AppColors.grey3)),
       ),
-      child: SizedBox(
-        height: 58,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
         child: ElevatedButton.icon(
           onPressed: onPressed,
           icon: const Icon(Icons.payments_outlined, size: 24),
           label: Text(
             context.strings.order_collection_button,
+            textAlign: TextAlign.center,
             style: Styles.textStyle17.copyWith(fontWeight: FontWeight.w800),
           ),
           style: ElevatedButton.styleFrom(

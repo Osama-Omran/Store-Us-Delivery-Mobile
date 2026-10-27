@@ -1,14 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 
-import 'delivery_collection_selector.dart';
 import 'delivery_payment_amount_field.dart';
 import 'delivery_payment_summary_card.dart';
 
-import 'package:storeus_delivery/core/theme/text_styles.dart';
-
+/// One amount field, cash only, and an optional receipt photo.
+/// The parent sends the selected image with the delivery confirmation request.
 class DeliveryPaymentContent extends StatelessWidget {
   const DeliveryPaymentContent({
     super.key,
@@ -19,10 +22,9 @@ class DeliveryPaymentContent extends StatelessWidget {
     required this.amountMatches,
     required this.showMismatch,
     required this.onAmountChanged,
-    required this.hasProof,
-    required this.onOpenProof,
-    required this.collectPayment,
-    required this.onCollectionChanged,
+    required this.receiptPhoto,
+    required this.onChooseReceipt,
+    required this.onRemoveReceipt,
   });
 
   final DeliveryFlowData flow;
@@ -32,146 +34,24 @@ class DeliveryPaymentContent extends StatelessWidget {
   final bool amountMatches;
   final bool showMismatch;
   final ValueChanged<String> onAmountChanged;
-  final bool hasProof;
-  final VoidCallback onOpenProof;
-  final bool collectPayment;
-  final ValueChanged<bool> onCollectionChanged;
+  final XFile? receiptPhoto;
+  final VoidCallback onChooseReceipt;
+  final VoidCallback onRemoveReceipt;
 
   @override
   Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.all(20),
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
     children: [
       DeliveryPaymentSummaryCard(
         originalTotal: flow.originalTotal,
         expected: expected,
-        collectPayment: collectPayment,
       ),
-
-      const SizedBox(height: 22),
-
-      DeliveryCollectionSelector(
-        collectPayment: collectPayment,
-        enabled: !isLoading,
-        onChanged: onCollectionChanged,
+      const SizedBox(height: 24),
+      Text(
+        context.strings.delivery_collected_amount,
+        style: Styles.textStyle17.copyWith(fontWeight: FontWeight.w800),
       ),
-
-      const SizedBox(height: 22),
-
-      if (collectPayment) ...[
-        Text(
-          context.strings.delivery_collected_amount,
-          style: Styles.textStyle17.copyWith(fontWeight: FontWeight.w800),
-        ),
-
-        const SizedBox(height: 10),
-
-        DeliveryPaymentAmountField(
-          controller: amountController,
-          isLoading: isLoading,
-          amountMatches: amountMatches,
-          showMismatch: showMismatch,
-          onChanged: onAmountChanged,
-        ),
-
-        const SizedBox(height: 10),
-
-        if (amountMatches)
-          _StatusMessage(
-            message: context.strings.delivery_amount_matches,
-            success: true,
-          )
-        else if (showMismatch)
-          _StatusMessage(
-            message: context.strings.delivery_amount_mismatch,
-            success: false,
-          ),
-
-        const SizedBox(height: 26),
-
-        Text(
-          context.strings.delivery_payment_method,
-          style: Styles.textStyle17.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        Row(
-          children: [
-            Expanded(
-              child: _PaymentMethodTile(
-                icon: Icons.payments_outlined,
-                title: context.strings.delivery_cash,
-                selected: true,
-                enabled: true,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: const _PaymentMethodTile(
-                icon: Icons.phone_android,
-                title: 'InstaPay',
-                selected: false,
-                enabled: false,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _PaymentMethodTile(
-                icon: Icons.credit_card,
-                title: context.strings.delivery_wallet,
-                selected: false,
-                enabled: false,
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 8),
-
-        Text(
-          context.strings.delivery_payment_not_supported,
-          style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
-        ),
-      ] else ...[
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.orange1,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.info_outline_rounded, color: AppColors.orange0),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  context.strings.delivery_no_collection_notice,
-                  style: Styles.base.copyWith(
-                    color: AppColors.black1,
-                    fontWeight: FontWeight.w600,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-
-      if (flow.hasMissingLineIds) ...[
-        const SizedBox(height: 12),
-        _StatusMessage(
-          message: context.strings.delivery_missing_line_ids,
-          success: false,
-        ),
-      ],
-
-      const SizedBox(height: 20),
-
       const SizedBox(height: 10),
       DeliveryPaymentAmountField(
         controller: amountController,
@@ -180,9 +60,7 @@ class DeliveryPaymentContent extends StatelessWidget {
         showMismatch: showMismatch,
         onChanged: onAmountChanged,
       ),
-
       const SizedBox(height: 10),
-
       if (amountMatches)
         _StatusMessage(
           message: context.strings.delivery_amount_matches,
@@ -193,7 +71,6 @@ class DeliveryPaymentContent extends StatelessWidget {
           message: context.strings.delivery_amount_mismatch,
           success: false,
         ),
-
       if (flow.hasMissingLineIds) ...[
         const SizedBox(height: 12),
         _StatusMessage(
@@ -201,9 +78,7 @@ class DeliveryPaymentContent extends StatelessWidget {
           success: false,
         ),
       ],
-
       const SizedBox(height: 26),
-
       Text(
         context.strings.delivery_payment_method,
         style: Styles.textStyle17.copyWith(
@@ -211,65 +86,97 @@ class DeliveryPaymentContent extends StatelessWidget {
           fontWeight: FontWeight.w800,
         ),
       ),
-
       const SizedBox(height: 12),
-
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.blue4,
+          border: Border.all(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.payments_outlined, color: AppColors.primary, size: 27),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                context.strings.delivery_cash,
+                style: Styles.textStyle17.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            Icon(Icons.check_circle, color: AppColors.primary),
+          ],
+        ),
+      ),
+      const SizedBox(height: 26),
       Row(
         children: [
-          Expanded(
-            child: _PaymentMethodTile(
-              icon: Icons.payments_outlined,
-              title: context.strings.delivery_cash,
-              selected: true,
-              enabled: true,
-            ),
-          ),
+          Icon(Icons.receipt_long_outlined, color: AppColors.primary),
           const SizedBox(width: 8),
           Expanded(
-            child: const _PaymentMethodTile(
-              icon: Icons.phone_android,
-              title: 'InstaPay',
-              selected: false,
-              enabled: false,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _PaymentMethodTile(
-              icon: Icons.credit_card,
-              title: context.strings.delivery_wallet,
-              selected: false,
-              enabled: false,
+            child: Text(
+              context.strings.delivery_receipt_optional,
+              style: Styles.textStyle17.copyWith(
+                color: AppColors.black1,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
         ],
       ),
-
-      const SizedBox(height: 8),
-
-      Text(
-        context.strings.delivery_payment_not_supported,
-        style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
-      ),
-
-      const SizedBox(height: 20),
-
-      OutlinedButton.icon(
-        onPressed: isLoading ? null : onOpenProof,
-        icon: const Icon(Icons.camera_alt_outlined),
-        label: Text(
-          hasProof
-              ? context.strings.delivery_proof_prepared
-              : context.strings.delivery_add_proof,
-        ),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          minimumSize: const Size.fromHeight(56),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      const SizedBox(height: 12),
+      if (receiptPhoto != null) ...[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: Image.file(
+            File(receiptPhoto!.path),
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 156,
+            errorBuilder: (_, _, _) => Container(
+              height: 110,
+              alignment: Alignment.center,
+              color: AppColors.grey5,
+              child: Text(context.strings.delivery_receipt_preview_failed),
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: isLoading ? null : onChooseReceipt,
+                icon: const Icon(Icons.autorenew_rounded),
+                label: Text(context.strings.delivery_receipt_replace),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: isLoading ? null : onRemoveReceipt,
+                icon: const Icon(Icons.delete_outline_rounded),
+                label: Text(context.strings.delivery_receipt_remove),
+              ),
+            ),
+          ],
+        ),
+      ] else
+        OutlinedButton.icon(
+          onPressed: isLoading ? null : onChooseReceipt,
+          icon: const Icon(Icons.add_a_photo_outlined),
+          label: Text(context.strings.delivery_receipt_add),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            minimumSize: const Size.fromHeight(56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+        ),
     ],
   );
 }
@@ -291,55 +198,10 @@ class _StatusMessage extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
       ),
       child: Text(
-        message,
+        context.localizedErrorMessage(message),
         style: Styles.base.copyWith(
           color: success ? AppColors.green0 : AppColors.red1,
           fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
-
-class _PaymentMethodTile extends StatelessWidget {
-  const _PaymentMethodTile({
-    required this.icon,
-    required this.title,
-    required this.selected,
-    required this.enabled,
-  });
-
-  final IconData icon;
-  final String title;
-  final bool selected;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: enabled ? 1 : .45,
-      child: Container(
-        height: 82,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.blue4 : AppColors.white0,
-          borderRadius: BorderRadius.circular(23),
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.grey3,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 7,
-          children: [
-            Icon(icon, color: selected ? AppColors.primary : AppColors.grey4),
-            Text(
-              title,
-              style: Styles.textStyle12.copyWith(
-                color: selected ? AppColors.primary : AppColors.black1,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
         ),
       ),
     );

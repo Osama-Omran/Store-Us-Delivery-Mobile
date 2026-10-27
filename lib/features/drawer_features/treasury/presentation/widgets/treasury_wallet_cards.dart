@@ -28,7 +28,9 @@ class TreasuryTripStrip extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: '${context.strings.treasury_current_trip} ',
+                    text: context.strings.text_with_trailing_space(
+                      context.strings.treasury_current_trip,
+                    ),
                     style: Styles.textStyle14.copyWith(color: AppColors.grey4),
                   ),
                   TextSpan(
@@ -316,7 +318,9 @@ class TreasuryCollectionCard extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  text: '${context.strings.treasury_balance_after}: ',
+                  text: context.strings.label_with_colon(
+                    context.strings.treasury_balance_after,
+                  ),
                   style: Styles.textStyle12.copyWith(
                     color: AppColors.grey4,
                     fontWeight: FontWeight.w400,
@@ -455,7 +459,9 @@ class TreasurySettlementNotice extends StatelessWidget {
             ],
           ),
           Text(
-            '${context.strings.treasury_current_custody}: ${formatTripAmount(context, balance)}',
+            context.strings.treasury_custody_amount(
+              formatTripAmount(context, balance),
+            ),
             style: Styles.textStyle16.copyWith(color: AppColors.black1),
           ),
           Text(

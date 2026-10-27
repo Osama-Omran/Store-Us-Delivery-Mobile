@@ -16,7 +16,7 @@ extension TopRankRoleLabels on TopRankRole {
   String label(BuildContext context) => switch (this) {
     TopRankRole.representatives => context.strings.top_rank_representatives,
     TopRankRole.drivers => context.strings.top_rank_drivers,
-    TopRankRole.dispatchers => context.strings.top_rank_dispatchers,
+    TopRankRole.dispatchers => context.strings.top_rank_dispatchers_label,
     TopRankRole.warehouses => context.strings.top_rank_warehouses,
     TopRankRole.warehouseStaff => context.strings.top_rank_warehouse_staff,
     TopRankRole.vehicles => context.strings.top_rank_vehicles,

@@ -18,7 +18,7 @@ class CustomLoadingIndicator extends StatelessWidget {
       height: size,
       child: LottieBuilder.asset(
         primaryColor ? AppAssets.loadingPrimary : AppAssets.loading,
-        frameRate: const FrameRate(900),
+        frameRate: FrameRate.composition,
       ),
     );
   }

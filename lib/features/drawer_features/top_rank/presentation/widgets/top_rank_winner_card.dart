@@ -27,7 +27,7 @@ class TopRankWinnerCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.rankWinnerBackground,
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.blue3),
         boxShadow: [
           BoxShadow(
@@ -40,51 +40,70 @@ class TopRankWinnerCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              TopRankAvatar(entry: entry, role: role, size: 72, isWinner: true),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      winnerLabel,
-                      style: Styles.textStyle14.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final narrow =
+                  constraints.maxWidth < 300 ||
+                  MediaQuery.textScalerOf(context).scale(16) > 20;
+              final rank = entry.rank == null
+                  ? null
+                  : Chip(
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor: AppColors.rankGoldLight,
+                      label: Text(
+                        '#${entry.rank}',
+                        style: Styles.textStyle12.copyWith(
+                          color: AppColors.black1,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    Text(
-                      entry.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Styles.textStyle20.copyWith(
-                        color: AppColors.black1,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (entry.rank != null)
-                Chip(
-                  visualDensity: VisualDensity.compact,
-                  backgroundColor: AppColors.rankGoldLight,
-                  label: Text(
-                    '#${entry.rank}',
-                    style: Styles.textStyle12.copyWith(
-                      color: AppColors.black1,
-                      fontWeight: FontWeight.w800,
+                    );
+              return Row(
+                children: [
+                  TopRankAvatar(
+                    entry: entry,
+                    role: role,
+                    size: 72,
+                    isWinner: true,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          winnerLabel,
+                          style: Styles.textStyle14.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          entry.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Styles.textStyle20.copyWith(
+                            color: AppColors.black1,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        if (narrow && rank != null) rank,
+                      ],
                     ),
                   ),
-                ),
-            ],
+                  if (!narrow && rank != null) rank,
+                ],
+              );
+            },
           ),
 
           const SizedBox(height: 16),
 
-          Row(
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 8,
             children: [
               Text(
                 '${formatRankNumber(entry.score)} / 100',
@@ -94,7 +113,6 @@ class TopRankWinnerCard extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const Spacer(),
               if (entry.provisional)
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -122,7 +140,11 @@ class TopRankWinnerCard extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          Row(
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 8,
             children: [
               TextButton(
                 onPressed: onDetails,
@@ -134,7 +156,6 @@ class TopRankWinnerCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Spacer(),
               TopRankMovement(movement: entry.movement),
             ],
           ),

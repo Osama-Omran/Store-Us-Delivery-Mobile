@@ -21,8 +21,7 @@ class OfflineQueuedException implements Exception {
   final String operationId;
 
   @override
-  String toString() =>
-      'العملية محفوظة على الجهاز وستُرسل تلقائيًا عند عودة الإنترنت';
+  String toString() => 'offline_operation_queued';
 }
 
 class OfflineSyncInterceptor extends Interceptor {
@@ -32,7 +31,9 @@ class OfflineSyncInterceptor extends Interceptor {
     final random = Random.secure();
     final bytes = List<int>.generate(16, (_) => random.nextInt(256));
     // UUID-like random stable ID for this logical operation.
-    final encoded = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    final encoded = bytes
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join();
     return '${encoded.substring(0, 8)}-${encoded.substring(8, 12)}-'
         '${encoded.substring(12, 16)}-${encoded.substring(16, 20)}-'
         '${encoded.substring(20)}';
@@ -40,7 +41,9 @@ class OfflineSyncInterceptor extends Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     if (options.extra[OfflineSyncOptions.enabled] != true) {
       return handler.next(options);
     }
@@ -75,15 +78,14 @@ class OfflineSyncInterceptor extends Interceptor {
 
       final sessionId = await PreferencesHelper.getOfflineSessionId();
       final auth = options.headers['Authorization']?.toString();
-      if (sessionId == null ||
-          auth == null ||
-          !auth.startsWith('Bearer ')) {
+      if (sessionId == null || auth == null || !auth.startsWith('Bearer ')) {
         throw StateError('An authenticated session is required');
       }
 
       final id = _newId();
-      final title = options.extra[OfflineSyncOptions.title]?.toString() ??
-          'عملية قيد المزامنة';
+      final title =
+          options.extra[OfflineSyncOptions.title]?.toString() ??
+          'offline_operation_title';
       final store = OfflineSyncStore.instance;
       await store.stage(
         id: id,
@@ -102,26 +104,30 @@ class OfflineSyncInterceptor extends Interceptor {
       await OfflineSyncScheduler.schedule();
       handler.next(options);
     } catch (e) {
-      return handler.reject(DioException(
-        requestOptions: options,
-        type: DioExceptionType.unknown,
-        error: e,
-        message: 'تعذر حفظ العملية محليًا، لم يتم إرسال الطلب',
-      ));
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.unknown,
+          error: e,
+          message: 'offline_operation_save_failed',
+        ),
+      );
     }
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    final id = response.requestOptions.extra[OfflineSyncOptions.internalId]
-        as String?;
+    final id =
+        response.requestOptions.extra[OfflineSyncOptions.internalId] as String?;
     if (id != null) {
       try {
-        final isFailure = response.data is Map &&
-            (response.data as Map)['success'] == false;
+        final isFailure =
+            response.data is Map && (response.data as Map)['success'] == false;
         if (isFailure) {
           await OfflineSyncStore.instance.failed(
-              id, 'Backend returned success=false');
+            id,
+            'Backend returned success=false',
+          );
         } else {
           await OfflineSyncStore.instance.completed(id);
         }
@@ -135,7 +141,8 @@ class OfflineSyncInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    final id = err.requestOptions.extra[OfflineSyncOptions.internalId] as String?;
+    final id =
+        err.requestOptions.extra[OfflineSyncOptions.internalId] as String?;
     if (id == null) return handler.next(err);
 
     final code = err.response?.statusCode;
@@ -150,20 +157,30 @@ class OfflineSyncInterceptor extends Interceptor {
     try {
       if (recoverable) {
         await OfflineSyncStore.instance.releaseForRetry(
-            id, '${err.type}: ${err.message}');
+          id,
+          '${err.type}: ${err.message}',
+        );
         // The previous one-off could have run while the original request
         // still owned the lease. Arm recovery again after releasing it.
-        try { await OfflineSyncScheduler.schedule(); } catch (_) {}
-        try { await OfflineSyncNotifications.instance.waiting(); } catch (_) {}
+        try {
+          await OfflineSyncScheduler.schedule();
+        } catch (_) {}
+        try {
+          await OfflineSyncNotifications.instance.waiting();
+        } catch (_) {}
         // Retry is already scheduled in onRequest. Keep existing Cubit
         // error behavior unless caller explicitly handles queued state.
-        return handler.next(err.copyWith(
-          error: OfflineQueuedException(id),
-          message: 'العملية محفوظة محليًا وسيتم إرسالها تلقائيًا',
-        ));
+        return handler.next(
+          err.copyWith(
+            error: OfflineQueuedException(id),
+            message: 'offline_operation_queued',
+          ),
+        );
       }
-      await OfflineSyncStore.instance.failed(id,
-          'HTTP ${code ?? 'unexpected error'}');
+      await OfflineSyncStore.instance.failed(
+        id,
+        'HTTP ${code ?? 'unexpected error'}',
+      );
     } catch (_) {
       // Preserve original HTTP error if local DB/notification fails.
     }

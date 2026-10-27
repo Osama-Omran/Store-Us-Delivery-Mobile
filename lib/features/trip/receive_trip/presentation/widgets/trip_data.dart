@@ -29,8 +29,10 @@ class TripData extends StatelessWidget {
 
     return switch (status) {
       'SHIPPED' => context.strings.trip_status_shipped,
+      'COMPLETED' => context.strings.home_history_completed,
+      'CANCELLED' || 'CANCELED' => context.strings.reports_status_cancelled,
       '' => context.strings.trip_tab_unknown_status,
-      _ => trip.status,
+      _ => context.strings.trip_tab_unknown_status,
     };
   }
 
@@ -43,7 +45,7 @@ class TripData extends StatelessWidget {
       'ACCEPTED' => context.strings.trip_tab_accepted,
       'OVERRIDDEN' => context.strings.trip_acceptance_admin_override,
       null || '' => context.strings.trip_tab_unknown_status,
-      final value => value,
+      _ => context.strings.trip_tab_unknown_status,
     };
   }
 

@@ -37,7 +37,7 @@ class HomeMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle15.copyWith(
               color: AppColors.grey4,

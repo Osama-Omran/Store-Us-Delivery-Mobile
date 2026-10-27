@@ -142,11 +142,18 @@ class EmptyTrips extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.route_outlined, color: AppColors.grey4, size: 18),
+                      Icon(
+                        Icons.route_outlined,
+                        color: AppColors.grey4,
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'رحلة $tripNumber • $warehouseName',
+                          context.strings.trip_warehouse_summary(
+                            tripNumber,
+                            warehouseName,
+                          ),
                           style: Styles.textStyle14.copyWith(
                             color: AppColors.grey4,
                             height: 1.45,

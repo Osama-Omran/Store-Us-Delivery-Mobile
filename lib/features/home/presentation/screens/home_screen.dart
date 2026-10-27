@@ -43,8 +43,9 @@ class _HomeScreenBody extends StatelessWidget {
     return switch (status) {
       'ACCEPTED' => context.strings.currently_on_trip,
       'PENDING' => context.strings.trip_acceptance_pending,
+      'OVERRIDDEN' => context.strings.trip_acceptance_admin_override,
       null || '' => null,
-      final value => value,
+      _ => context.strings.trip_tab_unknown_status,
     };
   }
 

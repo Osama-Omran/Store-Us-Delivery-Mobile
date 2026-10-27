@@ -53,7 +53,7 @@ class TripStatusPlaceholder extends StatelessWidget {
               ),
               const SizedBox(height: 21),
               Text(
-                title,
+                context.localizedErrorMessage(title),
                 textAlign: TextAlign.center,
                 style: Styles.textStyle20.copyWith(
                   color: AppColors.black1,

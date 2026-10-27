@@ -37,8 +37,8 @@ class TreasuryWalletLive extends StatelessWidget {
         message: state.walletError == null
             ? context.strings.treasury_wallet_no_data
             : state.walletError!.trim().isEmpty
-                ? context.strings.treasury_wallet_load_failed
-                : state.walletError!,
+            ? context.strings.treasury_wallet_load_failed
+            : state.walletError!,
         onRetry: onRefresh,
       );
     }
@@ -50,7 +50,7 @@ class TreasuryWalletLive extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                '${context.strings.treasury_current_trip} ${wallet.trip}',
+                context.strings.treasury_trip_title(wallet.trip),
                 style: Styles.textStyle16.copyWith(color: AppColors.black1),
               ),
             ),
@@ -178,7 +178,11 @@ class _WalletStatistics extends StatelessWidget {
 }
 
 class _WalletMetric extends StatelessWidget {
-  const _WalletMetric({required this.title, required this.value, required this.color});
+  const _WalletMetric({
+    required this.title,
+    required this.value,
+    required this.color,
+  });
   final String title;
   final String value;
   final Color color;
@@ -199,7 +203,10 @@ class _WalletMetric extends StatelessWidget {
           const SizedBox(height: 8),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(value, style: Styles.textStyle18.copyWith(color: color)),
+            child: Text(
+              value,
+              style: Styles.textStyle18.copyWith(color: color),
+            ),
           ),
         ],
       ),
@@ -219,10 +226,10 @@ class _SettlementStatus extends StatelessWidget {
     final label = settled
         ? context.strings.treasury_settled
         : pending
-            ? context.strings.treasury_pending_settlement
-            : status == 'PARTIAL' || status == 'PARTIALLY_SETTLED'
-                ? context.strings.treasury_wallet_partially_settled
-                : context.strings.treasury_wallet_status_unknown;
+        ? context.strings.treasury_pending_settlement
+        : status == 'PARTIAL' || status == 'PARTIALLY_SETTLED'
+        ? context.strings.treasury_wallet_partially_settled
+        : context.strings.treasury_wallet_status_unknown;
     final color = settled ? AppColors.green0 : AppColors.orange0;
     return TreasuryCard(
       color: settled ? AppColors.green1 : AppColors.orange1,
@@ -234,7 +241,12 @@ class _SettlementStatus extends StatelessWidget {
             color: color,
           ),
           const SizedBox(width: 10),
-          Expanded(child: Text(label, style: Styles.textStyle16.copyWith(color: color))),
+          Expanded(
+            child: Text(
+              label,
+              style: Styles.textStyle16.copyWith(color: color),
+            ),
+          ),
         ],
       ),
     );
@@ -251,13 +263,16 @@ class _WalletTransactionCard extends StatelessWidget {
     final paymentLabel = switch (paymentMethod) {
       'cash' => context.strings.treasury_cash,
       'instapay' || 'insta_pay' => context.strings.treasury_insta_pay,
-      'wallet' || 'electronic_wallet' => context.strings.treasury_electronic_wallet,
-      _ => transaction.paymentMethod,
+      'wallet' ||
+      'electronic_wallet' => context.strings.treasury_electronic_wallet,
+      _ => context.strings.payment_method_unknown,
     };
     final time = transaction.collectedAt == null
         ? ''
-        : DateFormat('dd/MM/yyyy  hh:mm a', context.language)
-            .format(transaction.collectedAt!.toLocal());
+        : DateFormat(
+            'dd/MM/yyyy  hh:mm a',
+            context.language,
+          ).format(transaction.collectedAt!.toLocal());
 
     return TreasuryCard(
       child: Column(
@@ -279,7 +294,10 @@ class _WalletTransactionCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            [transaction.salesOrder, time].where((it) => it.isNotEmpty).join('  •  '),
+            [
+              transaction.salesOrder,
+              time,
+            ].where((it) => it.isNotEmpty).join('  •  '),
             style: Styles.textStyle12.copyWith(color: AppColors.grey4),
           ),
           const SizedBox(height: 14),
@@ -313,7 +331,10 @@ class _WalletTransactionCard extends StatelessWidget {
               Icon(Icons.payments_outlined, color: AppColors.primary, size: 18),
               const SizedBox(width: 7),
               Expanded(
-                child: Text(paymentLabel, style: Styles.textStyle14.copyWith(color: AppColors.primary)),
+                child: Text(
+                  paymentLabel,
+                  style: Styles.textStyle14.copyWith(color: AppColors.primary),
+                ),
               ),
             ],
           ),
@@ -321,7 +342,9 @@ class _WalletTransactionCard extends StatelessWidget {
               transaction.paymentEntryId!.trim().isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              '${context.strings.treasury_wallet_payment_entry}: ${transaction.paymentEntryId}',
+              context.strings.treasury_payment_entry_label(
+                transaction.paymentEntryId!,
+              ),
               style: Styles.textStyle12.copyWith(color: AppColors.grey4),
             ),
           ],
@@ -369,7 +392,7 @@ class _WalletMessage extends StatelessWidget {
           Icon(Icons.wifi_off_rounded, size: 40, color: AppColors.grey4),
           const SizedBox(height: 14),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle14.copyWith(color: AppColors.black1),
           ),

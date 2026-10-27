@@ -228,7 +228,7 @@ class _OrdersMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle14.copyWith(
               color: AppColors.grey4,

@@ -26,7 +26,9 @@ class OrderCustomerCard extends StatelessWidget {
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(
+        SnackBar(content: Text(context.localizedErrorMessage(message))),
+      );
   }
 
   Future<void> _openPhone(BuildContext context) async {

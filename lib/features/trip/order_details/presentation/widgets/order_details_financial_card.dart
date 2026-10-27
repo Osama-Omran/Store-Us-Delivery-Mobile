@@ -29,13 +29,17 @@ class OrderDetailsFinancialCard extends StatelessWidget {
             ),
           ),
 
-          Text(
-            order.originalTotal == null
-                ? '—'
-                : formatTripAmount(context, order.originalTotal!),
-            style: Styles.textStyle24.copyWith(
-              color: AppColors.black1,
-              fontWeight: FontWeight.w800,
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              order.originalTotal == null
+                  ? '—'
+                  : formatTripAmount(context, order.originalTotal!),
+              textAlign: TextAlign.end,
+              style: Styles.textStyle24.copyWith(
+                color: AppColors.black1,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
         ],

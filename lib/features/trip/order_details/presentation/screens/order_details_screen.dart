@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
@@ -30,22 +32,46 @@ class OrderDetailsScreen extends StatelessWidget {
   final int tripId;
   final int orderId;
 
+  void _goBack(BuildContext context) {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      router.pop();
+    } else {
+      router.goNamed(RoutesNames.layout);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          getIt<OrderDetailsCubit>()
-            ..getOrderDetails(tripId: tripId, orderId: orderId),
-      child: _OrderDetailsBody(tripId: tripId, orderId: orderId),
+    return PopScope<Object?>(
+      canPop: GoRouter.of(context).canPop(),
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _goBack(context);
+      },
+      child: BlocProvider(
+        create: (_) =>
+            getIt<OrderDetailsCubit>()
+              ..getOrderDetails(tripId: tripId, orderId: orderId),
+        child: _OrderDetailsBody(
+          tripId: tripId,
+          orderId: orderId,
+          onBack: () => _goBack(context),
+        ),
+      ),
     );
   }
 }
 
 class _OrderDetailsBody extends StatelessWidget {
-  const _OrderDetailsBody({required this.tripId, required this.orderId});
+  const _OrderDetailsBody({
+    required this.tripId,
+    required this.orderId,
+    required this.onBack,
+  });
 
   final int tripId;
   final int orderId;
+  final VoidCallback onBack;
 
   Future<void> _reload(BuildContext context) {
     return context.read<OrderDetailsCubit>().getOrderDetails(
@@ -77,7 +103,7 @@ class _OrderDetailsBody extends StatelessWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(message),
+            content: Text(context.localizedErrorMessage(message)),
             action: SnackBarAction(
               label: context.strings.order_collection_refresh,
               onPressed: () {
@@ -110,9 +136,7 @@ class _OrderDetailsBody extends StatelessWidget {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          SnackBar(
-            content: Text(context.strings.order_collection_sent),
-          ),
+          SnackBar(content: Text(context.strings.order_collection_sent)),
         );
     }
     await _reload(context);
@@ -143,8 +167,8 @@ class _OrderDetailsBody extends StatelessWidget {
         // Only payment_status decides if the collection button is visible.
         // Backend retry flags are checked on tap and again in the Cubit.
         final showCollectionAction =
-            success != null &&
             collection != null &&
+            collection.canRetryCollection &&
             OrderCollectionPolicy.showCollectButton(collection.paymentStatus);
 
         final isDelivered = const {
@@ -162,7 +186,7 @@ class _OrderDetailsBody extends StatelessWidget {
             child: Column(
               children: [
                 // ======= Header ======= //
-                OrderDetailsHeader(subtitle: order?.salesOrder),
+                OrderDetailsHeader(subtitle: order?.salesOrder, onBack: onBack),
 
                 Expanded(
                   child: switch (state) {
@@ -184,7 +208,9 @@ class _OrderDetailsBody extends StatelessWidget {
 
                             Text(
                               state.errorMessage?.isNotEmpty == true
-                                  ? state.errorMessage!
+                                  ? context.localizedErrorMessage(
+                                      state.errorMessage,
+                                    )
                                   : context.strings.order_details_load_failed,
                               textAlign: TextAlign.center,
                             ),
@@ -317,31 +343,28 @@ class _OrderDetailsBody extends StatelessWidget {
           bottomNavigationBar: success == null
               ? null
               : isPending && showCollectionAction
-                  // Keep all original delivery actions and show collection too.
-                  // Remove inner bottom padding to avoid duplicated safe areas.
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MediaQuery.removePadding(
-                          context: context,
-                          removeBottom: true,
-                          child: OrderActionBar(
-                            tripId: tripId,
-                            orderId: orderId,
-                          ),
-                        ),
-                        OrderCollectionActionBar(
-                          onPressed: () => _openRetryCollection(context, success),
-                        ),
-                      ],
-                    )
-                  : isPending
-                      ? OrderActionBar(tripId: tripId, orderId: orderId)
-                      : showCollectionAction
-                          ? OrderCollectionActionBar(
-                              onPressed: () => _openRetryCollection(context, success),
-                            )
-                          : null,
+              // Keep all original delivery actions and show collection too.
+              // Remove inner bottom padding to avoid duplicated safe areas.
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MediaQuery.removePadding(
+                      context: context,
+                      removeBottom: true,
+                      child: OrderActionBar(tripId: tripId, orderId: orderId),
+                    ),
+                    OrderCollectionActionBar(
+                      onPressed: () => _openRetryCollection(context, success),
+                    ),
+                  ],
+                )
+              : isPending
+              ? OrderActionBar(tripId: tripId, orderId: orderId)
+              : showCollectionAction
+              ? OrderCollectionActionBar(
+                  onPressed: () => _openRetryCollection(context, success),
+                )
+              : null,
         );
       },
     );

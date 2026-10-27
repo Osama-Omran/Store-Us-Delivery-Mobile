@@ -2094,6 +2094,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'ربط الطلبات قائم على الاسم والعنوان بسبب عدم توفر معرّف العميل ورقم هاتفه. يُرجى مراجعة الطلبات قبل أي إجراء.';
 
   @override
+  String get order_collection_not_started => 'لم يبدأ التحصيل';
+
+  @override
   String get order_collection_button => 'تحصيل';
 
   @override
@@ -2110,4 +2113,698 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get order_collection_sent =>
       'تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.';
+
+  @override
+  String get order_collection_incomplete => 'لم يكتمل التحصيل';
+
+  @override
+  String get order_collection_failed => 'فشل التحصيل';
+
+  @override
+  String get order_collection_completed => 'تم التحصيل بالكامل';
+
+  @override
+  String get order_collection_status_title => 'حالة تحصيل الطلب';
+
+  @override
+  String get order_collection_resume_hint =>
+      'يمكن إكمال التحصيل من الزر أسفل الشاشة دون إعادة تسليم الطلب.';
+
+  @override
+  String get order_collection_unavailable_hint =>
+      'إكمال التحصيل غير متاح حاليًا. اسحب لتحديث حالة الطلب أو تواصل مع الإدارة.';
+
+  @override
+  String get order_collection_status_unknown => 'حالة التحصيل غير متاحة';
+
+  @override
+  String get top_rank_no_metrics => 'لا توجد مؤشرات أداء متاحة';
+
+  @override
+  String get top_rank_no_movement => 'بدون تغيير';
+
+  @override
+  String get top_rank_current_rank => 'الترتيب الحالي';
+
+  @override
+  String get top_rank_score => 'التقييم';
+
+  @override
+  String get top_rank_points_breakdown => 'تفصيل النقاط';
+
+  @override
+  String get top_rank_total => 'الإجمالي';
+
+  @override
+  String get top_rank_strengths_title => 'كيف حقق هذا الترتيب؟';
+
+  @override
+  String get top_rank_improve_title => 'كيف تحسن ترتيبك؟';
+
+  @override
+  String get top_rank_compare_leader => 'المقارنة مع الأول';
+
+  @override
+  String get top_rank_your_score => 'درجتك';
+
+  @override
+  String get top_rank_leader_score => 'درجة الأول';
+
+  @override
+  String get top_rank_difference => 'الفرق';
+
+  @override
+  String top_rank_metric_target(String current, String target) {
+    return 'الحالي: $current   |   الهدف: $target';
+  }
+
+  @override
+  String top_rank_impact_points(String points) {
+    return '+$points نقطة';
+  }
+
+  @override
+  String top_rank_winner_label(String label) {
+    return 'الفائز — $label';
+  }
+
+  @override
+  String top_rank_page_summary(int page, int lastPage) {
+    return 'تم عرض الصفحة $page من $lastPage';
+  }
+
+  @override
+  String get top_rank_dispatchers_label => 'مسؤولو توزيع الطلبات';
+
+  @override
+  String get order_country_hint => 'مصر';
+
+  @override
+  String get order_phone_hint => '01XXXXXXXXX';
+
+  @override
+  String get reschedule_date_hint => 'يوم/شهر/سنة';
+
+  @override
+  String trip_warehouse_summary(String tripNumber, String warehouse) {
+    return 'رحلة $tripNumber • $warehouse';
+  }
+
+  @override
+  String get offline_saved_data => 'غير متصل — تعرض بيانات محفوظة';
+
+  @override
+  String offline_saved_data_since(String savedAt) {
+    return 'غير متصل — تعرض بيانات محفوظة من $savedAt';
+  }
+
+  @override
+  String get offline_data_unavailable =>
+      'لا يوجد اتصال بالإنترنت — قد لا تتوفر بعض البيانات';
+
+  @override
+  String get order_collection_in_progress => 'عملية تحصيل قيد التنفيذ بالفعل';
+
+  @override
+  String get order_collection_invalid_details =>
+      'راجع مبلغ التحصيل وبيانات العملية';
+
+  @override
+  String get order_collection_not_available =>
+      'العملية غير متاحة للتحصيل حاليًا. حدّث حالة الطلب.';
+
+  @override
+  String get order_collection_not_confirmed =>
+      'السيرفر لم يؤكد نجاح التحصيل. حدّث حالة الطلب.';
+
+  @override
+  String get order_collection_refresh_first =>
+      'تعذر تأكيد التحصيل. حدّث حالة الطلب أولًا.';
+
+  @override
+  String get order_collection_refresh_before_retry =>
+      'تعذر تأكيد التحصيل. حدّث حالة الطلب قبل إعادة المحاولة.';
+
+  @override
+  String get order_collection_connection_uncertain =>
+      'تعذر تأكيد نتيجة التحصيل بسبب الاتصال. حدّث حالة الطلب قبل المحاولة مرة أخرى.';
+
+  @override
+  String get top_rank_category_empty => 'لا توجد بيانات لهذه الفئة';
+
+  @override
+  String get top_rank_load_failed => 'تعذر تحميل الترتيب';
+
+  @override
+  String get top_rank_details_load_failed => 'تعذر تحديث التفاصيل';
+
+  @override
+  String get reports_load_failed => 'تعذر تحميل التقارير';
+
+  @override
+  String get offline_operation_queued =>
+      'تم حفظ العملية على الجهاز، وسيتم إرسالها تلقائيًا عند عودة الإنترنت';
+
+  @override
+  String get offline_operation_save_failed =>
+      'تعذر حفظ العملية محليًا، لم يتم إرسال الطلب';
+
+  @override
+  String get offline_operation_title => 'عملية قيد المزامنة';
+
+  @override
+  String get reschedule_reason_customer_requested => 'العميل طلب تغيير الموعد';
+
+  @override
+  String get reschedule_reason_customer_absent => 'العميل غير متواجد';
+
+  @override
+  String get reschedule_reason_customer_unreachable => 'تعذر الوصول للعميل';
+
+  @override
+  String get reschedule_reason_address_issue => 'مشكلة في العنوان';
+
+  @override
+  String get reschedule_reason_vehicle_issue => 'مشكلة في السيارة';
+
+  @override
+  String get payment_method_unknown => 'طريقة الدفع غير متاحة';
+
+  @override
+  String get account_role_unknown => 'الدور الوظيفي غير متاح';
+
+  @override
+  String get api_bad_request =>
+      'تعذر تنفيذ الطلب. راجع البيانات وحاول مرة أخرى.';
+
+  @override
+  String get api_no_content => 'لا توجد بيانات متاحة';
+
+  @override
+  String get api_forbidden => 'ليس لديك صلاحية لتنفيذ هذه العملية';
+
+  @override
+  String get api_unauthorized =>
+      'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get api_not_found => 'البيانات المطلوبة غير موجودة';
+
+  @override
+  String get api_cache_error => 'تعذر قراءة البيانات المحفوظة';
+
+  @override
+  String get offline_notifications_waiting => 'عمليات محفوظة';
+
+  @override
+  String get offline_notifications_waiting_body =>
+      'سيتم إرسال العمليات بمجرد توفر اتصال بالإنترنت';
+
+  @override
+  String get offline_notifications_channel => 'مزامنة عمليات ستوراس';
+
+  @override
+  String get offline_notifications_channel_description =>
+      'حالة إرسال العمليات المحفوظة';
+
+  @override
+  String get offline_notifications_sending => 'جاري مزامنة العمليات';
+
+  @override
+  String get offline_notifications_finished => 'اكتملت المزامنة';
+
+  @override
+  String get offline_notifications_results_channel => 'نتائج مزامنة ستوراس';
+
+  @override
+  String get offline_notifications_results_description =>
+      'نتائج إرسال العمليات المحفوظة';
+
+  @override
+  String get offline_notifications_review => 'تحتاج عملية للمراجعة';
+
+  @override
+  String offline_notifications_sending_body(String title) {
+    return 'جاري إرسال: $title';
+  }
+
+  @override
+  String offline_notifications_finished_body(String title) {
+    return 'تم تنفيذ: $title';
+  }
+
+  @override
+  String offline_notifications_error_body(String title) {
+    return 'تعذر إكمال $title. راجع التطبيق.';
+  }
+
+  @override
+  String offline_notifications_toast(String title) {
+    return 'اكتملت المزامنة: $title';
+  }
+
+  @override
+  String amount_egp(String amount) {
+    return '$amount ج.م';
+  }
+
+  @override
+  String account_named_wallet(String name) {
+    return 'محفظة $name';
+  }
+
+  @override
+  String home_van_label(String van) {
+    return 'الشاحنة: $van';
+  }
+
+  @override
+  String home_driver_label(String driver) {
+    return 'السائق: $driver';
+  }
+
+  @override
+  String trip_number_title(String number) {
+    return 'رحلة $number';
+  }
+
+  @override
+  String trip_completed_at_time(String time) {
+    return 'اكتملت $time';
+  }
+
+  @override
+  String orders_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count طلب',
+      many: '$count طلبًا',
+      few: '$count طلبات',
+      two: 'طلبان',
+      one: 'طلب واحد',
+      zero: 'لا توجد طلبات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get orders_count_unavailable => 'عدد الطلبات غير متاح';
+
+  @override
+  String trip_customers_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عميل في الرحلة',
+      many: '$count عميلًا في الرحلة',
+      few: '$count عملاء في الرحلة',
+      two: 'عميلان في الرحلة',
+      one: 'عميل واحد في الرحلة',
+      zero: 'لا يوجد عملاء في الرحلة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String trip_customers_summary(String customers, String tripNumber) {
+    return '$customers · $tripNumber';
+  }
+
+  @override
+  String notifications_unread_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count إشعار غير مقروء',
+      many: '$count إشعارًا غير مقروء',
+      few: '$count إشعارات غير مقروءة',
+      two: 'إشعاران غير مقروءين',
+      one: 'إشعار واحد غير مقروء',
+      zero: 'لا توجد إشعارات غير مقروءة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notification_minutes_ago_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count دقيقة',
+      many: 'منذ $count دقيقة',
+      few: 'منذ $count دقائق',
+      two: 'منذ دقيقتين',
+      one: 'منذ دقيقة',
+      zero: 'الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notification_hours_ago_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count ساعة',
+      many: 'منذ $count ساعة',
+      few: 'منذ $count ساعات',
+      two: 'منذ ساعتين',
+      one: 'منذ ساعة',
+      zero: 'الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String trip_handled_orders_summary(int handled, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: '$handled من $total طلب تم التعامل معها',
+      many: '$handled من $total طلبًا تم التعامل معها',
+      few: '$handled من $total طلبات تم التعامل معها',
+      two: '$handled من طلبين تم التعامل معهما',
+      one: '$handled من طلب واحد تم التعامل معه',
+      zero: 'لا توجد طلبات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String trip_map_number_title(String number) {
+    return 'خريطة رحلة $number';
+  }
+
+  @override
+  String trip_stop_summary(String label, int stopNumber, int totalStops) {
+    return '$label · $stopNumber من $totalStops';
+  }
+
+  @override
+  String distance_meters(int distance) {
+    return '$distance متر';
+  }
+
+  @override
+  String distance_kilometers(String distance) {
+    return '$distance كم';
+  }
+
+  @override
+  String trip_map_arrival_minutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'الوصول خلال $count دقيقة',
+      many: 'الوصول خلال $count دقيقة',
+      few: 'الوصول خلال $count دقائق',
+      two: 'الوصول خلال دقيقتين',
+      one: 'الوصول خلال دقيقة',
+      zero: 'الوصول الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String location_accuracy_meters(String accuracy) {
+    return '±$accuracy متر';
+  }
+
+  @override
+  String location_accuracy_description(String accuracy) {
+    return 'دقة الموقع ±$accuracy متر';
+  }
+
+  @override
+  String delivery_item_code_unit(String code, String unit) {
+    return 'كود الصنف: $code • الوحدة: $unit';
+  }
+
+  @override
+  String product_code_unit(String code, String unit) {
+    return '$code • الوحدة: $unit';
+  }
+
+  @override
+  String treasury_product_code_unit(String code, String unit) {
+    return '$code · الوحدة: $unit';
+  }
+
+  @override
+  String treasury_trip_title(String trip) {
+    return 'الرحلة الحالية $trip';
+  }
+
+  @override
+  String treasury_payment_entry_label(String entry) {
+    return 'قيد الدفع: $entry';
+  }
+
+  @override
+  String treasury_custody_amount(String amount) {
+    return 'العهدة الحالية: $amount';
+  }
+
+  @override
+  String cancel_delivery_order_description(String orderNumber, String reason) {
+    return 'سيتم تسجيل إلغاء التسليم للطلب $orderNumber\nالسبب: $reason';
+  }
+
+  @override
+  String confirm_receiving_trip_description(String tripNumber) {
+    return 'أنت تؤكد أنك راجعت واستلمت العربية والبضاعة الموضحة في الرحلة $tripNumber.';
+  }
+
+  @override
+  String order_number_label(String orderNumber) {
+    return 'الطلب: $orderNumber';
+  }
+
+  @override
+  String order_required_amount_label(String amount) {
+    return 'المبلغ المطلوب: $amount';
+  }
+
+  @override
+  String payment_method_label(String method) {
+    return 'طريقة الدفع: $method';
+  }
+
+  @override
+  String text_with_trailing_space(String text) {
+    return '$text ';
+  }
+
+  @override
+  String label_with_colon(String label) {
+    return '$label: ';
+  }
+
+  @override
+  String inline_secondary_label(String label) {
+    return ' · $label';
+  }
+
+  @override
+  String get optional_field_suffix => ' (اختياري)';
+
+  @override
+  String filter_count_label(String label, int count) {
+    return '$label ($count)';
+  }
+
+  @override
+  String get top_rank_metric_unknown => 'مؤشر أداء غير معروف';
+
+  @override
+  String get direct_sale_customer_retry_same_request_notice =>
+      'قد يكون السيرفر سجّل العميل بالفعل. إعادة المحاولة ستستخدم نفس البيانات ونفس معرّف العملية لتجنب التكرار. إذا استمر الخطأ، تحقق من العميل في النظام.';
+
+  @override
+  String get direct_sale_customer_retry_same_data =>
+      'لا يمكن تغيير بيانات العميل أثناء إعادة محاولة عملية نتيجتها غير مؤكدة. أعد البيانات الأصلية أو تحقق من وجود العميل أولًا.';
+
+  @override
+  String get delivery_receipt_optional => 'صورة إيصال الدفع (اختياري)';
+
+  @override
+  String get delivery_receipt_add => 'إضافة صورة إيصال';
+
+  @override
+  String get delivery_receipt_camera => 'التقاط صورة بالكاميرا';
+
+  @override
+  String get delivery_receipt_gallery => 'اختيار صورة من المعرض';
+
+  @override
+  String get delivery_receipt_replace => 'تغيير الصورة';
+
+  @override
+  String get delivery_receipt_remove => 'إزالة الصورة';
+
+  @override
+  String get delivery_receipt_preview_failed => 'تعذر عرض صورة الإيصال';
+
+  @override
+  String get delivery_receipt_select_failed =>
+      'تعذر اختيار صورة الإيصال. حاول مرة أخرى.';
+
+  @override
+  String get delivery_receipt_local_only =>
+      'صورة الإيصال للمعاينة داخل الشاشة فقط، ولن تُحفظ أو تُرفع للسيرفر حتى تتوفر واجهة API تدعم الإيصالات.';
+
+  @override
+  String get areas_title => 'المناطق والمسار';
+
+  @override
+  String get trip_map_estimates_unavailable =>
+      'المسافة ووقت الوصول غير متاحين حاليًا. يمكنك بدء الملاحة.';
+
+  @override
+  String get areas_distribution_order => 'الترتيب محدد من إدارة التوزيع';
+
+  @override
+  String get areas_refresh => 'تحديث المسار';
+
+  @override
+  String get areas_stops => 'محطة';
+
+  @override
+  String get areas_finished => 'تم الانتهاء منها';
+
+  @override
+  String get areas_list => 'قائمة';
+
+  @override
+  String get areas_map => 'خريطة';
+
+  @override
+  String get areas_next => 'التالية';
+
+  @override
+  String get areas_starting_point => 'نقطة البداية';
+
+  @override
+  String get areas_warehouse_unavailable => 'اسم المخزن غير متاح';
+
+  @override
+  String get areas_address_unavailable => 'العنوان غير متاح';
+
+  @override
+  String areas_stop_summary(String address, String status) {
+    return '$address · $status';
+  }
+
+  @override
+  String get areas_stop_location_unavailable =>
+      'موقع المحطة غير متاح على الخريطة';
+
+  @override
+  String get areas_no_stops => 'لا توجد محطات في الرحلة الحالية';
+
+  @override
+  String get areas_load_failed => 'تعذر تحميل مسار الرحلة. حاول مرة أخرى.';
+
+  @override
+  String get areas_open_google_maps => 'فتح المسار في Google Maps';
+
+  @override
+  String get areas_route_sections => 'اختر جزء المسار';
+
+  @override
+  String get areas_route_sections_description =>
+      'تم تقسيم المسار ليتوافق مع عدد المحطات المسموح به في خرائط Google. افتح الأجزاء بالترتيب للحفاظ على مسار التوزيع.';
+
+  @override
+  String get areas_route_origin_unavailable =>
+      'إحداثيات المخزن غير متاحة. ستستخدم خرائط Google موقعك كنقطة بداية.';
+
+  @override
+  String get areas_route_location_unavailable =>
+      'تعذر فتح المسار بالكامل: توجد محطة بدون موقع أو عنوان صالح لخرائط Google. يمكنك فتح المحطات الأخرى من الخريطة.';
+
+  @override
+  String areas_missing_coordinates(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'توجد $count محطة بدون إحداثيات. تظل ظاهرة في القائمة.',
+      many: 'توجد $count محطة بدون إحداثيات. تظل ظاهرة في القائمة.',
+      few: 'توجد $count محطات بدون إحداثيات. تظل ظاهرة في القائمة.',
+      two: 'توجد محطتان بدون إحداثيات. تظلان ظاهرتين في القائمة.',
+      one: 'توجد محطة بدون إحداثيات. تظل ظاهرة في القائمة.',
+      zero: 'كل المحطات متاحة على الخريطة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String areas_route_section(int number, int total) {
+    return 'الجزء $number من $total';
+  }
+
+  @override
+  String areas_route_section_stops(int first, int last) {
+    return 'من المحطة $first إلى المحطة $last';
+  }
+
+  @override
+  String get delivery_outcome_actions_title => 'إجراءات التسليم';
+
+  @override
+  String get delivery_cancel => 'إلغاء التسليم';
+
+  @override
+  String get delivery_reschedule => 'إعادة الجدولة';
+
+  @override
+  String get delivery_cancel_title => 'إلغاء تسليم الطلب';
+
+  @override
+  String get delivery_reschedule_title => 'إعادة جدولة التسليم';
+
+  @override
+  String get delivery_cancel_warning =>
+      'سيتم إلغاء تسليم هذا الطلب بعد التأكيد. يرجى إدخال سبب الإلغاء المعتمد.';
+
+  @override
+  String get delivery_reschedule_hint =>
+      'حدد الموعد الجديد للتسليم مع توضيح سبب التأجيل.';
+
+  @override
+  String get delivery_outcome_reason => 'السبب (إجباري)';
+
+  @override
+  String get delivery_outcome_reason_hint => 'اكتب السبب المعتمد';
+
+  @override
+  String get delivery_reschedule_choose_date =>
+      'اختيار تاريخ ووقت التسليم الجديد';
+
+  @override
+  String get delivery_outcome_invalid_reason => 'يرجى إدخال سبب صحيح.';
+
+  @override
+  String get delivery_outcome_invalid_date =>
+      'يرجى اختيار تاريخ ووقت في المستقبل.';
+
+  @override
+  String get delivery_outcome_failed =>
+      'تعذر تحديث حالة التسليم. حاول مرة أخرى.';
+
+  @override
+  String get delivery_cancel_confirm => 'تأكيد إلغاء التسليم';
+
+  @override
+  String get delivery_reschedule_confirm => 'تأكيد إعادة الجدولة';
+
+  @override
+  String get delivery_cancel_success => 'تم إلغاء تسليم الطلب بنجاح';
+
+  @override
+  String get delivery_reschedule_success => 'تمت إعادة جدولة تسليم الطلب بنجاح';
+
+  @override
+  String get delivery_outcome_back => 'العودة إلى الطلبات';
 }

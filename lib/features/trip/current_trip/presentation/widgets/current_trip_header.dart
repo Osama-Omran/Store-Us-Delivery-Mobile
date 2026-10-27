@@ -102,8 +102,9 @@ class CurrentTripHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '${context.strings.trip_label} '
-                  '\u2066#$displayTripNumber\u2069',
+                  context.strings.trip_number_title(
+                    '\u2066#$displayTripNumber\u2069',
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Styles.textStyle12.copyWith(color: AppColors.grey4),
@@ -115,16 +116,19 @@ class CurrentTripHeader extends StatelessWidget {
           Material(
             color: AppColors.blue4,
             borderRadius: BorderRadius.circular(15),
-            child: InkWell(
-              onTap: () => _openTripMap(context),
-              borderRadius: BorderRadius.circular(15),
-              child: SizedBox(
-                width: 48,
-                height: 48,
-                child: Icon(
-                  Icons.location_on_outlined,
-                  color: AppColors.primary,
-                  size: 25,
+            child: Tooltip(
+              message: context.strings.open_location,
+              child: InkWell(
+                onTap: () => _openTripMap(context),
+                borderRadius: BorderRadius.circular(15),
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Icon(
+                    Icons.location_on_outlined,
+                    color: AppColors.primary,
+                    size: 25,
+                  ),
                 ),
               ),
             ),

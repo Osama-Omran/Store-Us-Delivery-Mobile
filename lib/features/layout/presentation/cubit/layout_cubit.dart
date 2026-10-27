@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storeus_delivery/features/drawer_features/areas/presentation/screens/areas_screen.dart';
 import 'package:storeus_delivery/features/drawer_features/customers/presentation/screens/trip_customers_screen.dart';
 import 'package:storeus_delivery/features/home/presentation/screens/home_screen.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_state.dart';
@@ -18,6 +19,7 @@ enum LayoutDrawerFeature {
   reports,
   contactUs,
   customers,
+  areas,
 }
 
 class LayoutCubit extends Cubit<LayoutState> {
@@ -46,6 +48,7 @@ class LayoutCubit extends Cubit<LayoutState> {
       drawerFeature == LayoutDrawerFeature.stockTransfer;
   bool get isReports => drawerFeature == LayoutDrawerFeature.reports;
   bool get isCustomers => drawerFeature == LayoutDrawerFeature.customers;
+  bool get isAreas => drawerFeature == LayoutDrawerFeature.areas;
 
   void selectTap(int index) {
     if (index < 0 || index >= screens.length) return;
@@ -75,6 +78,10 @@ class LayoutCubit extends Cubit<LayoutState> {
 
   void openCustomerScreen() {
     _openDrawerFeature(LayoutDrawerFeature.customers);
+  }
+
+  void openAreas() {
+    _openDrawerFeature(LayoutDrawerFeature.areas);
   }
 
   void closeTopRank() {
@@ -109,6 +116,7 @@ class LayoutCubit extends Cubit<LayoutState> {
       LayoutDrawerFeature.customers => TripCustomersScreen(
         onBack: closeDrawerFeature,
       ),
+      LayoutDrawerFeature.areas => AreasScreen(onBack: closeDrawerFeature),
     };
     emit(LayoutInitial());
   }

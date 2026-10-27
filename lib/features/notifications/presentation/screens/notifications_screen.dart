@@ -226,7 +226,7 @@ class _NotificationsErrorView extends StatelessWidget {
               ),
               const SizedBox(height: 19),
               Text(
-                message,
+                context.localizedErrorMessage(message),
                 textAlign: TextAlign.center,
                 style: Styles.textStyle15.copyWith(
                   height: 1.6,

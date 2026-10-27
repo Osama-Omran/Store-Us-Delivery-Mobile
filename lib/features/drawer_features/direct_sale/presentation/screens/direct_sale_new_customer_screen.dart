@@ -21,10 +21,10 @@ class DirectSaleNewCustomerScreen extends StatelessWidget {
     footer: DirectSaleFooter(
       label: state.creatingCustomer
           ? context.strings.direct_sale_customer_saving
-          : context.strings.direct_sale_save_customer,
-      onPressed: state.creatingCustomer || state.customerVerificationRequired
-          ? null
-          : cubit.createCustomer,
+          : state.customerCreateError != null
+              ? context.strings.current_trip_retry
+              : context.strings.direct_sale_save_customer,
+      onPressed: state.creatingCustomer ? null : cubit.createCustomer,
       secondaryLabel: context.strings.account_cancel,
       onSecondaryPressed: state.creatingCustomer ? null : cubit.goBack,
     ),
@@ -50,11 +50,10 @@ class DirectSaleNewCustomerScreen extends StatelessWidget {
             message: _customerError(context, state),
           ),
         ],
-        if (state.customerVerificationRequired) ...[
+        if (state.retryOriginalCustomerRequest) ...[
           const SizedBox(height: 8),
           DirectSaleNotice(
-            error: true,
-            message: context.strings.direct_sale_customer_verify_before_retry,
+            message: context.strings.direct_sale_customer_retry_same_request_notice,
           ),
         ],
       ],
@@ -68,6 +67,7 @@ class DirectSaleNewCustomerScreen extends StatelessWidget {
       'direct_sale_customer_create_failed' => context.strings.direct_sale_customer_create_failed,
       'direct_sale_customer_missing_id' => context.strings.direct_sale_customer_missing_id,
       'direct_sale_customer_verify_before_retry' => context.strings.direct_sale_customer_verify_before_retry,
+      'direct_sale_customer_retry_same_data' => context.strings.direct_sale_customer_retry_same_data,
       final message => message ?? context.strings.direct_sale_customer_create_failed,
     };
   }

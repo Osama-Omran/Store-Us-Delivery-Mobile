@@ -100,9 +100,7 @@ class _CustomerField extends StatelessWidget {
           style: Styles.textStyle16.copyWith(color: AppColors.black1),
           children: [
             TextSpan(
-              text: required
-                  ? ' *'
-                  : ' ${context.strings.direct_sale_optional}',
+              text: required ? ' *' : context.strings.optional_field_suffix,
               style: Styles.textStyle14.copyWith(
                 color: required ? AppColors.red1 : AppColors.grey4,
               ),

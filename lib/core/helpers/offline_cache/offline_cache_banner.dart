@@ -1,3 +1,4 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_connectivity.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -42,8 +43,12 @@ class OfflineCacheBanner extends StatelessWidget {
               Expanded(
                 child: Text(
                   state.showingSavedData
-                      ? 'غير متصل — تعرض بيانات محفوظة${savedLabel == null ? '' : ' من $savedLabel'}'
-                      : 'لا يوجد اتصال بالإنترنت — قد لا تتوفر بعض البيانات',
+                      ? (savedLabel == null
+                            ? context.strings.offline_saved_data
+                            : context.strings.offline_saved_data_since(
+                                savedLabel,
+                              ))
+                      : context.strings.offline_data_unavailable,
                   textDirection: TextDirection.rtl,
                   style: Styles.textStyle12.copyWith(
                     color: AppColors.offlineBannerText,

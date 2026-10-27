@@ -27,14 +27,14 @@ class AppMenuDrawerItem extends StatelessWidget {
     final titleColor = isLogout
         ? AppColors.red0
         : isSelected
-            ? AppColors.primary
-            : AppColors.black1;
+        ? AppColors.primary
+        : AppColors.black1;
 
     final iconColor = isLogout
         ? AppColors.red0
         : isSelected
-            ? AppColors.primary
-            : AppColors.grey4;
+        ? AppColors.primary
+        : AppColors.grey4;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -43,15 +43,18 @@ class AppMenuDrawerItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
           child: Material(
             color: isSelected ? AppColors.blue4 : AppColors.white0,
-            borderRadius: BorderRadius.circular(17),
+            borderRadius: BorderRadius.circular(20),
             child: InkWell(
               onTap: onTap,
-              borderRadius: BorderRadius.circular(17),
+              borderRadius: BorderRadius.circular(20),
               child: Container(
-                height: 64,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                constraints: const BoxConstraints(minHeight: 64),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(17),
+                  borderRadius: BorderRadius.circular(20),
                   border: isSelected
                       ? Border.all(
                           color: AppColors.primary.withValues(alpha: 0.10),
@@ -69,8 +72,8 @@ class AppMenuDrawerItem extends StatelessWidget {
                         color: isLogout
                             ? AppColors.red0.withValues(alpha: 0.07)
                             : isSelected
-                                ? AppColors.primary.withValues(alpha: 0.10)
-                                : AppColors.grey3.withValues(alpha: 0.30),
+                            ? AppColors.primary.withValues(alpha: 0.10)
+                            : AppColors.grey3.withValues(alpha: 0.30),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(icon, size: 23, color: iconColor),
@@ -79,7 +82,7 @@ class AppMenuDrawerItem extends StatelessWidget {
                     Expanded(
                       child: Text(
                         title,
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.start,
                         style: Styles.textStyle18.copyWith(
@@ -122,11 +125,7 @@ class AppMenuDrawerItem extends StatelessWidget {
         if (showDivider)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Divider(
-              height: 1,
-              thickness: 1,
-              color: AppColors.grey3,
-            ),
+            child: Divider(height: 1, thickness: 1, color: AppColors.grey3),
           ),
       ],
     );

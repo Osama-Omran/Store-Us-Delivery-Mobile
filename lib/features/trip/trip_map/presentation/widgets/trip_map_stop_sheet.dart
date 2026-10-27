@@ -20,6 +20,8 @@ class TripMapStopSheet extends StatelessWidget {
     required this.route,
     required this.onNavigate,
     required this.tripApiId,
+    this.onShowOrder,
+    this.routeServiceAvailable = true,
   });
 
   final ScrollController scrollController;
@@ -32,6 +34,8 @@ class TripMapStopSheet extends StatelessWidget {
   final TripRouteResult? route;
   final VoidCallback onNavigate;
   final int tripApiId;
+  final VoidCallback? onShowOrder;
+  final bool routeServiceAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +68,13 @@ class TripMapStopSheet extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            '${isNextStop ? context.strings.trip_map_next_stop : context.strings.trip_map_selected_stop}'
-            ' · ${stop.number} ${context.strings.trip_map_out_of} $totalStops',
+            context.strings.trip_stop_summary(
+              isNextStop
+                  ? context.strings.trip_map_next_stop
+                  : context.strings.trip_map_selected_stop,
+              stop.number,
+              totalStops,
+            ),
             style: Styles.textStyle14.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w800,
@@ -103,21 +112,23 @@ class TripMapStopSheet extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           if (route != null)
-            Row(
+            Wrap(
+              spacing: 9,
+              runSpacing: 8,
               children: [
                 _InfoChip(
                   icon: Icons.route_outlined,
                   label: route!.distanceMeters < 1000
-                      ? '${route!.distanceMeters} ${context.strings.trip_map_meters}'
-                      : '${(route!.distanceMeters / 1000).toStringAsFixed(1)} ${context.strings.trip_map_km}',
+                      ? context.strings.distance_meters(route!.distanceMeters)
+                      : context.strings.distance_kilometers(
+                          (route!.distanceMeters / 1000).toStringAsFixed(1),
+                        ),
                 ),
-                const SizedBox(width: 9),
                 _InfoChip(
                   icon: Icons.access_time_rounded,
-                  label:
-                      '${context.strings.trip_map_arrival_in} '
-                      '${(route!.durationSeconds / 60).ceil()} '
-                      '${context.strings.trip_map_minutes}',
+                  label: context.strings.trip_map_arrival_minutes(
+                    (route!.durationSeconds / 60).ceil(),
+                  ),
                 ),
               ],
             )
@@ -133,15 +144,19 @@ class TripMapStopSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  context.strings.trip_map_calculating_route,
-                  style: Styles.base.copyWith(color: AppColors.grey4),
+                Expanded(
+                  child: Text(
+                    context.strings.trip_map_calculating_route,
+                    style: Styles.base.copyWith(color: AppColors.grey4),
+                  ),
                 ),
               ],
             )
           else
             Text(
-              !locationAvailable
+              !routeServiceAvailable
+                  ? context.strings.trip_map_estimates_unavailable
+                  : !locationAvailable
                   ? context.strings.trip_map_location_unavailable
                   : routeError
                   ? context.strings.trip_map_route_unavailable
@@ -153,13 +168,14 @@ class TripMapStopSheet extends StatelessWidget {
             children: [
               Expanded(
                 flex: 2,
-                child: SizedBox(
-                  height: 70,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 56),
                   child: ElevatedButton.icon(
                     onPressed: onNavigate,
                     icon: const Icon(Icons.navigation_outlined, size: 24),
                     label: Text(
                       context.strings.trip_map_start_navigation,
+                      textAlign: TextAlign.center,
                       style: Styles.textStyle17.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -167,10 +183,10 @@ class TripMapStopSheet extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white0,
-                      elevation: 4,
+                      elevation: 0,
                       shadowColor: AppColors.primary.withValues(alpha: .25),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(18),
                       ),
                     ),
                   ),
@@ -178,10 +194,14 @@ class TripMapStopSheet extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: SizedBox(
-                  height: 70,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 56),
                   child: OutlinedButton(
                     onPressed: () {
+                      if (onShowOrder != null) {
+                        onShowOrder!();
+                        return;
+                      }
                       final int? orderID = stop.order.apiId;
 
                       if (orderID == null) {
@@ -205,7 +225,7 @@ class TripMapStopSheet extends StatelessWidget {
                       foregroundColor: AppColors.primary,
                       side: BorderSide(color: AppColors.blue3, width: 2),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(18),
                       ),
                       padding: EdgeInsets.zero,
                     ),
@@ -246,11 +266,13 @@ class _InfoChip extends StatelessWidget {
         children: [
           Icon(icon, color: AppColors.black1, size: 18),
           const SizedBox(width: 5),
-          Text(
-            label,
-            style: Styles.textStyle12.copyWith(
-              color: AppColors.black1,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            child: Text(
+              label,
+              style: Styles.textStyle12.copyWith(
+                color: AppColors.black1,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],

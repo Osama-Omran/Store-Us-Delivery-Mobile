@@ -21,31 +21,34 @@ class AccountPersonalInfoCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white0,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.grey3),
       ),
       child: Column(
         spacing: 18,
         children: [
-          Row(
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 8,
             children: [
-              Expanded(
-                child: Text(
-                  context.strings.account_my_data,
-                  style: Styles.textStyle18.copyWith(color: AppColors.black1),
-                ),
+              Text(
+                context.strings.account_my_data,
+                style: Styles.textStyle18.copyWith(color: AppColors.black1),
               ),
               InkWell(
                 onTap: () => _showUnavailable(context),
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20),
                 child: Container(
+                  constraints: const BoxConstraints(minHeight: 48),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 14,
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.blue4,
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     context.strings.account_edit_data,
@@ -73,20 +76,22 @@ class AccountPersonalInfoCard extends StatelessWidget {
             value: user.employeeId,
             isLtr: true,
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 54,
-            child: OutlinedButton(
-              onPressed: () => _showUnavailable(context),
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: AppColors.grey3, width: 2),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 54),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => _showUnavailable(context),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: AppColors.grey3, width: 2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-              ),
-              child: Text(
-                context.strings.account_change_password,
-                style: Styles.textStyle16.copyWith(color: AppColors.black1),
+                child: Text(
+                  context.strings.account_change_password,
+                  style: Styles.textStyle16.copyWith(color: AppColors.black1),
+                ),
               ),
             ),
           ),
@@ -111,30 +116,40 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final displayValue = value?.trim().isNotEmpty == true ? value! : '—';
 
-    return Row(
-      spacing: 12,
-      children: [
-        SizedBox(
-          width: 110,
-          child: Text(
-            label,
-            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final labelWidget = Text(
+          label,
+          style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+        );
+        final stacked =
+            constraints.maxWidth < 300 ||
+            MediaQuery.textScalerOf(context).scale(16) > 20;
+        final valueWidget = Text(
+          displayValue,
+          textAlign: stacked ? TextAlign.start : TextAlign.left,
+          textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+          style: Styles.textStyle14.copyWith(
+            color: AppColors.black1,
+            fontWeight: FontWeight.w700,
           ),
-        ),
-        Expanded(
-          child: Text(
-            displayValue,
-            textAlign: TextAlign.left,
-            textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.black1,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ],
+        );
+        if (stacked) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 6,
+            children: [labelWidget, valueWidget],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            SizedBox(width: 110, child: labelWidget),
+            Expanded(child: valueWidget),
+          ],
+        );
+      },
     );
   }
 }

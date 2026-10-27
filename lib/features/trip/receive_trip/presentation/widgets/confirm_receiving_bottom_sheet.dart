@@ -19,7 +19,7 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
       decoration: BoxDecoration(
         color: AppColors.white0,
         border: Border(top: BorderSide(color: AppColors.grey3, width: 1)),
@@ -50,9 +50,11 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 70,
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: double.infinity,
+                minHeight: 56,
+              ),
               child: ElevatedButton(
                 onPressed: isLoading || !isProofApproved ? null : onConfirm,
                 style: ElevatedButton.styleFrom(
@@ -60,10 +62,10 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                   disabledBackgroundColor: AppColors.blue0,
                   foregroundColor: AppColors.white0,
                   disabledForegroundColor: AppColors.white0,
-                  elevation: 5,
+                  elevation: 0,
                   shadowColor: AppColors.blue1,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                 ),
                 child: isLoading
@@ -77,7 +79,8 @@ class ConfirmReceivingBottomSheet extends StatelessWidget {
                       )
                     : Text(
                         context.strings.confirm_receiving_van,
-                        style: Styles.textStyle20.copyWith(
+                        textAlign: TextAlign.center,
+                        style: Styles.textStyle18.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),

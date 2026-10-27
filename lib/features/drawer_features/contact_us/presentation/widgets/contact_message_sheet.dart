@@ -106,7 +106,9 @@ class _ContactMessageSheetState extends State<ContactMessageSheet> {
                           Text(
                             state.sendError == 'contact_send_error'
                                 ? context.strings.contact_send_error
-                                : state.sendError!,
+                                : context.localizedErrorMessage(
+                                    state.sendError,
+                                  ),
                             style: Styles.textStyle14.copyWith(
                               color: AppColors.red0,
                             ),

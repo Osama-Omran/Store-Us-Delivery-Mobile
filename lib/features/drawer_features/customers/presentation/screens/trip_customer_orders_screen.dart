@@ -52,7 +52,7 @@ class _TripCustomerOrdersScreenState extends State<TripCustomerOrdersScreen> {
       },
     );
     if (orders == null) {
-      throw StateError(errorMessage ?? 'Unable to load orders');
+      throw StateError(errorMessage ?? 'trip_customers_orders_load_failed');
     }
     return orders!;
   }

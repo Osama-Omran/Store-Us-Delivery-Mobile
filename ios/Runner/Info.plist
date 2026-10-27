@@ -67,7 +67,9 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>NSCameraUsageDescription</key>
-		<string>Camera access is required to capture proof of receiving the van and goods.</string>
+		<string>Camera access is used to capture delivery and receipt confirmation photos, including a selfie to check that a face is clearly visible.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Photo access is used to process confirmation photos and their image information.</string>
 		<!-- Location permission -->
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>نحتاج إلى الوصول إلى موقعك لتحديد مكانك الحالي وعرض محطات الرحلة وتوجيهك إلى العملاء.</string>

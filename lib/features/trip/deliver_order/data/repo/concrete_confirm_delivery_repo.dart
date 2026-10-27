@@ -39,7 +39,7 @@ class ConcreteConfirmDeliveryRepo implements ConfirmDeliveryRepoInterface {
         tripId,
         orderId,
         'Bearer $authToken',
-        body,
+        await body.toFormData(),
       );
 
       return ApiResult.success(response);

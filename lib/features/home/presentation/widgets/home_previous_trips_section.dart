@@ -158,7 +158,7 @@ class _PreviousTripCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${context.strings.trip_label} ${trip.number}',
+                  context.strings.trip_number_title(trip.number),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Styles.textStyle16.copyWith(
@@ -168,14 +168,15 @@ class _PreviousTripCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '${trip.totalOrders?.toString() ?? '—'} '
-                  '${context.strings.orders_plural}',
+                  trip.totalOrders == null
+                      ? context.strings.orders_count_unavailable
+                      : context.strings.orders_count(trip.totalOrders!),
                   style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
                 if (completedTime != null) ...[
                   const SizedBox(height: 4),
                   Text(
-                    '${context.strings.completed_at} $completedTime',
+                    context.strings.trip_completed_at_time(completedTime),
                     style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                   ),
                 ],
@@ -225,7 +226,7 @@ class _HistoryMessage extends StatelessWidget {
           Icon(Icons.history_rounded, color: AppColors.primary, size: 32),
           const SizedBox(height: 10),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),

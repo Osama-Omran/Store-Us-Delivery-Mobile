@@ -1,5 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
@@ -8,7 +9,6 @@ import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/t
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/confirm_delivery_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/confirm_delivery_state.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/delivery_proof_screen.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_flow_header.dart';
 
 import '../widgets/delivery_payment_confirmation_sheet.dart';
@@ -27,28 +27,64 @@ class DeliveryPaymentScreen extends StatefulWidget {
 
 class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
   final _amountController = TextEditingController();
-  bool _collectPayment = true;
+  XFile? _receiptPhoto;
+  bool _isPickingReceipt = false;
 
-  void _changeCollectionMode(bool value) {
-    setState(() {
-      _collectPayment = value;
-    });
+  // Only supported payment method in this application flow.
+  static const String _paymentMethod = 'cash';
+
+  @override
+  void initState() {
+    super.initState();
+    final expected = widget.flow.estimatedTotal;
+    if (expected != null && expected.isFinite && expected > 0) {
+      _amountController.text = expected.toString();
+    }
   }
 
-  DeliveryProofDraft? _proof;
-
-  Future<void> _openProof() async {
-    final proof = await context.pushNamed<DeliveryProofDraft>(
-      RoutesNames.deliveryProof,
+  Future<void> _chooseReceipt() async {
+    if (_isPickingReceipt) return;
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt_outlined),
+              title: Text(context.strings.delivery_receipt_camera),
+              onTap: () => Navigator.of(sheetContext).pop(ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(context.strings.delivery_receipt_gallery),
+              onTap: () => Navigator.of(sheetContext).pop(ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
     );
-
-    if (!mounted || proof == null) return;
-
-    setState(() => _proof = proof);
+    if (!mounted || source == null) return;
+    setState(() => _isPickingReceipt = true);
+    try {
+      final image = await ImagePicker().pickImage(
+        source: source,
+        imageQuality: 80,
+        maxWidth: 1600,
+      );
+      if (mounted && image != null) {
+        setState(() => _receiptPhoto = image);
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text(context.strings.delivery_receipt_select_failed)),
+        );
+    } finally {
+      if (mounted) setState(() => _isPickingReceipt = false);
+    }
   }
-
-  // Only confirmed API value.
-  final String _paymentMethod = 'cash';
 
   @override
   void dispose() {
@@ -90,9 +126,9 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
     final entered = _enteredAmount;
     final expected = _expectedAmount;
 
-    if (entered == null || expected == null) return false;
+    if (entered == null || expected == null || expected <= 0) return false;
 
-    return entered >= 0 &&
+    return entered > 0 &&
         ((entered * 100).round() - (expected * 100).round()).abs() == 0;
   }
 
@@ -101,12 +137,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
       return false;
     }
 
-    // Delivery without collecting any money.
-    if (!_collectPayment) {
-      return true;
-    }
-
-    // Existing full-collection validation.
+    // Full cash collection is required, never optional.
     return _amountMatches &&
         _enteredAmount != null &&
         _enteredAmount! > 0 &&
@@ -116,6 +147,10 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
   // ======= Review Bottom Sheet ======= //
   Future<void> _reviewDelivery() async {
     if (!_canConfirm) return;
+
+    // Keep the same selected receipt for the review and the API request.
+    // Null means the optional receipt_photo field will be omitted.
+    final selectedReceiptPhotoPath = _receiptPhoto?.path;
 
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
@@ -129,13 +164,11 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
         return DeliveryPaymentConfirmationSheet(
           flow: widget.flow,
           strings: context.strings,
-          collectPayment: _collectPayment,
           expectedAmountText: _expectedAmount == null
               ? '—'
               : formatTripAmount(context, _expectedAmount!),
-          enteredAmountText: _collectPayment
-              ? formatTripAmount(context, _enteredAmount!)
-              : context.strings.delivery_not_collected,
+          enteredAmountText: formatTripAmount(context, _enteredAmount!),
+          hasReceipt: selectedReceiptPhotoPath != null,
         );
       },
     );
@@ -146,8 +179,9 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
       tripId: widget.flow.tripId,
       orderId: widget.flow.orderId,
       items: widget.flow.apiItems,
-      collectedAmount: _collectPayment ? _enteredAmount : null,
-      paymentMethod: _collectPayment ? _paymentMethod : null,
+      collectedAmount: _enteredAmount!,
+      expectedAmount: _expectedAmount!,
+      receiptPhotoPath: selectedReceiptPhotoPath,
     );
   }
 
@@ -175,7 +209,10 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(message), backgroundColor: AppColors.red0),
+              SnackBar(
+                content: Text(context.localizedErrorMessage(message)),
+                backgroundColor: AppColors.red0,
+              ),
             );
         }
 
@@ -184,8 +221,8 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
             RoutesNames.deliverySuccess,
             extra: {
               'flow': widget.flow,
-              'collected_amount': _collectPayment ? _enteredAmount : null,
-              'payment_method': _collectPayment ? _paymentMethod : null,
+              'collected_amount': _enteredAmount!,
+              'payment_method': _paymentMethod,
             },
           );
         }
@@ -205,9 +242,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                 child: Column(
                   children: [
                     DeliveryFlowHeader(
-                      title: _collectPayment
-                          ? context.strings.delivery_payment_title
-                          : context.strings.delivery_finalize_title,
+                      title: context.strings.delivery_payment_title,
                       subtitle:
                           '${widget.flow.salesOrder} • ${widget.flow.customerName}',
                     ),
@@ -219,15 +254,11 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                         isLoading: isLoading,
                         amountMatches: _amountMatches,
                         showMismatch:
-                            _collectPayment &&
-                            entered != null &&
-                            entered > 0 &&
-                            !_amountMatches,
+                            entered != null && !_amountMatches,
                         onAmountChanged: (_) => setState(() {}),
-                        hasProof: _proof?.hasProof == true,
-                        onOpenProof: _openProof,
-                        collectPayment: _collectPayment,
-                        onCollectionChanged: _changeCollectionMode,
+                        receiptPhoto: _receiptPhoto,
+                        onChooseReceipt: _chooseReceipt,
+                        onRemoveReceipt: () => setState(() => _receiptPhoto = null),
                       ),
                     ),
                   ],
@@ -242,7 +273,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                   child: SizedBox(
                     height: 68,
                     child: ElevatedButton(
-                      onPressed: isLoading || !_canConfirm
+                      onPressed: isLoading || _isPickingReceipt || !_canConfirm
                           ? null
                           : _reviewDelivery,
                       style: ElevatedButton.styleFrom(
@@ -255,11 +286,7 @@ class _DeliveryPaymentScreenState extends State<DeliveryPaymentScreen> {
                       child: isLoading
                           ? CircularProgressIndicator(color: AppColors.white0)
                           : Text(
-                              _collectPayment
-                                  ? context.strings.delivery_confirm_button
-                                  : context
-                                        .strings
-                                        .delivery_confirm_without_collection,
+                              context.strings.delivery_confirm_button,
                               style: Styles.textStyle19.copyWith(
                                 fontWeight: FontWeight.w800,
                               ),

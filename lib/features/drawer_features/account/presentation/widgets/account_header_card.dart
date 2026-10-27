@@ -16,9 +16,7 @@ class AccountHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final role = user.role == 'Delivery Representative'
-        ? context.strings.account_delivery_representative
-        : user.role;
+    final role = context.localizedUserRole(user.role);
 
     return Container(
       padding: const EdgeInsets.all(20),

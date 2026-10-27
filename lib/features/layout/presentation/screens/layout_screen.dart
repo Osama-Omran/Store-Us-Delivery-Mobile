@@ -132,7 +132,7 @@ class _LayoutContentState extends State<_LayoutContent> {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(message),
+                content: Text(context.localizedErrorMessage(message)),
                 backgroundColor: AppColors.red0,
                 behavior: SnackBarBehavior.floating,
               ),
@@ -212,11 +212,7 @@ class _LayoutContentState extends State<_LayoutContent> {
                       ? storedName!
                       : '—';
 
-                  final userRole = user?.role == 'Delivery Representative'
-                      ? context.strings.account_delivery_representative
-                      : user?.role.isNotEmpty == true
-                      ? user!.role
-                      : '—';
+                  final userRole = context.localizedUserRole(user?.role);
 
                   // ======= Current Trip Availability And Badge Counts ======= //
                   return BlocSelector<
@@ -265,6 +261,8 @@ class _LayoutContentState extends State<_LayoutContent> {
                                 ? AppMenuSection.contactUs
                                 : layout.isCustomers
                                 ? AppMenuSection.customers
+                                : layout.isAreas
+                                ? AppMenuSection.areas
                                 : AppMenuSection.deliveries,
 
                             // ======= Drawer Navigation ======= //
@@ -282,7 +280,7 @@ class _LayoutContentState extends State<_LayoutContent> {
 
                             onCustomersTap: layout.openCustomerScreen,
 
-                            onAreasTap: () {},
+                            onAreasTap: layout.openAreas,
 
                             onReportsTap: layout.openReports,
 

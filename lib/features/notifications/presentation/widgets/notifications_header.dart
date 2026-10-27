@@ -18,13 +18,6 @@ class NotificationsHeader extends StatelessWidget {
         border: Border(
           bottom: BorderSide(color: AppColors.grey3.withValues(alpha: 0.85)),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black1.withValues(alpha: 0.025),
-            blurRadius: 18,
-            offset: const Offset(0, 5),
-          ),
-        ],
       ),
       child: Row(
         children: [
@@ -38,13 +31,6 @@ class NotificationsHeader extends StatelessWidget {
                 colors: [AppColors.primary, AppColors.blue0],
               ),
               borderRadius: BorderRadius.circular(17),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.16),
-                  blurRadius: 13,
-                  offset: const Offset(0, 5),
-                ),
-              ],
             ),
             child: Icon(
               Icons.notifications_active_outlined,
@@ -70,7 +56,7 @@ class NotificationsHeader extends StatelessWidget {
                 if (unreadCount != null) ...[
                   const SizedBox(height: 5),
                   Text(
-                    '$unreadCount ${context.strings.unread_notifications}',
+                    context.strings.notifications_unread_count(unreadCount!),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Styles.textStyle12_5.copyWith(

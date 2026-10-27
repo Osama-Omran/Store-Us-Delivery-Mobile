@@ -272,10 +272,11 @@ class _PaymentTagData {
       case 'PARTIALLY_PAID':
       case 'PARTIAL_PAID':
       case 'PARTIALLY_COLLECTED':
+      case 'PARTIAL_COLLECTED':
       case 'PARTIAL_COLLECTION':
       case 'PARTIAL_PAYMENT':
         return _PaymentTagData(
-          title: 'لم يكتمل التحصيل',
+          title: context.strings.order_collection_incomplete,
           color: AppColors.orange0,
           background: AppColors.orange1,
         );
@@ -289,13 +290,13 @@ class _PaymentTagData {
         // If we know some cash was collected, avoid saying "none".
         if (order.collectedAmount > 0) {
           return _PaymentTagData(
-            title: 'لم يكتمل التحصيل',
+            title: context.strings.order_collection_incomplete,
             color: AppColors.orange0,
             background: AppColors.orange1,
           );
         }
         return _PaymentTagData(
-          title: 'لم يتم التحصيل',
+          title: context.strings.delivery_not_collected,
           color: AppColors.red1,
           background: AppColors.red1.withValues(alpha: 0.10),
         );
@@ -304,21 +305,21 @@ class _PaymentTagData {
       case 'PAYMENT_FAILED':
       case 'COLLECTION_FAILED':
         return _PaymentTagData(
-          title: 'فشل التحصيل',
+          title: context.strings.order_collection_failed,
           color: AppColors.red1,
           background: AppColors.red1.withValues(alpha: 0.10),
         );
 
       case 'NOT_STARTED':
         return _PaymentTagData(
-          title: 'لم يبدأ التحصيل',
+          title: context.strings.order_collection_not_started,
           color: AppColors.red1,
           background: AppColors.red1.withValues(alpha: 0.10),
         );
 
       default:
         return _PaymentTagData(
-          title: paymentStatus,
+          title: context.strings.order_collection_status_unknown,
           color: AppColors.grey4,
           background: AppColors.grey5,
         );

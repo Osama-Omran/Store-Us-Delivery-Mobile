@@ -17,68 +17,90 @@ class DirectSaleProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.watch<DirectSaleCubit>();
     final quantity = cubit.state.quantityFor(product);
-    return DirectSaleCard(
+    final details = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 3,
+      children: [
+        Text(
+          product.name,
+          style: Styles.textStyle16.copyWith(
+            color: AppColors.black1,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          '${product.code} · ${formatTripAmount(context, product.unitPriceMinor / 100)} / ${product.unit}',
+          style: Styles.textStyle12.copyWith(color: AppColors.grey4),
+        ),
+        Text(
+          context.strings.direct_sale_available(product.availableQuantity),
+          style: Styles.textStyle12.copyWith(color: AppColors.green0),
+        ),
+      ],
+    );
+    final quantityControl = Directionality(
+      textDirection: TextDirection.ltr,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 3,
-              children: [
-                Text(
-                  product.name,
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.black1,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  '${product.code} · ${formatTripAmount(context, product.unitPriceMinor / 100)} / ${product.unit}',
-                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
-                ),
-                Text(
-                  context.strings.direct_sale_available(
-                    product.availableQuantity,
-                  ),
-                  style: Styles.textStyle12.copyWith(color: AppColors.green0),
-                ),
-              ],
+          _QuantityButton(
+            icon: Icons.add,
+            primary: true,
+            tooltip: context.strings.direct_sale_increase,
+            onPressed:
+                quantity < product.availableQuantity &&
+                    product.unitPriceMinor >= 0
+                ? () => cubit.setQuantity(product, quantity + 1)
+                : null,
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                '$quantity',
+                textAlign: TextAlign.center,
+                style: Styles.textStyle16.copyWith(color: AppColors.black1),
+              ),
             ),
           ),
-          const SizedBox(width: 10),
-          Directionality(
-            textDirection: TextDirection.ltr,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _QuantityButton(
-                  icon: Icons.add,
-                  primary: true,
-                  tooltip: context.strings.direct_sale_increase,
-                  onPressed:
-                      quantity < product.availableQuantity &&
-                          product.unitPriceMinor >= 0
-                      ? () => cubit.setQuantity(product, quantity + 1)
-                      : null,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    '$quantity',
-                    style: Styles.textStyle16.copyWith(color: AppColors.black1),
-                  ),
-                ),
-                _QuantityButton(
-                  icon: Icons.remove,
-                  tooltip: context.strings.direct_sale_decrease,
-                  onPressed: quantity > 0
-                      ? () => cubit.setQuantity(product, quantity - 1)
-                      : null,
-                ),
-              ],
-            ),
+          _QuantityButton(
+            icon: Icons.remove,
+            tooltip: context.strings.direct_sale_decrease,
+            onPressed: quantity > 0
+                ? () => cubit.setQuantity(product, quantity - 1)
+                : null,
           ),
         ],
+      ),
+    );
+    return DirectSaleCard(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 300 ||
+              MediaQuery.textScalerOf(context).scale(16) > 20) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 12,
+              children: [
+                details,
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: quantityControl,
+                ),
+              ],
+            );
+          }
+          return Row(
+            children: [
+              Expanded(child: details),
+              const SizedBox(width: 12),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: constraints.maxWidth / 2),
+                child: quantityControl,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -106,8 +128,8 @@ class _QuantityButton extends StatelessWidget {
       disabledBackgroundColor: primary ? AppColors.blue0 : AppColors.white0,
       disabledForegroundColor: primary ? AppColors.white0 : AppColors.grey4,
       side: primary ? BorderSide.none : BorderSide(color: AppColors.grey3),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      fixedSize: const Size(40, 40),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      fixedSize: const Size(48, 48),
       padding: EdgeInsets.zero,
     ),
     icon: Icon(icon, size: 20),

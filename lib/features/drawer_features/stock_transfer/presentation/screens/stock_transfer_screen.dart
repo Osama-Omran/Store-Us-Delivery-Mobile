@@ -31,7 +31,9 @@ class StockTransferScreen extends StatelessWidget {
                 builder: (context, state) {
                   final cubit = StockTransferCubit.get(context);
                   if (state.isLoading && !state.hasLoaded) {
-                    return const Center(child: CustomLoadingIndicator(size: 96));
+                    return const Center(
+                      child: CustomLoadingIndicator(size: 96),
+                    );
                   }
                   if (state.error != null && !state.hasLoaded) {
                     return _StockTransferError(
@@ -43,7 +45,10 @@ class StockTransferScreen extends StatelessWidget {
                   final transfers = state.filteredTransfers;
                   return Column(
                     children: [
-                      StockTransferFilters(state: state, onChanged: cubit.selectFilter),
+                      StockTransferFilters(
+                        state: state,
+                        onChanged: cubit.selectFilter,
+                      ),
                       if (state.isRefreshing)
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 6),
@@ -63,26 +68,35 @@ class StockTransferScreen extends StatelessWidget {
                           child: Text(
                             context.strings.stock_transfer_more_pages_notice,
                             textAlign: TextAlign.center,
-                            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+                            style: Styles.textStyle14.copyWith(
+                              color: AppColors.grey4,
+                            ),
                           ),
                         ),
                       Expanded(
                         child: RefreshIndicator(
                           onRefresh: cubit.load,
                           child: ListView.separated(
-                            key: ValueKey('stock-transfer-list-${state.filter.name}'),
+                            key: ValueKey(
+                              'stock-transfer-list-${state.filter.name}',
+                            ),
                             physics: const AlwaysScrollableScrollPhysics(),
                             padding: const EdgeInsets.fromLTRB(24, 0, 24, 125),
                             itemCount: transfers.isEmpty ? 1 : transfers.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 16),
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 16),
                             itemBuilder: (context, index) {
                               if (transfers.isEmpty) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 32),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 32,
+                                  ),
                                   child: Text(
                                     context.strings.stock_transfer_empty,
                                     textAlign: TextAlign.center,
-                                    style: Styles.textStyle16.copyWith(color: AppColors.grey4),
+                                    style: Styles.textStyle16.copyWith(
+                                      color: AppColors.grey4,
+                                    ),
                                   ),
                                 );
                               }
@@ -123,7 +137,7 @@ class _StockTransferError extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              message,
+              context.localizedErrorMessage(message),
               textAlign: TextAlign.center,
               style: Styles.textStyle14.copyWith(color: AppColors.grey4),
             ),

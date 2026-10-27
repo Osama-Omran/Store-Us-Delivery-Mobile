@@ -23,7 +23,7 @@ class LoginButton extends StatelessWidget {
         final bool loading = state is LoginLoadingState;
         return CustomButton(
           text: loading ? null : context.strings.login,
-          icon: loading ? CustomLoadingIndicator() : null,
+          icon: loading ? const CustomLoadingIndicator(size: 32) : null,
           onPressed: () => LoginCubit.get(context).validateToLogin(),
         );
       },

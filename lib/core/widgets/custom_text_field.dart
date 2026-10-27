@@ -37,7 +37,14 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: [
-        if (label != null) Text(label!),
+        if (label != null)
+          Text(
+            label!,
+            style: Styles.textStyle14.copyWith(
+              color: AppColors.black1,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         TextFormField(
           controller: controller,
           inputFormatters: inputFormatters,
@@ -48,6 +55,11 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            errorMaxLines: 3,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             hintText: hint,
@@ -56,15 +68,18 @@ class CustomTextField extends StatelessWidget {
             filled: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.grey2, width: 1),
+              borderSide: const BorderSide(color: AppColors.grey3),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.grey2, width: 1),
+              borderSide: const BorderSide(color: AppColors.grey3),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.black0, width: 1),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),

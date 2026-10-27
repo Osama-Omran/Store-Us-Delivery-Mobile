@@ -1,3 +1,4 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -5,10 +6,7 @@ import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/mo
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/presentation/widgets/stock_transfer_filters.dart';
 
 class StockTransferStatusBadge extends StatelessWidget {
-  const StockTransferStatusBadge({
-    super.key,
-    required this.transfer,
-  });
+  const StockTransferStatusBadge({super.key, required this.transfer});
 
   final StockTransferModel transfer;
 
@@ -32,12 +30,12 @@ class StockTransferStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawLabel = transfer.statusLabel.trim();
-    final text = rawLabel.isNotEmpty
-        ? rawLabel
-        : transfer.statusCode.isNotEmpty
-            ? transfer.statusCode
-            : transfer.status.filter.label(context);
+    final text = switch (transfer.status) {
+      StockTransferStatus.receiptDiscrepancy =>
+        context.strings.stock_transfer_receipt_discrepancy,
+      StockTransferStatus.other => context.strings.trip_tab_unknown_status,
+      _ => transfer.status.filter.label(context),
+    };
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

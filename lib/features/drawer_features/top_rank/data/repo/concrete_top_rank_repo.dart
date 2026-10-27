@@ -49,7 +49,7 @@ class ConcreteTopRankRepo implements TopRankRepoInterface {
       );
 
       if (!response.success || response.data == null) {
-        throw StateError(response.message ?? 'تعذر تحميل الترتيب');
+        throw StateError(response.message ?? 'top_rank_load_failed');
       }
 
       return ApiResult.success(response);

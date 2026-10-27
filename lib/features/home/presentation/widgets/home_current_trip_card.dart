@@ -40,7 +40,7 @@ class HomeCurrentTripCard extends StatelessWidget {
           end: Alignment.bottomLeft,
           colors: [AppColors.blue4, AppColors.white0],
         ),
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.blue3),
         boxShadow: [
           BoxShadow(
@@ -65,24 +65,26 @@ class HomeCurrentTripCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Container(
-                constraints: const BoxConstraints(maxWidth: 160),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Text(
-                  '#${trip.number}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textDirection: TextDirection.ltr,
-                  style: Styles.textStyle12.copyWith(
-                    color: AppColors.white0,
-                    fontWeight: FontWeight.w700,
+              Flexible(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 160),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Text(
+                    '#${trip.number}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.ltr,
+                    style: Styles.textStyle12.copyWith(
+                      color: AppColors.white0,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -93,19 +95,19 @@ class HomeCurrentTripCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
               color: AppColors.white0,
-              borderRadius: BorderRadius.circular(19),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.grey3),
             ),
             child: Column(
               children: [
                 _TripInfoRow(
                   icon: Icons.local_shipping_outlined,
-                  text: '${context.strings.van}: $vehicleName',
+                  text: context.strings.home_van_label(vehicleName),
                 ),
                 const SizedBox(height: 12),
                 _TripInfoRow(
                   icon: Icons.person_outline_rounded,
-                  text: '${context.strings.driver}: $driverName',
+                  text: context.strings.home_driver_label(driverName),
                 ),
                 const SizedBox(height: 12),
                 _TripInfoRow(
@@ -142,7 +144,7 @@ class HomeCurrentTripCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.white0,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.grey3),
             ),
             child: Row(
@@ -173,16 +175,18 @@ class HomeCurrentTripCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            height: 60,
-            width: double.infinity,
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 60),
             child: ElevatedButton(
               onPressed: () => LayoutCubit.get(context).selectTap(1),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white0,
-                elevation: 2,
-                shadowColor: AppColors.primary.withValues(alpha: .18),
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -191,10 +195,13 @@ class HomeCurrentTripCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    context.strings.continue_trip,
-                    style: Styles.textStyle17.copyWith(
-                      fontWeight: FontWeight.w800,
+                  Flexible(
+                    child: Text(
+                      context.strings.continue_trip,
+                      textAlign: TextAlign.center,
+                      style: Styles.textStyle17.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),

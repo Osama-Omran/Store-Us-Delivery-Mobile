@@ -8,7 +8,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/domain/usecases/curr
 
 class TripCustomersCubit extends Cubit<TripCustomersState> {
   TripCustomersCubit(this._currentTrip, this._getCustomers)
-      : super(const TripCustomersState());
+    : super(const TripCustomersState());
 
   final CurrentTripUsecase _currentTrip;
   final GetTripCustomersUsecase _getCustomers;
@@ -30,7 +30,8 @@ class TripCustomersCubit extends Cubit<TripCustomersState> {
 
       tripResult.when(
         success: (response) {
-          if (!response.success || response.data == null ||
+          if (!response.success ||
+              response.data == null ||
               response.data!.id <= 0) {
             errorMessage = response.message;
           } else {
@@ -43,42 +44,52 @@ class TripCustomersCubit extends Cubit<TripCustomersState> {
         },
       );
       if (tripId == null) {
-        emit(TripCustomersState(
-          status: TripCustomersStatus.failure,
-          errorMessage: errorMessage,
-        ));
+        emit(
+          TripCustomersState(
+            status: TripCustomersStatus.failure,
+            errorMessage: errorMessage,
+          ),
+        );
         return;
       }
 
-      final ApiResult<TripCustomersResponse> result = await _getCustomers.call(tripId: tripId!);
+      final ApiResult<TripCustomersResponse> result = await _getCustomers.call(
+        tripId: tripId!,
+      );
       if (isClosed) return;
       result.when(
         success: (response) {
-          emit(TripCustomersState(
-            status: response.success
-                ? TripCustomersStatus.success
-                : TripCustomersStatus.failure,
-            tripId: tripId,
-            tripNumber: tripNumber,
-            customers: response.success ? response.data : const [],
-            errorMessage: response.message,
-          ));
+          emit(
+            TripCustomersState(
+              status: response.success
+                  ? TripCustomersStatus.success
+                  : TripCustomersStatus.failure,
+              tripId: tripId,
+              tripNumber: tripNumber,
+              customers: response.success ? response.data : const [],
+              errorMessage: response.message,
+            ),
+          );
         },
         failure: (error) {
-          emit(TripCustomersState(
-            status: TripCustomersStatus.failure,
-            tripId: tripId,
-            tripNumber: tripNumber,
-            errorMessage: error.apiErrorModel.message,
-          ));
+          emit(
+            TripCustomersState(
+              status: TripCustomersStatus.failure,
+              tripId: tripId,
+              tripNumber: tripNumber,
+              errorMessage: error.apiErrorModel.message,
+            ),
+          );
         },
       );
     } catch (error) {
       if (!isClosed) {
-        emit(TripCustomersState(
-          status: TripCustomersStatus.failure,
-          errorMessage: error.toString(),
-        ));
+        emit(
+          TripCustomersState(
+            status: TripCustomersStatus.failure,
+            errorMessage: 'trip_customers_load_failed',
+          ),
+        );
       }
     } finally {
       _working = false;

@@ -56,12 +56,15 @@ class OrderDetailsItemsCard extends StatelessWidget {
 
                 const SizedBox(width: 12),
 
-                Text(
-                  '${_formatQty(items[i].orderedQty)} '
-                  '${items[i].uom}',
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.black1,
-                    fontWeight: FontWeight.w800,
+                Flexible(
+                  child: Text(
+                    '${_formatQty(items[i].orderedQty)} '
+                    '${items[i].uom}',
+                    textAlign: TextAlign.end,
+                    style: Styles.textStyle16.copyWith(
+                      color: AppColors.black1,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],

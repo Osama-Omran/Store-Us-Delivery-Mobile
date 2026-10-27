@@ -19,9 +19,9 @@ class ReportsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-        create: (_) => getIt<ReportsCubit>()..load(),
-        child: const _ReportsBody(),
-      );
+    create: (_) => getIt<ReportsCubit>()..load(),
+    child: const _ReportsBody(),
+  );
 }
 
 class _ReportsBody extends StatelessWidget {
@@ -29,76 +29,74 @@ class _ReportsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: AppColors.grey0,
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              const ReportsHeader(),
-              Expanded(
-                child: BlocBuilder<ReportsCubit, ReportsState>(
-                  builder: (context, state) {
-                    final cubit = ReportsCubit.get(context);
-                    final summary = state.summary;
-                    return RefreshIndicator(
-                      onRefresh: () => cubit.load(),
-                      child: ListView(
-                        key: const ValueKey('reports-scroll'),
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 125),
-                        children: [
-                          ReportsFilters(state: state),
-                          const SizedBox(height: 16),
-                          if (state.isLoading)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 80),
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          else if (state.errorMessage != null)
-                            _ReportsError(
-                              message: state.errorMessage!,
-                              onRetry: () => cubit.load(),
-                            )
-                          else if (summary == null)
-                            Center(child: Text(context.strings.reports_empty))
-                          else ...[
-                            ReportsSummaryCard(
-                              summary: summary,
-                              period: state.period,
+    backgroundColor: AppColors.grey0,
+    body: SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          const ReportsHeader(),
+          Expanded(
+            child: BlocBuilder<ReportsCubit, ReportsState>(
+              builder: (context, state) {
+                final cubit = ReportsCubit.get(context);
+                final summary = state.summary;
+                return RefreshIndicator(
+                  onRefresh: () => cubit.load(),
+                  child: ListView(
+                    key: const ValueKey('reports-scroll'),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 125),
+                    children: [
+                      ReportsFilters(state: state),
+                      const SizedBox(height: 16),
+                      if (state.isLoading)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 80),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      else if (state.errorMessage != null)
+                        _ReportsError(
+                          message: state.errorMessage!,
+                          onRetry: () => cubit.load(),
+                        )
+                      else if (summary == null)
+                        Center(child: Text(context.strings.reports_empty))
+                      else ...[
+                        ReportsSummaryCard(
+                          summary: summary,
+                          period: state.period,
+                        ),
+                        const SizedBox(height: 16),
+                        ReportsStatistics(summary: summary),
+                        const SizedBox(height: 16),
+                        ReportsDistributionCard(
+                          distribution: state.distribution,
+                        ),
+                        const SizedBox(height: 16),
+                        ReportsFinancialCard(summary: summary),
+                        const SizedBox(height: 16),
+                        ReportsTripPerformanceCard(trips: state.displayedTrips),
+                        if (state.data?.warnings.isNotEmpty == true) ...[
+                          const SizedBox(height: 12),
+                          for (final warning in state.data!.warnings)
+                            Text(
+                              warning,
+                              style: Styles.textStyle12.copyWith(
+                                color: AppColors.grey4,
+                              ),
                             ),
-                            const SizedBox(height: 16),
-                            ReportsStatistics(summary: summary),
-                            const SizedBox(height: 16),
-                            ReportsDistributionCard(
-                              distribution: state.distribution,
-                            ),
-                            const SizedBox(height: 16),
-                            ReportsFinancialCard(summary: summary),
-                            const SizedBox(height: 16),
-                            ReportsTripPerformanceCard(
-                              trips: state.displayedTrips,
-                            ),
-                            if (state.data?.warnings.isNotEmpty == true) ...[
-                              const SizedBox(height: 12),
-                              for (final warning in state.data!.warnings)
-                                Text(
-                                  warning,
-                                  style: Styles.textStyle12.copyWith(
-                                    color: AppColors.grey4,
-                                  ),
-                                ),
-                            ],
-                          ],
                         ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+                      ],
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 }
 
 class _ReportsError extends StatelessWidget {
@@ -109,18 +107,18 @@ class _ReportsError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: Styles.textStyle14.copyWith(color: AppColors.red1),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh_rounded),
-            label: Text(context.strings.reports_retry),
-          ),
-        ],
-      );
+    children: [
+      Text(
+        context.localizedErrorMessage(message),
+        textAlign: TextAlign.center,
+        style: Styles.textStyle14.copyWith(color: AppColors.red1),
+      ),
+      const SizedBox(height: 12),
+      OutlinedButton.icon(
+        onPressed: onRetry,
+        icon: const Icon(Icons.refresh_rounded),
+        label: Text(context.strings.reports_retry),
+      ),
+    ],
+  );
 }

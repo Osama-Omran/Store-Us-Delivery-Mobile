@@ -20,10 +20,9 @@ class LoginHeader extends StatelessWidget {
             color: AppColors.primary,
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: .4),
-                blurRadius: 3,
+                color: AppColors.primary.withValues(alpha: .12),
+                blurRadius: 10,
                 offset: const Offset(0, 4),
-                spreadRadius: 2,
               ),
             ],
           ),
@@ -36,7 +35,10 @@ class LoginHeader extends StatelessWidget {
         ),
         CustomText(
           context.strings.delivery_agent_app,
-          style: Styles.textStyle10,
+          style: Styles.textStyle12.copyWith(
+            color: AppColors.grey1,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );

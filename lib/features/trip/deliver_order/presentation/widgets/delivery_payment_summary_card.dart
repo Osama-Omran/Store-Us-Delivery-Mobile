@@ -9,15 +9,17 @@ class DeliveryPaymentSummaryCard extends StatelessWidget {
     super.key,
     required this.originalTotal,
     required this.expected,
-    this.collectPayment = true,
   });
-  final bool collectPayment;
+
   final num? originalTotal;
   final num? expected;
 
   @override
   Widget build(BuildContext context) {
-    final expected = this.expected;
+    final showOriginal = originalTotal != null &&
+        expected != null &&
+        ((originalTotal! * 100).round() != (expected! * 100).round());
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -28,27 +30,16 @@ class DeliveryPaymentSummaryCard extends StatelessWidget {
       child: Column(
         spacing: 14,
         children: [
+          if (showOriginal) ...[
+            DeliveryPaymentReviewRow(
+              label: context.strings.order_details_original_total,
+              value: formatTripAmount(context, originalTotal!),
+            ),
+            Divider(color: AppColors.grey3),
+          ],
           DeliveryPaymentReviewRow(
-            label: context.strings.order_details_original_total,
-            value: originalTotal == null
-                ? '—'
-                : formatTripAmount(context, originalTotal!),
-          ),
-          DeliveryPaymentReviewRow(
-            label: context.strings.delivery_selected_items_value,
-            value: expected == null ? '—' : formatTripAmount(context, expected),
-          ),
-          Divider(color: AppColors.grey3),
-
-          DeliveryPaymentReviewRow(
-            label: collectPayment
-                ? context.strings.delivery_required_amount
-                : context.strings.delivery_collection_status,
-            value: collectPayment
-                ? expected == null
-                      ? '—'
-                      : formatTripAmount(context, expected)
-                : context.strings.delivery_not_collected,
+            label: context.strings.delivery_required_amount,
+            value: expected == null ? '—' : formatTripAmount(context, expected!),
             highlighted: true,
           ),
         ],

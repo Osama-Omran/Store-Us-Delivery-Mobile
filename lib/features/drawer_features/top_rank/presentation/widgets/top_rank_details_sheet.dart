@@ -1,3 +1,4 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -88,14 +89,14 @@ class _TopRankDetailsContent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _SummaryTile(
-                          label: 'الترتيب الحالي',
+                          label: context.strings.top_rank_current_rank,
                           value: entry.rank == null ? '—' : '#${entry.rank}',
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _SummaryTile(
-                          label: 'التقييم',
+                          label: context.strings.top_rank_score,
                           value: '${formatRankNumber(entry.score)} / 100',
                         ),
                       ),
@@ -103,21 +104,19 @@ class _TopRankDetailsContent extends StatelessWidget {
                   ),
 
                   if (entry.provisional)
-                    _InfoBanner(
-                      text: 'هذا تقييم مبدئي بسبب نقص بعض بيانات الأداء.',
-                    ),
+                    _InfoBanner(text: context.strings.top_rank_data_incomplete),
 
                   if (state.loading)
                     LinearProgressIndicator(color: AppColors.primary),
 
                   if (state.error != null)
                     _InfoBanner(
-                      text: 'تعذر تحديث التفاصيل. يتم عرض بيانات الترتيب المحمّلة.',
+                      text: context.strings.top_rank_details_refresh_failed,
                     ),
 
                   // ======= Breakdown ======= //
                   Text(
-                    'تفصيل النقاط',
+                    context.strings.top_rank_points_breakdown,
                     style: Styles.textStyle20.copyWith(color: AppColors.black1),
                   ),
 
@@ -130,7 +129,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'الإجمالي',
+                          context.strings.top_rank_total,
                           style: Styles.textStyle18.copyWith(
                             color: AppColors.black1,
                           ),
@@ -149,7 +148,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                   // ======= Strengths ======= //
                   if (entry.advice.strengths.isNotEmpty) ...[
                     Text(
-                      'عمل إيه علشان وصل كده؟',
+                      context.strings.top_rank_strengths_title,
                       style: Styles.textStyle18.copyWith(
                         color: AppColors.black1,
                       ),
@@ -179,7 +178,7 @@ class _TopRankDetailsContent extends StatelessWidget {
                   // ======= Improvement Advice ======= //
                   if (entry.advice.actions.isNotEmpty) ...[
                     Text(
-                      'إعمل إيه علشان تحسن ترتيبك؟',
+                      context.strings.top_rank_improve_title,
                       style: Styles.textStyle18.copyWith(
                         color: AppColors.black1,
                       ),
@@ -205,21 +204,21 @@ class _TopRankDetailsContent extends StatelessWidget {
                         spacing: 10,
                         children: [
                           Text(
-                            'المقارنة مع الأول',
+                            context.strings.top_rank_compare_leader,
                             style: Styles.textStyle18.copyWith(
                               color: AppColors.black1,
                             ),
                           ),
                           _CompareRow(
-                            label: 'درجتك',
+                            label: context.strings.top_rank_your_score,
                             value: formatRankNumber(entry.score),
                           ),
                           _CompareRow(
-                            label: 'درجة الأول',
+                            label: context.strings.top_rank_leader_score,
                             value: formatRankNumber(leader!.score),
                           ),
                           _CompareRow(
-                            label: 'الفرق',
+                            label: context.strings.top_rank_difference,
                             value: formatRankNumber(entry.gap),
                           ),
                         ],
@@ -284,7 +283,7 @@ class _MetricProgress extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                metric.label,
+                rankMetricLabel(context, metric),
                 style: Styles.textStyle14.copyWith(
                   color: AppColors.black1,
                   fontWeight: FontWeight.w700,
@@ -294,7 +293,7 @@ class _MetricProgress extends StatelessWidget {
             Text(
               available
                   ? '${formatRankNumber(metric.points)} / ${formatRankNumber(metric.weight)}'
-                  : 'غير متاح',
+                  : context.strings.top_rank_unavailable,
               textDirection: TextDirection.ltr,
               style: Styles.textStyle14.copyWith(
                 color: available ? AppColors.black1 : AppColors.grey4,
@@ -318,9 +317,12 @@ class _MetricProgress extends StatelessWidget {
 
         if (metric.value != null || metric.target != null)
           Text(
-            'الحالي: ${formatRankMetric(metric)}'
-            '   |   الهدف: '
-            '${metric.target == null ? 'غير متاح' : formatRankNumber(metric.target)}',
+            context.strings.top_rank_metric_target(
+              formatRankMetric(metric),
+              metric.target == null
+                  ? context.strings.top_rank_unavailable
+                  : formatRankNumber(metric.target),
+            ),
             style: Styles.textStyle12.copyWith(color: AppColors.grey4),
           ),
       ],
@@ -360,7 +362,9 @@ class _AdviceCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  isDataIssue ? 'بيانات غير كافية' : 'فرصة للتحسين',
+                  isDataIssue
+                      ? context.strings.top_rank_data_insufficient
+                      : context.strings.top_rank_improvement_opportunity,
                   style: Styles.textStyle14.copyWith(
                     color: AppColors.black1,
                     fontWeight: FontWeight.w800,
@@ -369,7 +373,9 @@ class _AdviceCard extends StatelessWidget {
               ),
               if (action.impact != null)
                 Text(
-                  '+${formatRankNumber(action.impact)} نقطة',
+                  context.strings.top_rank_impact_points(
+                    formatRankNumber(action.impact),
+                  ),
                   style: Styles.textStyle12.copyWith(
                     color: AppColors.green0,
                     fontWeight: FontWeight.w800,
