@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_flow_header.dart';
 
@@ -49,10 +50,16 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
     return _reasons(context)[_reasonIndex!];
   }
 
+  void _hideKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
   void _continue() {
     if (widget.flow.isPartial && _selectedReason.isEmpty) {
       return;
     }
+
+    _hideKeyboard();
 
     context.pushNamed(
       RoutesNames.deliveryPayment,
@@ -72,140 +79,178 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.grey0,
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              DeliveryFlowHeader(
-                title: context.strings.delivery_result_title,
-                subtitle: '${flow.salesOrder} • ${flow.customerName}',
-              ),
 
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.all(20),
-                  children: [
-                    // ======= Delivery Status ======= //
-                    DeliveryResultSummaryCard(flow: flow),
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: _hideKeyboard,
+          child: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                // ======= Header ======= //
+                DeliveryFlowHeader(
+                  title: context.strings.delivery_result_title,
+                  subtitle: '${flow.salesOrder} • ${flow.customerName}',
+                ),
 
-                    const SizedBox(height: 18),
+                // ======= Scrollable Content ======= //
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(20),
+                    children: [
+                      // ======= Delivery Status ======= //
+                      DeliveryResultSummaryCard(flow: flow),
 
-                    DeliveryFinancialResultCard(
-                      original: flow.originalTotal,
-                      estimated: amount,
-                    ),
+                      const SizedBox(height: 18),
 
-                    const SizedBox(height: 20),
+                      DeliveryFinancialResultCard(
+                        original: flow.originalTotal,
+                        estimated: amount,
+                      ),
 
-                    if (partial) ...[
+                      const SizedBox(height: 20),
+
+                      // ======= Partial Delivery Reason ======= //
+                      if (partial) ...[
+                        Text(
+                          context.strings.delivery_partial_reason_required,
+                          style: Styles.textStyle17.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.black1,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Wrap(
+                          spacing: 9,
+                          runSpacing: 9,
+                          children: [
+                            for (int i = 0; i < _reasons(context).length; i++)
+                              ChoiceChip(
+                                showCheckmark: false,
+                                label: Text(_reasons(context)[i]),
+                                selected: _reasonIndex == i,
+                                onSelected: (_) {
+                                  setState(() => _reasonIndex = i);
+                                },
+                                selectedColor: AppColors.primary,
+                                backgroundColor: AppColors.white0,
+                                labelStyle: Styles.base.copyWith(
+                                  color: _reasonIndex == i
+                                      ? AppColors.white0
+                                      : AppColors.black1,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                          ],
+                        ),
+
+                        // ======= Other Reason ======= //
+                        if (_reasonIndex == 4) ...[
+                          const SizedBox(height: 12),
+
+                          TextField(
+                            controller: _otherReasonController,
+                            onChanged: (_) => setState(() {}),
+
+                            onTapOutside: (_) {
+                              _hideKeyboard();
+                            },
+
+                            decoration: InputDecoration(
+                              hintText:
+                                  context.strings.delivery_other_reason_hint,
+                              border: const OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
+
+                        const SizedBox(height: 20),
+                      ],
+
+                      // ======= Notes ======= //
                       Text(
-                        context.strings.delivery_partial_reason_required,
-                        style: TextStyle(
-                          fontSize: 17,
+                        context.strings.delivery_notes_title,
+                        style: Styles.textStyle17.copyWith(
                           fontWeight: FontWeight.w800,
                           color: AppColors.black1,
                         ),
                       ),
+
                       const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 9,
-                        runSpacing: 9,
-                        children: [
-                          for (int i = 0; i < _reasons(context).length; i++)
-                            ChoiceChip(
-                              showCheckmark: false,
-                              label: Text(_reasons(context)[i]),
-                              selected: _reasonIndex == i,
-                              onSelected: (_) {
-                                setState(() => _reasonIndex = i);
-                              },
-                              selectedColor: AppColors.primary,
-                              backgroundColor: AppColors.white0,
-                              labelStyle: TextStyle(
-                                color: _reasonIndex == i
-                                    ? AppColors.white0
-                                    : AppColors.black1,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                        ],
-                      ),
-                      if (_reasonIndex == 4) ...[
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: _otherReasonController,
-                          onChanged: (_) => setState(() {}),
-                          decoration: InputDecoration(
-                            hintText:
-                                context.strings.delivery_other_reason_hint,
-                            border: const OutlineInputBorder(),
+
+                      TextField(
+                        controller: _notesController,
+                        minLines: 3,
+                        maxLines: 4,
+
+                        onTapOutside: (_) {
+                          _hideKeyboard();
+                        },
+
+                        decoration: InputDecoration(
+                          hintText: context.strings.delivery_notes_hint,
+                          filled: true,
+                          fillColor: AppColors.white0,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                      ],
-                      const SizedBox(height: 20),
-                    ],
+                      ),
 
-                    Text(
-                      context.strings.delivery_notes_title,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.black1,
+                      const SizedBox(height: 12),
+
+                      Text(
+                        context.strings.delivery_reason_not_sent,
+                        style: Styles.base.copyWith(
+                          fontSize: 12,
+                          color: AppColors.grey4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // ======= Fixed Bottom Button ======= //
+                // Remains visible above the keyboard.
+                SafeArea(
+                  top: false,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey0,
+                      border: Border(
+                        top: BorderSide(color: AppColors.grey3, width: 1),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _notesController,
-                      minLines: 3,
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        hintText: context.strings.delivery_notes_hint,
-                        filled: true,
-                        fillColor: AppColors.white0,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                    child: SizedBox(
+                      height: 60,
+                      child: ElevatedButton(
+                        onPressed: partial && _selectedReason.isEmpty
+                            ? null
+                            : _continue,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.white0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          context.strings.delivery_continue_finalization,
+                          style: Styles.textStyle18.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: 12),
-                    Text(
-                      context.strings.delivery_reason_not_sent,
-                      style: TextStyle(fontSize: 12, color: AppColors.grey4),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        bottomNavigationBar: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SizedBox(
-              height: 66,
-              child: ElevatedButton(
-                onPressed: partial && _selectedReason.isEmpty
-                    ? null
-                    : _continue,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
                   ),
                 ),
-                child: Text(
-                  context.strings.delivery_continue_finalization,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
+              ],
             ),
           ),
         ),

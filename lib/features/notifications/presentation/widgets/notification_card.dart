@@ -6,6 +6,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({
@@ -62,12 +63,12 @@ class NotificationCard extends StatelessWidget {
         return context.strings.notification_just_now;
       }
       if (difference.inMinutes < 60) {
-        return '${difference.inMinutes} '
-            '${context.strings.notification_minutes_ago}';
+        return context.strings.notification_minutes_ago_count(
+          difference.inMinutes,
+        );
       }
       if (difference.inHours < 24) {
-        return '${difference.inHours} '
-            '${context.strings.notification_hours_ago}';
+        return context.strings.notification_hours_ago_count(difference.inHours);
       }
       if (difference.inDays == 1) {
         return context.strings.yesterday;
@@ -100,7 +101,7 @@ class NotificationCard extends StatelessWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text(message),
+          content: Text(context.localizedErrorMessage(message)),
           backgroundColor: AppColors.red0,
           behavior: SnackBarBehavior.floating,
         ),
@@ -121,24 +122,24 @@ class NotificationCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: isRead ? AppColors.white0 : AppColors.blue5,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isRead ? AppColors.grey3 : AppColors.blue3,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black1.withValues(alpha: isRead ? 0.02 : 0.055),
-            blurRadius: isRead ? 9 : 17,
-            offset: const Offset(0, 5),
+            color: AppColors.black1.withValues(alpha: isRead ? 0.02 : 0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: isRead || isMarking ? null : () => _markAsRead(context),
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
               Padding(
@@ -164,11 +165,11 @@ class NotificationCard extends StatelessWidget {
                                   notification.title,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: Styles.textStyle16.copyWith(
                                     height: 1.35,
-                                    fontWeight:
-                                        isRead ? FontWeight.w700 : FontWeight.w800,
+                                    fontWeight: isRead
+                                        ? FontWeight.w700
+                                        : FontWeight.w800,
                                     color: AppColors.black1,
                                   ),
                                 ),
@@ -188,13 +189,6 @@ class NotificationCard extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: AppColors.primary,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.18),
-                                        blurRadius: 8,
-                                      ),
-                                    ],
                                   ),
                                 ),
                               ],
@@ -205,8 +199,7 @@ class NotificationCard extends StatelessWidget {
                             description,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.5,
+                            style: Styles.textStyle13_5.copyWith(
                               height: 1.55,
                               fontWeight: FontWeight.w400,
                               color: AppColors.grey1,
@@ -226,9 +219,7 @@ class NotificationCard extends StatelessWidget {
                                   _formatTime(context),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                  style: Styles.textStyle12.copyWith(
                                     color: AppColors.grey4,
                                   ),
                                 ),
@@ -288,11 +279,7 @@ class _NotificationIcon extends StatelessWidget {
               : iconColor.withValues(alpha: 0.12),
         ),
       ),
-      child: Icon(
-        icon,
-        size: 25,
-        color: isRead ? AppColors.grey4 : iconColor,
-      ),
+      child: Icon(icon, size: 25, color: isRead ? AppColors.grey4 : iconColor),
     );
   }
 }

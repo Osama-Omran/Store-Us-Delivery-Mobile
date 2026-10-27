@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingPhotoActions extends StatelessWidget {
   const ReceivingPhotoActions({
@@ -27,7 +28,10 @@ class ReceivingPhotoActions extends StatelessWidget {
             ),
             child: Text(
               context.strings.retake_photo,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              style: Styles.base.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         )
@@ -49,8 +53,7 @@ class ReceivingPhotoActions extends StatelessWidget {
                   ),
                   child: Text(
                     context.strings.retake_photo,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: Styles.textStyle16.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -72,8 +75,7 @@ class ReceivingPhotoActions extends StatelessWidget {
                   ),
                   child: Text(
                     context.strings.use_photo,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: Styles.textStyle16.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),

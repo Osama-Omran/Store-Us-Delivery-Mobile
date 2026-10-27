@@ -8,6 +8,8 @@ import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cub
 import 'reschedule_date_time_fields.dart';
 import 'reschedule_order_form.dart';
 
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+
 class RescheduleOrderSheet extends StatefulWidget {
   const RescheduleOrderSheet({
     super.key,
@@ -31,12 +33,13 @@ class RescheduleOrderSheet extends StatefulWidget {
 class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-  String? _selectedReason;
+  int? _selectedReasonIndex;
 
   final _notesController = TextEditingController();
   final _otherReasonController = TextEditingController();
 
-  final List<String> _reasons = const [
+  // These are existing API reason values; localize labels separately.
+  static const List<String> _reasonValues = [
     'العميل طلب تغيير الموعد',
     'العميل غير متواجد',
     'المحل مغلق',
@@ -44,6 +47,16 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
     'مشكلة في العنوان',
     'مشكلة في السيارة',
     'سبب آخر',
+  ];
+
+  List<String> _reasons(BuildContext context) => [
+    context.strings.reschedule_reason_customer_requested,
+    context.strings.reschedule_reason_customer_absent,
+    context.strings.cancel_reason_shop_closed,
+    context.strings.reschedule_reason_customer_unreachable,
+    context.strings.reschedule_reason_address_issue,
+    context.strings.reschedule_reason_vehicle_issue,
+    context.strings.cancel_reason_other,
   ];
 
   @override
@@ -68,11 +81,13 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
   }
 
   String get _reason {
-    if (_selectedReason == 'سبب آخر') {
+    if (_selectedReasonIndex == 6) {
       return _otherReasonController.text.trim();
     }
 
-    return _selectedReason ?? '';
+    return _selectedReasonIndex == null
+        ? ''
+        : _reasonValues[_selectedReasonIndex!];
   }
 
   bool get _canSubmit {
@@ -129,7 +144,10 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.red0),
+        SnackBar(
+          content: Text(context.localizedErrorMessage(message)),
+          backgroundColor: AppColors.red0,
+        ),
       );
   }
 
@@ -198,8 +216,7 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
 
                   Text(
                     context.strings.reschedule_order_title,
-                    style: TextStyle(
-                      fontSize: 23,
+                    style: Styles.textStyle23.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.black1,
                     ),
@@ -215,7 +232,7 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
                       address: widget.address,
                       dateTimeFields: RescheduleDateTimeFields(
                         dateLabel: _selectedDate == null
-                            ? 'dd/mm/yyyy'
+                            ? context.strings.reschedule_date_hint
                             : _formatDate(_selectedDate!),
                         timeLabel: _selectedTime == null
                             ? '--:--'
@@ -228,14 +245,14 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
                       dateIsPast:
                           _selectedDateTime != null &&
                           !_selectedDateTime!.isAfter(DateTime.now()),
-                      reasons: _reasons,
-                      selectedReason: _selectedReason,
+                      reasons: _reasons(context),
+                      selectedReasonIndex: _selectedReasonIndex,
                       otherReasonController: _otherReasonController,
                       notesController: _notesController,
                       isLoading: isLoading,
                       onReasonSelected: (reason) {
                         setState(() {
-                          _selectedReason = reason;
+                          _selectedReasonIndex = reason;
                         });
                       },
                       onOtherReasonChanged: () {
@@ -268,8 +285,7 @@ class _RescheduleOrderSheetState extends State<RescheduleOrderSheet> {
                             ? CircularProgressIndicator(color: AppColors.white0)
                             : Text(
                                 context.strings.reschedule_confirm,
-                                style: const TextStyle(
-                                  fontSize: 18,
+                                style: Styles.textStyle18.copyWith(
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),

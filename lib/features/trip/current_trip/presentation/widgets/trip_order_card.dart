@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
+
 import '../utils/trip_amount_formatter.dart';
 import '../utils/trip_order_navigation.dart';
 import 'trip_order_contact_line.dart';
 import 'trip_order_status.dart';
 import 'trip_pending_order_actions.dart';
+
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class TripOrderCard extends StatelessWidget {
   const TripOrderCard({
@@ -63,8 +66,7 @@ class TripOrderCard extends StatelessWidget {
                       ),
                       child: Text(
                         '${order.stopNumber}',
-                        style: TextStyle(
-                          fontSize: 21,
+                        style: Styles.textStyle21.copyWith(
                           fontWeight: FontWeight.w900,
                           color: status.numberForeground,
                         ),
@@ -79,8 +81,7 @@ class TripOrderCard extends StatelessWidget {
                             order.customerName,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 17,
+                            style: Styles.textStyle17.copyWith(
                               height: 1.3,
                               color: AppColors.black1,
                               fontWeight: FontWeight.w900,
@@ -92,9 +93,8 @@ class TripOrderCard extends StatelessWidget {
                             textDirection: TextDirection.ltr,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: Styles.textStyle12.copyWith(
                               color: AppColors.primary,
-                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -155,9 +155,7 @@ class TripOrderCard extends StatelessWidget {
                         children: [
                           Text(
                             context.strings.order_value,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                            style: Styles.textStyle12.copyWith(
                               color: AppColors.grey4,
                             ),
                           ),
@@ -168,10 +166,8 @@ class TripOrderCard extends StatelessWidget {
                                 : formatTripAmount(context, order.orderAmount!),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 22,
+                            style: Styles.textStyle22.copyWith(
                               fontWeight: FontWeight.w900,
-                              color: AppColors.black1,
                             ),
                           ),
                         ],
@@ -222,7 +218,7 @@ class TripOrderCard extends StatelessWidget {
                   icon: const Icon(Icons.receipt_long_outlined, size: 19),
                   label: Text(
                     context.strings.view_delivery_details,
-                    style: const TextStyle(
+                    style: Styles.base.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                     ),
@@ -276,10 +272,11 @@ class _PaymentTagData {
       case 'PARTIALLY_PAID':
       case 'PARTIAL_PAID':
       case 'PARTIALLY_COLLECTED':
+      case 'PARTIAL_COLLECTED':
       case 'PARTIAL_COLLECTION':
       case 'PARTIAL_PAYMENT':
         return _PaymentTagData(
-          title: 'لم يكتمل التحصيل',
+          title: context.strings.order_collection_incomplete,
           color: AppColors.orange0,
           background: AppColors.orange1,
         );
@@ -293,13 +290,13 @@ class _PaymentTagData {
         // If we know some cash was collected, avoid saying "none".
         if (order.collectedAmount > 0) {
           return _PaymentTagData(
-            title: 'لم يكتمل التحصيل',
+            title: context.strings.order_collection_incomplete,
             color: AppColors.orange0,
             background: AppColors.orange1,
           );
         }
         return _PaymentTagData(
-          title: 'لم يتم التحصيل',
+          title: context.strings.delivery_not_collected,
           color: AppColors.red1,
           background: AppColors.red1.withValues(alpha: 0.10),
         );
@@ -308,15 +305,21 @@ class _PaymentTagData {
       case 'PAYMENT_FAILED':
       case 'COLLECTION_FAILED':
         return _PaymentTagData(
-          title: 'فشل التحصيل',
+          title: context.strings.order_collection_failed,
+          color: AppColors.red1,
+          background: AppColors.red1.withValues(alpha: 0.10),
+        );
+
+      case 'NOT_STARTED':
+        return _PaymentTagData(
+          title: context.strings.order_collection_not_started,
           color: AppColors.red1,
           background: AppColors.red1.withValues(alpha: 0.10),
         );
 
       default:
-        // Do not claim payment is complete or pending for unknown statuses.
         return _PaymentTagData(
-          title: 'حالة التحصيل غير محددة',
+          title: context.strings.order_collection_status_unknown,
           color: AppColors.grey4,
           background: AppColors.grey5,
         );
@@ -348,10 +351,9 @@ class _PaymentTag extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: Styles.textStyle11.copyWith(
           fontWeight: FontWeight.w800,
           color: color,
-          fontSize: 11,
         ),
       ),
     );

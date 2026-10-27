@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_interceptor.dart';
-import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:storeus_delivery/core/routing/app_router.dart';
 
 import 'api_error_model.dart';
 
@@ -130,8 +128,13 @@ class ErrorHandler implements Exception {
 ApiErrorModel _handleError(DioException error) {
   // Queued is NOT a confirmed server success. Surface a dedicated message.
   if (error.error is OfflineQueuedException) {
-    const message = 'تم حفظ العملية على الجهاز، وسيتم إرسالها تلقائيًا عند عودة الإنترنت';
-    return ApiErrorModel(message: message, errors: {'general': [message]});
+    const message = 'offline_operation_queued';
+    return ApiErrorModel(
+      message: message,
+      errors: {
+        'general': [message],
+      },
+    );
   }
   final data = error.response?.data;
   final statusCode = error.response?.statusCode;
@@ -139,17 +142,9 @@ ApiErrorModel _handleError(DioException error) {
   // Any 5xx error
   if (statusCode != null && statusCode >= 500 && statusCode < 600) {
     return ApiErrorModel(
-      message: navigatorKey
-          .currentContext!
-          .strings
-          .an_error_occurred_try_again_later,
+      message: 'api_server_error',
       errors: {
-        'general': [
-          navigatorKey
-              .currentContext!
-              .strings
-              .an_error_occurred_try_again_later,
-        ],
+        'general': ['api_server_error'],
       },
       errorCode: statusCode,
     );
@@ -170,15 +165,15 @@ ApiErrorModel _handleError(DioException error) {
               }
             });
             return ApiErrorModel(
-              message: data['message']?.toString() ?? 'Unknown error',
+              message: data['message']?.toString() ?? 'api_unknown_error',
               errors: errorMap,
               errorCode: data['status'] as int?,
             );
           } else {
             return ApiErrorModel(
-              message: data['message']?.toString() ?? 'Unknown error',
+              message: data['message']?.toString() ?? 'api_unknown_error',
               errors: {
-                'general': [data['message']?.toString() ?? 'Unknown error'],
+                'general': [data['message']?.toString() ?? 'api_unknown_error'],
               },
               errorCode: data['status'] as int?,
             );
@@ -233,13 +228,10 @@ class ApiErrors {
   static const String conflictError = "conflictError";
   static const String internalServerError = "internalServerError";
   static const String unknownError = "unknownError";
-  static String timeoutError =
-      navigatorKey.currentContext!.strings.no_internet_please_try_again;
-  static String defaultError =
-      navigatorKey.currentContext!.strings.no_internet_please_try_again;
+  static const String timeoutError = 'api_no_internet';
+  static const String defaultError = 'api_no_internet';
   static const String cacheError = "cacheError";
-  static String noInternetError =
-      navigatorKey.currentContext!.strings.no_internet_please_try_again;
+  static const String noInternetError = 'api_no_internet';
   static const String loadingMessage = "loading_message";
   static const String retryAgainMessage = "retry_again_message";
   static const String ok = "Ok";

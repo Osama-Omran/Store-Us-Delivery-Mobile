@@ -51,7 +51,7 @@ class LoadedItemsSection extends StatelessWidget {
                 children: [
                   Text(
                     state.loadedItemsError?.isNotEmpty == true
-                        ? state.loadedItemsError!
+                        ? context.localizedErrorMessage(state.loadedItemsError)
                         : context.strings.loaded_items_load_failed,
                     textAlign: TextAlign.center,
                     style: Styles.textStyle14.copyWith(color: AppColors.grey4),

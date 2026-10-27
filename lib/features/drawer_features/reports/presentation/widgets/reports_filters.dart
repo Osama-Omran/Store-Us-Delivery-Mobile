@@ -93,27 +93,36 @@ class ReportsFilters extends StatelessWidget {
 
         // ======= Custom Dates ======= //
         if (state.period == ReportsPeriod.custom)
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
-            children: [
-              Expanded(
-                child: _ReportsDateField(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final fields = [
+                _ReportsDateField(
                   key: const ValueKey('reports-from-date'),
                   label: context.strings.reports_from_date,
                   date: state.fromDate,
                   onTap: () => _selectDate(context, from: true),
                 ),
-              ),
-              Expanded(
-                child: _ReportsDateField(
+                _ReportsDateField(
                   key: const ValueKey('reports-to-date'),
                   label: context.strings.reports_to_date,
                   date: state.toDate,
                   onTap: () => _selectDate(context, from: false),
                 ),
-              ),
-            ],
+              ];
+              if (constraints.maxWidth < 340 ||
+                  MediaQuery.textScalerOf(context).scale(16) > 20) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 12,
+                  children: fields,
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 10,
+                children: [for (final field in fields) Expanded(child: field)],
+              );
+            },
           ),
 
         // ======= Trip Selector ======= //
@@ -168,7 +177,7 @@ class ReportsFilters extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               decoration: BoxDecoration(
                 color: AppColors.white0,
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppColors.grey3, width: 2),
               ),
               child: Row(
@@ -232,11 +241,11 @@ class _ReportsDateField extends StatelessWidget {
           child: Material(
             color: AppColors.white0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(20),
               side: BorderSide(color: AppColors.grey3, width: 2),
             ),
             child: InkWell(
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(20),
               onTap: onTap,
               child: Container(
                 constraints: const BoxConstraints(minHeight: 60),

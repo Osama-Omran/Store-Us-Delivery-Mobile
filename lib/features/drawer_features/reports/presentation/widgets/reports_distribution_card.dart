@@ -3,32 +3,37 @@ import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/data/models/reports_models.dart';
+
 import 'reports_card.dart';
 
 class ReportsDistributionCard extends StatelessWidget {
-  const ReportsDistributionCard({
-    super.key,
-    required this.distribution,
-  });
+  const ReportsDistributionCard({super.key, required this.distribution});
 
   // null means per-trip distribution is unavailable, not zero.
   final List<ReportOrderDistribution>? distribution;
 
-  String _label(BuildContext context, String status) => switch (status) {
-        'DELIVERED' => context.strings.reports_delivered,
-        'PARTIAL' => context.strings.reports_partial,
+  String _label(BuildContext context, String status) =>
+      switch (status.trim().toUpperCase()) {
+        'DELIVERED' ||
+        'COMPLETED' ||
+        'FULLY_DELIVERED' ||
+        'DELIVERED_FULLY' => context.strings.reports_delivered,
+        'PARTIAL' ||
+        'PARTIALLY_DELIVERED' ||
+        'PARTIAL_DELIVERED' ||
+        'DELIVERED_PARTIALLY' => context.strings.reports_partial,
         'PENDING' => context.strings.reports_status_pending,
         'RESCHEDULED' => context.strings.reports_status_rescheduled,
-        'CANCELLED' => context.strings.reports_status_cancelled,
-        _ => status,
+        'CANCELLED' || 'CANCELED' => context.strings.reports_status_cancelled,
+        _ => context.strings.trip_customers_unknown_status,
       };
 
   Color _color(String status) => switch (status) {
-        'DELIVERED' => AppColors.green0,
-        'PARTIAL' => AppColors.orange0,
-        'CANCELLED' => AppColors.red1,
-        _ => AppColors.grey4,
-      };
+    'DELIVERED' => AppColors.green0,
+    'PARTIAL' => AppColors.orange0,
+    'CANCELLED' => AppColors.red1,
+    _ => AppColors.grey4,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +88,9 @@ class ReportsDistributionCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       _label(context, row.status),
-                      style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+                      style: Styles.textStyle14.copyWith(
+                        color: AppColors.grey4,
+                      ),
                     ),
                   ),
                   Text(

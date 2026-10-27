@@ -7,6 +7,7 @@ import 'package:storeus_delivery/core/widgets/custom_svg.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
@@ -29,7 +30,10 @@ class HomeHeader extends StatelessWidget {
             children: [
               Text(
                 context.strings.welcome,
-                style: TextStyle(fontSize: 14, color: AppColors.grey4),
+                style: Styles.base.copyWith(
+                  fontSize: 14,
+                  color: AppColors.grey4,
+                ),
               ),
               if (userName.isNotEmpty) ...[
                 const SizedBox(height: 3),
@@ -37,8 +41,7 @@ class HomeHeader extends StatelessWidget {
                   userName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 27,
+                  style: Styles.textStyle27.copyWith(
                     height: 1.2,
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
@@ -75,8 +78,7 @@ class HomeHeader extends StatelessWidget {
                             tripBadge!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
+                            style: Styles.textStyle12.copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColors.primary,
                             ),
@@ -115,8 +117,8 @@ class HomeHeader extends StatelessWidget {
                       builder: (context, notificationState) {
                         final unreadCount =
                             notificationState is NotificationsSuccessState
-                                ? notificationState.unreadCount
-                                : 0;
+                            ? notificationState.unreadCount
+                            : 0;
                         if (unreadCount <= 0) {
                           return const SizedBox.shrink();
                         }

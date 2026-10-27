@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_request_body.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/create_customer_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -8,16 +13,25 @@ import '../utils/direct_sale_input.dart';
 
 class DirectSaleCubit extends Cubit<DirectSaleState> {
   DirectSaleCubit({
+    required this._createCustomerUsecase,
     DirectSaleState initialState = const DirectSaleState(),
     Future<Position> Function()? locate,
   }) : _locate = locate ?? _currentPosition,
        super(initialState) {
     amountController.text = initialState.amountText;
+    // After an explicit server rejection, editing the form clears the stale
+    // error without affecting any unresolved/possibly successful operation.
+    for (final controller in [nameController, phoneController, areaController]) {
+      controller.addListener(_clearRejectedCustomerErrorOnEdit);
+    }
   }
 
   static DirectSaleCubit get(BuildContext context) => BlocProvider.of(context);
 
+  final CreateCustomerUsecase _createCustomerUsecase;
   final Future<Position> Function() _locate;
+  String? _createCustomerIdempotencyKey;
+  CreateCustomerRequestBody? _unconfirmedCustomerRequest;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -26,12 +40,156 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
   final notesController = TextEditingController();
   final amountController = TextEditingController();
 
+  // UUID v4, stable across retries of the same unsaved form.
+  static String _uuidV4() {
+    final random = Random.secure();
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    final hex = bytes.map((value) => value.toRadixString(16).padLeft(2, '0')).join();
+    return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-'
+        '${hex.substring(12, 16)}-${hex.substring(16, 20)}-'
+        '${hex.substring(20)}';
+  }
+
+  Future<void> createCustomer() async {
+    if (isClosed || state.creatingCustomer) {
+      return;
+    }
+    if (formKey.currentState?.validate() != true) return;
+
+    final customerName = nameController.text.trim();
+    final phone = normalizeDirectSaleDigits(phoneController.text);
+    final territory = areaController.text.trim();
+    if (customerName.isEmpty || !isValidDirectSalePhone(phone) || territory.isEmpty) {
+      emit(state.copyWith(customerCreateError: 'direct_sale_customer_invalid_fields'));
+      return;
+    }
+
+    // If the last operation has an uncertain result, do NOT send a different
+    // customer under the same idempotency key (or generate another key).
+    // Retrying the EXACT previous payload with the original key is safe only
+    // when the backend implements its documented idempotency contract.
+    final unconfirmed = _unconfirmedCustomerRequest;
+    if (unconfirmed != null &&
+        (unconfirmed.customerName != customerName ||
+            unconfirmed.phone != phone ||
+            unconfirmed.territory != territory)) {
+      emit(state.copyWith(
+        creatingCustomer: false,
+        clearCustomerCreateError: false,
+        customerCreateError: 'direct_sale_customer_retry_same_data',
+        retryOriginalCustomerRequest: true,
+      ));
+      return;
+    }
+
+    _createCustomerIdempotencyKey ??= _uuidV4();
+    final request = unconfirmed ?? CreateCustomerRequestBody(
+      idempotencyKey: _createCustomerIdempotencyKey!,
+      customerName: customerName,
+      phone: phone,
+      customerType: 'Individual',
+      customerGroup: 'Individual',
+      territory: territory,
+    );
+    emit(state.copyWith(creatingCustomer: true, clearCustomerCreateError: true));
+
+    try {
+      final result = await _createCustomerUsecase(request);
+      if (isClosed) return;
+
+      result.when(
+        success: (response) {
+          if (!response.success) {
+            // Explicit business rejection: a corrected form is a new attempt.
+            _createCustomerIdempotencyKey = null;
+            _unconfirmedCustomerRequest = null;
+            emit(state.copyWith(
+              creatingCustomer: false,
+              customerVerificationRequired: false,
+              retryOriginalCustomerRequest: false,
+              customerCreateError: response.message?.trim().isNotEmpty == true
+                  ? response.message
+                  : 'direct_sale_customer_create_failed',
+            ));
+            return;
+          }
+          if (response.customerId == null) {
+            // The server may have created the customer. Allow a manual retry
+            // of the EXACT same operation; never allocate a new UUID here.
+            _unconfirmedCustomerRequest = request;
+            emit(state.copyWith(
+              creatingCustomer: false,
+              customerVerificationRequired: false,
+              retryOriginalCustomerRequest: true,
+              customerCreateError: 'direct_sale_customer_missing_id',
+            ));
+            return;
+          }
+          final created = DirectSaleCustomer(
+            id: response.customerId,
+            name: response.customerName?.trim().isNotEmpty == true
+                ? response.customerName!.trim()
+                : customerName,
+            phone: phone,
+          );
+          _createCustomerIdempotencyKey = null;
+          _unconfirmedCustomerRequest = null;
+          emit(state.copyWith(
+            creatingCustomer: false,
+            customerVerificationRequired: false,
+            retryOriginalCustomerRequest: false,
+            clearCustomerCreateError: true,
+            customer: created,
+            step: DirectSaleStep.customer,
+          ));
+        },
+        failure: (failure) {
+          final message = failure.apiErrorModel.message.trim();
+          // Enable an explicit retry. Reuse the same idempotency key AND
+          // request body so a timeout or 5xx cannot create a second customer.
+          _unconfirmedCustomerRequest = request;
+          emit(state.copyWith(
+            creatingCustomer: false,
+            customerVerificationRequired: false,
+            retryOriginalCustomerRequest: true,
+            customerCreateError: message.isNotEmpty
+                ? message
+                : 'direct_sale_customer_verify_before_retry',
+          ));
+        },
+      );
+    } catch (_) {
+      if (!isClosed) {
+        _unconfirmedCustomerRequest = request;
+        emit(state.copyWith(
+          creatingCustomer: false,
+          customerVerificationRequired: false,
+          retryOriginalCustomerRequest: true,
+          customerCreateError: 'direct_sale_customer_verify_before_retry',
+        ));
+      }
+    }
+  }
+
+  void _clearRejectedCustomerErrorOnEdit() {
+    if (isClosed || state.creatingCustomer ||
+        state.customerCreateError == null ||
+        _unconfirmedCustomerRequest != null) {
+      return;
+    }
+    emit(state.copyWith(clearCustomerCreateError: true));
+  }
+
   void selectCashCustomer() {
     emit(state.copyWith(customer: const DirectSaleCustomer(name: '')));
   }
 
-  void openNewCustomer() =>
-      emit(state.copyWith(step: DirectSaleStep.newCustomer));
+  void openNewCustomer() {
+    if (state.creatingCustomer) return;
+    emit(state.copyWith(step: DirectSaleStep.newCustomer));
+  }
   void changeCustomer() => emit(state.copyWith(step: DirectSaleStep.customer));
 
   void continueToProducts() {
@@ -78,6 +236,7 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
 
   // Returns false when the route itself should close.
   bool goBack() {
+    if (state.creatingCustomer) return true;
     final step = switch (state.step) {
       DirectSaleStep.customer || DirectSaleStep.success => null,
       DirectSaleStep.newCustomer ||
@@ -93,6 +252,8 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
     for (final controller in _controllers) {
       controller.clear();
     }
+    _createCustomerIdempotencyKey = null;
+    _unconfirmedCustomerRequest = null;
     emit(
       DirectSaleState(
         products: state.products,

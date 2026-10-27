@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryExtraProductsSection extends StatelessWidget {
   const DeliveryExtraProductsSection({super.key});
@@ -29,8 +30,7 @@ class DeliveryExtraProductsSection extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 context.strings.delivery_extra_products,
-                style: TextStyle(
-                  fontSize: 18,
+                style: Styles.textStyle18.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.primary,
                 ),

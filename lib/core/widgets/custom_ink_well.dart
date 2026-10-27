@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
+import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 class CustomInkWell extends StatefulWidget {
   const CustomInkWell({
@@ -34,12 +35,14 @@ class _CustomInkWellState extends State<CustomInkWell> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
-        splashColor: widget.withEffect == false ? Colors.transparent : null,
-        highlightColor: widget.withEffect == false ? Colors.transparent : null,
-        hoverColor: widget.withEffect == false ? Colors.transparent : null,
-        focusColor: widget.withEffect == false ? Colors.transparent : null,
+        splashColor: widget.withEffect == false ? AppColors.transparent : null,
+        highlightColor: widget.withEffect == false
+            ? AppColors.transparent
+            : null,
+        hoverColor: widget.withEffect == false ? AppColors.transparent : null,
+        focusColor: widget.withEffect == false ? AppColors.transparent : null,
         borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
 
         onHighlightChanged: (isPressed) {

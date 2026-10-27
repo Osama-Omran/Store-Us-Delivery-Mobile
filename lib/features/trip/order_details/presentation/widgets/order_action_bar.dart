@@ -157,7 +157,7 @@ class OrderActionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
       decoration: BoxDecoration(
         color: AppColors.white0,
         border: Border(top: BorderSide(color: AppColors.grey3)),
@@ -175,18 +175,21 @@ class OrderActionBar extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
-            SizedBox(
-              height: 76,
-              width: double.infinity,
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: 56,
+                minWidth: double.infinity,
+              ),
               child: ElevatedButton.icon(
                 onPressed: () => _openDeliveryScreen(context),
 
-                icon: const Icon(Icons.inventory_2_outlined, size: 28),
+                icon: const Icon(Icons.inventory_2_outlined, size: 24),
                 label: Text(
                   context.strings.deliver_order,
-                  style: Styles.textStyle20.copyWith(
+                  textAlign: TextAlign.center,
+                  style: Styles.textStyle18.copyWith(
                     color: AppColors.white0,
                     fontWeight: FontWeight.w800,
                   ),
@@ -195,29 +198,32 @@ class OrderActionBar extends StatelessWidget {
                   backgroundColor: AppColors.green0,
                   foregroundColor: AppColors.white0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(27),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
 
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 68,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
                     child: OutlinedButton.icon(
                       onPressed: () => _openRescheduleSheet(context),
                       icon: const Icon(Icons.event_repeat),
-                      label: Text(context.strings.reschedule_delivery),
+                      label: Text(
+                        context.strings.reschedule_delivery,
+                        textAlign: TextAlign.center,
+                      ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
                         backgroundColor: AppColors.blue4,
                         side: BorderSide(color: AppColors.blue3, width: 1.5),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                       ),
                     ),
@@ -227,12 +233,15 @@ class OrderActionBar extends StatelessWidget {
                 const SizedBox(width: 10),
 
                 Expanded(
-                  child: SizedBox(
-                    height: 68,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
                     child: OutlinedButton.icon(
                       onPressed: () => _openCancelDeliverySheet(context),
                       icon: const Icon(Icons.block_outlined),
-                      label: Text(context.strings.cancel_delivery),
+                      label: Text(
+                        context.strings.cancel_delivery,
+                        textAlign: TextAlign.center,
+                      ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.red1,
                         backgroundColor: AppColors.red1.withValues(alpha: .10),
@@ -241,7 +250,7 @@ class OrderActionBar extends StatelessWidget {
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                       ),
                     ),

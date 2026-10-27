@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
+import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
@@ -13,10 +14,15 @@ import 'package:storeus_delivery/features/trip/order_details/presentation/widget
 import 'package:storeus_delivery/features/trip/order_details/presentation/widgets/order_details_financial_card.dart';
 
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_outcome_request_body.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_state.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_outcome_actions.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_order_header.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_order_items_section.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_extra_products_section.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_summary_bar.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliverOrderScreen extends StatelessWidget {
   const DeliverOrderScreen({
@@ -41,6 +47,9 @@ class DeliverOrderScreen extends StatelessWidget {
 
         // ======= Local Delivery Draft ======= //
         BlocProvider<DeliveryDraftCubit>(create: (_) => DeliveryDraftCubit()),
+        BlocProvider<DeliveryOutcomeCubit>(
+          create: (_) => getIt<DeliveryOutcomeCubit>(),
+        ),
       ],
       child: _DeliverOrderBody(tripId: tripId, orderId: orderId),
     );
@@ -62,16 +71,33 @@ class _DeliverOrderBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<OrderDetailsCubit, OrderDetailsState>(
-      listenWhen: (_, current) => current is OrderDetailsSuccessState,
-      listener: (context, state) {
-        if (state is OrderDetailsSuccessState) {
-          context.read<DeliveryDraftCubit>().initialize(state.order);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<OrderDetailsCubit, OrderDetailsState>(
+          listenWhen: (_, current) => current is OrderDetailsSuccessState,
+          listener: (context, state) {
+            if (state is OrderDetailsSuccessState) {
+              context.read<DeliveryDraftCubit>().initialize(state.order);
+            }
+          },
+        ),
+        BlocListener<DeliveryOutcomeCubit, DeliveryOutcomeState>(
+          listenWhen: (_, current) => current is DeliveryOutcomeSuccess,
+          listener: (context, _) {
+            // Re-fetch the backend status; don't mark a request complete locally
+            // before the API confirms it.
+            context.read<OrderDetailsCubit>().getOrderDetails(
+              tripId: tripId,
+              orderId: orderId,
+            );
+          },
+        ),
+      ],
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: BlocBuilder<OrderDetailsCubit, OrderDetailsState>(
+        child: BlocBuilder<DeliveryOutcomeCubit, DeliveryOutcomeState>(
+          builder: (context, outcomeState) =>
+              BlocBuilder<OrderDetailsCubit, OrderDetailsState>(
           builder: (context, state) {
             final success = state is OrderDetailsSuccessState ? state : null;
 
@@ -97,7 +123,11 @@ class _DeliverOrderBody extends StatelessWidget {
                     DeliveryOrderHeader(salesOrder: order?.salesOrder),
 
                     Expanded(
-                      child: switch (state) {
+                      child: outcomeState is DeliveryOutcomeSuccess
+                          ? _DeliveryOutcomeCompleted(
+                              outcome: outcomeState.outcome,
+                            )
+                          : switch (state) {
                         OrderDetailsInitial() || OrderDetailsLoadingState() =>
                           const Center(child: CircularProgressIndicator()),
 
@@ -144,6 +174,14 @@ class _DeliverOrderBody extends StatelessWidget {
 
                                       const SizedBox(height: 22),
 
+                                      // ======= Cancel / Reschedule ======= //
+                                      DeliveryOutcomeActions(
+                                        tripId: tripId,
+                                        orderId: orderId,
+                                      ),
+
+                                      const SizedBox(height: 22),
+
                                       // ======= Delivery Items ======= //
                                       const DeliveryOrderItemsSection(),
 
@@ -165,11 +203,13 @@ class _DeliverOrderBody extends StatelessWidget {
               ),
 
               // ======= Fixed Summary ======= //
-              bottomNavigationBar: success != null && isPending
+              bottomNavigationBar: outcomeState is! DeliveryOutcomeSuccess &&
+                      success != null && isPending
                   ? DeliverySummaryBar(tripId: tripId, orderId: orderId)
                   : null,
             );
           },
+        ),
         ),
       ),
     );
@@ -202,7 +242,10 @@ class _DeliveryError extends StatelessWidget {
           children: [
             Icon(Icons.error_outline_rounded, size: 44, color: AppColors.red1),
 
-            Text(message, textAlign: TextAlign.center),
+            Text(
+              context.localizedErrorMessage(message),
+              textAlign: TextAlign.center,
+            ),
 
             OutlinedButton.icon(
               onPressed: () {
@@ -248,17 +291,70 @@ class _DeliveryUnavailable extends StatelessWidget {
             Text(
               context.strings.delivery_order_not_pending,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 color: AppColors.black1,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            Text(status, style: TextStyle(color: AppColors.grey4)),
+            Text(status, style: Styles.base.copyWith(color: AppColors.grey4)),
 
             OutlinedButton(
               onPressed: () => context.pop(),
               child: Text(context.strings.delivery_back_to_edit),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// =====================================================
+// Server-confirmed outcome
+// =====================================================
+class _DeliveryOutcomeCompleted extends StatelessWidget {
+  const _DeliveryOutcomeCompleted({required this.outcome});
+
+  final DeliveryOutcomeType outcome;
+
+  @override
+  Widget build(BuildContext context) {
+    final cancelled = outcome == DeliveryOutcomeType.cancelled;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              cancelled
+                  ? Icons.cancel_outlined
+                  : Icons.event_available_rounded,
+              size: 70,
+              color: cancelled ? AppColors.red1 : AppColors.green0,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              cancelled
+                  ? context.strings.delivery_cancel_success
+                  : context.strings.delivery_reschedule_success,
+              textAlign: TextAlign.center,
+              style: Styles.textStyle20.copyWith(
+                color: AppColors.black1,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop(true);
+                } else {
+                  context.goNamed(RoutesNames.layout);
+                }
+              },
+              child: Text(context.strings.delivery_outcome_back),
             ),
           ],
         ),

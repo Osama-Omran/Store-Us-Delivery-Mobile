@@ -146,9 +146,9 @@ class OrderAddressLocationSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Text(
-                '${context.strings.order_location_accuracy} '
-                '±${accuracy!.toStringAsFixed(0)} '
-                '${context.strings.order_meters}',
+                context.strings.location_accuracy_description(
+                  accuracy!.toStringAsFixed(0),
+                ),
                 style: Styles.textStyle12.copyWith(color: AppColors.orange0),
               ),
             ),

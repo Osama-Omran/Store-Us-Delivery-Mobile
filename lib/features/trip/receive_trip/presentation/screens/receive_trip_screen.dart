@@ -99,7 +99,7 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(message),
+            content: Text(context.localizedErrorMessage(message)),
             backgroundColor: AppColors.red0,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 4),
@@ -260,7 +260,10 @@ class _ReceiveTripMessage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 16,
           children: [
-            Text(message, textAlign: TextAlign.center),
+            Text(
+              context.localizedErrorMessage(message),
+              textAlign: TextAlign.center,
+            ),
             OutlinedButton(
               onPressed: onRetry,
               child: Text(context.strings.current_trip_retry),

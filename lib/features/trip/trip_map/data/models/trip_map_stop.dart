@@ -8,7 +8,7 @@ class TripMapStop {
   final TripOrderModel order;
   final LatLng location;
 
-  String get id => order.id;
+  String get id => order.apiId?.toString() ?? order.id;
   int get number => order.stopNumber;
   String get name => order.customerName;
   String get address => order.address;

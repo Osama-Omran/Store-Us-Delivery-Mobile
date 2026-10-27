@@ -1,5 +1,8 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_connectivity.dart';
+import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 /// Mount near the top of LayoutScreen to clearly identify stale data.
 class OfflineCacheBanner extends StatelessWidget {
@@ -17,36 +20,39 @@ class OfflineCacheBanner extends StatelessWidget {
         final savedLabel = savedAt == null
             ? null
             : '${savedAt.year}/${savedAt.month.toString().padLeft(2, '0')}/'
-                '${savedAt.day.toString().padLeft(2, '0')} '
-                '${savedAt.hour.toString().padLeft(2, '0')}:'
-                '${savedAt.minute.toString().padLeft(2, '0')}';
+                  '${savedAt.day.toString().padLeft(2, '0')} '
+                  '${savedAt.hour.toString().padLeft(2, '0')}:'
+                  '${savedAt.minute.toString().padLeft(2, '0')}';
         return Container(
           width: double.infinity,
           margin: const EdgeInsets.fromLTRB(14, 8, 14, 8),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFF0D8),
+            color: AppColors.offlineBannerBackground,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFF1C482)),
+            border: Border.all(color: AppColors.offlineBannerBorder),
           ),
           child: Row(
             children: [
               const Icon(
                 Icons.wifi_off_rounded,
-                color: Color(0xFFB86600),
+                color: AppColors.offlineBannerIcon,
                 size: 21,
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   state.showingSavedData
-                      ? 'غير متصل — تعرض بيانات محفوظة${savedLabel == null ? '' : ' من $savedLabel'}'
-                      : 'لا يوجد اتصال بالإنترنت — قد لا تتوفر بعض البيانات',
+                      ? (savedLabel == null
+                            ? context.strings.offline_saved_data
+                            : context.strings.offline_saved_data_since(
+                                savedLabel,
+                              ))
+                      : context.strings.offline_data_unavailable,
                   textDirection: TextDirection.rtl,
-                  style: const TextStyle(
-                    color: Color(0xFF8B5100),
+                  style: Styles.textStyle12.copyWith(
+                    color: AppColors.offlineBannerText,
                     fontWeight: FontWeight.w700,
-                    fontSize: 12,
                   ),
                 ),
               ),

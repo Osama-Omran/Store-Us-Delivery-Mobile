@@ -32,10 +32,10 @@ class _ContactMessageSheetState extends State<ContactMessageSheet> {
     if (!_formKey.currentState!.validate()) return;
 
     context.read<ContactCubit>().sendMessage(
-          subject: _subject.text,
-          message: _message.text,
-          tripId: widget.tripId,
-        );
+      subject: _subject.text,
+      message: _message.text,
+      tripId: widget.tripId,
+    );
   }
 
   @override
@@ -82,8 +82,8 @@ class _ContactMessageSheetState extends State<ContactMessageSheet> {
                           ),
                           validator: (value) =>
                               value == null || value.trim().isEmpty
-                                  ? context.strings.contact_subject_required
-                                  : null,
+                              ? context.strings.contact_subject_required
+                              : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -98,15 +98,17 @@ class _ContactMessageSheetState extends State<ContactMessageSheet> {
                           ),
                           validator: (value) =>
                               value == null || value.trim().isEmpty
-                                  ? context.strings.contact_message_required
-                                  : null,
+                              ? context.strings.contact_message_required
+                              : null,
                         ),
                         if (state.sendError != null) ...[
                           const SizedBox(height: 12),
                           Text(
                             state.sendError == 'contact_send_error'
                                 ? context.strings.contact_send_error
-                                : state.sendError!,
+                                : context.localizedErrorMessage(
+                                    state.sendError,
+                                  ),
                             style: Styles.textStyle14.copyWith(
                               color: AppColors.red0,
                             ),
@@ -127,7 +129,7 @@ class _ContactMessageSheetState extends State<ContactMessageSheet> {
                                     height: 24,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      color: Colors.white,
+                                      color: AppColors.white0,
                                     ),
                                   )
                                 : Text(context.strings.contact_send),

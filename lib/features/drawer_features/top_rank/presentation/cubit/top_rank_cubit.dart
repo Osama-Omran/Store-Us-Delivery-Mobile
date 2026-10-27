@@ -48,7 +48,7 @@ class TopRankCubit extends Cubit<TopRankState> {
               TopRankState(
                 period: selectedPeriod,
                 role: selectedRole,
-                error: 'لا توجد بيانات لهذه الفئة',
+                error: 'top_rank_category_empty',
               ),
             );
             return;
@@ -73,7 +73,7 @@ class TopRankCubit extends Cubit<TopRankState> {
               role: selectedRole,
               error: message.isNotEmpty && message != 'null'
                   ? message
-                  : 'تعذر تحميل الترتيب',
+                  : 'top_rank_load_failed',
             ),
           );
         },
@@ -85,7 +85,7 @@ class TopRankCubit extends Cubit<TopRankState> {
         TopRankState(
           period: selectedPeriod,
           role: selectedRole,
-          error: 'تعذر تحميل الترتيب',
+          error: 'top_rank_load_failed',
         ),
       );
     }

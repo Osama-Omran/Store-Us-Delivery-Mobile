@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingPhotoPlaceholder extends StatelessWidget {
   const ReceivingPhotoPlaceholder({
@@ -24,41 +25,47 @@ class ReceivingPhotoPlaceholder extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: isBusy ? null : onCapturePhoto,
-          child: SizedBox(
-            width: double.infinity,
-            height: 198,
-            child: isBusy
-                ? Center(
-                    child: CircularProgressIndicator(color: AppColors.primary),
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 12,
-                    children: [
-                      Icon(
-                        Icons.photo_camera_outlined,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: double.infinity,
+              minHeight: 198,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: isBusy
+                  ? Center(
+                      child: CircularProgressIndicator(
                         color: AppColors.primary,
-                        size: 44,
                       ),
-                      Text(
-                        context.strings.open_camera_and_capture,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w700,
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 12,
+                      children: [
+                        Icon(
+                          Icons.photo_camera_outlined,
                           color: AppColors.primary,
+                          size: 44,
                         ),
-                      ),
-                      Text(
-                        context.strings.proof_photo_auto_details,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: AppColors.primary,
+                        Text(
+                          context.strings.open_camera_and_capture,
+                          textAlign: TextAlign.center,
+                          style: Styles.textStyle19.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          context.strings.proof_photo_auto_details,
+                          textAlign: TextAlign.center,
+                          style: Styles.textStyle13.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ),

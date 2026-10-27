@@ -8,6 +8,7 @@ import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_image.dart';
 import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.nextRoute});
@@ -50,10 +51,10 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: Color(0xFF06469D),
+        systemNavigationBarColor: AppColors.splashNavigationBar,
         systemNavigationBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -78,9 +79,9 @@ class _SplashScreenState extends State<SplashScreen>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFF0649B1),
-                        Color(0xFF0462D2),
-                        Color(0xFF187BF0),
+                        AppColors.splashGradientStart,
+                        AppColors.primary,
+                        AppColors.splashGradientEnd,
                       ],
                       stops: [0, .55, 1],
                     ),
@@ -93,8 +94,10 @@ class _SplashScreenState extends State<SplashScreen>
                   right: -width * .43,
                   child: _SplashCircle(
                     size: width * 1.22,
-                    fillColor: const Color(0xFF9BCFFF).withValues(alpha: .17),
-                    borderColor: Colors.white.withValues(alpha: .16),
+                    fillColor: AppColors.splashCircleLight.withValues(
+                      alpha: .17,
+                    ),
+                    borderColor: AppColors.white0.withValues(alpha: .16),
                   ),
                 ),
 
@@ -103,8 +106,8 @@ class _SplashScreenState extends State<SplashScreen>
                   right: -width * .26,
                   child: _SplashCircle(
                     size: width * .92,
-                    fillColor: Colors.transparent,
-                    borderColor: Colors.white.withValues(alpha: .13),
+                    fillColor: AppColors.transparent,
+                    borderColor: AppColors.white0.withValues(alpha: .13),
                   ),
                 ),
 
@@ -114,8 +117,10 @@ class _SplashScreenState extends State<SplashScreen>
                   left: -width * .47,
                   child: _SplashCircle(
                     size: width * 1.1,
-                    fillColor: const Color(0xFF002C70).withValues(alpha: .47),
-                    borderColor: Colors.white.withValues(alpha: .10),
+                    fillColor: AppColors.splashCircleDark.withValues(
+                      alpha: .47,
+                    ),
+                    borderColor: AppColors.white0.withValues(alpha: .10),
                   ),
                 ),
 
@@ -124,8 +129,8 @@ class _SplashScreenState extends State<SplashScreen>
                   left: -width * .30,
                   child: _SplashCircle(
                     size: width * .76,
-                    fillColor: Colors.transparent,
-                    borderColor: Colors.white.withValues(alpha: .09),
+                    fillColor: AppColors.transparent,
+                    borderColor: AppColors.white0.withValues(alpha: .09),
                   ),
                 ),
 
@@ -167,12 +172,12 @@ class _SplashScreenState extends State<SplashScreen>
                                   Container(
                                     padding: const EdgeInsets.all(7),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
+                                      color: AppColors.white0.withValues(
                                         alpha: .10,
                                       ),
                                       borderRadius: BorderRadius.circular(39),
                                       border: Border.all(
-                                        color: Colors.white.withValues(
+                                        color: AppColors.white0.withValues(
                                           alpha: .26,
                                         ),
                                       ),
@@ -184,7 +189,7 @@ class _SplashScreenState extends State<SplashScreen>
                                         borderRadius: BorderRadius.circular(31),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: const Color(0xFF002B76)
+                                            color: AppColors.splashShadow
                                                 .withValues(alpha: .28),
                                             blurRadius: 38,
                                             offset: const Offset(0, 18),
@@ -206,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen>
                                     width: 36,
                                     height: 3,
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
+                                      color: AppColors.white0.withValues(
                                         alpha: .80,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
@@ -218,10 +223,10 @@ class _SplashScreenState extends State<SplashScreen>
                                   Text(
                                     context.strings.splash_tagline,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: Styles.base.copyWith(
                                       fontSize: isCompact ? 13 : 15,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white.withValues(
+                                      color: AppColors.white0.withValues(
                                         alpha: .90,
                                       ),
                                       height: 1.5,
@@ -247,10 +252,9 @@ class _SplashScreenState extends State<SplashScreen>
                             Text(
                               context.strings.splash_loading,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 13,
+                              style: Styles.textStyle13.copyWith(
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white.withValues(alpha: .80),
+                                color: AppColors.white0.withValues(alpha: .80),
                               ),
                             ),
                           ],

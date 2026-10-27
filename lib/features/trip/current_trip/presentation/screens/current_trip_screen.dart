@@ -130,9 +130,8 @@ class _CurrentTripScreenState extends State<CurrentTripScreen> {
                             child: Text(
                               '${visibleOrders.length}',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: Styles.textStyle12.copyWith(
                                 color: AppColors.primary,
-                                fontSize: 12,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -229,7 +228,7 @@ class _OrdersMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle14.copyWith(
               color: AppColors.grey4,

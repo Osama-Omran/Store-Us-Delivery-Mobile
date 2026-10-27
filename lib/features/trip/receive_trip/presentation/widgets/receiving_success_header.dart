@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class ReceivingSuccessHeader extends StatelessWidget {
   const ReceivingSuccessHeader({super.key});
@@ -33,8 +34,7 @@ class ReceivingSuccessHeader extends StatelessWidget {
         Text(
           context.strings.trip_receiving_success_title,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 28,
+          style: Styles.textStyle28.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.black1,
           ),
@@ -43,7 +43,7 @@ class ReceivingSuccessHeader extends StatelessWidget {
         Text(
           context.strings.trip_receiving_success_description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, color: AppColors.grey4),
+          style: Styles.base.copyWith(fontSize: 16, color: AppColors.grey4),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationsHeader extends StatelessWidget {
   const NotificationsHeader({super.key, this.unreadCount});
@@ -17,13 +18,6 @@ class NotificationsHeader extends StatelessWidget {
         border: Border(
           bottom: BorderSide(color: AppColors.grey3.withValues(alpha: 0.85)),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black1.withValues(alpha: 0.025),
-            blurRadius: 18,
-            offset: const Offset(0, 5),
-          ),
-        ],
       ),
       child: Row(
         children: [
@@ -37,13 +31,6 @@ class NotificationsHeader extends StatelessWidget {
                 colors: [AppColors.primary, AppColors.blue0],
               ),
               borderRadius: BorderRadius.circular(17),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.16),
-                  blurRadius: 13,
-                  offset: const Offset(0, 5),
-                ),
-              ],
             ),
             child: Icon(
               Icons.notifications_active_outlined,
@@ -60,8 +47,7 @@ class NotificationsHeader extends StatelessWidget {
                   context.strings.notifications,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 23,
+                  style: Styles.textStyle23.copyWith(
                     height: 1.2,
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
@@ -70,11 +56,10 @@ class NotificationsHeader extends StatelessWidget {
                 if (unreadCount != null) ...[
                   const SizedBox(height: 5),
                   Text(
-                    '$unreadCount ${context.strings.unread_notifications}',
+                    context.strings.notifications_unread_count(unreadCount!),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12.5,
+                    style: Styles.textStyle12_5.copyWith(
                       height: 1.25,
                       color: AppColors.grey4,
                       fontWeight: FontWeight.w500,
@@ -97,8 +82,7 @@ class NotificationsHeader extends StatelessWidget {
               ),
               child: Text(
                 '$unreadCount',
-                style: TextStyle(
-                  fontSize: 14,
+                style: Styles.textStyle14.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.primary,
                 ),

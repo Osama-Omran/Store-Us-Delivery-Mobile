@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_stop.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class TripStopMarkerFactory {
   const TripStopMarkerFactory._();
@@ -56,7 +57,7 @@ class TripStopMarkerFactory {
     final painter = TextPainter(
       text: TextSpan(
         text: label,
-        style: TextStyle(
+        style: Styles.base.copyWith(
           color: delivered ? AppColors.black1 : textColor,
           fontSize: cancelled
               ? 31

@@ -22,12 +22,14 @@ class OrderDeliveryStatusCard extends StatelessWidget {
       case 'DELIVERED':
       case 'COMPLETED':
       case 'FULLY_DELIVERED':
+      case 'DELIVERED_FULLY':
         statusLabel = context.strings.delivered_fully;
         statusColor = AppColors.green0;
         statusBackground = AppColors.green1;
 
       case 'PARTIAL':
       case 'PARTIALLY_DELIVERED':
+      case 'PARTIAL_DELIVERED':
       case 'DELIVERED_PARTIALLY':
         statusLabel = context.strings.delivered_partially;
         statusColor = AppColors.orange0;
@@ -50,9 +52,7 @@ class OrderDeliveryStatusCard extends StatelessWidget {
         statusBackground = AppColors.red1.withValues(alpha: 0.10);
 
       default:
-        statusLabel = status.isEmpty
-            ? context.strings.trip_tab_unknown_status
-            : order.deliveryStatus;
+        statusLabel = context.strings.trip_customers_unknown_status;
         statusColor = AppColors.grey4;
         statusBackground = AppColors.grey5;
     }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryFlowHeader extends StatelessWidget {
   const DeliveryFlowHeader({
@@ -17,7 +17,8 @@ class DeliveryFlowHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      constraints: const BoxConstraints(minHeight: 90),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.grey0,
@@ -26,40 +27,44 @@ class DeliveryFlowHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 4,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: AppColors.black1,
-                  fontSize: 23,
-                  fontWeight: FontWeight.w800,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 76),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 4,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: Styles.textStyle23.copyWith(
+                    color: AppColors.black1,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
-              Text(
-                subtitle,
-                style: TextStyle(color: AppColors.grey4, fontSize: 13),
-              ),
-            ],
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: Styles.textStyle13.copyWith(color: AppColors.grey4),
+                ),
+              ],
+            ),
           ),
           PositionedDirectional(
             start: 20,
             child: Material(
               color: AppColors.white0,
               shape: CircleBorder(side: BorderSide(color: AppColors.grey3)),
-              child: InkWell(
-                onTap: () => context.pop(),
-                customBorder: const CircleBorder(),
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    context.isArabic
-                        ? Icons.chevron_left_rounded
-                        : Icons.chevron_right_rounded,
-                    size: 30,
+              child: Tooltip(
+                message: MaterialLocalizations.of(context).backButtonTooltip,
+                child: InkWell(
+                  onTap: () => context.pop(),
+                  customBorder: const CircleBorder(),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: const BackButtonIcon(),
                   ),
                 ),
               ),

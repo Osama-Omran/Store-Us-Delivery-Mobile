@@ -642,5 +642,571 @@
 "treasury_wallet_collected_amount": "المبلغ المحصل",
 "treasury_wallet_payment_entry": "قيد الدفع",
 "splash_tagline": "رحلتك تبدأ من هنا",
-"splash_loading": "جاري تجهيز رحلتك..."
+"splash_loading": "جاري تجهيز رحلتك...",
+"show_password": "إظهار كلمة المرور",
+"hide_password": "إخفاء كلمة المرور",
+"direct_sale_territory": "المنطقة المسجلة بالنظام",
+"direct_sale_territory_hint": "مثال: Sheikh Zayed",
+"direct_sale_territory_required": "المنطقة مطلوبة لإضافة العميل",
+"direct_sale_customer_defaults": "نوع العميل: Individual   •   مجموعة العملاء: Retail",
+"direct_sale_customer_unsupported_fields": "العنوان والملاحظات والموقع الحالي غير مدعومين في API إضافة العميل الحالية، ولن يتم حفظهم على الخادم.",
+"direct_sale_customer_saving": "جارٍ حفظ العميل...",
+"direct_sale_customer_invalid_fields": "تأكد من الاسم ورقم الهاتف والمنطقة.",
+"direct_sale_customer_create_failed": "تعذر إنشاء العميل، راجع البيانات وحاول مرة أخرى.",
+"direct_sale_customer_missing_id": "الخادم أكد الاستجابة لكنه لم يرجع معرّف العميل. تحقّق من إنشاء العميل قبل المتابعة.",
+"direct_sale_customer_verify_before_retry": "نتيجة طلب الإنشاء غير مؤكدة. تحقق من وجود العميل على الخادم قبل إعادة المحاولة لتجنب التكرار.",
+"trip_customers_title": "عملاء الرحلة",
+"trip_customers_in_trip": "عميل في الرحلة",
+"trip_customers_search_hint": "بحث باسم العميل أو رقم الهاتف",
+"trip_customers_back": "الرجوع",
+"trip_customers_refresh": "تحديث العملاء",
+"trip_customers_retry": "إعادة المحاولة",
+"trip_customers_loading": "جاري تحميل العملاء...",
+"trip_customers_load_failed": "تعذر تحميل عملاء الرحلة",
+"trip_customers_empty": "لا يوجد عملاء في هذه الرحلة",
+"trip_customers_no_results": "لا توجد نتائج مطابقة للبحث",
+"trip_customers_orders_count": "طلب",
+"trip_customers_orders_button": "الطلبات",
+"trip_customers_call": "اتصال",
+"trip_customers_whatsapp": "واتساب",
+"trip_customers_location": "الموقع",
+"trip_customers_action_unavailable": "تعذر فتح التطبيق المطلوب",
+"trip_customers_delivered": "تم التسليم",
+"trip_customers_partial": "تم التسليم جزئيًا",
+"trip_customers_rescheduled": "تمت إعادة الجدولة",
+"trip_customers_cancelled": "تم إلغاء التسليم",
+"trip_customers_pending": "في انتظار التسليم",
+"trip_customers_unknown_status": "حالة التوصيل غير متاحة",
+"trip_customers_customer_orders": "طلبات العميل",
+"trip_customers_orders_load_failed": "تعذر تحميل طلبات العميل",
+"trip_customers_no_matched_orders": "لا توجد طلبات مؤكدة مرتبطة بهذا العميل",
+"trip_customers_name_match_warning": "ربط الطلبات قائم على الاسم والعنوان بسبب عدم توفر معرّف العميل ورقم هاتفه. يُرجى مراجعة الطلبات قبل أي إجراء.",
+"order_collection_not_started": "لم يبدأ التحصيل",
+"order_collection_button": "تحصيل",
+"order_collection_not_ready": "حالة الطلب تحتاج إلى تأكيد من السيرفر قبل التحصيل. حدّث الطلب أو تواصل مع الإدارة.",
+"order_collection_missing_operation": "معرّف عملية التحصيل الأصلية غير متاح. حدّث بيانات الطلب قبل المحاولة.",
+"order_collection_refresh": "تحديث الطلب",
+"order_collection_sent": "تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.",
+
+  "order_collection_incomplete": "لم يكتمل التحصيل",
+  "order_collection_failed": "فشل التحصيل",
+  "order_collection_completed": "تم التحصيل بالكامل",
+  "order_collection_status_title": "حالة تحصيل الطلب",
+  "order_collection_resume_hint": "يمكن إكمال التحصيل من الزر أسفل الشاشة دون إعادة تسليم الطلب.",
+  "order_collection_unavailable_hint": "إكمال التحصيل غير متاح حاليًا. اسحب لتحديث حالة الطلب أو تواصل مع الإدارة.",
+  "order_collection_status_unknown": "حالة التحصيل غير متاحة",
+  "top_rank_no_metrics": "لا توجد مؤشرات أداء متاحة",
+  "top_rank_no_movement": "بدون تغيير",
+  "top_rank_current_rank": "الترتيب الحالي",
+  "top_rank_score": "التقييم",
+  "top_rank_points_breakdown": "تفصيل النقاط",
+  "top_rank_total": "الإجمالي",
+  "top_rank_strengths_title": "كيف حقق هذا الترتيب؟",
+  "top_rank_improve_title": "كيف تحسن ترتيبك؟",
+  "top_rank_compare_leader": "المقارنة مع الأول",
+  "top_rank_your_score": "درجتك",
+  "top_rank_leader_score": "درجة الأول",
+  "top_rank_difference": "الفرق",
+  "top_rank_metric_target": "الحالي: {current}   |   الهدف: {target}",
+  "@top_rank_metric_target": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "top_rank_impact_points": "+{points} نقطة",
+  "@top_rank_impact_points": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "top_rank_winner_label": "الفائز — {label}",
+  "@top_rank_winner_label": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "top_rank_page_summary": "تم عرض الصفحة {page} من {lastPage}",
+  "@top_rank_page_summary": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "lastPage": {
+        "type": "int"
+      }
+    }
+  },
+  "top_rank_dispatchers_label": "مسؤولو توزيع الطلبات",
+  "order_country_hint": "مصر",
+  "order_phone_hint": "01XXXXXXXXX",
+  "reschedule_date_hint": "يوم/شهر/سنة",
+  "trip_warehouse_summary": "رحلة {tripNumber} • {warehouse}",
+  "@trip_warehouse_summary": {
+    "placeholders": {
+      "tripNumber": {
+        "type": "String"
+      },
+      "warehouse": {
+        "type": "String"
+      }
+    }
+  },
+  "offline_saved_data": "غير متصل — تعرض بيانات محفوظة",
+  "offline_saved_data_since": "غير متصل — تعرض بيانات محفوظة من {savedAt}",
+  "@offline_saved_data_since": {
+    "placeholders": {
+      "savedAt": {
+        "type": "String"
+      }
+    }
+  },
+  "offline_data_unavailable": "لا يوجد اتصال بالإنترنت — قد لا تتوفر بعض البيانات",
+  "order_collection_in_progress": "عملية تحصيل قيد التنفيذ بالفعل",
+  "order_collection_invalid_details": "راجع مبلغ التحصيل وبيانات العملية",
+  "order_collection_not_available": "العملية غير متاحة للتحصيل حاليًا. حدّث حالة الطلب.",
+  "order_collection_not_confirmed": "السيرفر لم يؤكد نجاح التحصيل. حدّث حالة الطلب.",
+  "order_collection_refresh_first": "تعذر تأكيد التحصيل. حدّث حالة الطلب أولًا.",
+  "order_collection_refresh_before_retry": "تعذر تأكيد التحصيل. حدّث حالة الطلب قبل إعادة المحاولة.",
+  "order_collection_connection_uncertain": "تعذر تأكيد نتيجة التحصيل بسبب الاتصال. حدّث حالة الطلب قبل المحاولة مرة أخرى.",
+  "top_rank_category_empty": "لا توجد بيانات لهذه الفئة",
+  "top_rank_load_failed": "تعذر تحميل الترتيب",
+  "top_rank_details_load_failed": "تعذر تحديث التفاصيل",
+  "reports_load_failed": "تعذر تحميل التقارير",
+  "offline_operation_queued": "تم حفظ العملية على الجهاز، وسيتم إرسالها تلقائيًا عند عودة الإنترنت",
+  "offline_operation_save_failed": "تعذر حفظ العملية محليًا، لم يتم إرسال الطلب",
+  "offline_operation_title": "عملية قيد المزامنة",
+
+  "reschedule_reason_customer_requested": "العميل طلب تغيير الموعد",
+  "reschedule_reason_customer_absent": "العميل غير متواجد",
+  "reschedule_reason_customer_unreachable": "تعذر الوصول للعميل",
+  "reschedule_reason_address_issue": "مشكلة في العنوان",
+  "reschedule_reason_vehicle_issue": "مشكلة في السيارة",
+  "payment_method_unknown": "طريقة الدفع غير متاحة",
+  "account_role_unknown": "الدور الوظيفي غير متاح",
+  "api_bad_request": "تعذر تنفيذ الطلب. راجع البيانات وحاول مرة أخرى.",
+  "api_no_content": "لا توجد بيانات متاحة",
+  "api_forbidden": "ليس لديك صلاحية لتنفيذ هذه العملية",
+  "api_unauthorized": "انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+  "api_not_found": "البيانات المطلوبة غير موجودة",
+  "api_cache_error": "تعذر قراءة البيانات المحفوظة",
+  "offline_notifications_waiting": "عمليات محفوظة",
+  "offline_notifications_waiting_body": "سيتم إرسال العمليات بمجرد توفر اتصال بالإنترنت",
+  "offline_notifications_channel": "مزامنة عمليات ستوراس",
+  "offline_notifications_channel_description": "حالة إرسال العمليات المحفوظة",
+  "offline_notifications_sending": "جاري مزامنة العمليات",
+  "offline_notifications_finished": "اكتملت المزامنة",
+  "offline_notifications_results_channel": "نتائج مزامنة ستوراس",
+  "offline_notifications_results_description": "نتائج إرسال العمليات المحفوظة",
+  "offline_notifications_review": "تحتاج عملية للمراجعة",
+  "offline_notifications_sending_body": "جاري إرسال: {title}",
+  "@offline_notifications_sending_body": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "offline_notifications_finished_body": "تم تنفيذ: {title}",
+  "@offline_notifications_finished_body": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "offline_notifications_error_body": "تعذر إكمال {title}. راجع التطبيق.",
+  "@offline_notifications_error_body": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "offline_notifications_toast": "اكتملت المزامنة: {title}",
+  "@offline_notifications_toast": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "amount_egp": "{amount} ج.م",
+  "@amount_egp": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "account_named_wallet": "محفظة {name}",
+  "@account_named_wallet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "home_van_label": "الشاحنة: {van}",
+  "@home_van_label": {
+    "placeholders": {
+      "van": {
+        "type": "String"
+      }
+    }
+  },
+  "home_driver_label": "السائق: {driver}",
+  "@home_driver_label": {
+    "placeholders": {
+      "driver": {
+        "type": "String"
+      }
+    }
+  },
+  "trip_number_title": "رحلة {number}",
+  "@trip_number_title": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "trip_completed_at_time": "اكتملت {time}",
+  "@trip_completed_at_time": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "orders_count": "{count, plural, =0{لا توجد طلبات} one{طلب واحد} two{طلبان} few{{count} طلبات} many{{count} طلبًا} other{{count} طلب}}",
+  "@orders_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "orders_count_unavailable": "عدد الطلبات غير متاح",
+  "trip_customers_count": "{count, plural, =0{لا يوجد عملاء في الرحلة} one{عميل واحد في الرحلة} two{عميلان في الرحلة} few{{count} عملاء في الرحلة} many{{count} عميلًا في الرحلة} other{{count} عميل في الرحلة}}",
+  "@trip_customers_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trip_customers_summary": "{customers} · {tripNumber}",
+  "@trip_customers_summary": {
+    "placeholders": {
+      "customers": {
+        "type": "String"
+      },
+      "tripNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_unread_count": "{count, plural, =0{لا توجد إشعارات غير مقروءة} one{إشعار واحد غير مقروء} two{إشعاران غير مقروءين} few{{count} إشعارات غير مقروءة} many{{count} إشعارًا غير مقروء} other{{count} إشعار غير مقروء}}",
+  "@notifications_unread_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notification_minutes_ago_count": "{count, plural, =0{الآن} one{منذ دقيقة} two{منذ دقيقتين} few{منذ {count} دقائق} many{منذ {count} دقيقة} other{منذ {count} دقيقة}}",
+  "@notification_minutes_ago_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notification_hours_ago_count": "{count, plural, =0{الآن} one{منذ ساعة} two{منذ ساعتين} few{منذ {count} ساعات} many{منذ {count} ساعة} other{منذ {count} ساعة}}",
+  "@notification_hours_ago_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trip_handled_orders_summary": "{total, plural, =0{لا توجد طلبات} one{{handled} من طلب واحد تم التعامل معه} two{{handled} من طلبين تم التعامل معهما} few{{handled} من {total} طلبات تم التعامل معها} many{{handled} من {total} طلبًا تم التعامل معها} other{{handled} من {total} طلب تم التعامل معها}}",
+  "@trip_handled_orders_summary": {
+    "placeholders": {
+      "handled": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "trip_map_number_title": "خريطة رحلة {number}",
+  "@trip_map_number_title": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "trip_stop_summary": "{label} · {stopNumber} من {totalStops}",
+  "@trip_stop_summary": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "stopNumber": {
+        "type": "int"
+      },
+      "totalStops": {
+        "type": "int"
+      }
+    }
+  },
+  "distance_meters": "{distance} متر",
+  "@distance_meters": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
+  "distance_kilometers": "{distance} كم",
+  "@distance_kilometers": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "trip_map_arrival_minutes": "{count, plural, =0{الوصول الآن} one{الوصول خلال دقيقة} two{الوصول خلال دقيقتين} few{الوصول خلال {count} دقائق} many{الوصول خلال {count} دقيقة} other{الوصول خلال {count} دقيقة}}",
+  "@trip_map_arrival_minutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "location_accuracy_meters": "±{accuracy} متر",
+  "@location_accuracy_meters": {
+    "placeholders": {
+      "accuracy": {
+        "type": "String"
+      }
+    }
+  },
+  "location_accuracy_description": "دقة الموقع ±{accuracy} متر",
+  "@location_accuracy_description": {
+    "placeholders": {
+      "accuracy": {
+        "type": "String"
+      }
+    }
+  },
+  "delivery_item_code_unit": "كود الصنف: {code} • الوحدة: {unit}",
+  "@delivery_item_code_unit": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "product_code_unit": "{code} • الوحدة: {unit}",
+  "@product_code_unit": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "treasury_product_code_unit": "{code} · الوحدة: {unit}",
+  "@treasury_product_code_unit": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "treasury_trip_title": "الرحلة الحالية {trip}",
+  "@treasury_trip_title": {
+    "placeholders": {
+      "trip": {
+        "type": "String"
+      }
+    }
+  },
+  "treasury_payment_entry_label": "قيد الدفع: {entry}",
+  "@treasury_payment_entry_label": {
+    "placeholders": {
+      "entry": {
+        "type": "String"
+      }
+    }
+  },
+  "treasury_custody_amount": "العهدة الحالية: {amount}",
+  "@treasury_custody_amount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel_delivery_order_description": "سيتم تسجيل إلغاء التسليم للطلب {orderNumber}\nالسبب: {reason}",
+  "@cancel_delivery_order_description": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm_receiving_trip_description": "أنت تؤكد أنك راجعت واستلمت العربية والبضاعة الموضحة في الرحلة {tripNumber}.",
+  "@confirm_receiving_trip_description": {
+    "placeholders": {
+      "tripNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "order_number_label": "الطلب: {orderNumber}",
+  "@order_number_label": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "order_required_amount_label": "المبلغ المطلوب: {amount}",
+  "@order_required_amount_label": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payment_method_label": "طريقة الدفع: {method}",
+  "@payment_method_label": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+
+  "text_with_trailing_space": "{text} ",
+  "@text_with_trailing_space": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "label_with_colon": "{label}: ",
+  "@label_with_colon": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "inline_secondary_label": " · {label}",
+  "@inline_secondary_label": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "optional_field_suffix": " (اختياري)",
+  "filter_count_label": "{label} ({count})",
+  "@filter_count_label": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "top_rank_metric_unknown": "مؤشر أداء غير معروف",
+"direct_sale_customer_retry_same_request_notice": "قد يكون السيرفر سجّل العميل بالفعل. إعادة المحاولة ستستخدم نفس البيانات ونفس معرّف العملية لتجنب التكرار. إذا استمر الخطأ، تحقق من العميل في النظام.",
+"direct_sale_customer_retry_same_data": "لا يمكن تغيير بيانات العميل أثناء إعادة محاولة عملية نتيجتها غير مؤكدة. أعد البيانات الأصلية أو تحقق من وجود العميل أولًا.",
+"delivery_receipt_optional": "صورة إيصال الدفع (اختياري)",
+"delivery_receipt_add": "إضافة صورة إيصال",
+"delivery_receipt_camera": "التقاط صورة بالكاميرا",
+"delivery_receipt_gallery": "اختيار صورة من المعرض",
+"delivery_receipt_replace": "تغيير الصورة",
+"delivery_receipt_remove": "إزالة الصورة",
+"delivery_receipt_preview_failed": "تعذر عرض صورة الإيصال",
+"delivery_receipt_select_failed": "تعذر اختيار صورة الإيصال. حاول مرة أخرى.",
+"delivery_receipt_local_only": "صورة الإيصال للمعاينة داخل الشاشة فقط، ولن تُحفظ أو تُرفع للسيرفر حتى تتوفر واجهة API تدعم الإيصالات.",
+  "areas_title": "المناطق والمسار",
+  "trip_map_estimates_unavailable": "المسافة ووقت الوصول غير متاحين حاليًا. يمكنك بدء الملاحة.",
+  "areas_distribution_order": "الترتيب محدد من إدارة التوزيع",
+  "areas_refresh": "تحديث المسار",
+  "areas_stops": "محطة",
+  "areas_finished": "تم الانتهاء منها",
+  "areas_list": "قائمة",
+  "areas_map": "خريطة",
+  "areas_next": "التالية",
+  "areas_starting_point": "نقطة البداية",
+  "areas_warehouse_unavailable": "اسم المخزن غير متاح",
+  "areas_address_unavailable": "العنوان غير متاح",
+  "areas_stop_summary": "{address} · {status}",
+  "@areas_stop_summary": {"placeholders": {"address": {"type": "String"}, "status": {"type": "String"}}},
+  "areas_stop_location_unavailable": "موقع المحطة غير متاح على الخريطة",
+  "areas_no_stops": "لا توجد محطات في الرحلة الحالية",
+  "areas_load_failed": "تعذر تحميل مسار الرحلة. حاول مرة أخرى.",
+  "areas_open_google_maps": "فتح المسار في Google Maps",
+  "areas_route_sections": "اختر جزء المسار",
+  "areas_route_sections_description": "تم تقسيم المسار ليتوافق مع عدد المحطات المسموح به في خرائط Google. افتح الأجزاء بالترتيب للحفاظ على مسار التوزيع.",
+  "areas_route_origin_unavailable": "إحداثيات المخزن غير متاحة. ستستخدم خرائط Google موقعك كنقطة بداية.",
+  "areas_route_location_unavailable": "تعذر فتح المسار بالكامل: توجد محطة بدون موقع أو عنوان صالح لخرائط Google. يمكنك فتح المحطات الأخرى من الخريطة.",
+  "areas_missing_coordinates": "{count, plural, =0{كل المحطات متاحة على الخريطة} one{توجد محطة بدون إحداثيات. تظل ظاهرة في القائمة.} two{توجد محطتان بدون إحداثيات. تظلان ظاهرتين في القائمة.} few{توجد {count} محطات بدون إحداثيات. تظل ظاهرة في القائمة.} many{توجد {count} محطة بدون إحداثيات. تظل ظاهرة في القائمة.} other{توجد {count} محطة بدون إحداثيات. تظل ظاهرة في القائمة.}}",
+  "@areas_missing_coordinates": {"placeholders": {"count": {"type": "int"}}},
+  "areas_route_section": "الجزء {number} من {total}",
+  "@areas_route_section": {"placeholders": {"number": {"type": "int"}, "total": {"type": "int"}}},
+  "areas_route_section_stops": "من المحطة {first} إلى المحطة {last}",
+  "@areas_route_section_stops": {"placeholders": {"first": {"type": "int"}, "last": {"type": "int"}}},
+
+"delivery_outcome_actions_title": "إجراءات التسليم",
+"delivery_cancel": "إلغاء التسليم",
+"delivery_reschedule": "إعادة الجدولة",
+"delivery_cancel_title": "إلغاء تسليم الطلب",
+"delivery_reschedule_title": "إعادة جدولة التسليم",
+"delivery_cancel_warning": "سيتم إلغاء تسليم هذا الطلب بعد التأكيد. يرجى إدخال سبب الإلغاء المعتمد.",
+"delivery_reschedule_hint": "حدد الموعد الجديد للتسليم مع توضيح سبب التأجيل.",
+"delivery_outcome_reason": "السبب (إجباري)",
+"delivery_outcome_reason_hint": "اكتب السبب المعتمد",
+"delivery_reschedule_choose_date": "اختيار تاريخ ووقت التسليم الجديد",
+"delivery_outcome_invalid_reason": "يرجى إدخال سبب صحيح.",
+"delivery_outcome_invalid_date": "يرجى اختيار تاريخ ووقت في المستقبل.",
+"delivery_outcome_failed": "تعذر تحديث حالة التسليم. حاول مرة أخرى.",
+"delivery_cancel_confirm": "تأكيد إلغاء التسليم",
+"delivery_reschedule_confirm": "تأكيد إعادة الجدولة",
+"delivery_cancel_success": "تم إلغاء تسليم الطلب بنجاح",
+"delivery_reschedule_success": "تمت إعادة جدولة تسليم الطلب بنجاح",
+"delivery_outcome_back": "العودة إلى الطلبات"
 }

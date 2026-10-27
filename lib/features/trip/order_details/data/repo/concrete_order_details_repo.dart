@@ -3,8 +3,11 @@ import 'package:storeus_delivery/core/helpers/apis/dio/dio_factory.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/retry_collection_request_body.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/trip_api_service.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_error_handler.dart';
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart'
+    show StringExtension;
 import 'package:storeus_delivery/core/helpers/utils/logger.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
+import 'package:storeus_delivery/core/routing/app_router.dart' show token;
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/repo/order_details_repo_interface.dart';
@@ -27,17 +30,22 @@ class ConcreteOrderDetailsRepo implements OrderDetailsRepoInterface {
     required RetryCollectionRequestBody body,
   }) async {
     try {
-      final token = await PreferencesHelper.getToken();
-      if (token == null || token.trim().isEmpty) {
+      final prefToken = await PreferencesHelper.getToken();
+      if ((prefToken == null || prefToken.trim().isEmpty) &&
+          token.isNullOrEmpty()) {
         throw StateError('Access token is missing');
       }
+
+      final authToken = prefToken != null && prefToken.trim().isNotEmpty
+          ? prefToken
+          : token;
       final dio = await DioFactory.getDio();
       final response = await dio.post<dynamic>(
         '/trips/$tripId/orders/$orderId/retry-collection',
         data: body.toJson(),
         options: Options(
           contentType: Headers.jsonContentType,
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {'Authorization': 'Bearer $authToken'},
         ),
       );
       return ApiResult.success(response.data);
@@ -55,7 +63,7 @@ class ConcreteOrderDetailsRepo implements OrderDetailsRepoInterface {
         }
       } else if (error.response == null) {
         handler.apiErrorModel = ApiErrorModel(
-          message: 'تعذر تأكيد نتيجة التحصيل بسبب الاتصال. حدّث حالة الطلب قبل المحاولة مرة أخرى.',
+          message: 'order_collection_connection_uncertain',
         );
       }
       return ApiResult.failure(handler);
@@ -71,16 +79,21 @@ class ConcreteOrderDetailsRepo implements OrderDetailsRepoInterface {
     required int orderId,
   }) async {
     try {
-      final token = await PreferencesHelper.getToken();
+      final prefToken = await PreferencesHelper.getToken();
 
-      if (token == null || token.trim().isEmpty) {
+      if ((prefToken == null || prefToken.trim().isEmpty) &&
+          token.isNullOrEmpty()) {
         throw StateError('Access token is missing');
       }
+
+      final authToken = prefToken != null && prefToken.trim().isNotEmpty
+          ? prefToken
+          : token;
 
       final response = await _apiService.getOrderDetails(
         tripId,
         orderId,
-        'Bearer $token',
+        'Bearer $authToken',
       );
 
       return ApiResult.success(response);

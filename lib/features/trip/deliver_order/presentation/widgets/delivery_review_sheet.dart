@@ -7,6 +7,7 @@ import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/t
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_draft_state.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_qty_format.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryReviewSheet extends StatelessWidget {
   const DeliveryReviewSheet({super.key});
@@ -37,8 +38,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                         Expanded(
                           child: Text(
                             context.strings.delivery_review_title,
-                            style: TextStyle(
-                              fontSize: 21,
+                            style: Styles.textStyle21.copyWith(
                               fontWeight: FontWeight.w800,
                               color: AppColors.black1,
                             ),
@@ -55,7 +55,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                       state.salesOrder,
                       textDirection: TextDirection.ltr,
                       textAlign: TextAlign.right,
-                      style: TextStyle(color: AppColors.grey4),
+                      style: Styles.base.copyWith(color: AppColors.grey4),
                     ),
 
                     // ======= Selected Items ======= //
@@ -81,7 +81,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                                     Text(
                                       '${formatDeliveryQty(state.qtyFor(i))} '
                                       '${state.items[i].uom}',
-                                      style: TextStyle(
+                                      style: Styles.base.copyWith(
                                         fontWeight: FontWeight.w800,
                                         color: AppColors.black1,
                                       ),
@@ -99,7 +99,9 @@ class DeliveryReviewSheet extends StatelessWidget {
                         Expanded(
                           child: Text(
                             context.strings.delivery_estimated_total,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
+                            style: Styles.base.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         Text(
@@ -109,9 +111,8 @@ class DeliveryReviewSheet extends StatelessWidget {
                                   context,
                                   state.estimatedItemsValue!,
                                 ),
-                          style: TextStyle(
+                          style: Styles.textStyle21.copyWith(
                             fontWeight: FontWeight.w800,
-                            fontSize: 21,
                             color: AppColors.primary,
                           ),
                         ),
@@ -135,7 +136,7 @@ class DeliveryReviewSheet extends StatelessWidget {
                           Expanded(
                             child: Text(
                               context.strings.delivery_submission_not_available,
-                              style: TextStyle(
+                              style: Styles.base.copyWith(
                                 color: AppColors.orange0,
                                 fontWeight: FontWeight.w600,
                               ),

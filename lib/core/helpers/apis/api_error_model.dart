@@ -19,12 +19,12 @@ class ApiErrorModel {
   factory ApiErrorModel.fromJson(Map<String, dynamic> json) {
     // Parse multi-language message
     final dynamic rawMessage = json['message'];
-    String parsedMessage = 'Unknown error';
+    String parsedMessage = 'api_unknown_error';
     try {
       if (rawMessage is Map<String, dynamic>) {
         final currentLang = getCurrentAppLang();
         parsedMessage =
-            rawMessage[currentLang] ?? rawMessage['en'] ?? 'Unknown error';
+            rawMessage[currentLang] ?? rawMessage['en'] ?? 'api_unknown_error';
       } else if (rawMessage is String) {
         try {
           final decoded = jsonDecode(rawMessage);
@@ -39,7 +39,7 @@ class ApiErrorModel {
         }
       }
     } catch (_) {
-      parsedMessage = 'Unknown error';
+      parsedMessage = 'api_unknown_error';
     }
 
     // Parse errors as Map<String, List<String>>

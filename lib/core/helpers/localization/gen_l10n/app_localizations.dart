@@ -3751,6 +3751,1242 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جاري تجهيز رحلتك...'**
   String get splash_loading;
+
+  /// No description provided for @show_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار كلمة المرور'**
+  String get show_password;
+
+  /// No description provided for @hide_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء كلمة المرور'**
+  String get hide_password;
+
+  /// No description provided for @direct_sale_territory.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة المسجلة بالنظام'**
+  String get direct_sale_territory;
+
+  /// No description provided for @direct_sale_territory_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: Sheikh Zayed'**
+  String get direct_sale_territory_hint;
+
+  /// No description provided for @direct_sale_territory_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة مطلوبة لإضافة العميل'**
+  String get direct_sale_territory_required;
+
+  /// No description provided for @direct_sale_customer_defaults.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع العميل: Individual   •   مجموعة العملاء: Retail'**
+  String get direct_sale_customer_defaults;
+
+  /// No description provided for @direct_sale_customer_unsupported_fields.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان والملاحظات والموقع الحالي غير مدعومين في API إضافة العميل الحالية، ولن يتم حفظهم على الخادم.'**
+  String get direct_sale_customer_unsupported_fields;
+
+  /// No description provided for @direct_sale_customer_saving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ حفظ العميل...'**
+  String get direct_sale_customer_saving;
+
+  /// No description provided for @direct_sale_customer_invalid_fields.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكد من الاسم ورقم الهاتف والمنطقة.'**
+  String get direct_sale_customer_invalid_fields;
+
+  /// No description provided for @direct_sale_customer_create_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء العميل، راجع البيانات وحاول مرة أخرى.'**
+  String get direct_sale_customer_create_failed;
+
+  /// No description provided for @direct_sale_customer_missing_id.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخادم أكد الاستجابة لكنه لم يرجع معرّف العميل. تحقّق من إنشاء العميل قبل المتابعة.'**
+  String get direct_sale_customer_missing_id;
+
+  /// No description provided for @direct_sale_customer_verify_before_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة طلب الإنشاء غير مؤكدة. تحقق من وجود العميل على الخادم قبل إعادة المحاولة لتجنب التكرار.'**
+  String get direct_sale_customer_verify_before_retry;
+
+  /// No description provided for @trip_customers_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملاء الرحلة'**
+  String get trip_customers_title;
+
+  /// No description provided for @trip_customers_in_trip.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل في الرحلة'**
+  String get trip_customers_in_trip;
+
+  /// No description provided for @trip_customers_search_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث باسم العميل أو رقم الهاتف'**
+  String get trip_customers_search_hint;
+
+  /// No description provided for @trip_customers_back.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرجوع'**
+  String get trip_customers_back;
+
+  /// No description provided for @trip_customers_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث العملاء'**
+  String get trip_customers_refresh;
+
+  /// No description provided for @trip_customers_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get trip_customers_retry;
+
+  /// No description provided for @trip_customers_loading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل العملاء...'**
+  String get trip_customers_loading;
+
+  /// No description provided for @trip_customers_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل عملاء الرحلة'**
+  String get trip_customers_load_failed;
+
+  /// No description provided for @trip_customers_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد عملاء في هذه الرحلة'**
+  String get trip_customers_empty;
+
+  /// No description provided for @trip_customers_no_results.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج مطابقة للبحث'**
+  String get trip_customers_no_results;
+
+  /// No description provided for @trip_customers_orders_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب'**
+  String get trip_customers_orders_count;
+
+  /// No description provided for @trip_customers_orders_button.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات'**
+  String get trip_customers_orders_button;
+
+  /// No description provided for @trip_customers_call.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال'**
+  String get trip_customers_call;
+
+  /// No description provided for @trip_customers_whatsapp.
+  ///
+  /// In ar, this message translates to:
+  /// **'واتساب'**
+  String get trip_customers_whatsapp;
+
+  /// No description provided for @trip_customers_location.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get trip_customers_location;
+
+  /// No description provided for @trip_customers_action_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح التطبيق المطلوب'**
+  String get trip_customers_action_unavailable;
+
+  /// No description provided for @trip_customers_delivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم'**
+  String get trip_customers_delivered;
+
+  /// No description provided for @trip_customers_partial.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم جزئيًا'**
+  String get trip_customers_partial;
+
+  /// No description provided for @trip_customers_rescheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة الجدولة'**
+  String get trip_customers_rescheduled;
+
+  /// No description provided for @trip_customers_cancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء التسليم'**
+  String get trip_customers_cancelled;
+
+  /// No description provided for @trip_customers_pending.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار التسليم'**
+  String get trip_customers_pending;
+
+  /// No description provided for @trip_customers_unknown_status.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التوصيل غير متاحة'**
+  String get trip_customers_unknown_status;
+
+  /// No description provided for @trip_customers_customer_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات العميل'**
+  String get trip_customers_customer_orders;
+
+  /// No description provided for @trip_customers_orders_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل طلبات العميل'**
+  String get trip_customers_orders_load_failed;
+
+  /// No description provided for @trip_customers_no_matched_orders.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات مؤكدة مرتبطة بهذا العميل'**
+  String get trip_customers_no_matched_orders;
+
+  /// No description provided for @trip_customers_name_match_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط الطلبات قائم على الاسم والعنوان بسبب عدم توفر معرّف العميل ورقم هاتفه. يُرجى مراجعة الطلبات قبل أي إجراء.'**
+  String get trip_customers_name_match_warning;
+
+  /// No description provided for @order_collection_not_started.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يبدأ التحصيل'**
+  String get order_collection_not_started;
+
+  /// No description provided for @order_collection_button.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل'**
+  String get order_collection_button;
+
+  /// No description provided for @order_collection_not_ready.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الطلب تحتاج إلى تأكيد من السيرفر قبل التحصيل. حدّث الطلب أو تواصل مع الإدارة.'**
+  String get order_collection_not_ready;
+
+  /// No description provided for @order_collection_missing_operation.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرّف عملية التحصيل الأصلية غير متاح. حدّث بيانات الطلب قبل المحاولة.'**
+  String get order_collection_missing_operation;
+
+  /// No description provided for @order_collection_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث الطلب'**
+  String get order_collection_refresh;
+
+  /// No description provided for @order_collection_sent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال بيانات التحصيل. جارٍ تحديث حالة الطلب.'**
+  String get order_collection_sent;
+
+  /// No description provided for @order_collection_incomplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يكتمل التحصيل'**
+  String get order_collection_incomplete;
+
+  /// No description provided for @order_collection_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل التحصيل'**
+  String get order_collection_failed;
+
+  /// No description provided for @order_collection_completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التحصيل بالكامل'**
+  String get order_collection_completed;
+
+  /// No description provided for @order_collection_status_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة تحصيل الطلب'**
+  String get order_collection_status_title;
+
+  /// No description provided for @order_collection_resume_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن إكمال التحصيل من الزر أسفل الشاشة دون إعادة تسليم الطلب.'**
+  String get order_collection_resume_hint;
+
+  /// No description provided for @order_collection_unavailable_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال التحصيل غير متاح حاليًا. اسحب لتحديث حالة الطلب أو تواصل مع الإدارة.'**
+  String get order_collection_unavailable_hint;
+
+  /// No description provided for @order_collection_status_unknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة التحصيل غير متاحة'**
+  String get order_collection_status_unknown;
+
+  /// No description provided for @top_rank_no_metrics.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مؤشرات أداء متاحة'**
+  String get top_rank_no_metrics;
+
+  /// No description provided for @top_rank_no_movement.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تغيير'**
+  String get top_rank_no_movement;
+
+  /// No description provided for @top_rank_current_rank.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترتيب الحالي'**
+  String get top_rank_current_rank;
+
+  /// No description provided for @top_rank_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم'**
+  String get top_rank_score;
+
+  /// No description provided for @top_rank_points_breakdown.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفصيل النقاط'**
+  String get top_rank_points_breakdown;
+
+  /// No description provided for @top_rank_total.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get top_rank_total;
+
+  /// No description provided for @top_rank_strengths_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف حقق هذا الترتيب؟'**
+  String get top_rank_strengths_title;
+
+  /// No description provided for @top_rank_improve_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف تحسن ترتيبك؟'**
+  String get top_rank_improve_title;
+
+  /// No description provided for @top_rank_compare_leader.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقارنة مع الأول'**
+  String get top_rank_compare_leader;
+
+  /// No description provided for @top_rank_your_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجتك'**
+  String get top_rank_your_score;
+
+  /// No description provided for @top_rank_leader_score.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة الأول'**
+  String get top_rank_leader_score;
+
+  /// No description provided for @top_rank_difference.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفرق'**
+  String get top_rank_difference;
+
+  /// No description provided for @top_rank_metric_target.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالي: {current}   |   الهدف: {target}'**
+  String top_rank_metric_target(String current, String target);
+
+  /// No description provided for @top_rank_impact_points.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{points} نقطة'**
+  String top_rank_impact_points(String points);
+
+  /// No description provided for @top_rank_winner_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفائز — {label}'**
+  String top_rank_winner_label(String label);
+
+  /// No description provided for @top_rank_page_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم عرض الصفحة {page} من {lastPage}'**
+  String top_rank_page_summary(int page, int lastPage);
+
+  /// No description provided for @top_rank_dispatchers_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسؤولو توزيع الطلبات'**
+  String get top_rank_dispatchers_label;
+
+  /// No description provided for @order_country_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مصر'**
+  String get order_country_hint;
+
+  /// No description provided for @order_phone_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'01XXXXXXXXX'**
+  String get order_phone_hint;
+
+  /// No description provided for @reschedule_date_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم/شهر/سنة'**
+  String get reschedule_date_hint;
+
+  /// No description provided for @trip_warehouse_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة {tripNumber} • {warehouse}'**
+  String trip_warehouse_summary(String tripNumber, String warehouse);
+
+  /// No description provided for @offline_saved_data.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متصل — تعرض بيانات محفوظة'**
+  String get offline_saved_data;
+
+  /// No description provided for @offline_saved_data_since.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متصل — تعرض بيانات محفوظة من {savedAt}'**
+  String offline_saved_data_since(String savedAt);
+
+  /// No description provided for @offline_data_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد اتصال بالإنترنت — قد لا تتوفر بعض البيانات'**
+  String get offline_data_unavailable;
+
+  /// No description provided for @order_collection_in_progress.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملية تحصيل قيد التنفيذ بالفعل'**
+  String get order_collection_in_progress;
+
+  /// No description provided for @order_collection_invalid_details.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع مبلغ التحصيل وبيانات العملية'**
+  String get order_collection_invalid_details;
+
+  /// No description provided for @order_collection_not_available.
+  ///
+  /// In ar, this message translates to:
+  /// **'العملية غير متاحة للتحصيل حاليًا. حدّث حالة الطلب.'**
+  String get order_collection_not_available;
+
+  /// No description provided for @order_collection_not_confirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'السيرفر لم يؤكد نجاح التحصيل. حدّث حالة الطلب.'**
+  String get order_collection_not_confirmed;
+
+  /// No description provided for @order_collection_refresh_first.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد التحصيل. حدّث حالة الطلب أولًا.'**
+  String get order_collection_refresh_first;
+
+  /// No description provided for @order_collection_refresh_before_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد التحصيل. حدّث حالة الطلب قبل إعادة المحاولة.'**
+  String get order_collection_refresh_before_retry;
+
+  /// No description provided for @order_collection_connection_uncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد نتيجة التحصيل بسبب الاتصال. حدّث حالة الطلب قبل المحاولة مرة أخرى.'**
+  String get order_collection_connection_uncertain;
+
+  /// No description provided for @top_rank_category_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات لهذه الفئة'**
+  String get top_rank_category_empty;
+
+  /// No description provided for @top_rank_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الترتيب'**
+  String get top_rank_load_failed;
+
+  /// No description provided for @top_rank_details_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث التفاصيل'**
+  String get top_rank_details_load_failed;
+
+  /// No description provided for @reports_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل التقارير'**
+  String get reports_load_failed;
+
+  /// No description provided for @offline_operation_queued.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ العملية على الجهاز، وسيتم إرسالها تلقائيًا عند عودة الإنترنت'**
+  String get offline_operation_queued;
+
+  /// No description provided for @offline_operation_save_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ العملية محليًا، لم يتم إرسال الطلب'**
+  String get offline_operation_save_failed;
+
+  /// No description provided for @offline_operation_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملية قيد المزامنة'**
+  String get offline_operation_title;
+
+  /// No description provided for @reschedule_reason_customer_requested.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل طلب تغيير الموعد'**
+  String get reschedule_reason_customer_requested;
+
+  /// No description provided for @reschedule_reason_customer_absent.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل غير متواجد'**
+  String get reschedule_reason_customer_absent;
+
+  /// No description provided for @reschedule_reason_customer_unreachable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الوصول للعميل'**
+  String get reschedule_reason_customer_unreachable;
+
+  /// No description provided for @reschedule_reason_address_issue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في العنوان'**
+  String get reschedule_reason_address_issue;
+
+  /// No description provided for @reschedule_reason_vehicle_issue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في السيارة'**
+  String get reschedule_reason_vehicle_issue;
+
+  /// No description provided for @payment_method_unknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع غير متاحة'**
+  String get payment_method_unknown;
+
+  /// No description provided for @account_role_unknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدور الوظيفي غير متاح'**
+  String get account_role_unknown;
+
+  /// No description provided for @api_bad_request.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تنفيذ الطلب. راجع البيانات وحاول مرة أخرى.'**
+  String get api_bad_request;
+
+  /// No description provided for @api_no_content.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات متاحة'**
+  String get api_no_content;
+
+  /// No description provided for @api_forbidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس لديك صلاحية لتنفيذ هذه العملية'**
+  String get api_forbidden;
+
+  /// No description provided for @api_unauthorized.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.'**
+  String get api_unauthorized;
+
+  /// No description provided for @api_not_found.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيانات المطلوبة غير موجودة'**
+  String get api_not_found;
+
+  /// No description provided for @api_cache_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر قراءة البيانات المحفوظة'**
+  String get api_cache_error;
+
+  /// No description provided for @offline_notifications_waiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات محفوظة'**
+  String get offline_notifications_waiting;
+
+  /// No description provided for @offline_notifications_waiting_body.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم إرسال العمليات بمجرد توفر اتصال بالإنترنت'**
+  String get offline_notifications_waiting_body;
+
+  /// No description provided for @offline_notifications_channel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مزامنة عمليات ستوراس'**
+  String get offline_notifications_channel;
+
+  /// No description provided for @offline_notifications_channel_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة إرسال العمليات المحفوظة'**
+  String get offline_notifications_channel_description;
+
+  /// No description provided for @offline_notifications_sending.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري مزامنة العمليات'**
+  String get offline_notifications_sending;
+
+  /// No description provided for @offline_notifications_finished.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت المزامنة'**
+  String get offline_notifications_finished;
+
+  /// No description provided for @offline_notifications_results_channel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج مزامنة ستوراس'**
+  String get offline_notifications_results_channel;
+
+  /// No description provided for @offline_notifications_results_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج إرسال العمليات المحفوظة'**
+  String get offline_notifications_results_description;
+
+  /// No description provided for @offline_notifications_review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج عملية للمراجعة'**
+  String get offline_notifications_review;
+
+  /// No description provided for @offline_notifications_sending_body.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري إرسال: {title}'**
+  String offline_notifications_sending_body(String title);
+
+  /// No description provided for @offline_notifications_finished_body.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تنفيذ: {title}'**
+  String offline_notifications_finished_body(String title);
+
+  /// No description provided for @offline_notifications_error_body.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إكمال {title}. راجع التطبيق.'**
+  String offline_notifications_error_body(String title);
+
+  /// No description provided for @offline_notifications_toast.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت المزامنة: {title}'**
+  String offline_notifications_toast(String title);
+
+  /// No description provided for @amount_egp.
+  ///
+  /// In ar, this message translates to:
+  /// **'{amount} ج.م'**
+  String amount_egp(String amount);
+
+  /// No description provided for @account_named_wallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة {name}'**
+  String account_named_wallet(String name);
+
+  /// No description provided for @home_van_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشاحنة: {van}'**
+  String home_van_label(String van);
+
+  /// No description provided for @home_driver_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق: {driver}'**
+  String home_driver_label(String driver);
+
+  /// No description provided for @trip_number_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة {number}'**
+  String trip_number_title(String number);
+
+  /// No description provided for @trip_completed_at_time.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت {time}'**
+  String trip_completed_at_time(String time);
+
+  /// No description provided for @orders_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا توجد طلبات} one{طلب واحد} two{طلبان} few{{count} طلبات} many{{count} طلبًا} other{{count} طلب}}'**
+  String orders_count(int count);
+
+  /// No description provided for @orders_count_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الطلبات غير متاح'**
+  String get orders_count_unavailable;
+
+  /// No description provided for @trip_customers_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد عملاء في الرحلة} one{عميل واحد في الرحلة} two{عميلان في الرحلة} few{{count} عملاء في الرحلة} many{{count} عميلًا في الرحلة} other{{count} عميل في الرحلة}}'**
+  String trip_customers_count(int count);
+
+  /// No description provided for @trip_customers_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{customers} · {tripNumber}'**
+  String trip_customers_summary(String customers, String tripNumber);
+
+  /// No description provided for @notifications_unread_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا توجد إشعارات غير مقروءة} one{إشعار واحد غير مقروء} two{إشعاران غير مقروءين} few{{count} إشعارات غير مقروءة} many{{count} إشعارًا غير مقروء} other{{count} إشعار غير مقروء}}'**
+  String notifications_unread_count(int count);
+
+  /// No description provided for @notification_minutes_ago_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{الآن} one{منذ دقيقة} two{منذ دقيقتين} few{منذ {count} دقائق} many{منذ {count} دقيقة} other{منذ {count} دقيقة}}'**
+  String notification_minutes_ago_count(int count);
+
+  /// No description provided for @notification_hours_ago_count.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{الآن} one{منذ ساعة} two{منذ ساعتين} few{منذ {count} ساعات} many{منذ {count} ساعة} other{منذ {count} ساعة}}'**
+  String notification_hours_ago_count(int count);
+
+  /// No description provided for @trip_handled_orders_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{total, plural, =0{لا توجد طلبات} one{{handled} من طلب واحد تم التعامل معه} two{{handled} من طلبين تم التعامل معهما} few{{handled} من {total} طلبات تم التعامل معها} many{{handled} من {total} طلبًا تم التعامل معها} other{{handled} من {total} طلب تم التعامل معها}}'**
+  String trip_handled_orders_summary(int handled, int total);
+
+  /// No description provided for @trip_map_number_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة رحلة {number}'**
+  String trip_map_number_title(String number);
+
+  /// No description provided for @trip_stop_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{label} · {stopNumber} من {totalStops}'**
+  String trip_stop_summary(String label, int stopNumber, int totalStops);
+
+  /// No description provided for @distance_meters.
+  ///
+  /// In ar, this message translates to:
+  /// **'{distance} متر'**
+  String distance_meters(int distance);
+
+  /// No description provided for @distance_kilometers.
+  ///
+  /// In ar, this message translates to:
+  /// **'{distance} كم'**
+  String distance_kilometers(String distance);
+
+  /// No description provided for @trip_map_arrival_minutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{الوصول الآن} one{الوصول خلال دقيقة} two{الوصول خلال دقيقتين} few{الوصول خلال {count} دقائق} many{الوصول خلال {count} دقيقة} other{الوصول خلال {count} دقيقة}}'**
+  String trip_map_arrival_minutes(int count);
+
+  /// No description provided for @location_accuracy_meters.
+  ///
+  /// In ar, this message translates to:
+  /// **'±{accuracy} متر'**
+  String location_accuracy_meters(String accuracy);
+
+  /// No description provided for @location_accuracy_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقة الموقع ±{accuracy} متر'**
+  String location_accuracy_description(String accuracy);
+
+  /// No description provided for @delivery_item_code_unit.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود الصنف: {code} • الوحدة: {unit}'**
+  String delivery_item_code_unit(String code, String unit);
+
+  /// No description provided for @product_code_unit.
+  ///
+  /// In ar, this message translates to:
+  /// **'{code} • الوحدة: {unit}'**
+  String product_code_unit(String code, String unit);
+
+  /// No description provided for @treasury_product_code_unit.
+  ///
+  /// In ar, this message translates to:
+  /// **'{code} · الوحدة: {unit}'**
+  String treasury_product_code_unit(String code, String unit);
+
+  /// No description provided for @treasury_trip_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة الحالية {trip}'**
+  String treasury_trip_title(String trip);
+
+  /// No description provided for @treasury_payment_entry_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الدفع: {entry}'**
+  String treasury_payment_entry_label(String entry);
+
+  /// No description provided for @treasury_custody_amount.
+  ///
+  /// In ar, this message translates to:
+  /// **'العهدة الحالية: {amount}'**
+  String treasury_custody_amount(String amount);
+
+  /// No description provided for @cancel_delivery_order_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم تسجيل إلغاء التسليم للطلب {orderNumber}\nالسبب: {reason}'**
+  String cancel_delivery_order_description(String orderNumber, String reason);
+
+  /// No description provided for @confirm_receiving_trip_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت تؤكد أنك راجعت واستلمت العربية والبضاعة الموضحة في الرحلة {tripNumber}.'**
+  String confirm_receiving_trip_description(String tripNumber);
+
+  /// No description provided for @order_number_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب: {orderNumber}'**
+  String order_number_label(String orderNumber);
+
+  /// No description provided for @order_required_amount_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المطلوب: {amount}'**
+  String order_required_amount_label(String amount);
+
+  /// No description provided for @payment_method_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع: {method}'**
+  String payment_method_label(String method);
+
+  /// No description provided for @text_with_trailing_space.
+  ///
+  /// In ar, this message translates to:
+  /// **'{text} '**
+  String text_with_trailing_space(String text);
+
+  /// No description provided for @label_with_colon.
+  ///
+  /// In ar, this message translates to:
+  /// **'{label}: '**
+  String label_with_colon(String label);
+
+  /// No description provided for @inline_secondary_label.
+  ///
+  /// In ar, this message translates to:
+  /// **' · {label}'**
+  String inline_secondary_label(String label);
+
+  /// No description provided for @optional_field_suffix.
+  ///
+  /// In ar, this message translates to:
+  /// **' (اختياري)'**
+  String get optional_field_suffix;
+
+  /// No description provided for @filter_count_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'{label} ({count})'**
+  String filter_count_label(String label, int count);
+
+  /// No description provided for @top_rank_metric_unknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤشر أداء غير معروف'**
+  String get top_rank_metric_unknown;
+
+  /// No description provided for @direct_sale_customer_retry_same_request_notice.
+  ///
+  /// In ar, this message translates to:
+  /// **'قد يكون السيرفر سجّل العميل بالفعل. إعادة المحاولة ستستخدم نفس البيانات ونفس معرّف العملية لتجنب التكرار. إذا استمر الخطأ، تحقق من العميل في النظام.'**
+  String get direct_sale_customer_retry_same_request_notice;
+
+  /// No description provided for @direct_sale_customer_retry_same_data.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن تغيير بيانات العميل أثناء إعادة محاولة عملية نتيجتها غير مؤكدة. أعد البيانات الأصلية أو تحقق من وجود العميل أولًا.'**
+  String get direct_sale_customer_retry_same_data;
+
+  /// No description provided for @delivery_receipt_optional.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة إيصال الدفع (اختياري)'**
+  String get delivery_receipt_optional;
+
+  /// No description provided for @delivery_receipt_add.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صورة إيصال'**
+  String get delivery_receipt_add;
+
+  /// No description provided for @delivery_receipt_camera.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط صورة بالكاميرا'**
+  String get delivery_receipt_camera;
+
+  /// No description provided for @delivery_receipt_gallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار صورة من المعرض'**
+  String get delivery_receipt_gallery;
+
+  /// No description provided for @delivery_receipt_replace.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الصورة'**
+  String get delivery_receipt_replace;
+
+  /// No description provided for @delivery_receipt_remove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة الصورة'**
+  String get delivery_receipt_remove;
+
+  /// No description provided for @delivery_receipt_preview_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر عرض صورة الإيصال'**
+  String get delivery_receipt_preview_failed;
+
+  /// No description provided for @delivery_receipt_select_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر اختيار صورة الإيصال. حاول مرة أخرى.'**
+  String get delivery_receipt_select_failed;
+
+  /// No description provided for @delivery_receipt_local_only.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة الإيصال للمعاينة داخل الشاشة فقط، ولن تُحفظ أو تُرفع للسيرفر حتى تتوفر واجهة API تدعم الإيصالات.'**
+  String get delivery_receipt_local_only;
+
+  /// No description provided for @areas_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'المناطق والمسار'**
+  String get areas_title;
+
+  /// No description provided for @trip_map_estimates_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة ووقت الوصول غير متاحين حاليًا. يمكنك بدء الملاحة.'**
+  String get trip_map_estimates_unavailable;
+
+  /// No description provided for @areas_distribution_order.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترتيب محدد من إدارة التوزيع'**
+  String get areas_distribution_order;
+
+  /// No description provided for @areas_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث المسار'**
+  String get areas_refresh;
+
+  /// No description provided for @areas_stops.
+  ///
+  /// In ar, this message translates to:
+  /// **'محطة'**
+  String get areas_stops;
+
+  /// No description provided for @areas_finished.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الانتهاء منها'**
+  String get areas_finished;
+
+  /// No description provided for @areas_list.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة'**
+  String get areas_list;
+
+  /// No description provided for @areas_map.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة'**
+  String get areas_map;
+
+  /// No description provided for @areas_next.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالية'**
+  String get areas_next;
+
+  /// No description provided for @areas_starting_point.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة البداية'**
+  String get areas_starting_point;
+
+  /// No description provided for @areas_warehouse_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المخزن غير متاح'**
+  String get areas_warehouse_unavailable;
+
+  /// No description provided for @areas_address_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان غير متاح'**
+  String get areas_address_unavailable;
+
+  /// No description provided for @areas_stop_summary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{address} · {status}'**
+  String areas_stop_summary(String address, String status);
+
+  /// No description provided for @areas_stop_location_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع المحطة غير متاح على الخريطة'**
+  String get areas_stop_location_unavailable;
+
+  /// No description provided for @areas_no_stops.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد محطات في الرحلة الحالية'**
+  String get areas_no_stops;
+
+  /// No description provided for @areas_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل مسار الرحلة. حاول مرة أخرى.'**
+  String get areas_load_failed;
+
+  /// No description provided for @areas_open_google_maps.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح المسار في Google Maps'**
+  String get areas_open_google_maps;
+
+  /// No description provided for @areas_route_sections.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر جزء المسار'**
+  String get areas_route_sections;
+
+  /// No description provided for @areas_route_sections_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تقسيم المسار ليتوافق مع عدد المحطات المسموح به في خرائط Google. افتح الأجزاء بالترتيب للحفاظ على مسار التوزيع.'**
+  String get areas_route_sections_description;
+
+  /// No description provided for @areas_route_origin_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحداثيات المخزن غير متاحة. ستستخدم خرائط Google موقعك كنقطة بداية.'**
+  String get areas_route_origin_unavailable;
+
+  /// No description provided for @areas_route_location_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح المسار بالكامل: توجد محطة بدون موقع أو عنوان صالح لخرائط Google. يمكنك فتح المحطات الأخرى من الخريطة.'**
+  String get areas_route_location_unavailable;
+
+  /// No description provided for @areas_missing_coordinates.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{كل المحطات متاحة على الخريطة} one{توجد محطة بدون إحداثيات. تظل ظاهرة في القائمة.} two{توجد محطتان بدون إحداثيات. تظلان ظاهرتين في القائمة.} few{توجد {count} محطات بدون إحداثيات. تظل ظاهرة في القائمة.} many{توجد {count} محطة بدون إحداثيات. تظل ظاهرة في القائمة.} other{توجد {count} محطة بدون إحداثيات. تظل ظاهرة في القائمة.}}'**
+  String areas_missing_coordinates(int count);
+
+  /// No description provided for @areas_route_section.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء {number} من {total}'**
+  String areas_route_section(int number, int total);
+
+  /// No description provided for @areas_route_section_stops.
+  ///
+  /// In ar, this message translates to:
+  /// **'من المحطة {first} إلى المحطة {last}'**
+  String areas_route_section_stops(int first, int last);
+
+  /// No description provided for @delivery_outcome_actions_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجراءات التسليم'**
+  String get delivery_outcome_actions_title;
+
+  /// No description provided for @delivery_cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء التسليم'**
+  String get delivery_cancel;
+
+  /// No description provided for @delivery_reschedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الجدولة'**
+  String get delivery_reschedule;
+
+  /// No description provided for @delivery_cancel_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء تسليم الطلب'**
+  String get delivery_cancel_title;
+
+  /// No description provided for @delivery_reschedule_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة جدولة التسليم'**
+  String get delivery_reschedule_title;
+
+  /// No description provided for @delivery_cancel_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم إلغاء تسليم هذا الطلب بعد التأكيد. يرجى إدخال سبب الإلغاء المعتمد.'**
+  String get delivery_cancel_warning;
+
+  /// No description provided for @delivery_reschedule_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد الموعد الجديد للتسليم مع توضيح سبب التأجيل.'**
+  String get delivery_reschedule_hint;
+
+  /// No description provided for @delivery_outcome_reason.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب (إجباري)'**
+  String get delivery_outcome_reason;
+
+  /// No description provided for @delivery_outcome_reason_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب السبب المعتمد'**
+  String get delivery_outcome_reason_hint;
+
+  /// No description provided for @delivery_reschedule_choose_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار تاريخ ووقت التسليم الجديد'**
+  String get delivery_reschedule_choose_date;
+
+  /// No description provided for @delivery_outcome_invalid_reason.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال سبب صحيح.'**
+  String get delivery_outcome_invalid_reason;
+
+  /// No description provided for @delivery_outcome_invalid_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى اختيار تاريخ ووقت في المستقبل.'**
+  String get delivery_outcome_invalid_date;
+
+  /// No description provided for @delivery_outcome_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث حالة التسليم. حاول مرة أخرى.'**
+  String get delivery_outcome_failed;
+
+  /// No description provided for @delivery_cancel_confirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد إلغاء التسليم'**
+  String get delivery_cancel_confirm;
+
+  /// No description provided for @delivery_reschedule_confirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد إعادة الجدولة'**
+  String get delivery_reschedule_confirm;
+
+  /// No description provided for @delivery_cancel_success.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء تسليم الطلب بنجاح'**
+  String get delivery_cancel_success;
+
+  /// No description provided for @delivery_reschedule_success.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة جدولة تسليم الطلب بنجاح'**
+  String get delivery_reschedule_success;
+
+  /// No description provided for @delivery_outcome_back.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى الطلبات'**
+  String get delivery_outcome_back;
 }
 
 class _AppLocalizationsDelegate

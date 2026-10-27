@@ -53,7 +53,7 @@ class TripStatusPlaceholder extends StatelessWidget {
               ),
               const SizedBox(height: 21),
               Text(
-                title,
+                context.localizedErrorMessage(title),
                 textAlign: TextAlign.center,
                 style: Styles.textStyle20.copyWith(
                   color: AppColors.black1,
@@ -112,7 +112,7 @@ class TripStatusPlaceholder extends StatelessWidget {
                     icon: const Icon(Icons.refresh_rounded, size: 20),
                     label: Text(
                       context.strings.trip_tab_retry,
-                      style: const TextStyle(fontWeight: FontWeight.w800),
+                      style: Styles.base.copyWith(fontWeight: FontWeight.w800),
                     ),
                   ),
                 ),

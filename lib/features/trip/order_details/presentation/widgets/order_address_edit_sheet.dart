@@ -103,7 +103,7 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
             ],
           ),
           content: Text(
-            message,
+            context.localizedErrorMessage(message),
             textDirection: TextDirection.rtl,
             style: Styles.textStyle14.copyWith(color: AppColors.black1),
           ),
@@ -125,7 +125,9 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(
+        SnackBar(content: Text(context.localizedErrorMessage(message))),
+      );
   }
 
   // ======= Get Device Location ======= //

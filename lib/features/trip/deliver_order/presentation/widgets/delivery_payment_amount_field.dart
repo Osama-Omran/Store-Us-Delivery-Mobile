@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryPaymentAmountField extends StatelessWidget {
   const DeliveryPaymentAmountField({
@@ -49,10 +50,9 @@ class DeliveryPaymentAmountField extends StatelessWidget {
       ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
     ),
-    style: TextStyle(
+    style: Styles.textStyle26.copyWith(
       fontWeight: FontWeight.w800,
       color: AppColors.black1,
-      fontSize: 26,
     ),
   );
 }

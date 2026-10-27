@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -24,7 +23,7 @@ class ContactSupportInfoCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white0,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.grey3),
         boxShadow: [
           BoxShadow(
@@ -69,30 +68,37 @@ class _ContactInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 12,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: Styles.textStyle14.copyWith(
-              color: AppColors.grey4,
-            ),
-          ),
-        ),
-
-        Text(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final labelWidget = Text(
+          label,
+          style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+        );
+        final valueWidget = Text(
           value.trim().isEmpty ? '—' : value,
-          textDirection: isPhone
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+          textDirection: isPhone ? TextDirection.ltr : TextDirection.rtl,
           style: Styles.textStyle16.copyWith(
             color: AppColors.black1,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
           ),
-        ),
-      ],
+        );
+        if (constraints.maxWidth < 300 ||
+            MediaQuery.textScalerOf(context).scale(16) > 20) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 6,
+            children: [labelWidget, valueWidget],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            Expanded(child: labelWidget),
+            Flexible(child: valueWidget),
+          ],
+        );
+      },
     );
   }
 }

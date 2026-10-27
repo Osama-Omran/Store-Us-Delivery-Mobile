@@ -8,6 +8,7 @@ import 'package:storeus_delivery/features/notifications/presentation/cubit/notif
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:storeus_delivery/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:storeus_delivery/features/notifications/presentation/widgets/notifications_header.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -41,46 +42,43 @@ class _NotificationsScreenBody extends StatelessWidget {
                     NotificationsInitial() || NotificationsLoadingState() =>
                       const _NotificationsLoadingView(),
                     NotificationsFailureState() => _NotificationsErrorView(
-                        message: state.errorMessage?.isNotEmpty == true
-                            ? state.errorMessage!
-                            : context.strings.notifications_load_failed,
-                        onRetry: () => context
-                            .read<NotificationsCubit>()
-                            .getNotifications(),
-                      ),
+                      message: state.errorMessage?.isNotEmpty == true
+                          ? state.errorMessage!
+                          : context.strings.notifications_load_failed,
+                      onRetry: () =>
+                          context.read<NotificationsCubit>().getNotifications(),
+                    ),
                     NotificationsSuccessState() => RefreshIndicator(
-                        color: AppColors.primary,
-                        backgroundColor: AppColors.white0,
-                        onRefresh: () => context
-                            .read<NotificationsCubit>()
-                            .getNotifications(),
-                        child: state.notifications.isEmpty
-                            ? const _NotificationsEmptyView()
-                            : ListView.separated(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16,
-                                  18,
-                                  16,
-                                  145,
-                                ),
-                                itemCount: state.notifications.length,
-                                separatorBuilder: (_, _) =>
-                                    const SizedBox(height: 12),
-                                itemBuilder: (context, index) {
-                                  final notification =
-                                      state.notifications[index];
-
-                                  return NotificationCard(
-                                    key: ValueKey(notification.id),
-                                    notification: notification,
-                                    isMarking: state.markingIds.contains(
-                                      notification.id,
-                                    ),
-                                  );
-                                },
+                      color: AppColors.primary,
+                      backgroundColor: AppColors.white0,
+                      onRefresh: () =>
+                          context.read<NotificationsCubit>().getNotifications(),
+                      child: state.notifications.isEmpty
+                          ? const _NotificationsEmptyView()
+                          : ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                16,
+                                18,
+                                16,
+                                145,
                               ),
-                      ),
+                              itemCount: state.notifications.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 12),
+                              itemBuilder: (context, index) {
+                                final notification = state.notifications[index];
+
+                                return NotificationCard(
+                                  key: ValueKey(notification.id),
+                                  notification: notification,
+                                  isMarking: state.markingIds.contains(
+                                    notification.id,
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
                   },
                 ),
               ],
@@ -109,10 +107,7 @@ class _NotificationsLoadingView extends StatelessWidget {
             color: AppColors.blue5,
             border: Border.all(color: AppColors.blue4),
           ),
-          child: const CustomLoadingIndicator(
-            size: 144,
-            primaryColor: true,
-          ),
+          child: const CustomLoadingIndicator(size: 144, primaryColor: true),
         ),
       ),
     );
@@ -170,8 +165,7 @@ class _NotificationsEmptyView extends StatelessWidget {
                   Text(
                     context.strings.no_notifications,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 17,
+                    style: Styles.textStyle17.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.black1,
                     ),
@@ -187,10 +181,7 @@ class _NotificationsEmptyView extends StatelessWidget {
 }
 
 class _NotificationsErrorView extends StatelessWidget {
-  const _NotificationsErrorView({
-    required this.message,
-    required this.onRetry,
-  });
+  const _NotificationsErrorView({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -235,10 +226,9 @@ class _NotificationsErrorView extends StatelessWidget {
               ),
               const SizedBox(height: 19),
               Text(
-                message,
+                context.localizedErrorMessage(message),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15,
+                style: Styles.textStyle15.copyWith(
                   height: 1.6,
                   fontWeight: FontWeight.w500,
                   color: AppColors.grey1,
@@ -261,7 +251,7 @@ class _NotificationsErrorView extends StatelessWidget {
                   icon: const Icon(Icons.refresh_rounded, size: 21),
                   label: Text(
                     context.strings.current_trip_retry,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                    style: Styles.base.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
               ),

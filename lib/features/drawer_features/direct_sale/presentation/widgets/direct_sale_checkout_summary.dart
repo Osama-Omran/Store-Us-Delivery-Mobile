@@ -19,46 +19,64 @@ class DirectSaleCheckoutSummary extends StatelessWidget {
         spacing: 8,
         children: [
           for (final product in state.selectedProducts)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    '${product.name} × ${state.quantityFor(product)}',
-                    style: Styles.textStyle14.copyWith(color: AppColors.black1),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  formatTripAmount(
-                    context,
-                    product.unitPriceMinor * state.quantityFor(product) / 100,
-                  ),
-                  style: Styles.textStyle14.copyWith(
-                    color: AppColors.black1,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+            _SummaryRow(
+              label: '${product.name} × ${state.quantityFor(product)}',
+              amount: formatTripAmount(
+                context,
+                product.unitPriceMinor * state.quantityFor(product) / 100,
+              ),
             ),
           Divider(height: 8, color: AppColors.grey3),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  context.strings.direct_sale_total_required,
-                  style: Styles.textStyle18.copyWith(color: AppColors.black1),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                formatTripAmount(context, state.totalMinor / 100),
-                style: Styles.textStyle18.copyWith(color: AppColors.black1),
-              ),
-            ],
+          _SummaryRow(
+            label: context.strings.direct_sale_total_required,
+            amount: formatTripAmount(context, state.totalMinor / 100),
+            total: true,
           ),
         ],
       ),
     );
   }
+}
+
+class _SummaryRow extends StatelessWidget {
+  const _SummaryRow({
+    required this.label,
+    required this.amount,
+    this.total = false,
+  });
+
+  final String label;
+  final String amount;
+  final bool total;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final style = (total ? Styles.textStyle18 : Styles.textStyle14).copyWith(
+        color: AppColors.black1,
+      );
+      final labelWidget = Text(label, style: style);
+      final amountWidget = Text(
+        amount,
+        textAlign: TextAlign.end,
+        style: style.copyWith(fontWeight: FontWeight.w700),
+      );
+      if (constraints.maxWidth < 300 ||
+          MediaQuery.textScalerOf(context).scale(16) > 20) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 4,
+          children: [labelWidget, amountWidget],
+        );
+      }
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 12,
+        children: [
+          Expanded(child: labelWidget),
+          Flexible(child: amountWidget),
+        ],
+      );
+    },
+  );
 }

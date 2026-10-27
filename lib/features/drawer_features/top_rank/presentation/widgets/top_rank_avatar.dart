@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class TopRankAvatar extends StatelessWidget {
   const TopRankAvatar({
@@ -52,7 +53,7 @@ class TopRankAvatar extends StatelessWidget {
             )
           : Text(
               initials.isEmpty ? '?' : initials,
-              style: TextStyle(
+              style: Styles.base.copyWith(
                 color: AppColors.primary,
                 fontSize: size * .27,
                 fontWeight: FontWeight.w800,

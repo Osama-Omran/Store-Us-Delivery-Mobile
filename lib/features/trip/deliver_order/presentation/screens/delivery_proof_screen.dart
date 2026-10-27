@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliveryProofDraft {
   const DeliveryProofDraft({this.photo, this.signature = const []});
@@ -97,7 +98,7 @@ class _DeliveryProofScreenState extends State<DeliveryProofScreen> {
                             ),
                             Text(
                               context.strings.delivery_take_photo,
-                              style: TextStyle(
+                              style: Styles.base.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -172,7 +173,7 @@ class _DeliveryProofScreenState extends State<DeliveryProofScreen> {
             Text(
               context.strings.delivery_proof_not_uploaded,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.grey4, fontSize: 12),
+              style: Styles.base.copyWith(color: AppColors.grey4, fontSize: 12),
             ),
           ],
         ),
@@ -219,8 +220,7 @@ class _ProofCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: 18,
+            style: Styles.textStyle18.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.black1,
             ),

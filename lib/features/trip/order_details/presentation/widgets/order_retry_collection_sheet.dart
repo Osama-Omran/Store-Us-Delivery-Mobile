@@ -4,6 +4,8 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 /// Result: true = accepted by backend; false = refresh required; null = cancelled.
 class OrderRetryCollectionSheet extends StatefulWidget {
@@ -58,7 +60,10 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
   }
 
   bool get _canCollect =>
-      _requiredAmount != null && _pendingOperations.length == 1;
+      widget.order.canRetryCollection &&
+      OrderCollectionPolicy.showCollectButton(widget.order.paymentStatus) &&
+      _requiredAmount != null &&
+      _pendingOperations.length == 1;
 
   Future<void> _send() async {
     if (_submitting || _mustRefreshBeforeRetry || !_canCollect) return;
@@ -73,16 +78,18 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(context.strings.order_number_label(widget.salesOrder)),
+            const SizedBox(height: 8),
             Text(
-              '${context.strings.retry_collection_order_label}: ${widget.salesOrder}',
+              context.strings.order_required_amount_label(
+                formatTripAmount(context, requiredAmount),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
-              '${context.strings.retry_collection_required_amount_label}: ${formatTripAmount(context, requiredAmount)}',
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${context.strings.delivery_payment_method}: ${context.strings.delivery_cash}',
+              context.strings.payment_method_label(
+                context.strings.delivery_cash,
+              ),
             ),
             const SizedBox(height: 12),
             Text(context.strings.retry_collection_confirm_notice),
@@ -178,16 +185,14 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                   ),
                   Text(
                     context.strings.retry_collection_screen_title,
-                    style: TextStyle(
-                      fontSize: 22,
+                    style: Styles.textStyle22.copyWith(
                       fontWeight: FontWeight.w900,
-                      color: AppColors.black1,
                     ),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     widget.salesOrder,
-                    style: TextStyle(
+                    style: Styles.base.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
                     ),
@@ -205,8 +210,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                       children: [
                         Text(
                           context.strings.retry_collection_full_amount_label,
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: Styles.textStyle14.copyWith(
                             fontWeight: FontWeight.w700,
                             color: AppColors.grey4,
                           ),
@@ -218,17 +222,14 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                                     .strings
                                     .retry_collection_amount_unavailable
                               : formatTripAmount(context, requiredAmount),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
+                          style: Styles.textStyle24.copyWith(
                             color: AppColors.primary,
                           ),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           context.strings.retry_collection_full_amount_notice,
-                          style: TextStyle(
-                            fontSize: 13,
+                          style: Styles.textStyle13.copyWith(
                             color: AppColors.grey4,
                           ),
                         ),
@@ -253,7 +254,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                             : context
                                   .strings
                                   .retry_collection_multiple_pending_error,
-                        style: TextStyle(
+                        style: Styles.base.copyWith(
                           color: AppColors.red1,
                           fontWeight: FontWeight.w700,
                         ),
@@ -263,8 +264,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                   const SizedBox(height: 20),
                   Text(
                     context.strings.delivery_payment_method,
-                    style: const TextStyle(
-                      fontSize: 17,
+                    style: Styles.textStyle17.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -282,7 +282,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                         const SizedBox(width: 12),
                         Text(
                           context.strings.delivery_cash,
-                          style: TextStyle(
+                          style: Styles.base.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w800,
                           ),
@@ -295,7 +295,9 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                   const SizedBox(height: 18),
                   Text(
                     context.strings.retry_collection_notes_label,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    style: Styles.textStyle15.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   TextField(
@@ -322,8 +324,8 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Text(
-                        _error!,
-                        style: TextStyle(
+                        context.localizedErrorMessage(_error!),
+                        style: Styles.base.copyWith(
                           color: AppColors.red1,
                           fontWeight: FontWeight.w700,
                         ),
@@ -363,8 +365,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                                   : context
                                         .strings
                                         .retry_collection_confirm_full_amount,
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: Styles.textStyle16.copyWith(
                                 fontWeight: FontWeight.w800,
                               ),
                             ),

@@ -45,7 +45,9 @@ class DirectSaleProductsScreen extends StatelessWidget {
               style: Styles.textStyle18.copyWith(color: AppColors.black1),
               children: [
                 TextSpan(
-                  text: ' · ${context.strings.direct_sale_vehicle_only}',
+                  text: context.strings.inline_secondary_label(
+                    context.strings.direct_sale_vehicle_only,
+                  ),
                   style: Styles.textStyle12.copyWith(color: AppColors.grey4),
                 ),
               ],

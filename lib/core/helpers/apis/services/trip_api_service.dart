@@ -1,5 +1,8 @@
 import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/send_support_message_body.dart';
 import 'package:storeus_delivery/features/drawer_features/contact_us/data/models/support_contact_response.dart';
+import 'package:storeus_delivery/features/drawer_features/customers/data/models/trip_customers_response.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_request_body.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_response.dart';
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/models/stock_transfers_response.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/data/models/treasury_wallet_response.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
@@ -11,14 +14,12 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/data/models/confirm_delivery_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/retry_collection_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_trip_response.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/models/loaded_items_response.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/data/models/reschedule_order_request_body.dart';
-
 part 'trip_api_service.g.dart';
 
 @RestApi()
@@ -78,28 +79,29 @@ abstract class TripApiService {
     @Body() UpdateDeliveryLocationBody body,
   );
 
-  @POST(ApiConstants.deliveryOutcome)
-  Future<dynamic> rescheduleOrder(
-    @Path('tripId') int tripId,
-    @Path('orderId') int orderId,
-    @Header('Authorization') String authorization,
-    @Body() RescheduleOrderRequestBody body,
-  );
 
   @POST(ApiConstants.deliveryOutcome)
   Future<dynamic> cancelDelivery(
-    @Path('tripId') int tripId,
-    @Path('orderId') int orderId,
-    @Header('Authorization') String authorization,
-    @Body() CancelDeliveryRequestBody body,
-  );
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() CancelDeliveryRequestBody body,
+      );
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> rescheduleOrder(
+      @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
+      @Header('Authorization') String authorization,
+      @Body() RescheduleOrderRequestBody body,
+      );
 
   @POST(ApiConstants.confirmDelivery)
   Future<dynamic> confirmDelivery(
     @Path('tripId') int tripId,
     @Path('orderId') int orderId,
     @Header('Authorization') String authorization,
-    @Body() ConfirmDeliveryRequestBody body,
+    @Body() FormData body,
   );
 
   @GET(ApiConstants.topRank)
@@ -117,34 +119,55 @@ abstract class TripApiService {
     @Query('to') String to,
   );
 
-
   @GET(ApiConstants.supportContact)
   Future<SupportContactResponse> getSupportContact(
-      @Header('Authorization') String authorization,
-      );
+    @Header('Authorization') String authorization,
+  );
 
   @POST(ApiConstants.supportMessages)
   Future<dynamic> sendSupportMessage(
-      @Header('Authorization') String authorization,
-      @Body() SendSupportMessageBody body,
-      );
+    @Header('Authorization') String authorization,
+    @Body() SendSupportMessageBody body,
+  );
 
   @GET(ApiConstants.warehouseTransfers)
   Future<StockTransfersResponse> getWarehouseTransfers(
-      @Header('Authorization') String authorization,
-      );
+    @Header('Authorization') String authorization,
+  );
 
   @POST(ApiConstants.retryCollection)
   Future<dynamic> retryCollection(
-      @Path('tripId') int tripId,
-      @Path('orderId') int orderId,
-      @Header('Authorization') String authorization,
-      @Body() RetryCollectionRequestBody body,
-      );
+    @Path('tripId') int tripId,
+    @Path('orderId') int orderId,
+    @Header('Authorization') String authorization,
+    @Body() RetryCollectionRequestBody body,
+  );
 
   @GET(ApiConstants.tripWallet)
   Future<TripWalletResponse> getTripWallet(
+    @Path('tripId') int tripId,
+    @Header('Authorization') String authorization,
+  );
+
+  @POST(ApiConstants.customers)
+  Future<CreateCustomerResponse> createCustomer(
+    @Header('Authorization') String authorization,
+    @Body() CreateCustomerRequestBody body,
+  );
+
+  @GET(ApiConstants.tripCustomers)
+  Future<TripCustomersResponse> getTripCustomers(
+    @Path('tripId') int tripId,
+    @Header('Authorization') String authorization,
+  );
+
+
+  @POST(ApiConstants.deliveryOutcome)
+  Future<dynamic> submitDeliveryOutcome(
       @Path('tripId') int tripId,
+      @Path('orderId') int orderId,
       @Header('Authorization') String authorization,
+      @Body() Map<String, dynamic> body,
       );
+
 }

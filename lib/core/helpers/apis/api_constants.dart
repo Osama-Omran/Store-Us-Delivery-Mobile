@@ -38,8 +38,6 @@ class ApiConstants {
       '$notifications/{notificationId}/read';
   static const String updateOrderDeliveryLocation =
       '/trips/{tripId}/orders/{orderId}/delivery-location';
-  static const String deliveryOutcome =
-      '$trips/{tripId}/orders/{orderId}/delivery-outcome';
   static const String confirmDelivery =
       '$trips/{tripId}/orders/{orderId}/confirm-delivery';
   static const String topRank = '/top-rank';
@@ -52,4 +50,13 @@ class ApiConstants {
 
   //======= Treasury / Wallet =======//
   static const String tripWallet = '$trips/{tripId}/wallet';
+
+  //======= Customers =======//
+  static const String customers = '/customers';
+
+  static const String tripCustomers = '$trips/{tripId}/customers';
+
+  static const String deliveryOutcome =
+      '$trips/{tripId}/orders/{orderId}/delivery-outcome';
+
 }

@@ -105,7 +105,7 @@ class ReportsCubit extends Cubit<ReportsState> {
           period: selected,
           fromDate: range.from,
           toDate: range.to,
-          errorMessage: 'تعذر تحميل التقارير',
+          errorMessage: 'reports_load_failed',
         ),
       );
     }

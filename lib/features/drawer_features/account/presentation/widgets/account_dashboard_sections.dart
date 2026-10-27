@@ -32,7 +32,7 @@ class AccountDashboardSections extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${context.strings.account_wallet_name} $userName',
+                      context.strings.account_named_wallet(userName),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.textStyle18.copyWith(

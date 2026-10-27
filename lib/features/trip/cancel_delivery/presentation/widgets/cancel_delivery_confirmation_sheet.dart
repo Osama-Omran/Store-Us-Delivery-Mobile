@@ -20,7 +20,7 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: SafeArea(
         top: false,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 26, 24, 28),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -37,9 +37,10 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
               ),
 
               Text(
-                '${context.strings.cancel_delivery_confirm_description} '
-                '$salesOrder\n'
-                '${context.strings.cancel_delivery_reason_label}: $reason',
+                context.strings.cancel_delivery_order_description(
+                  salesOrder,
+                  reason,
+                ),
                 textAlign: TextAlign.center,
                 style: Styles.textStyle14.copyWith(color: AppColors.grey4),
               ),
@@ -48,8 +49,8 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
                 spacing: 10,
                 children: [
                   Expanded(
-                    child: SizedBox(
-                      height: 62,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 56),
                       child: OutlinedButton(
                         onPressed: () => Navigator.of(context).pop(false),
                         style: OutlinedButton.styleFrom(
@@ -70,8 +71,8 @@ class CancelDeliveryConfirmationSheet extends StatelessWidget {
                   ),
 
                   Expanded(
-                    child: SizedBox(
-                      height: 62,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 56),
                       child: ElevatedButton(
                         onPressed: () => Navigator.of(context).pop(true),
                         style: ElevatedButton.styleFrom(

@@ -19,6 +19,10 @@ class DirectSaleState {
     this.locating = false,
     this.locationError,
     this.receipt,
+    this.creatingCustomer = false,
+    this.customerCreateError,
+    this.customerVerificationRequired = false,
+    this.retryOriginalCustomerRequest = false,
   });
 
   final DirectSaleStep step;
@@ -33,6 +37,12 @@ class DirectSaleState {
   final bool locating;
   final DirectSaleLocationError? locationError;
   final DirectSaleReceipt? receipt;
+  final bool creatingCustomer;
+  final String? customerCreateError;
+  final bool customerVerificationRequired;
+  // An earlier request may already have reached the server.
+  // Retry only with the same UUID and exact original payload.
+  final bool retryOriginalCustomerRequest;
 
   int quantityFor(DirectSaleProduct product) => quantities[product.code] ?? 0;
   List<DirectSaleProduct> get selectedProducts =>
@@ -60,6 +70,11 @@ class DirectSaleState {
     bool? locating,
     DirectSaleLocationError? locationError,
     bool clearLocationError = false,
+    bool? creatingCustomer,
+    String? customerCreateError,
+    bool clearCustomerCreateError = false,
+    bool? customerVerificationRequired,
+    bool? retryOriginalCustomerRequest,
   }) => DirectSaleState(
     step: step ?? this.step,
     customer: customer ?? this.customer,
@@ -77,5 +92,12 @@ class DirectSaleState {
         ? null
         : locationError ?? this.locationError,
     receipt: receipt,
+    creatingCustomer: creatingCustomer ?? this.creatingCustomer,
+    customerCreateError: clearCustomerCreateError
+        ? null
+        : customerCreateError ?? this.customerCreateError,
+    customerVerificationRequired: customerVerificationRequired ?? this.customerVerificationRequired,
+    retryOriginalCustomerRequest:
+        retryOriginalCustomerRequest ?? this.retryOriginalCustomerRequest,
   );
 }

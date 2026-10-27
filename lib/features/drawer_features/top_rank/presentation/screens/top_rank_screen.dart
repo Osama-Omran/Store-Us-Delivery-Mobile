@@ -129,7 +129,9 @@ class _TopRankBody extends StatelessWidget {
                             // ======= Winner ======= //
                             if (winner != null) ...[
                               Text(
-                                'الفائز — ${category.winnerLabel}',
+                                context.strings.top_rank_winner_label(
+                                  category.winnerLabel,
+                                ),
                                 style: Styles.textStyle20.copyWith(
                                   color: AppColors.black1,
                                   fontWeight: FontWeight.w800,
@@ -154,7 +156,7 @@ class _TopRankBody extends StatelessWidget {
                                 const SizedBox(width: 9),
                                 Expanded(
                                   child: Text(
-                                    category.label,
+                                    state.role.label(context),
                                     style: Styles.textStyle20.copyWith(
                                       color: AppColors.black1,
                                     ),
@@ -187,9 +189,10 @@ class _TopRankBody extends StatelessWidget {
                             if (category.pagination.lastPage > 1) ...[
                               const SizedBox(height: 12),
                               Text(
-                                'تم عرض الصفحة '
-                                '${category.pagination.page} من '
-                                '${category.pagination.lastPage}',
+                                context.strings.top_rank_page_summary(
+                                  category.pagination.page,
+                                  category.pagination.lastPage,
+                                ),
                                 textAlign: TextAlign.center,
                                 style: Styles.textStyle12.copyWith(
                                   color: AppColors.grey4,
@@ -256,7 +259,7 @@ class _TopRankMessage extends StatelessWidget {
         children: [
           Icon(Icons.leaderboard_outlined, color: AppColors.primary, size: 43),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
             style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),

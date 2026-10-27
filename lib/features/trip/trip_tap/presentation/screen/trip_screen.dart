@@ -119,7 +119,7 @@ class _TripScreenState extends State<TripScreen> {
           // ======= Other Status ======= //
           return TripStatusPlaceholder(
             title: context.strings.trip_tab_unsupported_status,
-            status: acceptanceStatus ?? context.strings.trip_tab_unknown_status,
+            status: context.localizedTripAcceptanceStatus(acceptanceStatus),
             onRetry: () => TripTabCubit.get(context).getCurrentTrip(),
           );
         }

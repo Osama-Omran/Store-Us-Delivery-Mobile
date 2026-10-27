@@ -32,6 +32,7 @@ class AppMenuDrawer extends StatelessWidget {
     super.key,
     required this.userName,
     required this.userRole,
+    required this.hasCurrentTrip,
     this.isOnTrip = true,
     this.pendingDeliveriesCount,
     this.pendingTransfersCount,
@@ -51,6 +52,7 @@ class AppMenuDrawer extends StatelessWidget {
 
   final String userName;
   final String userRole;
+  final bool hasCurrentTrip;
   final bool isOnTrip;
   final int? pendingDeliveriesCount;
   final int? pendingTransfersCount;
@@ -115,7 +117,7 @@ class AppMenuDrawer extends StatelessWidget {
                   ),
 
                   AppMenuDrawerItem(
-                    title: '${context.strings.top_rank} · Top Rank',
+                    title: context.strings.top_rank,
                     icon: Icons.emoji_events_outlined,
                     isSelected: selectedSection == AppMenuSection.topRank,
                     onTap: () => _handleTap(context, onTopRankTap),
@@ -154,12 +156,13 @@ class AppMenuDrawer extends StatelessWidget {
                     onTap: () => _handleTap(context, onDirectSaleTap),
                   ),
 
-                  AppMenuDrawerItem(
-                    title: context.strings.customers,
-                    icon: Icons.groups_2_outlined,
-                    isSelected: selectedSection == AppMenuSection.customers,
-                    onTap: () => _handleTap(context, onCustomersTap),
-                  ),
+                  if (hasCurrentTrip)
+                    AppMenuDrawerItem(
+                      title: context.strings.customers,
+                      icon: Icons.groups_2_outlined,
+                      isSelected: selectedSection == AppMenuSection.customers,
+                      onTap: () => _handleTap(context, onCustomersTap),
+                    ),
 
                   AppMenuDrawerItem(
                     title: context.strings.areas,

@@ -25,7 +25,7 @@ class AppNavBar extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(color: Colors.transparent, height: 14),
+            Container(color: AppColors.transparent, height: 14),
             Container(
               height: 80,
               decoration: BoxDecoration(
@@ -63,25 +63,33 @@ class AppNavBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            NavBarItem(
-              icon: AppAssets.home,
-              title: context.strings.home,
-              index: 0,
+            Expanded(
+              child: NavBarItem(
+                icon: AppAssets.home,
+                title: context.strings.home,
+                index: 0,
+              ),
             ),
-            NavBarItem(
-              icon: AppAssets.van,
-              title: context.strings.trip,
-              index: 1,
+            Expanded(
+              child: NavBarItem(
+                icon: AppAssets.van,
+                title: context.strings.trip,
+                index: 1,
+              ),
             ),
-            NavBarItem(
-              icon: AppAssets.notifications,
-              title: context.strings.notifications,
-              index: 2,
+            Expanded(
+              child: NavBarItem(
+                icon: AppAssets.notifications,
+                title: context.strings.notifications,
+                index: 2,
+              ),
             ),
-            NavBarItem(
-              icon: AppAssets.menu,
-              title: context.strings.menu,
-              index: 3,
+            Expanded(
+              child: NavBarItem(
+                icon: AppAssets.menu,
+                title: context.strings.menu,
+                index: 3,
+              ),
             ),
           ],
         ),
@@ -245,9 +253,9 @@ class NavBarItem extends StatelessWidget {
                   ),
 
                   if (index == 3 && menuBadgeCount > 0)
-                    Positioned(
+                    PositionedDirectional(
                       top: 3,
-                      right: -5,
+                      end: -5,
                       child: Container(
                         height: 20,
                         constraints: const BoxConstraints(minWidth: 20),
@@ -259,9 +267,8 @@ class NavBarItem extends StatelessWidget {
                         ),
                         child: Text(
                           '$menuBadgeCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
+                          style: Styles.textStyle11.copyWith(
+                            color: AppColors.white0,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -273,6 +280,7 @@ class NavBarItem extends StatelessWidget {
               // ======= Tab Title ======= //
               Text(
                 title,
+                textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Styles.textStyle14.copyWith(

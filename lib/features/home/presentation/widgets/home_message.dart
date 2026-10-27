@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class HomeMessage extends StatelessWidget {
   const HomeMessage({super.key, required this.message, required this.onRetry});
@@ -36,11 +37,10 @@ class HomeMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            message,
+            context.localizedErrorMessage(message),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: Styles.textStyle15.copyWith(
               color: AppColors.grey4,
-              fontSize: 15,
               height: 1.5,
             ),
           ),
@@ -52,10 +52,7 @@ class HomeMessage extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
               side: BorderSide(color: AppColors.blue3),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

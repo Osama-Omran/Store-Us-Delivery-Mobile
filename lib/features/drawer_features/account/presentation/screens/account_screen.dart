@@ -131,7 +131,7 @@ class _AccountErrorView extends StatelessWidget {
           children: [
             Icon(Icons.error_outline_rounded, color: AppColors.red1, size: 42),
             Text(
-              message,
+              context.localizedErrorMessage(message),
               textAlign: TextAlign.center,
               style: Styles.textStyle14.copyWith(color: AppColors.grey4),
             ),

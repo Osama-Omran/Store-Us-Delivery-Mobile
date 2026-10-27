@@ -1,3 +1,4 @@
+import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,7 +27,7 @@ class AppBuilder extends StatelessWidget {
         builder: (_, locale) {
           return OverlaySupport(
             child: MaterialApp.router(
-              title: 'Store Us Delivery',
+              onGenerateTitle: (context) => context.strings.store_us_delivery,
               theme: AppTheme.lightTheme,
               locale: locale,
               supportedLocales: L10n.all,

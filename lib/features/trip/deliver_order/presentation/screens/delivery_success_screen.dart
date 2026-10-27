@@ -11,6 +11,7 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 import 'package:storeus_delivery/features/trip/current_trip/domain/usecases/get_trip_orders_usecase.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class DeliverySuccessScreen extends StatefulWidget {
   const DeliverySuccessScreen({
@@ -20,7 +21,8 @@ class DeliverySuccessScreen extends StatefulWidget {
     required this.paymentMethod,
   });
 
-  final DeliveryFlowData flow;final num? collectedAmount;
+  final DeliveryFlowData flow;
+  final num? collectedAmount;
   final String? paymentMethod;
 
   @override
@@ -96,8 +98,9 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
     setState(() => _loading = false);
 
     if (error != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error!)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.localizedErrorMessage(error))),
+      );
       return;
     }
 
@@ -146,9 +149,8 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
               Text(
                 context.strings.delivery_success_title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: Styles.textStyle25.copyWith(
                   color: AppColors.black1,
-                  fontSize: 25,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -184,10 +186,7 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
                       label: context.strings.delivery_collected_amount,
                       value: widget.collectedAmount == null
                           ? context.strings.delivery_not_collected
-                          : formatTripAmount(
-                        context,
-                        widget.collectedAmount!,
-                      ),
+                          : formatTripAmount(context, widget.collectedAmount!),
                     ),
                     _SuccessRow(
                       label: context.strings.delivery_payment_method,
@@ -203,14 +202,12 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
                       Text(
                         context.strings.delivery_success_without_collection,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: Styles.textStyle14.copyWith(
                           color: AppColors.orange0,
                           fontWeight: FontWeight.w700,
-                          fontSize: 14,
                         ),
                       ),
                     ],
-
                   ],
                 ),
               ),
@@ -229,8 +226,7 @@ class _DeliverySuccessScreenState extends State<DeliverySuccessScreen> {
                       ? CircularProgressIndicator(color: AppColors.white0)
                       : Text(
                           context.strings.delivery_next_order,
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: Styles.textStyle18.copyWith(
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -267,13 +263,16 @@ class _SuccessRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(label, style: TextStyle(color: AppColors.grey4)),
+          child: Text(
+            label,
+            style: Styles.base.copyWith(color: AppColors.grey4),
+          ),
         ),
         Expanded(
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: TextStyle(
+            style: Styles.base.copyWith(
               color: AppColors.black1,
               fontWeight: FontWeight.w800,
             ),

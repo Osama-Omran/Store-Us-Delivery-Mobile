@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class TripOrderStatusBadge extends StatelessWidget {
   const TripOrderStatusBadge({super.key, required this.style});
@@ -21,8 +22,7 @@ class TripOrderStatusBadge extends StatelessWidget {
         style.title,
         textAlign: TextAlign.center,
         maxLines: 2,
-        style: TextStyle(
-          fontSize: 12,
+        style: Styles.textStyle12.copyWith(
           height: 1.2,
           fontWeight: FontWeight.w800,
           color: style.badgeForeground,
@@ -99,9 +99,7 @@ class TripOrderStatusStyle {
 
       case TripOrderStatus.unknown:
         return TripOrderStatusStyle(
-          title: order.rawDeliveryStatus?.isNotEmpty == true
-              ? order.rawDeliveryStatus!
-              : context.strings.trip_tab_unknown_status,
+          title: context.strings.trip_customers_unknown_status,
           badgeBackground: AppColors.grey5,
           badgeForeground: AppColors.grey4,
           numberBackground: AppColors.grey3,

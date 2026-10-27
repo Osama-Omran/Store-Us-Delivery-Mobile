@@ -10,6 +10,7 @@ import 'package:storeus_delivery/features/trip/order_details/data/models/update_
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/get_order_details_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/update_delivery_location_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_state.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_collection_policy.dart';
 
 class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   OrderDetailsCubit(
@@ -114,22 +115,26 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     String? notes,
   }) async {
     if (isClosed || _collectionRequestInProgress) {
-      return 'عملية تحصيل قيد التنفيذ بالفعل';
+      return 'order_collection_in_progress';
     }
     if (clientOperationId.trim().isEmpty ||
         collectedAmount <= 0 ||
         !collectedAmount.isFinite ||
-        ((collectedAmount * 100).round() - collectedAmount * 100).abs() > 0.0001) {
-      return 'راجع مبلغ التحصيل وبيانات العملية';
+        ((collectedAmount * 100).round() - collectedAmount * 100).abs() >
+            0.0001) {
+      return 'order_collection_invalid_details';
     }
 
     final current = state;
     if (current is! OrderDetailsSuccessState ||
         current.tripOrder?.canRetryCollection != true ||
+        !OrderCollectionPolicy.showCollectButton(
+          current.tripOrder?.paymentStatus,
+        ) ||
         !current.tripOrder!.pendingCollections.any(
           (p) => p.clientOperationId == clientOperationId,
         )) {
-      return 'العملية غير متاحة للتحصيل حاليًا. حدّث حالة الطلب.';
+      return 'order_collection_not_available';
     }
 
     _collectionRequestInProgress = true;
@@ -151,25 +156,27 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
           if (response is Map && response['success'] == false) {
             message = response['message']?.toString().trim();
             if (message == null || message!.isEmpty) {
-              message = 'السيرفر لم يؤكد نجاح التحصيل. حدّث حالة الطلب.';
+              message = 'order_collection_not_confirmed';
             }
           }
         },
         failure: (error) {
           message = error.apiErrorModel.message.trim();
           if (message == null || message!.isEmpty) {
-            message = 'تعذر تأكيد التحصيل. حدّث حالة الطلب أولًا.';
+            message = 'order_collection_refresh_first';
           }
         },
       );
     } catch (_) {
-      message = 'تعذر تأكيد التحصيل. حدّث حالة الطلب قبل إعادة المحاولة.';
+      message = 'order_collection_refresh_before_retry';
     } finally {
       _collectionRequestInProgress = false;
       if (!isClosed && state is OrderDetailsSuccessState) {
-        emit((state as OrderDetailsSuccessState).copyWith(
-          isSubmittingCollection: false,
-        ));
+        emit(
+          (state as OrderDetailsSuccessState).copyWith(
+            isSubmittingCollection: false,
+          ),
+        );
       }
     }
     return message;

@@ -6,3 +6,5 @@
   
 */
 "CFBundleDisplayName" = "StoreUs Delivery";
+"NSCameraUsageDescription" = "Camera access is used to capture delivery and receipt confirmation photos, including a selfie to check that a face is clearly visible.";
+"NSPhotoLibraryUsageDescription" = "Photo access is used to process confirmation photos and their image information.";

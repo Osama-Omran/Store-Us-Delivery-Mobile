@@ -9,6 +9,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/current_trip/domain/usecases/get_trip_orders_usecase.dart';
+import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class RescheduleSuccessScreen extends StatefulWidget {
   const RescheduleSuccessScreen({
@@ -147,8 +148,7 @@ class _RescheduleSuccessScreenState extends State<RescheduleSuccessScreen> {
                 Text(
                   context.strings.reschedule_success_title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 27,
+                  style: Styles.textStyle27.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.black1,
                   ),
@@ -199,7 +199,10 @@ class _RescheduleSuccessScreenState extends State<RescheduleSuccessScreen> {
                 Text(
                   context.strings.reschedule_no_delivery_recorded,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: AppColors.grey4),
+                  style: Styles.base.copyWith(
+                    fontSize: 14,
+                    color: AppColors.grey4,
+                  ),
                 ),
 
                 const SizedBox(height: 4),
@@ -220,8 +223,7 @@ class _RescheduleSuccessScreenState extends State<RescheduleSuccessScreen> {
                         ? CircularProgressIndicator(color: AppColors.white0)
                         : Text(
                             context.strings.reschedule_next_order,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: Styles.textStyle20.copyWith(
                               fontWeight: FontWeight.w800,
                             ),
                           ),
@@ -256,7 +258,7 @@ class _ResultRow extends StatelessWidget {
           width: 110,
           child: Text(
             title,
-            style: TextStyle(fontSize: 14, color: AppColors.grey4),
+            style: Styles.base.copyWith(fontSize: 14, color: AppColors.grey4),
           ),
         ),
 
@@ -266,7 +268,7 @@ class _ResultRow extends StatelessWidget {
           child: Text(
             value,
             textAlign: TextAlign.start,
-            style: TextStyle(
+            style: Styles.base.copyWith(
               fontSize: highlighted ? 22 : 16,
               fontWeight: FontWeight.w800,
               color: highlighted ? AppColors.primary : AppColors.black1,

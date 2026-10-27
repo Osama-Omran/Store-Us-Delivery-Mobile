@@ -66,7 +66,12 @@ class TopRankDetailsCubit extends Cubit<TopRankDetailsState> {
     } catch (_) {
       if (isClosed) return;
 
-      emit(TopRankDetailsState(entry: fallback, error: 'تعذر تحديث التفاصيل'));
+      emit(
+        TopRankDetailsState(
+          entry: fallback,
+          error: 'top_rank_details_load_failed',
+        ),
+      );
     }
   }
 }
