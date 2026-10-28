@@ -4987,6 +4987,162 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'العودة إلى الطلبات'**
   String get delivery_outcome_back;
+
+  /// No description provided for @delivery_reasons_select.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر السبب من القائمة'**
+  String get delivery_reasons_select;
+
+  /// No description provided for @delivery_reasons_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل أسباب التسليم. حاول مرة أخرى.'**
+  String get delivery_reasons_load_failed;
+
+  /// No description provided for @delivery_reasons_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get delivery_reasons_retry;
+
+  /// No description provided for @delivery_reasons_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسباب متاحة حاليًا'**
+  String get delivery_reasons_empty;
+
+  /// No description provided for @direct_sale_pos_zero_rate_warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد منتج مختار بسعر صفر حسب النظام. راجع السعر قبل إتمام البيع.'**
+  String get direct_sale_pos_zero_rate_warning;
+
+  /// No description provided for @direct_sale_vehicle_stock_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل منتجات العربية. حاول مرة أخرى.'**
+  String get direct_sale_vehicle_stock_load_failed;
+
+  /// No description provided for @direct_sale_vehicle_stock_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get direct_sale_vehicle_stock_retry;
+
+  /// No description provided for @direct_sale_vehicle_stock_refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث مخزون العربية'**
+  String get direct_sale_vehicle_stock_refresh;
+
+  /// No description provided for @direct_sale_vehicle_stock_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات متبقية متاحة للبيع في العربية.'**
+  String get direct_sale_vehicle_stock_empty;
+
+  /// No description provided for @direct_sale_vehicle_stock_completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الرحلة مكتملة ولا يمكن إضافة مبيعات عليها.'**
+  String get direct_sale_vehicle_stock_completed;
+
+  /// No description provided for @direct_sale_vehicle_stock_fractional.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتوي العربية على كميات عشرية؛ يرجى دعم إدخال الكميات الجزئية قبل البيع.'**
+  String get direct_sale_vehicle_stock_fractional;
+
+  /// No description provided for @direct_sale_vehicle_stock_price_required.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك تحديد المنتجات والكميات من مخزون العربية، لكن لا يمكن الانتقال للدفع حتى ربط أسعار البيع المعتمدة من السيرفر.'**
+  String get direct_sale_vehicle_stock_price_required;
+
+  /// No description provided for @direct_sale_territory_loading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل المناطق...'**
+  String get direct_sale_territory_loading;
+
+  /// No description provided for @direct_sale_territory_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل المناطق. حاول مرة أخرى.'**
+  String get direct_sale_territory_load_failed;
+
+  /// No description provided for @direct_sale_territory_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مناطق متاحة حاليًا.'**
+  String get direct_sale_territory_empty;
+
+  /// No description provided for @direct_sale_territory_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get direct_sale_territory_retry;
+
+  /// No description provided for @direct_sale_pos_select_customer.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر العميل من القائمة'**
+  String get direct_sale_pos_select_customer;
+
+  /// No description provided for @direct_sale_pos_customers_load_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل قائمة العملاء. حاول مرة أخرى.'**
+  String get direct_sale_pos_customers_load_failed;
+
+  /// No description provided for @direct_sale_pos_customers_empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد عملاء متاحون في القائمة. يمكنك إضافة عميل جديد.'**
+  String get direct_sale_pos_customers_empty;
+
+  /// No description provided for @direct_sale_pos_existing_only.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيع المباشر الحالي يتطلب اختيار عميل محفوظ أو إنشاء عميل جديد أولاً.'**
+  String get direct_sale_pos_existing_only;
+
+  /// No description provided for @direct_sale_pos_confirm_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع المنتجات والأسعار، ثم أدخل المبلغ المطابق للإجمالي لتأكيد البيع في النظام.'**
+  String get direct_sale_pos_confirm_hint;
+
+  /// No description provided for @direct_sale_pos_submitting.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تأكيد البيع...'**
+  String get direct_sale_pos_submitting;
+
+  /// No description provided for @direct_sale_pos_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة محاولة نفس العملية'**
+  String get direct_sale_pos_retry;
+
+  /// No description provided for @direct_sale_pos_failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إتمام البيع. راجع البيانات وحاول مرة أخرى.'**
+  String get direct_sale_pos_failed;
+
+  /// No description provided for @direct_sale_pos_invalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل أو الأصناف أو المبلغ غير صالح. راجع بيانات العملية.'**
+  String get direct_sale_pos_invalid;
+
+  /// No description provided for @direct_sale_pos_verify_or_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة العملية غير مؤكدة. تحقق من تسجيل البيع أولاً أو أعد محاولة نفس العملية. لا تنشئ بيعًا جديدًا حتى يتم التأكد.'**
+  String get direct_sale_pos_verify_or_retry;
 }
 
 class _AppLocalizationsDelegate

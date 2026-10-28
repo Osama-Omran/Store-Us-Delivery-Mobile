@@ -24,7 +24,12 @@ class DirectSaleNewCustomerScreen extends StatelessWidget {
           : state.customerCreateError != null
               ? context.strings.current_trip_retry
               : context.strings.direct_sale_save_customer,
-      onPressed: state.creatingCustomer ? null : cubit.createCustomer,
+      onPressed: state.creatingCustomer ||
+              state.loadingCustomerOptions ||
+              !state.customerOptionsLoaded ||
+              state.territories.isEmpty
+          ? null
+          : cubit.createCustomer,
       secondaryLabel: context.strings.account_cancel,
       onSecondaryPressed: state.creatingCustomer ? null : cubit.goBack,
     ),

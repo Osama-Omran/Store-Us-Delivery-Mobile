@@ -100,11 +100,18 @@ class _LayoutContentState extends State<_LayoutContent> {
 
   // ======= Open Receive Trip ======= //
   Future<void> _openReceiveTrip() async {
-    await context.pushNamed(RoutesNames.receiveTrip);
+    final tripCubit = context.read<TripTabCubit>();
+    final accepted = await context.pushNamed<bool>(RoutesNames.receiveTrip);
 
-    if (!mounted) return;
+    if (!mounted || tripCubit.isClosed) return;
 
-    await context.read<TripTabCubit>().getCurrentTrip();
+    final refresh = tripCubit.getCurrentTrip(forceRefresh: accepted == true);
+
+    if (accepted == true) {
+      context.read<LayoutCubit>().selectTap(1);
+    }
+
+    await refresh;
   }
 
   @override
@@ -275,7 +282,15 @@ class _LayoutContentState extends State<_LayoutContent> {
                             onStockTransferTap: layout.openStockTransfer,
 
                             onDirectSaleTap: () {
-                              context.pushNamed(RoutesNames.directSale);
+                              final tripState = context
+                                  .read<TripTabCubit>()
+                                  .state;
+                              if (tripState is! TripTabSuccessState) return;
+
+                              context.pushNamed(
+                                RoutesNames.directSale,
+                                extra: tripState.trip.id,
+                              );
                             },
 
                             onCustomersTap: layout.openCustomerScreen,

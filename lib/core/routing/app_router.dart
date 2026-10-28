@@ -54,7 +54,10 @@ class AppRouter {
         path: RoutesNames.directSale,
         pageBuilder: (_, state) => _slidePageBuilder(
           BlocProvider(
-            create: (_) => getIt<DirectSaleCubit>(),
+            create: (_) {
+              final tripId = state.extra as int;
+              return getIt<DirectSaleCubit>(param1: tripId);
+            },
             child: const DirectSaleScreen(),
           ),
           state,

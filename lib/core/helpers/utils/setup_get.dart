@@ -10,8 +10,17 @@ import 'package:storeus_delivery/features/drawer_features/customers/domain/repo/
 import 'package:storeus_delivery/features/drawer_features/customers/domain/usecases/get_trip_customers_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/customers/presentation/cubit/trip_customers_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/data/repo/concrete_create_customer_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/repo/concrete_customer_options_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/repo/concrete_submit_pos_repo.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/repo/concrete_vehicle_stock_repo.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/repo/create_customer_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/repo/customer_options_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/repo/submit_pos_repo_interface.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/repo/vehicle_stock_repo_interface.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/create_customer_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/get_customer_options_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/get_vehicle_stock_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/submit_pos_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/cubit/direct_sale_cubit.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/dio_factory.dart';
 import 'package:storeus_delivery/core/helpers/apis/environment_config.dart';
@@ -38,9 +47,13 @@ import 'package:storeus_delivery/features/login/domain/repo/login_repo_interface
 import 'package:storeus_delivery/features/login/domain/usecases/login_usecase.dart';
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/repo/concrete_delivery_outcome_repo.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/repo/concrete_delivery_reasons_repo.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/domain/repo/delivery_outcome_repo_interface.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/repo/delivery_reasons_repo_interface.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/domain/usecases/get_delivery_reasons_usecase.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/domain/usecases/submit_delivery_outcome_usecase.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_reasons_cubit.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/update_delivery_location_usecase.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/data/repo/concrete_receive_trip_repo.dart';
 import 'package:storeus_delivery/features/trip/receive_trip/domain/repo/receive_trip_repo_interface.dart';
@@ -132,9 +145,35 @@ void setupLocator() {
   );
 
   // Cubit — replace the old registration
-  getIt.registerFactory<DirectSaleCubit>(
-    () =>
-        DirectSaleCubit(createCustomerUsecase: getIt<CreateCustomerUsecase>()),
+  getIt.registerFactoryParam<DirectSaleCubit, int, void>(
+        (tripId, _) => DirectSaleCubit(
+      createCustomerUsecase: getIt<CreateCustomerUsecase>(),
+      getCustomerOptionsUsecase: getIt<GetCustomerOptionsUsecase>(),
+      getVehicleStockUsecase: getIt<GetVehicleStockUsecase>(),
+      submitPosUsecase: getIt<SubmitPosUsecase>(),
+      tripId: tripId,
+    ),
+  );
+
+
+  getIt.registerLazySingleton<VehicleStockRepoInterface>(
+        () => ConcreteVehicleStockRepo(
+      getIt<TripApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetVehicleStockUsecase>(
+        () => GetVehicleStockUsecase(
+      getIt<VehicleStockRepoInterface>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CustomerOptionsRepoInterface>(
+    () => ConcreteCustomerOptionsRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetCustomerOptionsUsecase>(
+    () => GetCustomerOptionsUsecase(getIt<CustomerOptionsRepoInterface>()),
   );
 
   // ========== Treasury / Wallet ========== //
@@ -421,5 +460,30 @@ void setupLocator() {
 
   getIt.registerFactory<DeliveryOutcomeCubit>(
     () => DeliveryOutcomeCubit(getIt<SubmitDeliveryOutcomeUsecase>()),
+  );
+
+  getIt.registerLazySingleton<DeliveryReasonsRepoInterface>(
+    () => ConcreteDeliveryReasonsRepo(getIt<TripApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetDeliveryReasonsUsecase>(
+    () => GetDeliveryReasonsUsecase(getIt<DeliveryReasonsRepoInterface>()),
+  );
+
+  getIt.registerFactory<DeliveryReasonsCubit>(
+    () => DeliveryReasonsCubit(getIt<GetDeliveryReasonsUsecase>()),
+  );
+
+
+  getIt.registerLazySingleton<SubmitPosRepoInterface>(
+        () => ConcreteSubmitPosRepo(
+      getIt<TripApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<SubmitPosUsecase>(
+        () => SubmitPosUsecase(
+      getIt<SubmitPosRepoInterface>(),
+    ),
   );
 }

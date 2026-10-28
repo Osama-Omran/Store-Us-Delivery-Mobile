@@ -46,11 +46,12 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Future<void> _openReceiveTrip(BuildContext context) async {
-    await context.pushNamed(RoutesNames.receiveTrip);
+    final tripCubit = TripTabCubit.get(context);
+    final accepted = await context.pushNamed<bool>(RoutesNames.receiveTrip);
 
-    if (!context.mounted) return;
+    if (!context.mounted || tripCubit.isClosed) return;
 
-    TripTabCubit.get(context).getCurrentTrip();
+    await tripCubit.getCurrentTrip(forceRefresh: accepted == true);
   }
 
   @override

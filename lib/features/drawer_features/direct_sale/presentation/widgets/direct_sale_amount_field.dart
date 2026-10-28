@@ -26,6 +26,7 @@ class DirectSaleAmountField extends StatelessWidget {
         TextField(
           key: const ValueKey('direct-sale-amount'),
           controller: cubit.amountController,
+          enabled: !state.submittingPos && !state.posRetryOriginal,
           onChanged: cubit.changeAmount,
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.right,
@@ -63,7 +64,9 @@ class DirectSaleAmountField extends StatelessWidget {
               state.amountMatches
                   ? context.strings.direct_sale_amount_matches
                   : context.strings.direct_sale_amount_mismatch(
-                      formatTripAmount(context, state.totalMinor / 100),
+                      state.pricedTotalMinor == null
+                          ? '—'
+                          : formatTripAmount(context, state.totalMinor / 100),
                     ),
               textAlign: TextAlign.center,
               style: Styles.textStyle14.copyWith(

@@ -22,10 +22,13 @@ class DirectSaleProductsScreen extends StatelessWidget {
       footer: DirectSaleFooter(
         label: context.strings.direct_sale_basket(
           state.itemCount,
-          formatTripAmount(context, state.totalMinor / 100),
+          state.pricedTotalMinor == null
+              ? '—'
+              : formatTripAmount(context, state.totalMinor / 100),
         ),
         icon: Icons.shopping_cart_outlined,
-        onPressed: state.inventoryAvailable && state.itemCount > 0
+        onPressed: state.inventoryAvailable && state.itemCount > 0 &&
+                state.vehicleStockLoaded && state.selectedProductsHavePrices
             ? cubit.continueToPayment
             : null,
       ),
@@ -53,10 +56,30 @@ class DirectSaleProductsScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          if (!state.inventoryAvailable)
+          const SizedBox(height: 12),
+          if (state.loadingVehicleStock)
+            const Center(child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: CircularProgressIndicator(),
+            ))
+          else if (state.vehicleStockError != null) ...[
             DirectSaleNotice(
-              message: context.strings.direct_sale_inventory_unavailable,
+              error: true,
+              message: state.vehicleStockError == 'fractional'
+                  ? context.strings.direct_sale_vehicle_stock_fractional
+                  : context.strings.direct_sale_vehicle_stock_load_failed,
+            ),
+            TextButton.icon(
+              onPressed: () => cubit.loadVehicleStock(force: true),
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(context.strings.direct_sale_vehicle_stock_retry),
+            ),
+          ]
+          else if (!state.vehicleStockLoaded)
+            DirectSaleNotice(message: context.strings.direct_sale_vehicle_stock_load_failed)
+          else if (!state.inventoryAvailable)
+            DirectSaleNotice(
+              message: context.strings.direct_sale_vehicle_stock_empty,
             )
           else if (state.products.isEmpty)
             DirectSaleNotice(message: context.strings.direct_sale_no_products)
@@ -68,6 +91,22 @@ class DirectSaleProductsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
             ],
+          if (state.vehicleStockLoaded && state.inventoryAvailable) ...[
+            const SizedBox(height: 8),
+            if (state.selectedProducts.any((product) =>
+                product.unitPriceMinor == 0))
+              DirectSaleNotice(
+                message: context.strings.direct_sale_pos_zero_rate_warning,
+              ),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: () => cubit.loadVehicleStock(force: true),
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(context.strings.direct_sale_vehicle_stock_refresh),
+              ),
+            ),
+          ],
         ],
       ),
     );

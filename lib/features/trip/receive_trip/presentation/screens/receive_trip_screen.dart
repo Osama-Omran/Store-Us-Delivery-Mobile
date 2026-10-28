@@ -77,13 +77,20 @@ class _ReceiveTripScreenState extends State<ReceiveTripScreen> {
   }
 
   // ======= Bloc Listener ======= //
-  void _receiveTripListener(BuildContext context, ReceiveTripState state) {
+  Future<void> _receiveTripListener(
+    BuildContext context,
+    ReceiveTripState state,
+  ) async {
     // ======= Accept Trip Success ======= //
     if (state is ReceiveTripAcceptedState) {
-      context.pushReplacementNamed(
+      await context.pushNamed<void>(
         RoutesNames.receiveTripSuccess,
         extra: {'tripNumber': state.tripNumber, 'receivedAt': state.acceptedAt},
       );
+
+      if (!context.mounted) return;
+
+      context.pop(true);
       return;
     }
 

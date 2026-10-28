@@ -2807,4 +2807,97 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get delivery_outcome_back => 'العودة إلى الطلبات';
+
+  @override
+  String get delivery_reasons_select => 'اختر السبب من القائمة';
+
+  @override
+  String get delivery_reasons_load_failed =>
+      'تعذر تحميل أسباب التسليم. حاول مرة أخرى.';
+
+  @override
+  String get delivery_reasons_retry => 'إعادة المحاولة';
+
+  @override
+  String get delivery_reasons_empty => 'لا توجد أسباب متاحة حاليًا';
+
+  @override
+  String get direct_sale_pos_zero_rate_warning =>
+      'يوجد منتج مختار بسعر صفر حسب النظام. راجع السعر قبل إتمام البيع.';
+
+  @override
+  String get direct_sale_vehicle_stock_load_failed =>
+      'تعذر تحميل منتجات العربية. حاول مرة أخرى.';
+
+  @override
+  String get direct_sale_vehicle_stock_retry => 'إعادة المحاولة';
+
+  @override
+  String get direct_sale_vehicle_stock_refresh => 'تحديث مخزون العربية';
+
+  @override
+  String get direct_sale_vehicle_stock_empty =>
+      'لا توجد منتجات متبقية متاحة للبيع في العربية.';
+
+  @override
+  String get direct_sale_vehicle_stock_completed =>
+      'هذه الرحلة مكتملة ولا يمكن إضافة مبيعات عليها.';
+
+  @override
+  String get direct_sale_vehicle_stock_fractional =>
+      'تحتوي العربية على كميات عشرية؛ يرجى دعم إدخال الكميات الجزئية قبل البيع.';
+
+  @override
+  String get direct_sale_vehicle_stock_price_required =>
+      'يمكنك تحديد المنتجات والكميات من مخزون العربية، لكن لا يمكن الانتقال للدفع حتى ربط أسعار البيع المعتمدة من السيرفر.';
+
+  @override
+  String get direct_sale_territory_loading => 'جاري تحميل المناطق...';
+
+  @override
+  String get direct_sale_territory_load_failed =>
+      'تعذر تحميل المناطق. حاول مرة أخرى.';
+
+  @override
+  String get direct_sale_territory_empty => 'لا توجد مناطق متاحة حاليًا.';
+
+  @override
+  String get direct_sale_territory_retry => 'إعادة المحاولة';
+
+  @override
+  String get direct_sale_pos_select_customer => 'اختر العميل من القائمة';
+
+  @override
+  String get direct_sale_pos_customers_load_failed =>
+      'تعذر تحميل قائمة العملاء. حاول مرة أخرى.';
+
+  @override
+  String get direct_sale_pos_customers_empty =>
+      'لا يوجد عملاء متاحون في القائمة. يمكنك إضافة عميل جديد.';
+
+  @override
+  String get direct_sale_pos_existing_only =>
+      'البيع المباشر الحالي يتطلب اختيار عميل محفوظ أو إنشاء عميل جديد أولاً.';
+
+  @override
+  String get direct_sale_pos_confirm_hint =>
+      'راجع المنتجات والأسعار، ثم أدخل المبلغ المطابق للإجمالي لتأكيد البيع في النظام.';
+
+  @override
+  String get direct_sale_pos_submitting => 'جاري تأكيد البيع...';
+
+  @override
+  String get direct_sale_pos_retry => 'إعادة محاولة نفس العملية';
+
+  @override
+  String get direct_sale_pos_failed =>
+      'تعذر إتمام البيع. راجع البيانات وحاول مرة أخرى.';
+
+  @override
+  String get direct_sale_pos_invalid =>
+      'العميل أو الأصناف أو المبلغ غير صالح. راجع بيانات العملية.';
+
+  @override
+  String get direct_sale_pos_verify_or_retry =>
+      'نتيجة العملية غير مؤكدة. تحقق من تسجيل البيع أولاً أو أعد محاولة نفس العملية. لا تنشئ بيعًا جديدًا حتى يتم التأكد.';
 }

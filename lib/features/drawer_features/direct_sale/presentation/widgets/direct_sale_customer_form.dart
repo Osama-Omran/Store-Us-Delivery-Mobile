@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -43,15 +44,7 @@ class DirectSaleCustomerForm extends StatelessWidget {
             label: context.strings.direct_sale_address,
             controller: cubit.addressController,
           ),
-          _CustomerField(
-            label: context.strings.direct_sale_territory,
-            controller: cubit.areaController,
-            required: true,
-            hint: context.strings.direct_sale_territory_hint,
-            validator: (value) => value?.trim().isNotEmpty == true
-                ? null
-                : context.strings.direct_sale_territory_required,
-          ),
+          const _TerritoryDropdown(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
@@ -124,4 +117,82 @@ class _CustomerField extends StatelessWidget {
       ),
     ],
   );
+}
+
+class _TerritoryDropdown extends StatelessWidget {
+  const _TerritoryDropdown();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<DirectSaleCubit>();
+    final state = context.watch<DirectSaleCubit>().state;
+    final enabled = state.customerOptionsLoaded &&
+        !state.loadingCustomerOptions &&
+        !state.creatingCustomer &&
+        state.territories.isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text.rich(
+          TextSpan(
+            text: context.strings.direct_sale_territory,
+            style: Styles.textStyle16.copyWith(color: AppColors.black1),
+            children: [
+              TextSpan(
+                text: ' *',
+                style: Styles.textStyle14.copyWith(color: AppColors.red1),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          // Recreate the FormField when loading changes or selection resets.
+          key: ValueKey('${state.customerOptionsLoaded}:${state.selectedTerritory}'),
+          initialValue: state.selectedTerritory,
+          isExpanded: true,
+          menuMaxHeight: 320,
+          decoration: InputDecoration(
+            hintText: state.loadingCustomerOptions
+                ? context.strings.direct_sale_territory_loading
+                : context.strings.direct_sale_territory_hint,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+          ),
+          items: state.territories.map((territory) =>
+            DropdownMenuItem<String>(
+              value: territory,
+              child: Text(territory, overflow: TextOverflow.ellipsis),
+            ),
+          ).toList(),
+          onChanged: enabled ? cubit.selectTerritory : null,
+          validator: (value) => value != null && state.territories.contains(value)
+              ? null
+              : context.strings.direct_sale_territory_required,
+        ),
+        if (state.loadingCustomerOptions) ...[
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(),
+        ],
+        if (state.customerOptionsError != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            state.customerOptionsError == 'empty'
+                ? context.strings.direct_sale_territory_empty
+                : context.strings.direct_sale_territory_load_failed,
+            style: Styles.textStyle14.copyWith(color: AppColors.red1),
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: () => cubit.loadCustomerOptions(force: true),
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(context.strings.direct_sale_territory_retry),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
 }

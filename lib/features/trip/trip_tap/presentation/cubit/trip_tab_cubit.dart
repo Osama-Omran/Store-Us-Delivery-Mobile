@@ -22,8 +22,8 @@ class TripTabCubit extends Cubit<TripTabState> {
   int _ordersRequestId = 0;
 
   // ======= Get Current Trip ======= //
-  Future<void> getCurrentTrip() async {
-    if (isClosed || state is TripTabLoadingState) return;
+  Future<void> getCurrentTrip({bool forceRefresh = false}) async {
+    if (isClosed || (!forceRefresh && state is TripTabLoadingState)) return;
 
     final requestId = ++_currentTripRequestId;
 

@@ -3,6 +3,8 @@ import 'package:storeus_delivery/features/drawer_features/contact_us/data/models
 import 'package:storeus_delivery/features/drawer_features/customers/data/models/trip_customers_response.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_request_body.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_response.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/submit_pos_request_body.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/vehicle_stock_response.dart';
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/models/stock_transfers_response.dart';
 import 'package:storeus_delivery/features/drawer_features/treasury/data/models/treasury_wallet_response.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
@@ -79,22 +81,21 @@ abstract class TripApiService {
     @Body() UpdateDeliveryLocationBody body,
   );
 
-
   @POST(ApiConstants.deliveryOutcome)
   Future<dynamic> cancelDelivery(
-      @Path('tripId') int tripId,
-      @Path('orderId') int orderId,
-      @Header('Authorization') String authorization,
-      @Body() CancelDeliveryRequestBody body,
-      );
+    @Path('tripId') int tripId,
+    @Path('orderId') int orderId,
+    @Header('Authorization') String authorization,
+    @Body() CancelDeliveryRequestBody body,
+  );
 
   @POST(ApiConstants.deliveryOutcome)
   Future<dynamic> rescheduleOrder(
-      @Path('tripId') int tripId,
-      @Path('orderId') int orderId,
-      @Header('Authorization') String authorization,
-      @Body() RescheduleOrderRequestBody body,
-      );
+    @Path('tripId') int tripId,
+    @Path('orderId') int orderId,
+    @Header('Authorization') String authorization,
+    @Body() RescheduleOrderRequestBody body,
+  );
 
   @POST(ApiConstants.confirmDelivery)
   Future<dynamic> confirmDelivery(
@@ -161,13 +162,42 @@ abstract class TripApiService {
     @Header('Authorization') String authorization,
   );
 
-
   @POST(ApiConstants.deliveryOutcome)
   Future<dynamic> submitDeliveryOutcome(
-      @Path('tripId') int tripId,
-      @Path('orderId') int orderId,
-      @Header('Authorization') String authorization,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path('tripId') int tripId,
+    @Path('orderId') int orderId,
+    @Header('Authorization') String authorization,
+    @Body() Map<String, dynamic> body,
+  );
 
+  @GET(ApiConstants.deliveryReasons)
+  Future<dynamic> getDeliveryReasons(
+    @Header('Authorization') String authorization,
+  );
+
+  @GET(ApiConstants.customerOptions)
+  Future<dynamic> getCustomerOptions(
+    @Header('Authorization') String authorization,
+    @Query('page') int? page,
+  );
+
+  @GET(ApiConstants.vehicleStock)
+  Future<VehicleStockResponse> getVehicleStock(
+    @Path('tripId') int tripId,
+    @Header('Authorization') String authorization,
+  );
+
+  @GET(ApiConstants.posOptions)
+  Future<VehicleStockResponse> getPosOptions(
+    @Path('tripId') int tripId,
+    @Header('Authorization') String authorization,
+  );
+
+
+  @POST(ApiConstants.submitPos)
+  Future<dynamic> submitPos(
+      @Path('tripId') int tripId,
+      @Header('Authorization') String authorization,
+      @Body() SubmitPosRequestBody body,
+      );
 }

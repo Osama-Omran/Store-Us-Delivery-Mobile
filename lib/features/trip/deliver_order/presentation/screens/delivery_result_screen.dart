@@ -5,6 +5,8 @@ import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_reasons_response.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_reason_dropdown.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_flow_header.dart';
 
 import '../widgets/delivery_financial_result_card.dart';
@@ -20,34 +22,13 @@ class DeliveryResultScreen extends StatefulWidget {
 }
 
 class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
-  int? _reasonIndex;
-
-  final _otherReasonController = TextEditingController();
+  String? _selectedReason;
   final _notesController = TextEditingController();
 
   @override
   void dispose() {
-    _otherReasonController.dispose();
     _notesController.dispose();
     super.dispose();
-  }
-
-  List<String> _reasons(BuildContext context) => [
-    context.strings.delivery_reason_customer_refused,
-    context.strings.delivery_reason_stock_unavailable,
-    context.strings.delivery_reason_customer_requested_less,
-    context.strings.delivery_reason_damaged,
-    context.strings.delivery_reason_other,
-  ];
-
-  String get _selectedReason {
-    if (_reasonIndex == null) return '';
-
-    if (_reasonIndex == 4) {
-      return _otherReasonController.text.trim();
-    }
-
-    return _reasons(context)[_reasonIndex!];
   }
 
   void _hideKeyboard() {
@@ -55,7 +36,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
   }
 
   void _continue() {
-    if (widget.flow.isPartial && _selectedReason.isEmpty) {
+    if (widget.flow.isPartial && _selectedReason == null) {
       return;
     }
 
@@ -124,49 +105,14 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
 
                         const SizedBox(height: 10),
 
-                        Wrap(
-                          spacing: 9,
-                          runSpacing: 9,
-                          children: [
-                            for (int i = 0; i < _reasons(context).length; i++)
-                              ChoiceChip(
-                                showCheckmark: false,
-                                label: Text(_reasons(context)[i]),
-                                selected: _reasonIndex == i,
-                                onSelected: (_) {
-                                  setState(() => _reasonIndex = i);
-                                },
-                                selectedColor: AppColors.primary,
-                                backgroundColor: AppColors.white0,
-                                labelStyle: Styles.base.copyWith(
-                                  color: _reasonIndex == i
-                                      ? AppColors.white0
-                                      : AppColors.black1,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                          ],
+                        DeliveryReasonDropdown(
+                          category: DeliveryReasonCategory.partialDelivery,
+                          value: _selectedReason,
+                          label: context.strings.delivery_partial_reason_required,
+                          onChanged: (reason) {
+                            setState(() => _selectedReason = reason);
+                          },
                         ),
-
-                        // ======= Other Reason ======= //
-                        if (_reasonIndex == 4) ...[
-                          const SizedBox(height: 12),
-
-                          TextField(
-                            controller: _otherReasonController,
-                            onChanged: (_) => setState(() {}),
-
-                            onTapOutside: (_) {
-                              _hideKeyboard();
-                            },
-
-                            decoration: InputDecoration(
-                              hintText:
-                                  context.strings.delivery_other_reason_hint,
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        ],
 
                         const SizedBox(height: 20),
                       ],
@@ -230,7 +176,7 @@ class _DeliveryResultScreenState extends State<DeliveryResultScreen> {
                     child: SizedBox(
                       height: 60,
                       child: ElevatedButton(
-                        onPressed: partial && _selectedReason.isEmpty
+                        onPressed: partial && _selectedReason == null
                             ? null
                             : _continue,
                         style: ElevatedButton.styleFrom(

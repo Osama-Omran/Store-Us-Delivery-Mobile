@@ -5,6 +5,8 @@ import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_outcome_request_body.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_reasons_response.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_reason_dropdown.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_state.dart';
 
@@ -132,13 +134,13 @@ class _DeliveryOutcomeSheet extends StatefulWidget {
 }
 
 class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
-  final _reasonController = TextEditingController();
+  String? _selectedReason;
   DateTime? _rescheduleDateTime;
 
   bool get _isReschedule => widget.outcome == DeliveryOutcomeType.rescheduled;
 
   bool get _canSubmit =>
-      _reasonController.text.trim().isNotEmpty &&
+      _selectedReason != null && _selectedReason!.isNotEmpty &&
       (!_isReschedule ||
           (_rescheduleDateTime != null &&
               _rescheduleDateTime!.isAfter(DateTime.now())));
@@ -200,7 +202,7 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
       tripId: widget.tripId,
       orderId: widget.orderId,
       outcome: widget.outcome,
-      reason: _reasonController.text,
+      reason: _selectedReason!,
       rescheduledFor: _isReschedule
           ? _toApiDateTime(_rescheduleDateTime!)
           : null,
@@ -216,12 +218,6 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
       'delivery_outcome_failed' => context.strings.delivery_outcome_failed,
       _ => context.localizedErrorMessage(error),
     };
-  }
-
-  @override
-  void dispose() {
-    _reasonController.dispose();
-    super.dispose();
   }
 
   @override
@@ -283,17 +279,16 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
                       style: Styles.base.copyWith(color: AppColors.grey4),
                     ),
                     const SizedBox(height: 18),
-                    TextField(
-                      controller: _reasonController,
+                    DeliveryReasonDropdown(
+                      category: _isReschedule
+                          ? DeliveryReasonCategory.rescheduling
+                          : DeliveryReasonCategory.cancellation,
+                      label: context.strings.delivery_outcome_reason,
+                      value: _selectedReason,
                       enabled: !loading,
-                      maxLines: 3,
-                      maxLength: 500,
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        labelText: context.strings.delivery_outcome_reason,
-                        hintText: context.strings.delivery_outcome_reason_hint,
-                        border: const OutlineInputBorder(),
-                      ),
+                      onChanged: (value) {
+                        setState(() => _selectedReason = value);
+                      },
                     ),
                     if (_isReschedule) ...[
                       const SizedBox(height: 12),

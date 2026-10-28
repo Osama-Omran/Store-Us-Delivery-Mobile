@@ -29,7 +29,9 @@ class DirectSaleProductCard extends StatelessWidget {
           ),
         ),
         Text(
-          '${product.code} · ${formatTripAmount(context, product.unitPriceMinor / 100)} / ${product.unit}',
+          product.unitPriceMinor == null
+              ? '${product.code} · ${product.unit}'
+              : '${product.code} · ${formatTripAmount(context, product.unitPriceMinor! / 100)} / ${product.unit}',
           style: Styles.textStyle12.copyWith(color: AppColors.grey4),
         ),
         Text(
@@ -47,9 +49,7 @@ class DirectSaleProductCard extends StatelessWidget {
             icon: Icons.add,
             primary: true,
             tooltip: context.strings.direct_sale_increase,
-            onPressed:
-                quantity < product.availableQuantity &&
-                    product.unitPriceMinor >= 0
+            onPressed: quantity < product.availableQuantity
                 ? () => cubit.setQuantity(product, quantity + 1)
                 : null,
           ),

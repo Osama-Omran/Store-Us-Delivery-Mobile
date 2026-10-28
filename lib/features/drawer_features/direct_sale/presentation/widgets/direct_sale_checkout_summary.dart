@@ -21,15 +21,19 @@ class DirectSaleCheckoutSummary extends StatelessWidget {
           for (final product in state.selectedProducts)
             _SummaryRow(
               label: '${product.name} × ${state.quantityFor(product)}',
-              amount: formatTripAmount(
-                context,
-                product.unitPriceMinor * state.quantityFor(product) / 100,
-              ),
+              amount: product.unitPriceMinor == null
+                  ? '—'
+                  : formatTripAmount(
+                      context,
+                      product.unitPriceMinor! * state.quantityFor(product) / 100,
+                    ),
             ),
           Divider(height: 8, color: AppColors.grey3),
           _SummaryRow(
             label: context.strings.direct_sale_total_required,
-            amount: formatTripAmount(context, state.totalMinor / 100),
+            amount: state.pricedTotalMinor == null
+                ? '—'
+                : formatTripAmount(context, state.totalMinor / 100),
             total: true,
           ),
         ],

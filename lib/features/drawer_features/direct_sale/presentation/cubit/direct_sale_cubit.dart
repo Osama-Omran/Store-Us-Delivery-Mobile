@@ -2,8 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/submit_pos_request_body.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/submit_pos_usecase.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/data/models/create_customer_request_body.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/create_customer_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/get_customer_options_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/get_vehicle_stock_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -13,32 +17,121 @@ import '../utils/direct_sale_input.dart';
 
 class DirectSaleCubit extends Cubit<DirectSaleState> {
   DirectSaleCubit({
-    required this._createCustomerUsecase,
+    required CreateCustomerUsecase createCustomerUsecase,
+    required GetCustomerOptionsUsecase getCustomerOptionsUsecase,
+    required GetVehicleStockUsecase getVehicleStockUsecase,
+    required SubmitPosUsecase submitPosUsecase,
+    required this.tripId,
     DirectSaleState initialState = const DirectSaleState(),
     Future<Position> Function()? locate,
-  }) : _locate = locate ?? _currentPosition,
+  }) : _createCustomerUsecase = createCustomerUsecase,
+       _getCustomerOptionsUsecase = getCustomerOptionsUsecase,
+       _getVehicleStockUsecase = getVehicleStockUsecase,
+       _submitPosUsecase = submitPosUsecase,
+       _locate = locate ?? _currentPosition,
        super(initialState) {
     amountController.text = initialState.amountText;
     // After an explicit server rejection, editing the form clears the stale
     // error without affecting any unresolved/possibly successful operation.
-    for (final controller in [nameController, phoneController, areaController]) {
+    for (final controller in [nameController, phoneController]) {
       controller.addListener(_clearRejectedCustomerErrorOnEdit);
+    }
+    if (initialState.step == DirectSaleStep.newCustomer) {
+      loadCustomerOptions();
+    }
+    // POS options also supplies existing customers for the first screen.
+    if (initialState.step == DirectSaleStep.customer ||
+        initialState.step == DirectSaleStep.products) {
+      loadVehicleStock(force: true);
     }
   }
 
   static DirectSaleCubit get(BuildContext context) => BlocProvider.of(context);
 
   final CreateCustomerUsecase _createCustomerUsecase;
+  final GetCustomerOptionsUsecase _getCustomerOptionsUsecase;
+  final GetVehicleStockUsecase _getVehicleStockUsecase;
+  final SubmitPosUsecase _submitPosUsecase;
+  /// Real trip identifier from the current trip / route, never an order ID.
+  final int tripId;
   final Future<Position> Function() _locate;
   String? _createCustomerIdempotencyKey;
   CreateCustomerRequestBody? _unconfirmedCustomerRequest;
+  SubmitPosRequestBody? _unconfirmedPosRequest;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
-  final areaController = TextEditingController();
   final notesController = TextEditingController();
   final amountController = TextEditingController();
+
+  Future<void> loadCustomerOptions({bool force = false}) async {
+    if (isClosed || state.loadingCustomerOptions ||
+        (state.customerOptionsLoaded && !force)) {
+      return;
+    }
+
+    final previousSelection = state.selectedTerritory;
+    emit(state.copyWith(
+      loadingCustomerOptions: true,
+      customerOptionsLoaded: false,
+      territories: const [],
+      clearSelectedTerritory: true,
+      clearCustomerOptionsError: true,
+    ));
+    try {
+      final result = await _getCustomerOptionsUsecase();
+      if (isClosed) return;
+      result.when(
+        success: (territories) {
+          if (territories.isEmpty) {
+            emit(state.copyWith(
+              loadingCustomerOptions: false,
+              customerOptionsLoaded: false,
+              customerOptionsError: 'empty',
+            ));
+            return;
+          }
+          emit(state.copyWith(
+            loadingCustomerOptions: false,
+            customerOptionsLoaded: true,
+            territories: territories,
+            selectedTerritory: territories.contains(previousSelection)
+                ? previousSelection
+                : null,
+            clearCustomerOptionsError: true,
+          ));
+        },
+        failure: (_) {
+          emit(state.copyWith(
+            loadingCustomerOptions: false,
+            customerOptionsLoaded: false,
+            customerOptionsError: 'failed',
+          ));
+        },
+      );
+    } catch (_) {
+      if (!isClosed) {
+        emit(state.copyWith(
+          loadingCustomerOptions: false,
+          customerOptionsLoaded: false,
+          customerOptionsError: 'failed',
+        ));
+      }
+    }
+  }
+
+  void selectTerritory(String? territory) {
+    if (isClosed || state.creatingCustomer || !state.customerOptionsLoaded ||
+        (territory != null && !state.territories.contains(territory))) {
+      return;
+    }
+    emit(state.copyWith(
+      selectedTerritory: territory,
+      clearSelectedTerritory: territory == null,
+      clearCustomerCreateError: _unconfirmedCustomerRequest == null,
+    ));
+  }
 
   // UUID v4, stable across retries of the same unsaved form.
   static String _uuidV4() {
@@ -60,8 +153,10 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
 
     final customerName = nameController.text.trim();
     final phone = normalizeDirectSaleDigits(phoneController.text);
-    final territory = areaController.text.trim();
-    if (customerName.isEmpty || !isValidDirectSalePhone(phone) || territory.isEmpty) {
+    final territory = state.selectedTerritory;
+    if (customerName.isEmpty || !isValidDirectSalePhone(phone) ||
+        !state.customerOptionsLoaded || territory == null ||
+        !state.territories.contains(territory)) {
       emit(state.copyWith(customerCreateError: 'direct_sale_customer_invalid_fields'));
       return;
     }
@@ -182,31 +277,133 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
     emit(state.copyWith(clearCustomerCreateError: true));
   }
 
-  void selectCashCustomer() {
-    emit(state.copyWith(customer: const DirectSaleCustomer(name: '')));
+  // The documented POS contract supports existing customers only.
+  // Never send customer_mode=existing with a blank/cash customer ID.
+  void selectExistingCustomer(String? customerId) {
+    if (isClosed || state.submittingPos || state.posRetryOriginal ||
+        !state.vehicleStockLoaded) return;
+    for (final customer in state.existingCustomers) {
+      if (customer.id == customerId) {
+        emit(state.copyWith(customer: customer));
+        return;
+      }
+    }
   }
 
   void openNewCustomer() {
-    if (state.creatingCustomer) return;
+    if (state.creatingCustomer || state.submittingPos ||
+        state.posRetryOriginal) return;
     emit(state.copyWith(step: DirectSaleStep.newCustomer));
+    loadCustomerOptions();
   }
-  void changeCustomer() => emit(state.copyWith(step: DirectSaleStep.customer));
+  void changeCustomer() {
+    if (state.submittingPos || state.posRetryOriginal) return;
+    emit(state.copyWith(step: DirectSaleStep.customer));
+  }
 
   void continueToProducts() {
-    if (state.customer == null) return;
+    if (state.customer?.isSaved != true || tripId <= 0 ||
+        state.submittingPos || state.posRetryOriginal) return;
     emit(state.copyWith(step: DirectSaleStep.products));
+    // Load fresh prices/stock whenever entering the cart for a new sale.
+    loadVehicleStock(force: true);
+  }
+
+  /// Refresh live remaining quantities; reset cart to prevent stale overselling.
+  Future<void> loadVehicleStock({bool force = false}) async {
+    if (isClosed || state.submittingPos || state.posRetryOriginal ||
+        state.loadingVehicleStock ||
+        (state.vehicleStockLoaded && !force)) return;
+
+    emit(state.copyWith(
+      loadingVehicleStock: true,
+      vehicleStockLoaded: false,
+      clearVehicleStockError: true,
+      products: const [],
+      quantities: const {},
+      inventoryAvailable: false,
+      clearPaymentMethod: true,
+      vehicleWarehouse: '',
+      vehicleTripStatus: '',
+      amountText: '',
+    ));
+    amountController.clear();
+    try {
+      final result = await _getVehicleStockUsecase(tripId);
+      if (isClosed) return;
+      result.when(
+        success: (stock) {
+          // The UI currently supports whole-unit quantities only; never
+          // round fractional POS stock into a different sellable quantity.
+          if (stock.sellableItems.any((item) =>
+              item.available != item.available.toInt())) {
+            emit(state.copyWith(
+              loadingVehicleStock: false,
+              vehicleStockError: 'fractional',
+            ));
+            return;
+          }
+          // This feature formats money as EGP. Don't label another currency
+          // incorrectly if backend options ever switch to another currency.
+          if (stock.currency != 'EGP') {
+            emit(state.copyWith(
+              loadingVehicleStock: false,
+              vehicleStockError: 'failed',
+            ));
+            return;
+          }
+          final products = stock.sellableItems.map((item) =>
+              DirectSaleProduct(
+                code: item.itemCode,
+                name: item.itemName,
+                unit: item.uom,
+                availableQuantity: item.available.toInt(),
+                // A rate of 0 is an explicit server rate, NOT a missing price.
+                unitPriceMinor: item.rateMinor,
+              ),
+          ).toList(growable: false);
+          final existingCustomers = stock.customers.map((item) =>
+              DirectSaleCustomer(
+                id: item.id,
+                name: item.displayName,
+                phone: item.mobileNo,
+              )).toList(growable: false);
+          emit(state.copyWith(
+            existingCustomers: List.unmodifiable(existingCustomers),
+            products: List.unmodifiable(products),
+            quantities: const {},
+            inventoryAvailable: products.isNotEmpty,
+            vehicleStockLoaded: true,
+            loadingVehicleStock: false,
+            clearVehicleStockError: true,
+          ));
+        },
+        failure: (_) => emit(state.copyWith(
+          loadingVehicleStock: false,
+          vehicleStockError: 'failed',
+        )),
+      );
+    } catch (_) {
+      if (!isClosed) emit(state.copyWith(
+        loadingVehicleStock: false,
+        vehicleStockError: 'failed',
+      ));
+    }
   }
 
   void continueToPayment() {
-    if (!state.inventoryAvailable || state.itemCount == 0) return;
+    if (!state.vehicleStockLoaded || !state.inventoryAvailable ||
+        state.customer?.isSaved != true || state.submittingPos ||
+        state.posRetryOriginal || state.itemCount == 0 ||
+        !state.selectedProductsHavePrices) return;
     emit(state.copyWith(step: DirectSaleStep.payment));
   }
 
   void setQuantity(DirectSaleProduct product, int quantity) {
-    if (!state.inventoryAvailable ||
+    if (state.submittingPos || state.posRetryOriginal ||
+        !state.inventoryAvailable ||
         !state.products.contains(product) ||
-        product.availableQuantity < 0 ||
-        product.unitPriceMinor < 0) {
+        product.availableQuantity < 0) {
       return;
     }
     final next = quantity.clamp(0, product.availableQuantity);
@@ -219,12 +416,14 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
     );
   }
 
-  void changeAmount(String value) => emit(
-    state.copyWith(
+  void changeAmount(String value) {
+    if (state.submittingPos || state.posRetryOriginal) return;
+    emit(state.copyWith(
       amountText: value,
       clearPaymentMethod: directSaleAmountMinor(value) != state.totalMinor,
-    ),
-  );
+      clearPosSubmitError: true,
+    ));
+  }
 
   void selectPaymentMethod(DirectSalePaymentMethod method) {
     if (!state.amountMatches ||
@@ -236,7 +435,8 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
 
   // Returns false when the route itself should close.
   bool goBack() {
-    if (state.creatingCustomer) return true;
+    if (state.creatingCustomer || state.submittingPos ||
+        state.posRetryOriginal) return true;
     final step = switch (state.step) {
       DirectSaleStep.customer || DirectSaleStep.success => null,
       DirectSaleStep.newCustomer ||
@@ -249,18 +449,105 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
   }
 
   void newSale() {
+    if (state.submittingPos || state.posRetryOriginal ||
+        state.step != DirectSaleStep.success) return;
     for (final controller in _controllers) {
       controller.clear();
     }
     _createCustomerIdempotencyKey = null;
     _unconfirmedCustomerRequest = null;
+    _unconfirmedPosRequest = null;
     emit(
       DirectSaleState(
-        products: state.products,
-        inventoryAvailable: state.inventoryAvailable,
         availablePaymentMethods: state.availablePaymentMethods,
       ),
     );
+    loadVehicleStock(force: true); // refresh customers and stock for next sale
+  }
+
+
+  /// Confirm the sale only after verifying that the counted amount matches
+  /// the total calculated from the server's rates and selected quantities.
+  /// Any ambiguous retry reuses the *same immutable request and operation_id*.
+  Future<void> submitSale() async {
+    if (isClosed || state.submittingPos ||
+        state.step != DirectSaleStep.payment) return;
+    final pending = _unconfirmedPosRequest;
+    if (pending == null && !state.canSubmitPos) return;
+
+    late final SubmitPosRequestBody request;
+    try {
+      request = pending ?? SubmitPosRequestBody(
+        operationId: _uuidV4(),
+        customerId: state.customer!.id!,
+        items: state.selectedProducts.map((product) => SubmitPosItem(
+          itemCode: product.code,
+          qty: state.quantityFor(product),
+          rateMinor: product.unitPriceMinor!,
+        )).toList(growable: false),
+        amountMinor: state.totalMinor,
+      );
+    } catch (_) {
+      emit(state.copyWith(posSubmitError: 'direct_sale_pos_invalid'));
+      return;
+    }
+    // Persist before invoking the server, so timeouts never generate a new ID.
+    _unconfirmedPosRequest = request;
+    emit(state.copyWith(
+      submittingPos: true,
+      clearPosSubmitError: true,
+    ));
+
+    try {
+      final result = await _submitPosUsecase(tripId, request);
+      if (isClosed) return;
+      result.when(
+        success: (response) {
+          if (!response.success) {
+            // A definite rejection can be corrected; a new submission must
+            // use a new operation_id after the user changes the order.
+            _unconfirmedPosRequest = null;
+            emit(state.copyWith(
+              submittingPos: false,
+              posRetryOriginal: false,
+              posSubmitError: response.message?.trim().isNotEmpty == true
+                  ? response.message
+                  : 'direct_sale_pos_failed',
+            ));
+            return;
+          }
+          _unconfirmedPosRequest = null;
+          final customer = state.customer!;
+          emit(state.copyWith(
+            submittingPos: false,
+            posRetryOriginal: false,
+            clearPosSubmitError: true,
+            receipt: DirectSaleReceipt(
+              customerName: customer.name,
+              paidAmountMinor: request.amountMinor,
+              // The POS endpoint has no payment_method field.
+              paymentMethod: null,
+            ),
+            step: DirectSaleStep.success,
+          ));
+        },
+        failure: (_) {
+          // Network/server ambiguity: don't allow editing or discarding the
+          // order; retry must use the original payload and operation_id.
+          emit(state.copyWith(
+            submittingPos: false,
+            posRetryOriginal: true,
+            posSubmitError: 'direct_sale_pos_verify_or_retry',
+          ));
+        },
+      );
+    } catch (_) {
+      if (!isClosed) emit(state.copyWith(
+        submittingPos: false,
+        posRetryOriginal: true,
+        posSubmitError: 'direct_sale_pos_verify_or_retry',
+      ));
+    }
   }
 
   Future<void> captureLocation() async {
@@ -309,7 +596,6 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
     nameController,
     phoneController,
     addressController,
-    areaController,
     notesController,
     amountController,
   ];

@@ -59,4 +59,17 @@ class ApiConstants {
   static const String deliveryOutcome =
       '$trips/{tripId}/orders/{orderId}/delivery-outcome';
 
+
+  static const String deliveryReasons = '/delivery-reasons';
+
+  static const String customerOptions = '$customers/options';
+
+  static const String vehicleStock =
+      '$trips/{tripId}/vehicle-stock';
+
+
+  static const String posOptions =
+      '$trips/{tripId}/pos/options';
+
+  static const String submitPos = '$trips/{tripId}/pos';
 }

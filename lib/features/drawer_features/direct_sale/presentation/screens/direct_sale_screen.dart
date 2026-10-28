@@ -19,8 +19,9 @@ class DirectSaleScreen extends StatelessWidget {
       BlocBuilder<DirectSaleCubit, DirectSaleState>(
         builder: (context, state) => PopScope<Object?>(
           canPop:
-              state.step == DirectSaleStep.customer ||
-              state.step == DirectSaleStep.success,
+              !state.submittingPos && !state.posRetryOriginal &&
+              (state.step == DirectSaleStep.customer ||
+               state.step == DirectSaleStep.success),
           onPopInvokedWithResult: (didPop, _) {
             if (!didPop) goBackFromDirectSale(context);
           },

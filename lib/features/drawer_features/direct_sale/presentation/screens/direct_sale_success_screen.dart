@@ -8,7 +8,6 @@ import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/t
 import '../../data/models/direct_sale_models.dart';
 import '../cubit/direct_sale_cubit.dart';
 import '../widgets/direct_sale_page.dart';
-import '../widgets/direct_sale_payment_methods.dart';
 
 class DirectSaleSuccessScreen extends StatelessWidget {
   const DirectSaleSuccessScreen({super.key, required this.receipt});
@@ -51,13 +50,8 @@ class DirectSaleSuccessScreen extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         Text(
-          context.strings.direct_sale_receipt_summary(
-            receipt.customerName.trim().isEmpty
-                ? context.strings.direct_sale_cash_customer
-                : receipt.customerName,
-            formatTripAmount(context, receipt.paidAmountMinor / 100),
-            receipt.paymentMethod.label(context),
-          ),
+          '${receipt.customerName} • '
+          '${formatTripAmount(context, receipt.paidAmountMinor / 100)} EGP',
           textAlign: TextAlign.center,
           style: Styles.textStyle16.copyWith(color: AppColors.grey4),
         ),

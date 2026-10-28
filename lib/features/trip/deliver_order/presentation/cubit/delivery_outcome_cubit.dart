@@ -51,8 +51,8 @@ class DeliveryOutcomeCubit extends Cubit<DeliveryOutcomeState> {
       return;
     }
 
-    final trimmedReason = reason.trim();
-    if (tripId <= 0 || orderId <= 0 || trimmedReason.isEmpty) {
+    // Validate, but preserve the exact value provided by delivery-reasons.
+    if (tripId <= 0 || orderId <= 0 || reason.trim().isEmpty) {
       emit(DeliveryOutcomeFailure('delivery_outcome_invalid_reason'));
       return;
     }
@@ -77,7 +77,7 @@ class DeliveryOutcomeCubit extends Cubit<DeliveryOutcomeState> {
       tripId,
       orderId,
       outcome.apiValue,
-      trimmedReason,
+      reason,
       outcome == DeliveryOutcomeType.rescheduled ? rescheduledFor : null,
     ]);
     if (_pendingPayload != payload) {
@@ -87,7 +87,7 @@ class DeliveryOutcomeCubit extends Cubit<DeliveryOutcomeState> {
 
     final body = DeliveryOutcomeRequestBody(
       outcome: outcome,
-      reason: trimmedReason,
+      reason: reason,
       rescheduledFor: outcome == DeliveryOutcomeType.rescheduled
           ? rescheduledFor
           : null,
