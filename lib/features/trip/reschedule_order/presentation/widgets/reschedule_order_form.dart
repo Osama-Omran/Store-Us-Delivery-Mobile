@@ -11,13 +11,9 @@ class RescheduleOrderForm extends StatelessWidget {
     required this.address,
     required this.dateTimeFields,
     required this.dateIsPast,
-    required this.reasons,
-    required this.selectedReasonIndex,
-    required this.otherReasonController,
+    required this.reasonDropdown,
     required this.notesController,
     required this.isLoading,
-    required this.onReasonSelected,
-    required this.onOtherReasonChanged,
   });
 
   final String customerName;
@@ -25,13 +21,9 @@ class RescheduleOrderForm extends StatelessWidget {
   final String address;
   final Widget dateTimeFields;
   final bool dateIsPast;
-  final List<String> reasons;
-  final int? selectedReasonIndex;
-  final TextEditingController otherReasonController;
+  final Widget reasonDropdown;
   final TextEditingController notesController;
   final bool isLoading;
-  final ValueChanged<int> onReasonSelected;
-  final VoidCallback onOtherReasonChanged;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -89,55 +81,14 @@ class RescheduleOrderForm extends StatelessWidget {
 
       const SizedBox(height: 12),
 
-      Wrap(
-        spacing: 9,
-        runSpacing: 10,
-        children: [
-          for (var index = 0; index < reasons.length; index++)
-            ChoiceChip(
-              label: Text(reasons[index]),
-              selected: selectedReasonIndex == index,
-              onSelected: isLoading ? null : (_) => onReasonSelected(index),
-              selectedColor: AppColors.blue4,
-              backgroundColor: AppColors.white0,
-              side: BorderSide(
-                color: selectedReasonIndex == index
-                    ? AppColors.primary
-                    : AppColors.grey3,
-              ),
-              showCheckmark: false,
-              labelStyle: Styles.base.copyWith(
-                fontWeight: FontWeight.w700,
-                color: selectedReasonIndex == index
-                    ? AppColors.primary
-                    : AppColors.black1,
-              ),
-            ),
-        ],
-      ),
-
-      if (selectedReasonIndex == 6) ...[
-        const SizedBox(height: 12),
-
-        TextField(
-          controller: otherReasonController,
-          enabled: !isLoading,
-          onChanged: (_) => onOtherReasonChanged(),
-          decoration: InputDecoration(
-            hintText: context.strings.reschedule_other_reason_hint,
-            filled: true,
-            fillColor: AppColors.grey0,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
-          ),
-        ),
-      ],
+      reasonDropdown,
 
       const SizedBox(height: 22),
 
       // ======= Optional Notes ======= //
       Text(
         context.strings.order_optional_notes,
-        style: Styles.base.copyWith(
+        style: Styles.textStyle16.copyWith(
           fontWeight: FontWeight.w800,
           color: AppColors.black1,
         ),
@@ -154,9 +105,18 @@ class RescheduleOrderForm extends StatelessWidget {
           hintText: context.strings.reschedule_notes_hint,
           filled: true,
           fillColor: AppColors.grey0,
+          contentPadding: const EdgeInsets.all(16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(color: AppColors.grey3),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(color: AppColors.grey3),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
           ),
         ),
       ),
@@ -165,7 +125,7 @@ class RescheduleOrderForm extends StatelessWidget {
 
       Text(
         context.strings.reschedule_notes_not_sent,
-        style: Styles.base.copyWith(fontSize: 12, color: AppColors.grey4),
+        style: Styles.textStyle12.copyWith(color: AppColors.grey4, height: 1.5),
       ),
 
       const SizedBox(height: 16),

@@ -75,12 +75,10 @@ class StockTransferCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 16,
-            children: [
-              Expanded(
-                child: Column(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 8,
                   children: [
@@ -99,9 +97,7 @@ class StockTransferCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 8,
                   children: [
@@ -129,8 +125,23 @@ class StockTransferCard extends StatelessWidget {
                       ),
                   ],
                 ),
-              ),
-            ],
+              ];
+              if (constraints.maxWidth < 300 ||
+                  MediaQuery.textScalerOf(context).scale(16) > 20) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 8,
+                  children: columns,
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 16,
+                children: [
+                  for (final column in columns) Expanded(child: column),
+                ],
+              );
+            },
           ),
         ],
       ),

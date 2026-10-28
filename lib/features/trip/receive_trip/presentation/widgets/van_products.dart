@@ -125,20 +125,24 @@ class ProductWidget extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            spacing: 6,
-            children: [
-              Text(
-                context.strings.loaded_quantity,
-                style: Styles.textStyle12.copyWith(color: AppColors.grey4),
-              ),
-              Text(
-                product.loadedQty.toString(),
-                style: Styles.textStyle24.copyWith(color: AppColors.black1),
-              ),
-            ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 6,
+              children: [
+                Text(
+                  context.strings.loaded_quantity,
+                  textAlign: TextAlign.center,
+                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
+                ),
+                Text(
+                  product.loadedQty.toString(),
+                  textAlign: TextAlign.center,
+                  style: Styles.textStyle24.copyWith(color: AppColors.black1),
+                ),
+              ],
+            ),
           ),
         ],
       ),

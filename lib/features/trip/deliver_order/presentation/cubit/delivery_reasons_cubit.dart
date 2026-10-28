@@ -9,9 +9,18 @@ class DeliveryReasonsCubit extends Cubit<DeliveryReasonsState> {
 
   final GetDeliveryReasonsUsecase _usecase;
 
-  Future<void> loadReasons() async {
-    if (isClosed || state is DeliveryReasonsLoading ||
-        state is DeliveryReasonsSuccess) {
+  bool containsReason(DeliveryReasonCategory category, String? reason) {
+    final current = state;
+    return reason != null &&
+        RegExp(r'\S').hasMatch(reason) &&
+        current is DeliveryReasonsSuccess &&
+        current.data.forCategory(category).contains(reason);
+  }
+
+  Future<void> loadReasons({bool force = false}) async {
+    if (isClosed ||
+        state is DeliveryReasonsLoading ||
+        (!force && state is DeliveryReasonsSuccess)) {
       return;
     }
     emit(const DeliveryReasonsLoading());
@@ -20,9 +29,8 @@ class DeliveryReasonsCubit extends Cubit<DeliveryReasonsState> {
       if (isClosed) return;
       result.when(
         success: (data) => emit(DeliveryReasonsSuccess(data)),
-        failure: (error) => emit(DeliveryReasonsFailure(
-          error.apiErrorModel.message,
-        )),
+        failure: (error) =>
+            emit(DeliveryReasonsFailure(error.apiErrorModel.message)),
       );
     } catch (_) {
       if (!isClosed) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -48,10 +49,18 @@ class OrderDetailsScreen extends StatelessWidget {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _goBack(context);
       },
-      child: BlocProvider(
-        create: (_) =>
-            getIt<OrderDetailsCubit>()
-              ..getOrderDetails(tripId: tripId, orderId: orderId),
+      child: MultiBlocProvider(
+        key: ValueKey((tripId, orderId)),
+        providers: [
+          BlocProvider<OrderDetailsCubit>(
+            create: (_) =>
+                getIt<OrderDetailsCubit>()
+                  ..getOrderDetails(tripId: tripId, orderId: orderId),
+          ),
+          BlocProvider<DeliveryOutcomeCubit>(
+            create: (_) => getIt<DeliveryOutcomeCubit>(),
+          ),
+        ],
         child: _OrderDetailsBody(
           tripId: tripId,
           orderId: orderId,

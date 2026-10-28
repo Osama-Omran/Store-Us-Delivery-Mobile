@@ -1,20 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_state.dart';
 
-import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/cubit/cancel_delivery_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/widgets/cancel_delivery_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/features/trip/reschedule_order/presentation/cubit/reschedule_order_cubit.dart';
 import 'package:storeus_delivery/features/trip/reschedule_order/presentation/widgets/reschedule_order_sheet.dart';
 
 class OrderActionBar extends StatelessWidget {
@@ -26,6 +26,14 @@ class OrderActionBar extends StatelessWidget {
 
   final int tripId;
   final int orderId;
+
+  Future<void> _refreshAfterOutcome(OrderDetailsCubit cubit) async {
+    try {
+      await cubit.getOrderDetails(tripId: tripId, orderId: orderId);
+    } catch (_) {
+      // A refresh failure must not interrupt navigation after an accepted outcome.
+    }
+  }
 
   // ======= Open Cancel Delivery Sheet ======= //
   Future<void> _openCancelDeliverySheet(BuildContext context) async {
@@ -41,6 +49,8 @@ class OrderActionBar extends StatelessWidget {
             .toUpperCase();
 
     if (deliveryStatus != 'PENDING') return;
+
+    final outcomeCubit = context.read<DeliveryOutcomeCubit>()..resetFailure();
 
     // ======= Customer Details ======= //
     final location = OrderCustomerLocation.fromApi(
@@ -59,8 +69,8 @@ class OrderActionBar extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (_) {
-        return BlocProvider(
-          create: (_) => getIt<CancelDeliveryCubit>(),
+        return BlocProvider.value(
+          value: outcomeCubit,
           child: CancelDeliverySheet(
             tripId: tripId,
             orderId: orderId,
@@ -74,7 +84,9 @@ class OrderActionBar extends StatelessWidget {
     // ======= Only Navigate After Successful API ======= //
     if (!context.mounted || result == null) return;
 
-    context.pushReplacementNamed(
+    final router = GoRouter.of(context);
+    unawaited(_refreshAfterOutcome(detailsCubit));
+    router.pushReplacementNamed(
       RoutesNames.cancelDeliverySuccess,
       extra: result,
     );
@@ -98,6 +110,8 @@ class OrderActionBar extends StatelessWidget {
       return;
     }
 
+    final outcomeCubit = context.read<DeliveryOutcomeCubit>()..resetFailure();
+
     // ======= Real Customer Data ======= //
     final location = OrderCustomerLocation.fromApi(
       details: state.order,
@@ -115,8 +129,8 @@ class OrderActionBar extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       builder: (sheetContext) {
-        return BlocProvider(
-          create: (_) => getIt<RescheduleOrderCubit>(),
+        return BlocProvider.value(
+          value: outcomeCubit,
           child: RescheduleOrderSheet(
             tripId: tripId,
             orderId: orderId,
@@ -132,8 +146,9 @@ class OrderActionBar extends StatelessWidget {
     if (!context.mounted || result == null) return;
 
     // API success: navigate to confirmation screen.
-    await GoRouter.of(context)
-        .pushNamed(RoutesNames.rescheduleSuccess, extra: result);
+    final router = GoRouter.of(context);
+    unawaited(_refreshAfterOutcome(detailsCubit));
+    await router.pushNamed(RoutesNames.rescheduleSuccess, extra: result);
 
     // Refresh if user returns to the original order details.
     if (!context.mounted || detailsCubit.isClosed) return;

@@ -29,7 +29,13 @@ class LoadedGoodsDetails extends StatelessWidget {
                       totals?.items.toString() ?? '—',
                       style: Styles.textStyle24,
                     ),
-                    Text(context.strings.total_items),
+                    Text(
+                      context.strings.total_items,
+                      textAlign: TextAlign.center,
+                      style: Styles.textStyle14.copyWith(
+                        color: AppColors.grey4,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -45,7 +51,13 @@ class LoadedGoodsDetails extends StatelessWidget {
                         color: AppColors.primary,
                       ),
                     ),
-                    Text(context.strings.total_quantities),
+                    Text(
+                      context.strings.total_quantities,
+                      textAlign: TextAlign.center,
+                      style: Styles.textStyle14.copyWith(
+                        color: AppColors.grey4,
+                      ),
+                    ),
                   ],
                 ),
               ),

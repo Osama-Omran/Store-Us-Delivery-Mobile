@@ -125,6 +125,22 @@ class _PreviousTripCard extends StatelessWidget {
         ? null
         : MaterialLocalizations.of(context)
               .formatTimeOfDay(TimeOfDay.fromDateTime(completedAt));
+    final statusBadge = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      decoration: BoxDecoration(
+        color: statusColor.withValues(alpha: .09),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Text(
+        statusText,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Styles.textStyle12.copyWith(
+          color: statusColor,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
 
     return Container(
       width: double.infinity,
@@ -134,72 +150,70 @@ class _PreviousTripCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.grey3),
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: statusColor.withValues(alpha: .09),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(
-              isCompleted
-                  ? Icons.check_circle_outline_rounded
-                  : Icons.cancel_outlined,
-              color: statusColor,
-              size: 23,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.strings.trip_number_title(trip.number),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Styles.textStyle16.copyWith(
-                    color: AppColors.black1,
-                    fontWeight: FontWeight.w800,
-                  ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact =
+              constraints.maxWidth < 300 ||
+              MediaQuery.textScalerOf(context).scale(16) > 20;
+
+          return Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: .09),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  trip.totalOrders == null
-                      ? context.strings.orders_count_unavailable
-                      : context.strings.orders_count(trip.totalOrders!),
-                  style: Styles.textStyle12.copyWith(color: AppColors.grey4),
+                child: Icon(
+                  isCompleted
+                      ? Icons.check_circle_outline_rounded
+                      : Icons.cancel_outlined,
+                  color: statusColor,
+                  size: 23,
                 ),
-                if (completedTime != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    context.strings.trip_completed_at_time(completedTime),
-                    style: Styles.textStyle12.copyWith(color: AppColors.grey4),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          const SizedBox(width: 7),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-            decoration: BoxDecoration(
-              color: statusColor.withValues(alpha: .09),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Text(
-              statusText,
-              maxLines: 1,
-              style: Styles.textStyle12.copyWith(
-                color: statusColor,
-                fontWeight: FontWeight.w800,
               ),
-            ),
-          ),
-        ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.strings.trip_number_title(trip.number),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.textStyle16.copyWith(
+                        color: AppColors.black1,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      trip.totalOrders == null
+                          ? context.strings.orders_count_unavailable
+                          : context.strings.orders_count(trip.totalOrders!),
+                      style: Styles.textStyle12.copyWith(
+                        color: AppColors.grey4,
+                      ),
+                    ),
+                    if (completedTime != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        context.strings.trip_completed_at_time(completedTime),
+                        style: Styles.textStyle12.copyWith(
+                          color: AppColors.grey4,
+                        ),
+                      ),
+                    ],
+                    if (compact) ...[const SizedBox(height: 10), statusBadge],
+                  ],
+                ),
+              ),
+              if (!compact) ...[const SizedBox(width: 7), statusBadge],
+            ],
+          );
+        },
       ),
     );
   }

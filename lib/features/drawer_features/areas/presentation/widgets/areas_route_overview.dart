@@ -20,32 +20,38 @@ class AreasRouteOverview extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _Metric(
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final metrics = [
+              _Metric(
                 value: route.total,
                 label: context.strings.areas_stops,
                 color: AppColors.black1,
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _Metric(
+              _Metric(
                 value: route.finished,
                 label: context.strings.areas_finished,
                 color: AppColors.green0,
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _Metric(
+              _Metric(
                 value: route.remaining,
                 label: context.strings.remaining_orders,
                 color: AppColors.orange0,
               ),
-            ),
-          ],
+            ];
+            if (constraints.maxWidth < 300 ||
+                MediaQuery.textScalerOf(context).scale(16) > 20) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 10,
+                children: metrics,
+              );
+            }
+            return Row(
+              spacing: 10,
+              children: [for (final metric in metrics) Expanded(child: metric)],
+            );
+          },
         ),
         const SizedBox(height: 20),
         Row(
@@ -156,29 +162,52 @@ class _Metric extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 15),
-    decoration: BoxDecoration(
-      color: AppColors.white0,
-      borderRadius: BorderRadius.circular(18),
-      border: Border.all(color: AppColors.grey3),
-    ),
-    child: Column(
-      children: [
-        Text(
-          '$value',
-          style: Styles.textStyle25.copyWith(
-            color: color,
-            fontWeight: FontWeight.w900,
+  Widget build(BuildContext context) {
+    final textScaler = MediaQuery.textScalerOf(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 15),
+      decoration: BoxDecoration(
+        color: AppColors.white0,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.grey3),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: textScaler.scale(25) * 1.3,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '$value',
+                maxLines: 1,
+                softWrap: false,
+                style: Styles.textStyle25.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w900,
+                  height: 1.3,
+                ),
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: Styles.textStyle11.copyWith(color: AppColors.grey4),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(height: 4),
+          SizedBox(
+            height: textScaler.scale(11) * 1.5 * 2,
+            child: Center(
+              child: Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle11.copyWith(
+                  color: AppColors.grey4,
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

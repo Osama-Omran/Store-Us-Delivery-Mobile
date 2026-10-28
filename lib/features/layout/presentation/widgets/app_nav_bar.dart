@@ -194,7 +194,7 @@ class NavBarItem extends StatelessWidget {
                                     : AppColors.primary
                               : isTrip
                               ? AppColors.primary
-                              : AppColors.grey2,
+                              : AppColors.grey4,
                           w: 24,
                         ),
 

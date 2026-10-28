@@ -10,7 +10,7 @@ class CustomTripContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white0,
-        border: Border.all(color: AppColors.grey2),
+        border: Border.all(color: AppColors.grey3),
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(16),

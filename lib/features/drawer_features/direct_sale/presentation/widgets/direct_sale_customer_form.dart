@@ -126,7 +126,8 @@ class _TerritoryDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<DirectSaleCubit>();
     final state = context.watch<DirectSaleCubit>().state;
-    final enabled = state.customerOptionsLoaded &&
+    final enabled =
+        state.customerOptionsLoaded &&
         !state.loadingCustomerOptions &&
         !state.creatingCustomer &&
         state.territories.isNotEmpty;
@@ -149,7 +150,9 @@ class _TerritoryDropdown extends StatelessWidget {
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           // Recreate the FormField when loading changes or selection resets.
-          key: ValueKey('${state.customerOptionsLoaded}:${state.selectedTerritory}'),
+          key: ValueKey(
+            '${state.customerOptionsLoaded}:${state.selectedTerritory}',
+          ),
           initialValue: state.selectedTerritory,
           isExpanded: true,
           menuMaxHeight: 320,
@@ -157,17 +160,49 @@ class _TerritoryDropdown extends StatelessWidget {
             hintText: state.loadingCustomerOptions
                 ? context.strings.direct_sale_territory_loading
                 : context.strings.direct_sale_territory_hint,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-          ),
-          items: state.territories.map((territory) =>
-            DropdownMenuItem<String>(
-              value: territory,
-              child: Text(territory, overflow: TextOverflow.ellipsis),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
             ),
-          ).toList(),
+            hintStyle: Styles.textStyle14,
+            fillColor: AppColors.white0,
+            filled: true,
+            errorMaxLines: 3,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: AppColors.grey3),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: AppColors.grey3),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: AppColors.red0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: AppColors.red0),
+            ),
+          ),
+          items: state.territories
+              .map(
+                (territory) => DropdownMenuItem<String>(
+                  value: territory,
+                  child: Text(territory, overflow: TextOverflow.ellipsis),
+                ),
+              )
+              .toList(),
           onChanged: enabled ? cubit.selectTerritory : null,
-          validator: (value) => value != null && state.territories.contains(value)
+          validator: (value) =>
+              value != null && state.territories.contains(value)
               ? null
               : context.strings.direct_sale_territory_required,
         ),

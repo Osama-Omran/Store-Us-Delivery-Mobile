@@ -142,13 +142,15 @@ class OrderCustomerFullAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 58,
-      width: double.infinity,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 58,
+        minWidth: double.infinity,
+      ),
       child: ElevatedButton.icon(
         onPressed: onTap,
         icon: Icon(icon, color: foreground),
-        label: Text(title),
+        label: Text(title, textAlign: TextAlign.center),
         style: ElevatedButton.styleFrom(
           backgroundColor: background,
           foregroundColor: foreground,

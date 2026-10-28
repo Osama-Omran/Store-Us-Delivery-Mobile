@@ -4,6 +4,7 @@ import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/trip_api_service.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart' as app_router;
+
 import '../../domain/repo/submit_pos_repo_interface.dart';
 import '../models/submit_pos_request_body.dart';
 
@@ -40,14 +41,18 @@ class ConcreteSubmitPosRepo implements SubmitPosRepoInterface {
       final status = error.response?.statusCode;
       // Validation/permission errors are definite rejections. Network errors,
       // timeouts, rate limits and 5xx are ambiguous and MUST reuse operation_id.
-      final definitiveRejection = status != null &&
-          status >= 400 && status < 500 &&
+      final definitiveRejection =
+          status != null &&
+          status >= 400 &&
+          status < 500 &&
           !const {408, 409, 425, 429}.contains(status);
       if (definitiveRejection) {
-        return ApiResult.success(SubmitPosResponse(
-          success: false,
-          message: _safeMessage(error.response?.data),
-        ));
+        return ApiResult.success(
+          SubmitPosResponse(
+            success: false,
+            message: _safeMessage(error.response?.data),
+          ),
+        );
       }
       return ApiResult.failure(ErrorHandler.handle(error));
     } catch (error) {
@@ -59,8 +64,11 @@ class ConcreteSubmitPosRepo implements SubmitPosRepoInterface {
 String? _safeMessage(dynamic data) {
   if (data is! Map) return null;
   final message = data['message'];
-  if (message is String && message.trim().isNotEmpty &&
-      !message.contains('<')) return message.trim();
+  if (message is String &&
+      message.trim().isNotEmpty &&
+      !message.contains('<')) {
+    return message.trim();
+  }
   final errors = data['errors'];
   if (errors is Map) {
     for (final value in errors.values) {

@@ -147,32 +147,41 @@ class _WalletStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _WalletMetric(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final metrics = [
+          _WalletMetric(
             title: context.strings.treasury_collected_total,
             value: formatTripAmount(context, wallet.totalCollected),
             color: AppColors.green0,
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _WalletMetric(
+          _WalletMetric(
             title: context.strings.treasury_wallet_received_warehouse,
             value: formatTripAmount(context, wallet.totalReceivedByWarehouse),
             color: AppColors.black1,
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _WalletMetric(
+          _WalletMetric(
             title: context.strings.treasury_collected_orders,
             value: '${wallet.transactions.length}',
             color: AppColors.black1,
           ),
-        ),
-      ],
+        ];
+        if (constraints.maxWidth < 300 ||
+            MediaQuery.textScalerOf(context).scale(16) > 20) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 8,
+            children: metrics,
+          );
+        }
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 8,
+            children: [for (final metric in metrics) Expanded(child: metric)],
+          ),
+        );
+      },
     );
   }
 }
@@ -189,24 +198,33 @@ class _WalletMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScaler = MediaQuery.textScalerOf(context);
+
     return TreasuryCard(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            title,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            style: Styles.textStyle12.copyWith(color: AppColors.grey4),
+          SizedBox(
+            height: textScaler.scale(12) * 1.5 * 2,
+            child: Center(
+              child: Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle12.copyWith(
+                  color: AppColors.grey4,
+                  height: 1.5,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 8),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              value,
-              style: Styles.textStyle18.copyWith(color: color),
-            ),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: Styles.textStyle18.copyWith(color: color, height: 1.4),
           ),
         ],
       ),

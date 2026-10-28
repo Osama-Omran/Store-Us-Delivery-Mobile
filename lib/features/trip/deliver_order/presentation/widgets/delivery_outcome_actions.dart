@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_reasons_cubit.dart';
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_reasons_state.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -53,8 +55,8 @@ class DeliveryOutcomeActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DeliveryOutcomeCubit, DeliveryOutcomeState>(
       builder: (context, state) {
-        final disabled = state is DeliveryOutcomeLoading ||
-            state is DeliveryOutcomeSuccess;
+        final disabled =
+            state is DeliveryOutcomeLoading || state is DeliveryOutcomeSuccess;
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -140,27 +142,15 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
   bool get _isReschedule => widget.outcome == DeliveryOutcomeType.rescheduled;
 
   bool get _canSubmit =>
-      _selectedReason != null && _selectedReason!.isNotEmpty &&
+      context.read<DeliveryOutcomeCubit>().reasonsCubit.containsReason(
+        _isReschedule
+            ? DeliveryReasonCategory.rescheduling
+            : DeliveryReasonCategory.cancellation,
+        _selectedReason,
+      ) &&
       (!_isReschedule ||
           (_rescheduleDateTime != null &&
               _rescheduleDateTime!.isAfter(DateTime.now())));
-
-  /// Explicitly append the selected local time-zone offset.
-  /// Dart's local DateTime.toIso8601String() omits the offset.
-  static String _toApiDateTime(DateTime local) {
-    final wallTime = '${local.year.toString().padLeft(4, '0')}-'
-        '${local.month.toString().padLeft(2, '0')}-'
-        '${local.day.toString().padLeft(2, '0')}T'
-        '${local.hour.toString().padLeft(2, '0')}:'
-        '${local.minute.toString().padLeft(2, '0')}:00';
-    final offset = local.timeZoneOffset;
-    final minutes = offset.inMinutes;
-    final sign = minutes < 0 ? '-' : '+';
-    final absoluteMinutes = minutes.abs();
-    final hh = (absoluteMinutes ~/ 60).toString().padLeft(2, '0');
-    final mm = (absoluteMinutes % 60).toString().padLeft(2, '0');
-    return '$wallTime$sign$hh:$mm';
-  }
 
   Future<void> _chooseDateTime() async {
     final now = DateTime.now();
@@ -204,7 +194,9 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
       outcome: widget.outcome,
       reason: _selectedReason!,
       rescheduledFor: _isReschedule
-          ? _toApiDateTime(_rescheduleDateTime!)
+          ? DeliveryOutcomeRequestBody.formatRescheduledFor(
+              _rescheduleDateTime!,
+            )
           : null,
     );
   }
@@ -222,134 +214,159 @@ class _DeliveryOutcomeSheetState extends State<_DeliveryOutcomeSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DeliveryOutcomeCubit, DeliveryOutcomeState>(
-      listenWhen: (_, current) => current is DeliveryOutcomeSuccess,
-      listener: (context, state) {
-        // The parent screen shows the final status and refreshes the order.
-        if (state is DeliveryOutcomeSuccess && mounted) {
-          Navigator.of(context).pop();
-        }
-      },
-      builder: (context, state) {
-        final loading = state is DeliveryOutcomeLoading;
-        final error = state is DeliveryOutcomeFailure ? state.message : null;
+    return BlocBuilder<DeliveryReasonsCubit, DeliveryReasonsState>(
+      bloc: context.read<DeliveryOutcomeCubit>().reasonsCubit,
+      builder: (context, _) =>
+          BlocConsumer<DeliveryOutcomeCubit, DeliveryOutcomeState>(
+            listenWhen: (_, current) => current is DeliveryOutcomeSuccess,
+            listener: (context, state) {
+              // The parent screen shows the final status and refreshes the order.
+              if (state is DeliveryOutcomeSuccess && mounted) {
+                Navigator.of(context).pop();
+              }
+            },
+            builder: (context, state) {
+              final loading = state is DeliveryOutcomeLoading;
+              final error = state is DeliveryOutcomeFailure
+                  ? state.message
+                  : null;
 
-        return PopScope(
-          canPop: !loading,
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                20,
-                18,
-                20,
-                MediaQuery.viewInsetsOf(context).bottom + 20,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _isReschedule
-                                ? context.strings.delivery_reschedule_title
-                                : context.strings.delivery_cancel_title,
-                            style: Styles.textStyle20.copyWith(
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.black1,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: loading
-                              ? null
-                              : () => Navigator.of(context).pop(),
-                          icon: const Icon(Icons.close_rounded),
-                        ),
-                      ],
+              return PopScope(
+                canPop: !loading,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      20,
+                      18,
+                      20,
+                      MediaQuery.viewInsetsOf(context).bottom + 20,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _isReschedule
-                          ? context.strings.delivery_reschedule_hint
-                          : context.strings.delivery_cancel_warning,
-                      style: Styles.base.copyWith(color: AppColors.grey4),
-                    ),
-                    const SizedBox(height: 18),
-                    DeliveryReasonDropdown(
-                      category: _isReschedule
-                          ? DeliveryReasonCategory.rescheduling
-                          : DeliveryReasonCategory.cancellation,
-                      label: context.strings.delivery_outcome_reason,
-                      value: _selectedReason,
-                      enabled: !loading,
-                      onChanged: (value) {
-                        setState(() => _selectedReason = value);
-                      },
-                    ),
-                    if (_isReschedule) ...[
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: loading ? null : _chooseDateTime,
-                        icon: const Icon(Icons.calendar_month_outlined),
-                        label: Text(
-                          _rescheduleDateTime == null
-                              ? context.strings.delivery_reschedule_choose_date
-                              : _toApiDateTime(_rescheduleDateTime!),
-                        ),
-                      ),
-                      if (_rescheduleDateTime != null &&
-                          !_rescheduleDateTime!.isAfter(DateTime.now()))
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            context.strings.delivery_outcome_invalid_date,
-                            style: Styles.base.copyWith(color: AppColors.red1),
-                          ),
-                        ),
-                    ],
-                    if (error != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        _errorLabel(context, error),
-                        style: Styles.base.copyWith(color: AppColors.red1),
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: loading || !_canSubmit ? null : _submit,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _isReschedule
-                              ? AppColors.primary
-                              : AppColors.red1,
-                          foregroundColor: AppColors.white0,
-                        ),
-                        child: loading
-                            ? CircularProgressIndicator(
-                                color: AppColors.white0,
-                              )
-                            : Text(
-                                _isReschedule
-                                    ? context.strings.delivery_reschedule_confirm
-                                    : context.strings.delivery_cancel_confirm,
-                                style: Styles.textStyle17.copyWith(
-                                  fontWeight: FontWeight.w800,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  _isReschedule
+                                      ? context
+                                            .strings
+                                            .delivery_reschedule_title
+                                      : context.strings.delivery_cancel_title,
+                                  style: Styles.textStyle20.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.black1,
+                                  ),
                                 ),
                               ),
+                              IconButton(
+                                onPressed: loading
+                                    ? null
+                                    : () => Navigator.of(context).pop(),
+                                icon: const Icon(Icons.close_rounded),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            _isReschedule
+                                ? context.strings.delivery_reschedule_hint
+                                : context.strings.delivery_cancel_warning,
+                            style: Styles.base.copyWith(color: AppColors.grey4),
+                          ),
+                          const SizedBox(height: 18),
+                          DeliveryReasonDropdown(
+                            cubit: context
+                                .read<DeliveryOutcomeCubit>()
+                                .reasonsCubit,
+                            category: _isReschedule
+                                ? DeliveryReasonCategory.rescheduling
+                                : DeliveryReasonCategory.cancellation,
+                            label: context.strings.delivery_outcome_reason,
+                            value: _selectedReason,
+                            enabled: !loading,
+                            onChanged: (value) {
+                              setState(() => _selectedReason = value);
+                            },
+                          ),
+                          if (_isReschedule) ...[
+                            const SizedBox(height: 12),
+                            OutlinedButton.icon(
+                              onPressed: loading ? null : _chooseDateTime,
+                              icon: const Icon(Icons.calendar_month_outlined),
+                              label: Text(
+                                _rescheduleDateTime == null
+                                    ? context
+                                          .strings
+                                          .delivery_reschedule_choose_date
+                                    : DeliveryOutcomeRequestBody.formatRescheduledFor(
+                                        _rescheduleDateTime!,
+                                      ),
+                              ),
+                            ),
+                            if (_rescheduleDateTime != null &&
+                                !_rescheduleDateTime!.isAfter(DateTime.now()))
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  context.strings.delivery_outcome_invalid_date,
+                                  style: Styles.base.copyWith(
+                                    color: AppColors.red1,
+                                  ),
+                                ),
+                              ),
+                          ],
+                          if (error != null) ...[
+                            const SizedBox(height: 12),
+                            Text(
+                              _errorLabel(context, error),
+                              style: Styles.base.copyWith(
+                                color: AppColors.red1,
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: loading || !_canSubmit
+                                  ? null
+                                  : _submit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _isReschedule
+                                    ? AppColors.primary
+                                    : AppColors.red1,
+                                foregroundColor: AppColors.white0,
+                              ),
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color: AppColors.white0,
+                                    )
+                                  : Text(
+                                      _isReschedule
+                                          ? context
+                                                .strings
+                                                .delivery_reschedule_confirm
+                                          : context
+                                                .strings
+                                                .delivery_cancel_confirm,
+                                      style: Styles.textStyle17.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        );
-      },
     );
   }
 }

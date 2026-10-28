@@ -41,10 +41,12 @@ class DirectSaleCustomerSelectionScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           if (state.loadingVehicleStock)
-            const Center(child: Padding(
-              padding: EdgeInsets.all(24),
-              child: CircularProgressIndicator(),
-            ))
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              ),
+            )
           else if (state.vehicleStockError != null) ...[
             DirectSaleNotice(
               error: true,
@@ -66,7 +68,7 @@ class DirectSaleCustomerSelectionScreen extends StatelessWidget {
           else
             DropdownButtonFormField<String>(
               key: const ValueKey('direct-sale-existing-customer'),
-              value: selectedId,
+              initialValue: selectedId,
               isExpanded: true,
               decoration: InputDecoration(
                 labelText: context.strings.direct_sale_pos_select_customer,
@@ -76,16 +78,18 @@ class DirectSaleCustomerSelectionScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              items: state.existingCustomers.map((option) =>
-                DropdownMenuItem<String>(
-                  value: option.id,
-                  child: Text(
-                    option.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ).toList(growable: false),
+              items: state.existingCustomers
+                  .map(
+                    (option) => DropdownMenuItem<String>(
+                      value: option.id,
+                      child: Text(
+                        option.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(growable: false),
               onChanged: cubit.selectExistingCustomer,
             ),
           const SizedBox(height: 14),

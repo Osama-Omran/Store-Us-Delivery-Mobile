@@ -39,8 +39,8 @@ class ReceivingPhotoActions extends StatelessWidget {
           spacing: 10,
           children: [
             Expanded(
-              child: SizedBox(
-                height: 60,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 60),
                 child: OutlinedButton(
                   onPressed: isCapturing ? null : onCapturePhoto,
                   style: OutlinedButton.styleFrom(
@@ -53,6 +53,7 @@ class ReceivingPhotoActions extends StatelessWidget {
                   ),
                   child: Text(
                     context.strings.retake_photo,
+                    textAlign: TextAlign.center,
                     style: Styles.textStyle16.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -61,8 +62,8 @@ class ReceivingPhotoActions extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: SizedBox(
-                height: 60,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 60),
                 child: ElevatedButton(
                   onPressed: onApprovePhoto,
                   style: ElevatedButton.styleFrom(
@@ -75,6 +76,7 @@ class ReceivingPhotoActions extends StatelessWidget {
                   ),
                   child: Text(
                     context.strings.use_photo,
+                    textAlign: TextAlign.center,
                     style: Styles.textStyle16.copyWith(
                       fontWeight: FontWeight.w700,
                     ),

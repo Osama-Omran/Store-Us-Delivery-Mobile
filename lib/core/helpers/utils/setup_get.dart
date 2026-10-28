@@ -459,7 +459,10 @@ void setupLocator() {
   );
 
   getIt.registerFactory<DeliveryOutcomeCubit>(
-    () => DeliveryOutcomeCubit(getIt<SubmitDeliveryOutcomeUsecase>()),
+    () => DeliveryOutcomeCubit(
+      getIt<SubmitDeliveryOutcomeUsecase>(),
+      getIt<DeliveryReasonsCubit>(),
+    ),
   );
 
   getIt.registerLazySingleton<DeliveryReasonsRepoInterface>(
