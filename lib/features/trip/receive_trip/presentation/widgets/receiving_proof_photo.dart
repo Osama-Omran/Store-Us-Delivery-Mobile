@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -61,72 +60,86 @@ class _ReceivingProofPhotoState extends State<ReceivingProofPhoto> {
     }
   }
 
-  Future<void> _capturePhoto() async {
-    if (_isCapturing || _isValidating) return;
+// widget file
+Future<void> _capturePhoto() async {
+  if (_isCapturing || _isValidating) return;
+
+  setState(() {
+    _isCapturing = true;
+    _errorMessage = null;
+  });
+
+  try {
+    final image = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+      maxWidth: 1280,
+      preferredCameraDevice: CameraDevice.front,
+    );
+
+    if (!mounted || image == null) return;
 
     setState(() {
-      _isCapturing = true;
-      _errorMessage = null;
+      _isCapturing = false;
+      _isValidating = true;
     });
 
+    FaceCheckResult result;
     try {
-      final image = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 85,
-        maxWidth: 1280,
-        preferredCameraDevice: CameraDevice.front,
-      );
-
-      if (!mounted || image == null) return;
-
+      result = await _faceValidator.validate(image.path);
+    } catch (e) {
+      debugPrint('Face validation failed: $e');
+      if (!mounted) return;
       setState(() {
-        _isCapturing = false;
-        _isValidating = true;
-      });
-
-      if (kReleaseMode) {
-        final result = await _faceValidator.validate(image.path);
-        if (!mounted) return;
-
-        if (result != FaceCheckResult.ok) {
-          setState(() {
-            _proof = null;
-            _isApproved = false;
-            _errorMessage = _messageFor(result);
-          });
-          widget.onPhotoApprovalChanged(null);
-          return;
-        }
-      }
-
-      setState(() {
-        _proof = ReceivingProofModel(
-          image: image,
-          tripNumber: widget.tripNumber,
-          capturedAt: DateTime.now(),
-        );
+        _proof = null;
         _isApproved = false;
+        _errorMessage = _messageFor(FaceCheckResult.failed);
       });
       widget.onPhotoApprovalChanged(null);
-    } catch (_) {
-      if (!mounted) return;
-      setState(() => _errorMessage = context.strings.proof_photo_error);
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isCapturing = false;
-          _isValidating = false;
-        });
-      }
+      return;
+    }
+
+    if (!mounted) return;
+
+    if (result != FaceCheckResult.ok) {
+      setState(() {
+        _proof = null;
+        _isApproved = false;
+        _errorMessage = _messageFor(result);
+      });
+      widget.onPhotoApprovalChanged(null);
+      return;
+    }
+
+    setState(() {
+      _proof = ReceivingProofModel(
+        image: image,
+        tripNumber: widget.tripNumber,
+        capturedAt: DateTime.now(),
+      );
+      _isApproved = false;
+    });
+    widget.onPhotoApprovalChanged(null);
+  } catch (e) {
+    if (!mounted) return;
+    setState(() => _errorMessage = context.strings.proof_photo_error);
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isCapturing = false;
+        _isValidating = false;
+      });
     }
   }
+}
 
-  void _approvePhoto() {
-    if (_proof == null) return;
 
-    setState(() => _isApproved = true);
-    widget.onPhotoApprovalChanged(_proof);
-  }
+void _approvePhoto() {
+  if (_proof == null) return;
+
+  setState(() => _isApproved = true);
+  widget.onPhotoApprovalChanged(_proof);
+}
 
   @override
   Widget build(BuildContext context) {
