@@ -1,6 +1,9 @@
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../cubit/top_rank_cubit.dart';
+import 'top_rank_details_sheet.dart';
+
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
@@ -8,19 +11,20 @@ import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/widgets/top_rank_metrics.dart';
 
 class TopRankList extends StatelessWidget {
-  const TopRankList({
-    super.key,
-    required this.entries,
-    required this.role,
-    required this.onDetails,
-  });
-
-  final List<TopRankEntry> entries;
-  final TopRankRole role;
-  final ValueChanged<TopRankEntry> onDetails;
+  const TopRankList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = TopRankCubit.get(context).state;
+    final entries = state.entries;
+    final role = state.role;
+    void onDetails(TopRankEntry entry) => showTopRankDetails(
+      context,
+      entry,
+      role: role,
+      period: state.period,
+      leader: state.winner,
+    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white0,

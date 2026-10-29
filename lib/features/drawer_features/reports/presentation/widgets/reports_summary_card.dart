@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/features/drawer_features/reports/data/models/reports_models.dart';
+
+import '../cubit/reports_cubit.dart';
+
 import 'package:storeus_delivery/features/drawer_features/reports/presentation/widgets/reports_card.dart';
 import 'package:storeus_delivery/features/drawer_features/reports/presentation/widgets/reports_filters.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
@@ -13,17 +15,14 @@ String formatReportPercentage(num number) {
 }
 
 class ReportsSummaryCard extends StatelessWidget {
-  const ReportsSummaryCard({
-    super.key,
-    required this.summary,
-    required this.period,
-  });
-
-  final ReportsSummary summary;
-  final ReportsPeriod period;
+  const ReportsSummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = ReportsCubit.get(context).state;
+    final summary = state.summary;
+    if (summary == null) return const SizedBox.shrink();
+    final period = state.period;
     final amount = formatTripAmount(context, summary.collectedAmount);
     return ReportsCard(
       child: LayoutBuilder(
@@ -76,7 +75,10 @@ class ReportsSummaryCard extends StatelessWidget {
           }
           return Row(
             spacing: 20,
-            children: [ring, Expanded(child: details)],
+            children: [
+              ring,
+              Expanded(child: details),
+            ],
           );
         },
       ),
@@ -92,36 +94,36 @@ class _DeliveryRateRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        label: context.strings.reports_delivery_rate,
-        value: formatReportPercentage(percentage),
-        child: SizedBox(
-          width: size,
-          height: size,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned.fill(
-                child: CircularProgressIndicator(
-                  key: const ValueKey('reports-delivery-ring'),
-                  value: (percentage.toDouble() / 100).clamp(0.0, 1.0),
-                  strokeWidth: 12,
-                  color: AppColors.green0,
-                  backgroundColor: AppColors.grey5,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                  strokeCap: StrokeCap.butt,
-                  trackGap: 0,
-                ),
-              ),
-              Text(
-                formatReportPercentage(percentage),
-                textDirection: TextDirection.ltr,
-                style: Styles.textStyle24.copyWith(
-                  fontSize: 28,
-                  color: AppColors.black1,
-                ),
-              ),
-            ],
+    label: context.strings.reports_delivery_rate,
+    value: formatReportPercentage(percentage),
+    child: SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: CircularProgressIndicator(
+              key: const ValueKey('reports-delivery-ring'),
+              value: (percentage.toDouble() / 100).clamp(0.0, 1.0),
+              strokeWidth: 12,
+              color: AppColors.green0,
+              backgroundColor: AppColors.grey5,
+              strokeAlign: BorderSide.strokeAlignInside,
+              strokeCap: StrokeCap.butt,
+              trackGap: 0,
+            ),
           ),
-        ),
-      );
+          Text(
+            formatReportPercentage(percentage),
+            textDirection: TextDirection.ltr,
+            style: Styles.textStyle24.copyWith(
+              fontSize: 28,
+              color: AppColors.black1,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

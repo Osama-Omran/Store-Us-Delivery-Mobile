@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 
+import '../cubit/top_rank_cubit.dart';
+import 'top_rank_details_sheet.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/features/drawer_features/top_rank/data/models/top_rank_entry.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/widgets/top_rank_avatar.dart';
 import 'package:storeus_delivery/features/drawer_features/top_rank/presentation/widgets/top_rank_metrics.dart';
 
 class TopRankWinnerCard extends StatelessWidget {
-  const TopRankWinnerCard({
-    super.key,
-    required this.entry,
-    required this.role,
-    required this.winnerLabel,
-    required this.onDetails,
-  });
-
-  final TopRankEntry entry;
-  final TopRankRole role;
-  final String winnerLabel;
-  final VoidCallback onDetails;
+  const TopRankWinnerCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = TopRankCubit.get(context).state;
+    final entry = state.winner;
+    if (entry == null) return const SizedBox.shrink();
+    final role = state.role;
+    final winnerLabel = state.category!.winnerLabel;
+    void onDetails() => showTopRankDetails(
+      context,
+      entry,
+      role: role,
+      period: state.period,
+      leader: state.winner,
+    );
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(

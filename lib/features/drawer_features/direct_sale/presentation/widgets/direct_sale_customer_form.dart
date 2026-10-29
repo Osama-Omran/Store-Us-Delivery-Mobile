@@ -7,6 +7,7 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/core/widgets/custom_text_field.dart';
 
 import '../cubit/direct_sale_cubit.dart';
+import '../cubit/direct_sale_state.dart';
 import '../utils/direct_sale_input.dart';
 
 class DirectSaleCustomerForm extends StatelessWidget {
@@ -123,111 +124,121 @@ class _TerritoryDropdown extends StatelessWidget {
   const _TerritoryDropdown();
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<DirectSaleCubit>();
-    final state = context.watch<DirectSaleCubit>().state;
-    final enabled =
-        state.customerOptionsLoaded &&
-        !state.loadingCustomerOptions &&
-        !state.creatingCustomer &&
-        state.territories.isNotEmpty;
+  Widget build(
+    BuildContext context,
+  ) => BlocBuilder<DirectSaleCubit, DirectSaleState>(
+    buildWhen: (previous, current) =>
+        previous.territories != current.territories ||
+        previous.selectedTerritory != current.selectedTerritory ||
+        previous.loadingCustomerOptions != current.loadingCustomerOptions ||
+        previous.customerOptionsLoaded != current.customerOptionsLoaded ||
+        previous.customerOptionsError != current.customerOptionsError ||
+        previous.creatingCustomer != current.creatingCustomer,
+    builder: (context, state) {
+      final cubit = DirectSaleCubit.get(context);
+      final enabled =
+          state.customerOptionsLoaded &&
+          !state.loadingCustomerOptions &&
+          !state.creatingCustomer &&
+          state.territories.isNotEmpty;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text.rich(
-          TextSpan(
-            text: context.strings.direct_sale_territory,
-            style: Styles.textStyle16.copyWith(color: AppColors.black1),
-            children: [
-              TextSpan(
-                text: ' *',
-                style: Styles.textStyle14.copyWith(color: AppColors.red1),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          // Recreate the FormField when loading changes or selection resets.
-          key: ValueKey(
-            '${state.customerOptionsLoaded}:${state.selectedTerritory}',
-          ),
-          initialValue: state.selectedTerritory,
-          isExpanded: true,
-          menuMaxHeight: 320,
-          decoration: InputDecoration(
-            hintText: state.loadingCustomerOptions
-                ? context.strings.direct_sale_territory_loading
-                : context.strings.direct_sale_territory_hint,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-            hintStyle: Styles.textStyle14,
-            fillColor: AppColors.white0,
-            filled: true,
-            errorMaxLines: 3,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(color: AppColors.grey3),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(color: AppColors.grey3),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 1.5,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(color: AppColors.red0),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(color: AppColors.red0),
-            ),
-          ),
-          items: state.territories
-              .map(
-                (territory) => DropdownMenuItem<String>(
-                  value: territory,
-                  child: Text(territory, overflow: TextOverflow.ellipsis),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text.rich(
+            TextSpan(
+              text: context.strings.direct_sale_territory,
+              style: Styles.textStyle16.copyWith(color: AppColors.black1),
+              children: [
+                TextSpan(
+                  text: ' *',
+                  style: Styles.textStyle14.copyWith(color: AppColors.red1),
                 ),
-              )
-              .toList(),
-          onChanged: enabled ? cubit.selectTerritory : null,
-          validator: (value) =>
-              value != null && state.territories.contains(value)
-              ? null
-              : context.strings.direct_sale_territory_required,
-        ),
-        if (state.loadingCustomerOptions) ...[
-          const SizedBox(height: 8),
-          const LinearProgressIndicator(),
-        ],
-        if (state.customerOptionsError != null) ...[
-          const SizedBox(height: 8),
-          Text(
-            state.customerOptionsError == 'empty'
-                ? context.strings.direct_sale_territory_empty
-                : context.strings.direct_sale_territory_load_failed,
-            style: Styles.textStyle14.copyWith(color: AppColors.red1),
-          ),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton.icon(
-              onPressed: () => cubit.loadCustomerOptions(force: true),
-              icon: const Icon(Icons.refresh_rounded),
-              label: Text(context.strings.direct_sale_territory_retry),
+              ],
             ),
           ),
+          const SizedBox(height: 8),
+          DropdownButtonFormField<String>(
+            // Recreate the FormField when loading changes or selection resets.
+            key: ValueKey(
+              '${state.customerOptionsLoaded}:${state.selectedTerritory}',
+            ),
+            initialValue: state.selectedTerritory,
+            isExpanded: true,
+            menuMaxHeight: 320,
+            decoration: InputDecoration(
+              hintText: state.loadingCustomerOptions
+                  ? context.strings.direct_sale_territory_loading
+                  : context.strings.direct_sale_territory_hint,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              hintStyle: Styles.textStyle14,
+              fillColor: AppColors.white0,
+              filled: true,
+              errorMaxLines: 3,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: AppColors.grey3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: AppColors.grey3),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 1.5,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: AppColors.red0),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: AppColors.red0),
+              ),
+            ),
+            items: state.territories
+                .map(
+                  (territory) => DropdownMenuItem<String>(
+                    value: territory,
+                    child: Text(territory, overflow: TextOverflow.ellipsis),
+                  ),
+                )
+                .toList(),
+            onChanged: enabled ? cubit.selectTerritory : null,
+            validator: (value) =>
+                value != null && state.territories.contains(value)
+                ? null
+                : context.strings.direct_sale_territory_required,
+          ),
+          if (state.loadingCustomerOptions) ...[
+            const SizedBox(height: 8),
+            const LinearProgressIndicator(),
+          ],
+          if (state.customerOptionsError != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              state.customerOptionsError == 'empty'
+                  ? context.strings.direct_sale_territory_empty
+                  : context.strings.direct_sale_territory_load_failed,
+              style: Styles.textStyle14.copyWith(color: AppColors.red1),
+            ),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: () => cubit.loadCustomerOptions(force: true),
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(context.strings.direct_sale_territory_retry),
+              ),
+            ),
+          ],
         ],
-      ],
-    );
-  }
+      );
+    },
+  );
 }

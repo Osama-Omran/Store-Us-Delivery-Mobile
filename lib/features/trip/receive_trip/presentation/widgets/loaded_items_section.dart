@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'loaded_items_shimmer.dart';
+
 import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -10,86 +14,79 @@ import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/van_products.dart';
 
 class LoadedItemsSection extends StatelessWidget {
-  const LoadedItemsSection({super.key, required this.state});
-
-  final ReceiveTripSuccessState state;
+  const LoadedItemsSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    switch (state.loadedItemsStatus) {
-      case LoadedItemsStatus.initial:
-      case LoadedItemsStatus.loading:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
-          children: [
-            Text(
-              context.strings.loaded_goods_details,
-              style: Styles.textStyle18,
-            ),
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ],
-        );
+  Widget build(BuildContext context) =>
+      BlocBuilder<ReceiveTripCubit, ReceiveTripState>(
+        builder: (context, state) {
+          if (state is! ReceiveTripSuccessState) return const SizedBox.shrink();
+          switch (state.loadedItemsStatus) {
+            case LoadedItemsStatus.initial:
+            case LoadedItemsStatus.loading:
+              return const LoadedItemsShimmer();
 
-      case LoadedItemsStatus.failure:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
-          children: [
-            Text(
-              context.strings.loaded_goods_details,
-              style: Styles.textStyle18,
-            ),
-            CustomTripContainer(
-              child: Column(
+            case LoadedItemsStatus.failure:
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 12,
                 children: [
                   Text(
-                    state.loadedItemsError?.isNotEmpty == true
-                        ? context.localizedErrorMessage(state.loadedItemsError)
-                        : context.strings.loaded_items_load_failed,
-                    textAlign: TextAlign.center,
-                    style: Styles.textStyle14.copyWith(color: AppColors.grey4),
+                    context.strings.loaded_goods_details,
+                    style: Styles.textStyle18,
                   ),
-                  OutlinedButton(
-                    onPressed: () =>
-                        ReceiveTripCubit.get(context).getLoadedItems(),
-                    child: Text(context.strings.current_trip_retry),
+                  CustomTripContainer(
+                    child: Column(
+                      spacing: 12,
+                      children: [
+                        Text(
+                          state.loadedItemsError?.isNotEmpty == true
+                              ? context.localizedErrorMessage(
+                                  state.loadedItemsError,
+                                )
+                              : context.strings.loaded_items_load_failed,
+                          textAlign: TextAlign.center,
+                          style: Styles.textStyle14.copyWith(
+                            color: AppColors.grey4,
+                          ),
+                        ),
+                        OutlinedButton(
+                          onPressed: () =>
+                              ReceiveTripCubit.get(context).getLoadedItems(),
+                          child: Text(context.strings.current_trip_retry),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            ),
-          ],
-        );
+              );
 
-      case LoadedItemsStatus.empty:
-      case LoadedItemsStatus.success:
-        final data = state.loadedItems;
+            case LoadedItemsStatus.empty:
+            case LoadedItemsStatus.success:
+              final data = state.loadedItems;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LoadedGoodsDetails(totals: data?.totals),
-            const Gap(16),
-            if (data == null || data.items.isEmpty)
-              CustomTripContainer(
-                child: Center(
-                  child: Text(
-                    context.strings.loaded_items_empty,
-                    textAlign: TextAlign.center,
-                    style: Styles.textStyle14.copyWith(color: AppColors.grey4),
-                  ),
-                ),
-              )
-            else
-              VanProducts(items: data.items),
-          ],
-        );
-    }
-  }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LoadedGoodsDetails(totals: data?.totals),
+                  const Gap(16),
+                  if (data == null || data.items.isEmpty)
+                    CustomTripContainer(
+                      child: Center(
+                        child: Text(
+                          context.strings.loaded_items_empty,
+                          textAlign: TextAlign.center,
+                          style: Styles.textStyle14.copyWith(
+                            color: AppColors.grey4,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    VanProducts(items: data.items),
+                ],
+              );
+          }
+        },
+      );
 }

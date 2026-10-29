@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/top_rank_cubit.dart';
+import '../cubit/top_rank_state.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -33,89 +37,83 @@ extension TopRankRoleLabels on TopRankRole {
 }
 
 class TopRankFilters extends StatelessWidget {
-  const TopRankFilters({
-    super.key,
-    required this.period,
-    required this.role,
-    required this.onPeriodChanged,
-    required this.onRoleChanged,
-  });
-
-  final TopRankPeriod period;
-  final TopRankRole role;
-  final ValueChanged<TopRankPeriod> onPeriodChanged;
-  final ValueChanged<TopRankRole> onRoleChanged;
+  const TopRankFilters({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // ======= Period ======= //
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            spacing: 10,
-            children: [
-              for (final value in TopRankPeriod.values)
-                _RankChip(
-                  title: value.label(context),
-                  selected: period == value,
-                  onTap: () => onPeriodChanged(value),
+  Widget build(BuildContext context) => BlocBuilder<TopRankCubit, TopRankState>(
+    builder: (context, state) {
+      final cubit = TopRankCubit.get(context);
+      final period = state.period;
+      final role = state.role;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ======= Period ======= //
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 10,
+              children: [
+                for (final value in TopRankPeriod.values)
+                  _RankChip(
+                    title: value.label(context),
+                    selected: period == value,
+                    onTap: () => cubit.selectPeriod(value),
+                  ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 14),
+
+          // ======= Warehouse Filter Placeholder ======= //
+          // No warehouse query/filter contract supplied by backend.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+            decoration: BoxDecoration(
+              color: AppColors.white0,
+              borderRadius: BorderRadius.circular(23),
+              border: Border.all(color: AppColors.grey3),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    context.strings.top_rank_all_warehouses,
+                    style: Styles.textStyle16.copyWith(color: AppColors.grey4),
+                  ),
                 ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 14),
-
-        // ======= Warehouse Filter Placeholder ======= //
-        // No warehouse query/filter contract supplied by backend.
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-          decoration: BoxDecoration(
-            color: AppColors.white0,
-            borderRadius: BorderRadius.circular(23),
-            border: Border.all(color: AppColors.grey3),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  context.strings.top_rank_all_warehouses,
-                  style: Styles.textStyle16.copyWith(color: AppColors.grey4),
+                Icon(
+                  Icons.lock_outline_rounded,
+                  color: AppColors.grey4,
+                  size: 17,
                 ),
-              ),
-              Icon(
-                Icons.lock_outline_rounded,
-                color: AppColors.grey4,
-                size: 17,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        // ======= Categories ======= //
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            spacing: 9,
-            children: [
-              for (final value in TopRankRole.values)
-                _RankChip(
-                  title: value.label(context),
-                  icon: value.icon,
-                  selected: role == value,
-                  onTap: () => onRoleChanged(value),
-                ),
-            ],
+          // ======= Categories ======= //
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 9,
+              children: [
+                for (final value in TopRankRole.values)
+                  _RankChip(
+                    title: value.label(context),
+                    icon: value.icon,
+                    selected: role == value,
+                    onTap: () => cubit.selectRole(value),
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
+    },
+  );
 }
 
 class _RankChip extends StatelessWidget {

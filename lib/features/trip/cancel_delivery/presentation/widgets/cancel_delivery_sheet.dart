@@ -1,9 +1,11 @@
+import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_outcome_back_guard.dart';
+
+import 'cancel_delivery_submit_button.dart';
+
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_outcome_request_body.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_reasons_response.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_cubit.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_outcome_state.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_reasons_cubit.dart';
-import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/delivery_reasons_state.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/widgets/delivery_reason_dropdown.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -95,159 +97,116 @@ class _CancelDeliverySheetState extends State<CancelDeliverySheet> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
-    return BlocBuilder<DeliveryReasonsCubit, DeliveryReasonsState>(
-      bloc: context.read<DeliveryOutcomeCubit>().reasonsCubit,
-      builder: (context, _) =>
-          BlocConsumer<DeliveryOutcomeCubit, DeliveryOutcomeState>(
-            listenWhen: (_, current) =>
-                current is DeliveryOutcomeSuccess ||
-                current is DeliveryOutcomeFailure,
-            listener: (context, state) {
-              if (state is DeliveryOutcomeFailure) {
-                final message = switch (state.message) {
-                  'delivery_outcome_failed' =>
-                    context.strings.cancel_delivery_failed,
-                  'delivery_outcome_invalid_reason' =>
-                    context.strings.cancel_delivery_reason_required,
-                  final message => message,
-                };
+    return BlocListener<DeliveryOutcomeCubit, DeliveryOutcomeState>(
+      listenWhen: (_, current) =>
+          current is DeliveryOutcomeSuccess ||
+          current is DeliveryOutcomeFailure,
+      listener: (context, state) {
+        if (state is DeliveryOutcomeFailure) {
+          final message = switch (state.message) {
+            'delivery_outcome_failed' => context.strings.cancel_delivery_failed,
+            'delivery_outcome_invalid_reason' =>
+              context.strings.cancel_delivery_reason_required,
+            final message => message,
+          };
 
-                _showError(message);
-                return;
-              }
+          _showError(message);
+          return;
+        }
 
-              if (state is DeliveryOutcomeSuccess) {
-                // Only return a result after the API succeeds.
-                Navigator.of(context).pop(<String, dynamic>{
-                  'trip_id': widget.tripId,
-                  'order_id': widget.orderId,
-                  'sales_order': widget.salesOrder,
-                  'customer_name': widget.customerName,
-                  'reason': _selectedReason,
-                });
-              }
-            },
-            builder: (context, state) {
-              final isLoading = state is DeliveryOutcomeLoading;
+        if (state is DeliveryOutcomeSuccess) {
+          // Only return a result after the API succeeds.
+          Navigator.of(context).pop(<String, dynamic>{
+            'trip_id': widget.tripId,
+            'order_id': widget.orderId,
+            'sales_order': widget.salesOrder,
+            'customer_name': widget.customerName,
+            'reason': _selectedReason,
+          });
+        }
+      },
 
-              return Directionality(
-                textDirection: TextDirection.rtl,
-                child: PopScope(
-                  canPop: !isLoading,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: bottomInset),
-                    child: FractionallySizedBox(
-                      heightFactor: 0.76,
-                      child: Column(
-                        children: [
-                          // ======= Drag Handle ======= //
-                          const SizedBox(height: 13),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: DeliveryOutcomeBackGuard(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: bottomInset),
+            child: FractionallySizedBox(
+              heightFactor: 0.82,
+              child: Column(
+                children: [
+                  // ======= Drag Handle ======= //
+                  const SizedBox(height: 13),
 
-                          Container(
-                            width: 60,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: AppColors.grey3,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                  Container(
+                    width: 60,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: AppColors.grey3,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
 
-                          const SizedBox(height: 18),
+                  const SizedBox(height: 18),
 
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Align(
-                              alignment: AlignmentDirectional.centerStart,
-                              child: Text(
-                                context.strings.cancel_delivery_title,
-                                style: Styles.textStyle22.copyWith(
-                                  color: AppColors.red1,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 14),
-
-                          // ======= Scrollable Form ======= //
-                          Expanded(
-                            child: CancelDeliveryForm(
-                              customerName: widget.customerName,
-                              salesOrder: widget.salesOrder,
-                              reasonDropdown: DeliveryReasonDropdown(
-                                cubit: context
-                                    .read<DeliveryOutcomeCubit>()
-                                    .reasonsCubit,
-                                category: DeliveryReasonCategory.cancellation,
-                                value: _selectedReason,
-                                label: context
-                                    .strings
-                                    .cancel_delivery_reason_required,
-                                enabled: !isLoading,
-                                onChanged: (reason) =>
-                                    setState(() => _selectedReason = reason),
-                              ),
-                              notesController: _notesController,
-                              isLoading: isLoading,
-                            ),
-                          ),
-
-                          // ======= Confirm Button ======= //
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                            decoration: BoxDecoration(
-                              color: AppColors.white0,
-                              border: Border(
-                                top: BorderSide(color: AppColors.grey3),
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 68,
-                              child: ElevatedButton(
-                                onPressed: isLoading || !_canSubmit
-                                    ? null
-                                    : _confirmCancellation,
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor: AppColors.red1,
-                                  disabledBackgroundColor: AppColors.red1
-                                      .withValues(alpha: 0.4),
-                                  foregroundColor: AppColors.white0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                ),
-                                child: isLoading
-                                    ? SizedBox(
-                                        width: 25,
-                                        height: 25,
-                                        child: CircularProgressIndicator(
-                                          color: AppColors.white0,
-                                          strokeWidth: 2.5,
-                                        ),
-                                      )
-                                    : Text(
-                                        context
-                                            .strings
-                                            .cancel_delivery_confirm_button,
-                                        style: Styles.textStyle18.copyWith(
-                                          color: AppColors.white0,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        context.strings.cancel_delivery_title,
+                        style: Styles.textStyle22.copyWith(
+                          color: AppColors.red1,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+
+                  const SizedBox(height: 14),
+
+                  // ======= Scrollable Form ======= //
+                  Expanded(
+                    child:
+                        BlocSelector<
+                          DeliveryOutcomeCubit,
+                          DeliveryOutcomeState,
+                          bool
+                        >(
+                          selector: (state) => state is DeliveryOutcomeLoading,
+                          builder: (context, isLoading) => CancelDeliveryForm(
+                            customerName: widget.customerName,
+                            salesOrder: widget.salesOrder,
+                            reasonDropdown: DeliveryReasonDropdown(
+                              cubit: context
+                                  .read<DeliveryOutcomeCubit>()
+                                  .reasonsCubit,
+                              category: DeliveryReasonCategory.cancellation,
+                              value: _selectedReason,
+                              label: context
+                                  .strings
+                                  .cancel_delivery_reason_required,
+                              enabled: !isLoading,
+                              onChanged: (reason) =>
+                                  setState(() => _selectedReason = reason),
+                            ),
+                            notesController: _notesController,
+                            isLoading: isLoading,
+                          ),
+                        ),
+                  ),
+
+                  // ======= Confirm Button ======= //
+                  CancelDeliverySubmitButton(
+                    canSubmit: () => _canSubmit,
+                    onSubmit: _confirmCancellation,
+                  ),
+                ],
+              ),
+            ),
           ),
+        ),
+      ),
     );
   }
 }

@@ -2750,6 +2750,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get direct_sale_customer_search_hint =>
+      'ابحث باسم العميل أو رقم الهاتف';
+
+  @override
+  String get direct_sale_customer_no_matches => 'لا توجد نتائج مطابقة للبحث';
+
+  @override
   String get delivery_outcome_actions_title => 'إجراءات التسليم';
 
   @override

@@ -7,6 +7,7 @@ import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/t
 
 import '../../data/models/direct_sale_models.dart';
 import '../cubit/direct_sale_cubit.dart';
+import '../cubit/direct_sale_state.dart';
 import 'direct_sale_card.dart';
 
 class DirectSaleProductCard extends StatelessWidget {
@@ -15,8 +16,6 @@ class DirectSaleProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<DirectSaleCubit>();
-    final quantity = cubit.state.quantityFor(product);
     final details = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 3,
@@ -40,39 +39,7 @@ class DirectSaleProductCard extends StatelessWidget {
         ),
       ],
     );
-    final quantityControl = Directionality(
-      textDirection: TextDirection.ltr,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _QuantityButton(
-            icon: Icons.add,
-            primary: true,
-            tooltip: context.strings.direct_sale_increase,
-            onPressed: quantity < product.availableQuantity
-                ? () => cubit.setQuantity(product, quantity + 1)
-                : null,
-          ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                '$quantity',
-                textAlign: TextAlign.center,
-                style: Styles.textStyle16.copyWith(color: AppColors.black1),
-              ),
-            ),
-          ),
-          _QuantityButton(
-            icon: Icons.remove,
-            tooltip: context.strings.direct_sale_decrease,
-            onPressed: quantity > 0
-                ? () => cubit.setQuantity(product, quantity - 1)
-                : null,
-          ),
-        ],
-      ),
-    );
+    final quantityControl = _ProductQuantityControl(product: product);
     return DirectSaleCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -104,6 +71,56 @@ class DirectSaleProductCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ProductQuantityControl extends StatelessWidget {
+  const _ProductQuantityControl({required this.product});
+  final DirectSaleProduct product;
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<DirectSaleCubit, DirectSaleState>(
+        buildWhen: (previous, current) =>
+            previous.quantityFor(product) != current.quantityFor(product),
+        builder: (context, state) {
+          final cubit = DirectSaleCubit.get(context);
+          final quantity = state.quantityFor(product);
+          return Directionality(
+            textDirection: TextDirection.ltr,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _QuantityButton(
+                  icon: Icons.add,
+                  primary: true,
+                  tooltip: context.strings.direct_sale_increase,
+                  onPressed: quantity < product.availableQuantity
+                      ? () => cubit.setQuantity(product, quantity + 1)
+                      : null,
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      '$quantity',
+                      textAlign: TextAlign.center,
+                      style: Styles.textStyle16.copyWith(
+                        color: AppColors.black1,
+                      ),
+                    ),
+                  ),
+                ),
+                _QuantityButton(
+                  icon: Icons.remove,
+                  tooltip: context.strings.direct_sale_decrease,
+                  onPressed: quantity > 0
+                      ? () => cubit.setQuantity(product, quantity - 1)
+                      : null,
+                ),
+              ],
+            ),
+          );
+        },
+      );
 }
 
 class _QuantityButton extends StatelessWidget {

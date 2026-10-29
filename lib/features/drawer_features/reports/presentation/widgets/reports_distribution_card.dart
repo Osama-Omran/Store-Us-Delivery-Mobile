@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/features/drawer_features/reports/data/models/reports_models.dart';
+
+import '../cubit/reports_cubit.dart';
 
 import 'reports_card.dart';
 
 class ReportsDistributionCard extends StatelessWidget {
-  const ReportsDistributionCard({super.key, required this.distribution});
-
-  // null means per-trip distribution is unavailable, not zero.
-  final List<ReportOrderDistribution>? distribution;
+  const ReportsDistributionCard({super.key});
 
   String _label(BuildContext context, String status) =>
       switch (status.trim().toUpperCase()) {
@@ -37,6 +35,8 @@ class ReportsDistributionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // null means per-trip distribution is unavailable, not zero.
+    final distribution = ReportsCubit.get(context).state.distribution;
     final values = distribution;
     final total = values?.fold<int>(0, (sum, row) => sum + row.count) ?? 0;
 

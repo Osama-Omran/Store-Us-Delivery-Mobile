@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/features/drawer_features/account/data/models/me_response.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_surface_card.dart';
 
 class AccountPersonalInfoCard extends StatelessWidget {
-  const AccountPersonalInfoCard({super.key, required this.user});
-
-  final AccountUser user;
+  const AccountPersonalInfoCard({super.key});
 
   void _showUnavailable(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -17,80 +16,72 @@ class AccountPersonalInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.white0,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.grey3),
-      ),
+    final user = AccountCubit.get(context).currentUser;
+    if (user == null) return const SizedBox.shrink();
+
+    return AccountSurfaceCard(
       child: Column(
-        spacing: 18,
         children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 12,
-            runSpacing: 8,
+          Row(
             children: [
-              Text(
-                context.strings.account_my_data,
-                style: Styles.textStyle18.copyWith(color: AppColors.black1),
-              ),
-              InkWell(
-                onTap: () => _showUnavailable(context),
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.blue4,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    context.strings.account_edit_data,
-                    style: Styles.textStyle14.copyWith(
-                      color: AppColors.primary,
-                    ),
+              Expanded(
+                child: Text(
+                  context.strings.account_my_data,
+                  style: Styles.textStyle18.copyWith(
+                    color: AppColors.black1,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
+              TextButton(
+                onPressed: () => _showUnavailable(context),
+                style: TextButton.styleFrom(
+                  backgroundColor: AppColors.blue4,
+                  foregroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  shape: const StadiumBorder(),
+                ),
+                child: Text(context.strings.account_edit_data),
+              ),
             ],
           ),
+          const SizedBox(height: 16),
           _InfoRow(label: context.strings.account_name, value: user.name),
+          const SizedBox(height: 14),
           _InfoRow(
             label: context.strings.phone_number,
             value: user.phone,
             isLtr: true,
           ),
+          const SizedBox(height: 14),
           _InfoRow(
             label: context.strings.email,
             value: user.email,
             isLtr: true,
           ),
+          const SizedBox(height: 14),
           _InfoRow(
             label: context.strings.account_employee_number,
             value: user.employeeId,
             isLtr: true,
           ),
-          ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 54),
-            child: SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => _showUnavailable(context),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: AppColors.grey3, width: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: OutlinedButton(
+              onPressed: () => _showUnavailable(context),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.grey3, width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: Text(
-                  context.strings.account_change_password,
-                  style: Styles.textStyle16.copyWith(color: AppColors.black1),
+              ),
+              child: Text(
+                context.strings.account_change_password,
+                style: Styles.textStyle16.copyWith(
+                  color: AppColors.black1,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -102,11 +93,7 @@ class AccountPersonalInfoCard extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.label,
-    required this.value,
-    this.isLtr = false,
-  });
+  const _InfoRow({required this.label, this.value, this.isLtr = false});
 
   final String label;
   final String? value;
@@ -114,42 +101,32 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayValue = value?.trim().isNotEmpty == true ? value! : '—';
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final labelWidget = Text(
-          label,
-          style: Styles.textStyle14.copyWith(color: AppColors.grey4),
-        );
-        final stacked =
-            constraints.maxWidth < 300 ||
-            MediaQuery.textScalerOf(context).scale(16) > 20;
-        final valueWidget = Text(
-          displayValue,
-          textAlign: stacked ? TextAlign.start : TextAlign.left,
-          textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-          style: Styles.textStyle14.copyWith(
-            color: AppColors.black1,
-            fontWeight: FontWeight.w700,
+    return Row(
+      children: [
+        Expanded(
+          flex: 4,
+          child: Text(
+            label,
+            maxLines: 2,
+            style: Styles.textStyle14.copyWith(color: AppColors.grey4),
           ),
-        );
-        if (stacked) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 6,
-            children: [labelWidget, valueWidget],
-          );
-        }
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
-          children: [
-            SizedBox(width: 110, child: labelWidget),
-            Expanded(child: valueWidget),
-          ],
-        );
-      },
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 6,
+          child: Text(
+            value?.trim().isNotEmpty == true ? value! : '—',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.end,
+            textDirection: isLtr ? TextDirection.ltr : null,
+            style: Styles.textStyle14.copyWith(
+              color: AppColors.black1,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

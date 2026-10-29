@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
@@ -11,14 +12,12 @@ import 'package:storeus_delivery/features/trip/order_details/presentation/utils/
 class OrderRetryCollectionSheet extends StatefulWidget {
   const OrderRetryCollectionSheet({
     super.key,
-    required this.cubit,
     required this.tripId,
     required this.order,
     required this.salesOrder,
     this.orderTotal,
   });
 
-  final OrderDetailsCubit cubit;
   final int tripId;
   final TripOrderData order;
   final String salesOrder;
@@ -113,7 +112,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
       _submitting = true;
       _error = null;
     });
-    final error = await widget.cubit.retryCollection(
+    final error = await context.read<OrderDetailsCubit>().retryCollection(
       tripId: widget.tripId,
       orderId: widget.order.id,
       clientOperationId: operationId,

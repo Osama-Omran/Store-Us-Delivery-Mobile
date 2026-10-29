@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
+import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
+import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/helpers/utils/app_assets.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -10,17 +13,25 @@ import 'package:storeus_delivery/features/notifications/presentation/cubit/notif
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({
-    super.key,
-    required this.userName,
-    required this.tripBadge,
-  });
-
-  final String userName;
-  final String? tripBadge;
+  const HomeHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userName = PreferencesHelper.getUserName()?.trim() ?? '';
+    final status = context.select<HomeCubit, String?>((cubit) {
+      final state = cubit.state;
+      return state is HomeSuccessState
+          ? state.trip.acceptance?.status.trim().toUpperCase()
+          : null;
+    });
+    final tripBadge = switch (status) {
+      'ACCEPTED' => context.strings.currently_on_trip,
+      'PENDING' => context.strings.trip_acceptance_pending,
+      'OVERRIDDEN' => context.strings.trip_acceptance_admin_override,
+      null || '' => null,
+      _ => context.strings.trip_tab_unknown_status,
+    };
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,7 +86,7 @@ class HomeHeader extends StatelessWidget {
                         const SizedBox(width: 7),
                         Flexible(
                           child: Text(
-                            tripBadge!,
+                            tripBadge,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Styles.textStyle12.copyWith(

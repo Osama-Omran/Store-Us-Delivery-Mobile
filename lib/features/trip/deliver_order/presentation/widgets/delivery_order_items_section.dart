@@ -14,6 +14,10 @@ class DeliveryOrderItemsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DeliveryDraftCubit, DeliveryDraftState>(
+      buildWhen: (previous, current) =>
+          previous is! DeliveryDraftReady ||
+          current is! DeliveryDraftReady ||
+          previous.items != current.items,
       builder: (context, state) {
         if (state is! DeliveryDraftReady) {
           return const SizedBox.shrink();

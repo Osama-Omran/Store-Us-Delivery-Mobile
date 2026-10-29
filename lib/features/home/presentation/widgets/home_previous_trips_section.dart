@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
-import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
+import 'package:storeus_delivery/features/home/presentation/widgets/home_shimmer.dart';
 import 'package:storeus_delivery/features/home/data/models/trip_history_response.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_history_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_history_state.dart';
@@ -53,18 +53,7 @@ class HomePreviousTripsSection extends StatelessWidget {
             builder: (context, state) {
               if (state is HomeHistoryInitial ||
                   state is HomeHistoryLoadingState) {
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.white0,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.grey3),
-                  ),
-                  child: const Center(
-                    child: CustomLoadingIndicator(size: 72, primaryColor: true),
-                  ),
-                );
+                return const HomeHistoryShimmer();
               }
 
               if (state is HomeHistoryFailureState) {

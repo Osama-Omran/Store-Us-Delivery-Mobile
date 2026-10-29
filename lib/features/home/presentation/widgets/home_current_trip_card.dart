@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
-import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
+import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
 
@@ -10,14 +10,7 @@ import 'home_order_statistics.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class HomeCurrentTripCard extends StatelessWidget {
-  const HomeCurrentTripCard({
-    super.key,
-    required this.state,
-    required this.onRetryOrders,
-  });
-
-  final HomeSuccessState state;
-  final VoidCallback onRetryOrders;
+  const HomeCurrentTripCard({super.key});
 
   String _nameOrId(String? name, String? id) {
     if (name != null && name.trim().isNotEmpty) return name;
@@ -27,6 +20,9 @@ class HomeCurrentTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = HomeCubit.get(context).state;
+    if (state is! HomeSuccessState) return const SizedBox.shrink();
+
     final trip = state.trip;
     final vehicleName = _nameOrId(trip.vehicle?.name, trip.vehicle?.id);
     final driverName = _nameOrId(trip.driver?.name, trip.driver?.id);
@@ -118,27 +114,7 @@ class HomeCurrentTripCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          HomeOrderStatistics(
-            total: trip.ordersSummary?.total,
-            delivered: state.deliveredOrders,
-            remaining: state.remainingOrders,
-          ),
-          if (state.ordersStatus == HomeOrdersStatus.loading)
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Center(
-                child: CustomLoadingIndicator(size: 44, primaryColor: true),
-              ),
-            ),
-          if (state.ordersStatus == HomeOrdersStatus.failure)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TextButton.icon(
-                onPressed: onRetryOrders,
-                icon: const Icon(Icons.refresh_rounded),
-                label: Text(context.strings.home_retry_orders),
-              ),
-            ),
+          const HomeOrderStatistics(),
           const SizedBox(height: 14),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),

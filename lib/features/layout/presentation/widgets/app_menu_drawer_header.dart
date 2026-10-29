@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
+import 'package:storeus_delivery/features/drawer_features/account/data/models/me_response.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class AppMenuDrawerHeader extends StatelessWidget {
-  const AppMenuDrawerHeader({
-    super.key,
-    required this.userName,
-    required this.userRole,
-    required this.isOnTrip,
-  });
-
-  final String userName;
-  final String userRole;
-  final bool isOnTrip;
+  const AppMenuDrawerHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select<AccountCubit, AccountUser?>(
+      (cubit) => cubit.currentUser,
+    );
+    final storedName = PreferencesHelper.getUserName()?.trim();
+    final userName = user?.name.isNotEmpty == true
+        ? user!.name
+        : storedName?.isNotEmpty == true
+        ? storedName!
+        : '—';
+    final userRole = context.localizedUserRole(user?.role);
+
     final initial = userName.trim().isNotEmpty
         ? userName.trim().substring(0, 1)
         : '؟';
@@ -30,9 +36,7 @@ class AppMenuDrawerHeader extends StatelessWidget {
           colors: [AppColors.blue4, AppColors.blue5],
         ),
         border: Border(
-          bottom: BorderSide(
-            color: AppColors.primary.withValues(alpha: 0.08),
-          ),
+          bottom: BorderSide(color: AppColors.primary.withValues(alpha: 0.08)),
         ),
       ),
       child: SafeArea(
@@ -140,29 +144,6 @@ class AppMenuDrawerHeader extends StatelessWidget {
                             color: AppColors.grey4,
                           ),
                         ),
-                        if (isOnTrip) ...[
-                          const SizedBox(height: 9),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 11,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.10),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: AppColors.primary.withValues(alpha: 0.12),
-                              ),
-                            ),
-                            child: Text(
-                              context.strings.currently_on_trip,
-                              style: Styles.textStyle12.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),

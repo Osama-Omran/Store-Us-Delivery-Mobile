@@ -6,17 +6,13 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/widgets/custom_loading_indicator.dart';
 import 'package:storeus_delivery/features/notifications/data/models/notifications_response.dart';
 import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:storeus_delivery/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class NotificationCard extends StatelessWidget {
-  const NotificationCard({
-    super.key,
-    required this.notification,
-    this.isMarking = false,
-  });
+  const NotificationCard({super.key, required this.notification});
 
   final NotificationItem notification;
-  final bool isMarking;
 
   // Keep the current notification-type mapping unchanged.
   IconData get _icon {
@@ -85,7 +81,7 @@ class NotificationCard extends StatelessWidget {
 
   // Keep the existing mark-as-read operation and error handling.
   Future<void> _markAsRead(BuildContext context) async {
-    if (notification.isRead || isMarking) return;
+    if (notification.isRead) return;
 
     final error = await context.read<NotificationsCubit>().markAsRead(
       notification.id,
@@ -110,6 +106,11 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMarking = context.select<NotificationsCubit, bool>((cubit) {
+      final state = cubit.state;
+      return state is NotificationsSuccessState &&
+          state.markingIds.contains(notification.id);
+    });
     final isRead = notification.isRead;
     final description = notification.message.trim().isNotEmpty
         ? notification.message

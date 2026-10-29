@@ -1190,7 +1190,8 @@
   "@areas_route_section": {"placeholders": {"number": {"type": "int"}, "total": {"type": "int"}}},
   "areas_route_section_stops": "من المحطة {first} إلى المحطة {last}",
   "@areas_route_section_stops": {"placeholders": {"first": {"type": "int"}, "last": {"type": "int"}}},
-
+"direct_sale_customer_search_hint": "ابحث باسم العميل أو رقم الهاتف",
+"direct_sale_customer_no_matches": "لا توجد نتائج مطابقة للبحث",
 "delivery_outcome_actions_title": "إجراءات التسليم",
 "delivery_cancel": "إلغاء التسليم",
 "delivery_reschedule": "إعادة الجدولة",

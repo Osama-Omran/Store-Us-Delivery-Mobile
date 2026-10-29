@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../cubit/treasury_cubit.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -6,17 +9,13 @@ import 'package:storeus_delivery/features/drawer_features/treasury/data/models/t
 import 'package:storeus_delivery/features/drawer_features/treasury/presentation/widgets/treasury_card.dart';
 
 class TreasuryInventorySummary extends StatelessWidget {
-  const TreasuryInventorySummary({
-    super.key,
-    required this.data,
-    required this.remainingUnits,
-  });
-
-  final TreasuryData data;
-  final int remainingUnits;
+  const TreasuryInventorySummary({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = TreasuryCubit.get(context).state;
+    final data = state.data;
+    final remainingUnits = state.remainingUnits;
     return TreasuryCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

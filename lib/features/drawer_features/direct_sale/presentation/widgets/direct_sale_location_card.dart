@@ -12,91 +12,99 @@ class DirectSaleLocationCard extends StatelessWidget {
   const DirectSaleLocationCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.watch<DirectSaleCubit>();
-    final state = cubit.state;
-    final position = state.position;
-    final error = switch (state.locationError) {
-      DirectSaleLocationError.disabled =>
-        context.strings.direct_sale_location_disabled,
-      DirectSaleLocationError.denied =>
-        context.strings.direct_sale_location_denied,
-      DirectSaleLocationError.failed =>
-        context.strings.direct_sale_location_failed,
-      null => null,
-    };
-    return DirectSaleCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 10,
-        children: [
-          FilledButton(
-            onPressed: state.locating ? null : cubit.captureLocation,
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.blue4,
-              foregroundColor: AppColors.primary,
-              minimumSize: const Size.fromHeight(52),
-              padding: const EdgeInsets.all(12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+  Widget build(BuildContext context) =>
+      BlocBuilder<DirectSaleCubit, DirectSaleState>(
+        buildWhen: (previous, current) =>
+            previous.position != current.position ||
+            previous.locating != current.locating ||
+            previous.locationError != current.locationError,
+        builder: (context, state) {
+          final cubit = DirectSaleCubit.get(context);
+          final position = state.position;
+          final error = switch (state.locationError) {
+            DirectSaleLocationError.disabled =>
+              context.strings.direct_sale_location_disabled,
+            DirectSaleLocationError.denied =>
+              context.strings.direct_sale_location_denied,
+            DirectSaleLocationError.failed =>
+              context.strings.direct_sale_location_failed,
+            null => null,
+          };
+          return DirectSaleCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 10,
               children: [
-                if (state.locating)
-                  const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                else
-                  const Icon(Icons.location_on_outlined),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    context.strings.direct_sale_current_location,
-                    textAlign: TextAlign.center,
-                    style: Styles.textStyle16,
+                FilledButton(
+                  onPressed: state.locating ? null : cubit.captureLocation,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.blue4,
+                    foregroundColor: AppColors.primary,
+                    minimumSize: const Size.fromHeight(52),
+                    padding: const EdgeInsets.all(12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (state.locating)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      else
+                        const Icon(Icons.location_on_outlined),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          context.strings.direct_sale_current_location,
+                          textAlign: TextAlign.center,
+                          style: Styles.textStyle16,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        context.strings.direct_sale_optional,
+                        style: Styles.textStyle12.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  context.strings.direct_sale_optional,
-                  style: Styles.textStyle12.copyWith(color: AppColors.primary),
-                ),
-              ],
-            ),
-          ),
-          if (position != null)
-            Row(
-              spacing: 8,
-              children: [
-                _LocationValue(
-                  label: context.strings.direct_sale_accuracy,
-                  value: context.strings.location_accuracy_meters(
-                    position.accuracy.toStringAsFixed(0),
+                if (position != null)
+                  Row(
+                    spacing: 8,
+                    children: [
+                      _LocationValue(
+                        label: context.strings.direct_sale_accuracy,
+                        value: context.strings.location_accuracy_meters(
+                          position.accuracy.toStringAsFixed(0),
+                        ),
+                      ),
+                      _LocationValue(
+                        label: context.strings.order_longitude,
+                        value: position.longitude.toStringAsFixed(5),
+                      ),
+                      _LocationValue(
+                        label: context.strings.order_latitude,
+                        value: position.latitude.toStringAsFixed(5),
+                      ),
+                    ],
                   ),
-                ),
-                _LocationValue(
-                  label: context.strings.order_longitude,
-                  value: position.longitude.toStringAsFixed(5),
-                ),
-                _LocationValue(
-                  label: context.strings.order_latitude,
-                  value: position.latitude.toStringAsFixed(5),
-                ),
+                if (error != null)
+                  Text(
+                    error,
+                    style: Styles.textStyle14.copyWith(color: AppColors.red1),
+                  ),
               ],
             ),
-          if (error != null)
-            Text(
-              error,
-              style: Styles.textStyle14.copyWith(color: AppColors.red1),
-            ),
-        ],
-      ),
-    );
-  }
+          );
+        },
+      );
 }
 
 class _LocationValue extends StatelessWidget {

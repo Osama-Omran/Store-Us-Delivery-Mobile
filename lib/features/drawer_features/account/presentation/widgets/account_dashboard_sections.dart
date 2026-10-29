@@ -1,47 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_surface_card.dart';
 
 class AccountDashboardSections extends StatelessWidget {
-  const AccountDashboardSections({super.key, required this.userName});
-
-  final String userName;
+  const AccountDashboardSections({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = AccountCubit.get(context).currentUser;
+    if (user == null) return const SizedBox.shrink();
+
     return Column(
-      spacing: 20,
       children: [
-        // ======= Wallet Summary ======= //
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: _cardDecoration(),
+        AccountSurfaceCard(
           child: Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 4,
                   children: [
                     Text(
                       context.strings.account_wallet_title,
-                      style: Styles.textStyle14.copyWith(
+                      style: Styles.textStyle12.copyWith(
                         color: AppColors.grey4,
                       ),
                     ),
+                    const Gap(4),
                     Text(
-                      context.strings.account_named_wallet(userName),
+                      context.strings.account_named_wallet(user.name),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.textStyle18.copyWith(
                         color: AppColors.black1,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
                 ),
               ),
+              const Gap(12),
+              // The /me response does not include a wallet balance.
               Text(
                 '—',
                 style: Styles.textStyle24.copyWith(color: AppColors.primary),
@@ -49,140 +51,43 @@ class AccountDashboardSections extends StatelessWidget {
             ],
           ),
         ),
-
-        // ======= Statistics ======= //
+        const Gap(16),
         Row(
-          spacing: 10,
           children: [
             Expanded(
-              child: _StatisticCard(
-                value: '—',
-                title: context.strings.account_today_trips,
-                valueColor: AppColors.black1,
-              ),
+              child: _StatCard(title: context.strings.account_today_trips),
             ),
+            const Gap(8),
             Expanded(
-              child: _StatisticCard(
-                value: '—',
-                title: context.strings.account_delivered_orders,
-                valueColor: AppColors.green0,
-              ),
+              child: _StatCard(title: context.strings.account_delivered_orders),
             ),
+            const Gap(8),
             Expanded(
-              child: _StatisticCard(
-                value: '—',
-                title: context.strings.account_today_collection,
-                valueColor: AppColors.black1,
-              ),
+              child: _StatCard(title: context.strings.account_today_collection),
             ),
           ],
-        ),
-
-        // ======= Sync Status ======= //
-        // Container(
-        //   width: double.infinity,
-        //   padding: const EdgeInsets.all(20),
-        //   decoration: _cardDecoration(),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     spacing: 18,
-        //     children: [
-        //       Text(
-        //         context.strings.account_sync_status,
-        //         style: Styles.textStyle18.copyWith(color: AppColors.black1),
-        //       ),
-        //       Row(
-        //         spacing: 10,
-        //         children: [
-        //           Icon(
-        //             Icons.info_outline_rounded,
-        //             color: AppColors.grey4,
-        //             size: 22,
-        //           ),
-        //           Expanded(
-        //             child: Text(
-        //               context.strings.account_sync_unavailable,
-        //               style: Styles.textStyle14.copyWith(
-        //                 color: AppColors.grey4,
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //       Container(
-        //         padding: const EdgeInsets.symmetric(
-        //           horizontal: 14,
-        //           vertical: 10,
-        //         ),
-        //         decoration: BoxDecoration(
-        //           color: AppColors.grey5,
-        //           borderRadius: BorderRadius.circular(20),
-        //         ),
-        //         child: Row(
-        //           children: [
-        //             Icon(Icons.wifi_off_rounded, color: AppColors.black1),
-        //             const Gap(12),
-        //             Expanded(
-        //               child: Text(
-        //                 context.strings.account_offline_preview,
-        //                 style: Styles.textStyle16.copyWith(
-        //                   color: AppColors.black1,
-        //                 ),
-        //               ),
-        //             ),
-        //             const Switch.adaptive(value: false, onChanged: null),
-        //           ],
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-      ],
-    );
-  }
-
-  BoxDecoration _cardDecoration() {
-    return BoxDecoration(
-      color: AppColors.white0,
-      borderRadius: BorderRadius.circular(26),
-      border: Border.all(color: AppColors.grey3),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.black1.withValues(alpha: .04),
-          blurRadius: 10,
-          offset: const Offset(0, 3),
         ),
       ],
     );
   }
 }
 
-class _StatisticCard extends StatelessWidget {
-  const _StatisticCard({
-    required this.value,
-    required this.title,
-    required this.valueColor,
-  });
+class _StatCard extends StatelessWidget {
+  const _StatCard({required this.title});
 
-  final String value;
   final String title;
-  final Color valueColor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 110),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18),
-      decoration: BoxDecoration(
-        color: AppColors.white0,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.grey3),
-      ),
+    return AccountSurfaceCard(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 7,
         children: [
-          Text(value, style: Styles.textStyle24.copyWith(color: valueColor)),
+          Text(
+            '—',
+            style: Styles.textStyle24.copyWith(color: AppColors.black1),
+          ),
+          const Gap(6),
           Text(
             title,
             maxLines: 2,

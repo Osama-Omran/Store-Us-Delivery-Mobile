@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/receive_trip_cubit.dart';
+import '../cubit/receive_trip_state.dart';
+
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -6,9 +11,7 @@ import 'package:storeus_delivery/features/trip/receive_trip/data/models/current_
 import 'package:storeus_delivery/features/trip/receive_trip/presentation/widgets/custom_trip_container.dart';
 
 class TripData extends StatelessWidget {
-  const TripData({super.key, required this.trip});
-
-  final CurrentTripData trip;
+  const TripData({super.key});
 
   // ======= Name Or ID ======= //
   String _nameOrId(String? name, String? id) {
@@ -24,7 +27,7 @@ class TripData extends StatelessWidget {
   }
 
   // ======= Trip Status ======= //
-  String _getTripStatus(BuildContext context) {
+  String _getTripStatus(BuildContext context, CurrentTripData trip) {
     final status = trip.status.trim().toUpperCase();
 
     return switch (status) {
@@ -37,7 +40,7 @@ class TripData extends StatelessWidget {
   }
 
   // ======= Acceptance Status ======= //
-  String _getAcceptanceStatus(BuildContext context) {
+  String _getAcceptanceStatus(BuildContext context, CurrentTripData trip) {
     final status = trip.acceptance?.status.trim().toUpperCase();
 
     return switch (status) {
@@ -66,62 +69,70 @@ class TripData extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final acceptedAt = trip.acceptance?.acceptedAt;
+  Widget build(BuildContext context) =>
+      BlocBuilder<ReceiveTripCubit, ReceiveTripState>(
+        builder: (context, state) {
+          if (state is! ReceiveTripSuccessState) return const SizedBox.shrink();
+          final trip = state.trip;
+          final acceptedAt = trip.acceptance?.acceptedAt;
 
-    return CustomTripContainer(
-      child: Column(
-        spacing: 12,
-        children: [
-          // ======= Trip Number ======= //
-          TripDataItem(title: context.strings.trip_number, value: trip.number),
+          return CustomTripContainer(
+            child: Column(
+              spacing: 12,
+              children: [
+                // ======= Trip Number ======= //
+                TripDataItem(
+                  title: context.strings.trip_number,
+                  value: trip.number,
+                ),
 
-          // ======= Trip Status ======= //
-          TripDataItem(
-            title: context.strings.trip_status,
-            value: _getTripStatus(context),
-          ),
+                // ======= Trip Status ======= //
+                TripDataItem(
+                  title: context.strings.trip_status,
+                  value: _getTripStatus(context, trip),
+                ),
 
-          // ======= Warehouse ======= //
-          TripDataItem(
-            title: context.strings.warehouse,
-            value: _nameOrId(trip.warehouse?.name, trip.warehouse?.id),
-          ),
+                // ======= Warehouse ======= //
+                TripDataItem(
+                  title: context.strings.warehouse,
+                  value: _nameOrId(trip.warehouse?.name, trip.warehouse?.id),
+                ),
 
-          // ======= Vehicle ======= //
-          TripDataItem(
-            title: context.strings.van,
-            value: _nameOrId(trip.vehicle?.name, trip.vehicle?.id),
-          ),
+                // ======= Vehicle ======= //
+                TripDataItem(
+                  title: context.strings.van,
+                  value: _nameOrId(trip.vehicle?.name, trip.vehicle?.id),
+                ),
 
-          // ======= Driver ======= //
-          TripDataItem(
-            title: context.strings.driver,
-            value: _nameOrId(trip.driver?.name, trip.driver?.id),
-          ),
+                // ======= Driver ======= //
+                TripDataItem(
+                  title: context.strings.driver,
+                  value: _nameOrId(trip.driver?.name, trip.driver?.id),
+                ),
 
-          // ======= Total Orders ======= //
-          TripDataItem(
-            title: context.strings.trip_total_orders,
-            value: trip.ordersSummary?.total.toString() ?? '—',
-          ),
+                // ======= Total Orders ======= //
+                TripDataItem(
+                  title: context.strings.trip_total_orders,
+                  value: trip.ordersSummary?.total.toString() ?? '—',
+                ),
 
-          // ======= Acceptance Status ======= //
-          TripDataItem(
-            title: context.strings.trip_acceptance_status,
-            value: _getAcceptanceStatus(context),
-          ),
+                // ======= Acceptance Status ======= //
+                TripDataItem(
+                  title: context.strings.trip_acceptance_status,
+                  value: _getAcceptanceStatus(context, trip),
+                ),
 
-          // ======= Accepted At ======= //
-          if (acceptedAt != null)
-            TripDataItem(
-              title: context.strings.trip_accepted_at,
-              value: _formatAcceptedAt(context, acceptedAt),
+                // ======= Accepted At ======= //
+                if (acceptedAt != null)
+                  TripDataItem(
+                    title: context.strings.trip_accepted_at,
+                    value: _formatAcceptedAt(context, acceptedAt),
+                  ),
+              ],
             ),
-        ],
-      ),
-    );
-  }
+          );
+        },
+      );
 }
 
 // =====================================================

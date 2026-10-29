@@ -21,6 +21,7 @@ class _AppVersionState extends State<AppVersion> {
 
   Future<void> loadVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
+    if (!mounted) return;
     setState(() {
       version = packageInfo.version;
     });

@@ -4880,6 +4880,18 @@ abstract class AppLocalizations {
   /// **'من المحطة {first} إلى المحطة {last}'**
   String areas_route_section_stops(int first, int last);
 
+  /// No description provided for @direct_sale_customer_search_hint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم العميل أو رقم الهاتف'**
+  String get direct_sale_customer_search_hint;
+
+  /// No description provided for @direct_sale_customer_no_matches.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج مطابقة للبحث'**
+  String get direct_sale_customer_no_matches;
+
   /// No description provided for @delivery_outcome_actions_title.
   ///
   /// In ar, this message translates to:

@@ -6,40 +6,48 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
 import '../cubit/direct_sale_cubit.dart';
+import '../cubit/direct_sale_state.dart';
 import 'direct_sale_card.dart';
 
 class DirectSaleCheckoutSummary extends StatelessWidget {
   const DirectSaleCheckoutSummary({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final state = context.watch<DirectSaleCubit>().state;
-    return DirectSaleCard(
-      child: Column(
-        spacing: 8,
-        children: [
-          for (final product in state.selectedProducts)
-            _SummaryRow(
-              label: '${product.name} × ${state.quantityFor(product)}',
-              amount: product.unitPriceMinor == null
-                  ? '—'
-                  : formatTripAmount(
-                      context,
-                      product.unitPriceMinor! * state.quantityFor(product) / 100,
-                    ),
+  Widget build(BuildContext context) =>
+      BlocBuilder<DirectSaleCubit, DirectSaleState>(
+        buildWhen: (previous, current) =>
+            previous.products != current.products ||
+            previous.quantities != current.quantities,
+        builder: (context, state) {
+          return DirectSaleCard(
+            child: Column(
+              spacing: 8,
+              children: [
+                for (final product in state.selectedProducts)
+                  _SummaryRow(
+                    label: '${product.name} × ${state.quantityFor(product)}',
+                    amount: product.unitPriceMinor == null
+                        ? '—'
+                        : formatTripAmount(
+                            context,
+                            product.unitPriceMinor! *
+                                state.quantityFor(product) /
+                                100,
+                          ),
+                  ),
+                Divider(height: 8, color: AppColors.grey3),
+                _SummaryRow(
+                  label: context.strings.direct_sale_total_required,
+                  amount: state.pricedTotalMinor == null
+                      ? '—'
+                      : formatTripAmount(context, state.totalMinor / 100),
+                  total: true,
+                ),
+              ],
             ),
-          Divider(height: 8, color: AppColors.grey3),
-          _SummaryRow(
-            label: context.strings.direct_sale_total_required,
-            amount: state.pricedTotalMinor == null
-                ? '—'
-                : formatTripAmount(context, state.totalMinor / 100),
-            total: true,
-          ),
-        ],
-      ),
-    );
-  }
+          );
+        },
+      );
 }
 
 class _SummaryRow extends StatelessWidget {

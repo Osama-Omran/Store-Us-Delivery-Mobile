@@ -3,7 +3,8 @@ import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/drawer_features/stock_transfer/data/models/stock_transfer_model.dart';
-import 'package:storeus_delivery/features/drawer_features/stock_transfer/presentation/cubit/stock_transfer_state.dart';
+
+import '../cubit/stock_transfer_cubit.dart';
 
 extension StockTransferFilterLabels on StockTransferFilter {
   String label(BuildContext context) => switch (this) {
@@ -18,17 +19,12 @@ extension StockTransferFilterLabels on StockTransferFilter {
 }
 
 class StockTransferFilters extends StatelessWidget {
-  const StockTransferFilters({
-    super.key,
-    required this.state,
-    required this.onChanged,
-  });
-
-  final StockTransferState state;
-  final ValueChanged<StockTransferFilter> onChanged;
+  const StockTransferFilters({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = StockTransferCubit.get(context);
+    final state = cubit.state;
     final filters = [
       ...StockTransferFilter.values.where(
         (filter) => filter != StockTransferFilter.other,
@@ -62,7 +58,7 @@ class StockTransferFilters extends StatelessWidget {
                 child: InkWell(
                   key: ValueKey('stock-transfer-filter-${filter.name}'),
                   borderRadius: BorderRadius.circular(28),
-                  onTap: () => onChanged(filter),
+                  onTap: () => cubit.selectFilter(filter),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,

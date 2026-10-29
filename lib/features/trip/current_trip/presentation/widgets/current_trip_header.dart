@@ -13,9 +13,7 @@ import 'package:storeus_delivery/features/trip/trip_map/data/models/trip_map_sto
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class CurrentTripHeader extends StatelessWidget {
-  const CurrentTripHeader({super.key, required this.tripNumber});
-
-  final String tripNumber;
+  const CurrentTripHeader({super.key});
 
   // ======= Open Trip Map: original navigation and validation ======= //
   void _openTripMap(BuildContext context) {
@@ -53,10 +51,11 @@ class CurrentTripHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<TripTabCubit>().state;
-    final displayTripNumber = state is TripTabSuccessState
-        ? state.trip.number
-        : tripNumber;
+    final displayTripNumber = context.select<TripTabCubit, String?>((cubit) {
+      final state = cubit.state;
+      return state is TripTabSuccessState ? state.trip.number : null;
+    });
+    if (displayTripNumber == null) return const SizedBox.shrink();
 
     return Container(
       width: double.infinity,
