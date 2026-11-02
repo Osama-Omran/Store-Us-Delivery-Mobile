@@ -23,4 +23,22 @@ abstract class AuthApiService {
 
   @POST(ApiConstants.logout)
   Future<dynamic> logout(@Header('Authorization') String authorization);
+
+  @PATCH(ApiConstants.profile)
+  Future<dynamic> updateProfile(
+    @Header('Authorization') String authorization,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiConstants.profile)
+  Future<dynamic> updateProfileWithPhoto(
+    @Header('Authorization') String authorization,
+    @Body() FormData body,
+  );
+
+  @POST(ApiConstants.profilePassword)
+  Future<dynamic> changePassword(
+    @Header('Authorization') String authorization,
+    @Body() Map<String, dynamic> body,
+  );
 }

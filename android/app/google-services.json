@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007442631925",
+    "project_id": "storeus-delivery",
+    "storage_bucket": "storeus-delivery.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007442631925:android:5bac7f72e6b7365e19b9bc",
+        "android_client_info": {
+          "package_name": "com.storeus.storeusDelivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpMLgcA1eNIZ_zSk0XZcHWcdrz0duLiug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

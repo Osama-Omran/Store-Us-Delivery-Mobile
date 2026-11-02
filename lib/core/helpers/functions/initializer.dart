@@ -2,14 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:storeus_delivery/core/helpers/functions/deferred_startup.dart';
 import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_notifications.dart';
 import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_service.dart';
 import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_connectivity.dart';
 import 'package:storeus_delivery/core/helpers/utils/bloc_observer.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
-import 'package:storeus_delivery/core/helpers/utils/logger.dart';
 import 'package:storeus_delivery/core/helpers/utils/remote_config_services.dart';
+import 'package:storeus_delivery/core/helpers/utils/logger.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart';
 
@@ -39,6 +40,14 @@ class Initializer {
       );
     }
 
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      await RemoteConfigServices.init(currentVersion: packageInfo.version);
+    } catch (_) {
+      // API services retain the configured environment URL if Remote Config
+      // or package information is unavailable.
+    }
+
     setupLocator();
 
     await getIt.allReady();
@@ -65,8 +74,6 @@ class Initializer {
 
         await OfflineSyncService.instance.check();
       },
-
-      RemoteConfigServices.init,
 
       () => OfflineSyncNotifications.instance.init(askPermission: true),
     ],

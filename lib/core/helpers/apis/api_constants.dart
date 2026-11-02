@@ -29,10 +29,6 @@ class ApiConstants {
   //======= Orders =======//
   static const String tripOrderDetails = '$trips/{tripId}/orders/{orderId}';
 
-  // ======= Account ======= //
-  static const String me = '/me';
-  static const String logout = '/logout';
-
   static const String notifications = '/notifications';
   static const String markNotificationAsRead =
       '$notifications/{notificationId}/read';
@@ -72,4 +68,11 @@ class ApiConstants {
       '$trips/{tripId}/pos/options';
 
   static const String submitPos = '$trips/{tripId}/pos';
+
+  //======= Account =======//
+  static const String me = '/me';
+  static const String logout = '/logout';
+
+  static const String profile = '/profile';
+  static const String profilePassword = '$profile/password';
 }

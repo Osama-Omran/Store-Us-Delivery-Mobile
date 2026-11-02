@@ -22,10 +22,15 @@ class AccountBody extends StatelessWidget {
     return BlocBuilder<AccountCubit, AccountState>(
       // Logout loading is handled by its own button, not the whole page.
       buildWhen: (_, state) =>
-          state is AccountInitial ||
+      state is AccountInitial ||
           state is AccountLoadingState ||
           state is AccountSuccessState ||
-          state is AccountFailureState,
+          state is AccountFailureState ||
+          state is AccountProfileUpdatingState ||
+          state is AccountProfileUpdateSuccessState ||
+          state is AccountProfileUpdateFailureState ||
+          state is AccountPasswordChangingState ||
+          state is AccountPasswordChangeFailureState,
       builder: (context, state) {
         if (state is AccountFailureState) {
           return _AccountError(message: state.errorMessage);

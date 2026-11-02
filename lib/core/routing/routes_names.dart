@@ -1,6 +1,7 @@
 class RoutesNames {
   //======= Splash =======//
   static const String splash = '/splashScreen';
+  static const String forceUpdate = '/forceUpdateScreen';
 
   //======= Authentication =======//
   static const String login = '/loginScreen';

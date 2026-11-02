@@ -4,15 +4,12 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/cubit/account_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_surface_card.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_edit_profile_dialog.dart';
+import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_change_password_dialog.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountPersonalInfoCard extends StatelessWidget {
   const AccountPersonalInfoCard({super.key});
-
-  void _showUnavailable(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.strings.account_feature_unavailable)),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,17 @@ class AccountPersonalInfoCard extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => _showUnavailable(context),
+                onPressed: () {
+                  final accountCubit = AccountCubit.get(context);
+
+                  showDialog<void>(
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                      value: accountCubit,
+                      child: AccountEditProfileDialog(user: user),
+                    ),
+                  );
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: AppColors.blue4,
                   foregroundColor: AppColors.primary,
@@ -70,7 +77,16 @@ class AccountPersonalInfoCard extends StatelessWidget {
             width: double.infinity,
             height: 52,
             child: OutlinedButton(
-              onPressed: () => _showUnavailable(context),
+              onPressed: () {
+                final accountCubit = AccountCubit.get(context);
+                showDialog<void>(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                    value: accountCubit,
+                    child: const AccountChangePasswordDialog(),
+                  ),
+                );
+              },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.grey3, width: 1.5),
                 shape: RoundedRectangleBorder(

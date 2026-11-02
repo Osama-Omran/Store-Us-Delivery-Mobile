@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
+import 'app_localizations_en.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +93,10 @@ abstract class AppLocalizations {
       ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('ar')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('en'),
+  ];
 
   /// No description provided for @store_us_delivery.
   ///
@@ -5155,6 +5159,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'نتيجة العملية غير مؤكدة. تحقق من تسجيل البيع أولاً أو أعد محاولة نفس العملية. لا تنشئ بيعًا جديدًا حتى يتم التأكد.'**
   String get direct_sale_pos_verify_or_retry;
+
+  /// No description provided for @force_update_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتوفر إصدار جديد من التطبيق'**
+  String get force_update_title;
+
+  /// No description provided for @force_update_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يعد الإصدار الحالي من تطبيق StoreUs Delivery مدعومًا. حدّث التطبيق لمواصلة الاستخدام.'**
+  String get force_update_description;
+
+  /// No description provided for @optional_update_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتوفر تحديث جديد'**
+  String get optional_update_title;
+
+  /// No description provided for @optional_update_description.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتوفر إصدار أحدث من التطبيق. حدّث الآن للاستفادة من أحدث التحسينات.'**
+  String get optional_update_description;
+
+  /// No description provided for @update_now.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث الآن'**
+  String get update_now;
+
+  /// No description provided for @update_later.
+  ///
+  /// In ar, this message translates to:
+  /// **'لاحقًا'**
+  String get update_later;
+
+  /// No description provided for @update_store_unavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح المتجر. تحقق من اتصالك وحاول مرة أخرى.'**
+  String get update_store_unavailable;
+
+  /// No description provided for @update_retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get update_retry;
 }
 
 class _AppLocalizationsDelegate
@@ -5168,7 +5220,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['ar'].contains(locale.languageCode);
+      <String>['ar', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -5179,6 +5231,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return AppLocalizationsAr();
+    case 'en':
+      return AppLocalizationsEn();
   }
 
   throw FlutterError(

@@ -10,6 +10,7 @@ class PreferencesHelper {
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   static const _tokenKey = 'Access Token';
   static const _sessionKey = 'StoreUs Offline Session ID';
+  static const _dismissedUpdateVersionKey = 'dismissed_update_version';
 
   static Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
@@ -17,9 +18,10 @@ class PreferencesHelper {
 
   static String _randomId() {
     final random = Random.secure();
-    return List.generate(24, (_) => random.nextInt(256)
-            .toRadixString(16).padLeft(2, '0'))
-        .join();
+    return List.generate(
+      24,
+      (_) => random.nextInt(256).toRadixString(16).padLeft(2, '0'),
+    ).join();
   }
 
   /// A new login is a distinct sync session, preventing replay under a
@@ -41,8 +43,7 @@ class PreferencesHelper {
     await _secureStorage.write(key: _tokenKey, value: token);
   }
 
-  static Future<String?> getToken() =>
-      _secureStorage.read(key: _tokenKey);
+  static Future<String?> getToken() => _secureStorage.read(key: _tokenKey);
 
   static Future<String?> getOfflineSessionId() async {
     if (await getToken() == null) return null;
@@ -73,4 +74,11 @@ class PreferencesHelper {
       preferences?.setString('User Name', name);
 
   static String? getUserName() => preferences?.getString('User Name');
+
+  static bool isOptionalUpdateDismissed(String version) =>
+      preferences?.getString(_dismissedUpdateVersionKey) == version;
+
+  static Future<void> dismissOptionalUpdate(String version) async {
+    await preferences?.setString(_dismissedUpdateVersionKey, version);
+  }
 }

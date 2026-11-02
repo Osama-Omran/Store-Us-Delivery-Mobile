@@ -3,6 +3,8 @@ import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
 import 'package:storeus_delivery/core/helpers/apis/services/auth_api_service.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart'
     show StringExtension;
+import 'package:storeus_delivery/features/drawer_features/account/data/models/update_profile_request_body.dart';
+import 'package:storeus_delivery/features/drawer_features/account/data/models/change_password_request_body.dart';
 import 'package:storeus_delivery/core/helpers/utils/logger.dart';
 import 'package:storeus_delivery/core/helpers/utils/preferences_helper.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart' show token;
@@ -46,6 +48,46 @@ class ConcreteAccountRepo implements AccountRepoInterface {
   Future<ApiResult<dynamic>> logout() async {
     try {
       final response = await _apiService.logout(await _getAuthorization());
+
+      return ApiResult.success(response);
+    } catch (error) {
+      CustomLogger.logger?.e(error);
+
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<dynamic>> updateProfile(
+    UpdateProfileRequestBody body,
+  ) async {
+    try {
+      final authorization = await _getAuthorization();
+
+      final response = body.photo == null
+          ? await _apiService.updateProfile(authorization, body.toJson())
+          : await _apiService.updateProfileWithPhoto(
+              authorization,
+              await body.toFormData(),
+            );
+
+      return ApiResult.success(response);
+    } catch (error) {
+      CustomLogger.logger?.e(error);
+
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<dynamic>> changePassword(
+    ChangePasswordRequestBody body,
+  ) async {
+    try {
+      final response = await _apiService.changePassword(
+        await _getAuthorization(),
+        body.toJson(),
+      );
 
       return ApiResult.success(response);
     } catch (error) {

@@ -87,7 +87,8 @@ import 'package:storeus_delivery/features/trip/order_details/data/repo/concrete_
 import 'package:storeus_delivery/features/trip/order_details/domain/repo/order_details_repo_interface.dart';
 import 'package:storeus_delivery/features/trip/order_details/domain/usecases/get_order_details_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
-
+import 'package:storeus_delivery/features/drawer_features/account/domain/usecases/update_profile_usecase.dart';
+import 'package:storeus_delivery/features/drawer_features/account/domain/usecases/change_password_usecase.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/data/repo/concrete_cancel_delivery_repo.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/domain/repo/cancel_delivery_repo_interface.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/domain/usecases/cancel_delivery_usecase.dart';
@@ -244,7 +245,12 @@ void setupLocator() {
 
   // ======= Account Cubit ======= //
   getIt.registerFactory<AccountCubit>(
-    () => AccountCubit(getIt<GetMeUsecase>(), getIt<LogoutUsecase>()),
+        () => AccountCubit(
+      getIt<GetMeUsecase>(),
+      getIt<LogoutUsecase>(),
+      getIt<UpdateProfileUsecase>(),
+      getIt<ChangePasswordUsecase>(),
+    ),
   );
 
   getIt.registerFactory<TripTabCubit>(
@@ -487,6 +493,18 @@ void setupLocator() {
   getIt.registerLazySingleton<SubmitPosUsecase>(
         () => SubmitPosUsecase(
       getIt<SubmitPosRepoInterface>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<UpdateProfileUsecase>(
+        () => UpdateProfileUsecase(
+      getIt<AccountRepoInterface>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<ChangePasswordUsecase>(
+        () => ChangePasswordUsecase(
+      getIt<AccountRepoInterface>(),
     ),
   );
 }

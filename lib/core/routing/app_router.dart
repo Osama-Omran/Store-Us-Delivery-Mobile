@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
+import 'package:storeus_delivery/core/helpers/utils/force_update_services.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/cubit/direct_sale_cubit.dart';
 import 'package:storeus_delivery/features/drawer_features/direct_sale/presentation/screens/direct_sale_screen.dart';
@@ -12,6 +13,7 @@ import 'package:storeus_delivery/features/layout/presentation/screens/layout_scr
 import 'package:storeus_delivery/features/login/presentation/cubit/login_cubit.dart';
 import 'package:storeus_delivery/features/login/presentation/screens/login_screen.dart';
 import 'package:storeus_delivery/features/splash/presentation/screens/splash_screen.dart';
+import 'package:storeus_delivery/features/app_update/presentation/screens/force_update_screen.dart';
 import 'package:storeus_delivery/features/trip/cancel_delivery/presentation/screens/cancel_delivery_success_screen.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/data/models/delivery_flow_data.dart';
 import 'package:storeus_delivery/features/trip/deliver_order/presentation/screens/deliver_order_screen.dart';
@@ -36,6 +38,17 @@ class AppRouter {
   static final routes = GoRouter(
     initialLocation: RoutesNames.splash,
     navigatorKey: navigatorKey,
+    redirect: (_, state) {
+      if (!ForceUpdateServices.startupCheckComplete &&
+          state.matchedLocation != RoutesNames.splash) {
+        return RoutesNames.splash;
+      }
+      if (ForceUpdateServices.mandatoryUpdateRequired &&
+          state.matchedLocation != RoutesNames.forceUpdate) {
+        return RoutesNames.forceUpdate;
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         name: RoutesNames.splash,
@@ -47,6 +60,14 @@ class AppRouter {
                 ? RoutesNames.layout
                 : RoutesNames.login,
           ),
+        ),
+      ),
+      GoRoute(
+        name: RoutesNames.forceUpdate,
+        path: RoutesNames.forceUpdate,
+        pageBuilder: (_, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const ForceUpdateScreen(),
         ),
       ),
       GoRoute(

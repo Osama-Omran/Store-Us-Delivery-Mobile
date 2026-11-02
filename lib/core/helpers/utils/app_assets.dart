@@ -2,6 +2,7 @@ class AppAssets {
   //======= Images =======//
   static const String imagesPath = 'assets/images';
   static const String logo = '$imagesPath/logo.png';
+  static const String forceUpdate = '$imagesPath/force_update.png';
 
   //======= Icons =======//
   static const String iconsPath = 'assets/icons';

@@ -2907,4 +2907,31 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get direct_sale_pos_verify_or_retry =>
       'نتيجة العملية غير مؤكدة. تحقق من تسجيل البيع أولاً أو أعد محاولة نفس العملية. لا تنشئ بيعًا جديدًا حتى يتم التأكد.';
+
+  @override
+  String get force_update_title => 'يتوفر إصدار جديد من التطبيق';
+
+  @override
+  String get force_update_description =>
+      'لم يعد الإصدار الحالي من تطبيق StoreUs Delivery مدعومًا. حدّث التطبيق لمواصلة الاستخدام.';
+
+  @override
+  String get optional_update_title => 'يتوفر تحديث جديد';
+
+  @override
+  String get optional_update_description =>
+      'يتوفر إصدار أحدث من التطبيق. حدّث الآن للاستفادة من أحدث التحسينات.';
+
+  @override
+  String get update_now => 'تحديث الآن';
+
+  @override
+  String get update_later => 'لاحقًا';
+
+  @override
+  String get update_store_unavailable =>
+      'تعذر فتح المتجر. تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get update_retry => 'إعادة المحاولة';
 }
