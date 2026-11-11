@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/auth_error_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/apis/dio/locale_interceptor.dart';
+import 'package:storeus_delivery/core/helpers/localization/l10n.dart';
 import 'package:storeus_delivery/core/helpers/offline_sync/offline_sync_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/offline_cache/offline_cache_interceptor.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -57,7 +58,9 @@ class DioFactory {
         'Accept-Language':
             navigatorKey.currentContext?.language ??
             localeCode ??
-            deviceLocale.languageCode,
+            (L10n.all.contains(deviceLocale)
+                ? deviceLocale.languageCode
+                : Locale('ar')),
         'Accept': 'application/json',
       };
   }
