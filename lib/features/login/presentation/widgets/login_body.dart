@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:storeus_delivery/features/login/presentation/widgets/app_version.dart';
 import 'package:storeus_delivery/features/login/presentation/widgets/login_button.dart';
 import 'package:storeus_delivery/features/login/presentation/widgets/login_failure_widget.dart';
@@ -24,12 +25,12 @@ class LoginBody extends StatelessWidget {
               child: const Column(
                 children: [
                   LoginHeader(),
-                  SizedBox(height: 32),
+                  Gap(32),
                   LoginForm(),
                   LoginFailureWidget(),
-                  SizedBox(height: 32),
+                  Gap(32),
                   LoginButton(),
-                  SizedBox(height: 32),
+                  Gap(32),
                   AppVersion(),
                 ],
               ),
