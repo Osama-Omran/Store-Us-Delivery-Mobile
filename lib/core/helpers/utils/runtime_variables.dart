@@ -1,3 +1,3 @@
 class RuntimeVariables {
-  static bool useAlice = true;
+  static bool useAlice = false;
 }
