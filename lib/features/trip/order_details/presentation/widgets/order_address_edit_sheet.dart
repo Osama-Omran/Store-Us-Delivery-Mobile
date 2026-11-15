@@ -8,6 +8,7 @@ import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_customer_location.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/update_delivery_location_request_body.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_address_validation.dart';
 
 import 'order_address_fields.dart';
 import 'order_address_location_section.dart';
@@ -30,6 +31,10 @@ class OrderAddressEditSheet extends StatefulWidget {
 }
 
 class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
+  final _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  String? _locationError;
+
   late final TextEditingController _addressController;
   late final TextEditingController _notesController;
   late final TextEditingController _phoneController;
@@ -120,7 +125,32 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
     );
   }
 
-  bool get _hasPosition => _latitude != null && _longitude != null;
+  bool get _hasPosition =>
+      OrderAddressValidation.hasValidCoordinates(_latitude, _longitude);
+
+  String? _firstFieldError() {
+    final errors = <String?>[
+      OrderAddressValidation.address(context, _addressController.text),
+      OrderAddressValidation.phone(context, _phoneController.text),
+      OrderAddressValidation.city(context, _cityController.text),
+      OrderAddressValidation.country(context, _countryController.text),
+      OrderAddressValidation.notes(context, _notesController.text),
+    ];
+    for (final error in errors) {
+      if (error != null) return error;
+    }
+    return null;
+  }
+
+  void _scrollToFirstInvalidField() {
+    final invalidFields = _formKey.currentState?.validateGranularly();
+    if (invalidFields == null || invalidFields.isEmpty) return;
+    Scrollable.ensureVisible(
+      invalidFields.first.context,
+      duration: const Duration(milliseconds: 250),
+      alignment: 0.2,
+    );
+  }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
@@ -179,6 +209,7 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
         _latitude = position.latitude;
         _longitude = position.longitude;
         _accuracy = position.accuracy;
+        _locationError = null;
       });
     } catch (_) {
       if (mounted) {
@@ -193,8 +224,17 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
 
   // ======= Review Before Save ======= //
   void _goToReview() {
-    if (_addressController.text.trim().isEmpty) {
-      _showMessage(context.strings.order_address_required);
+    setState(() {
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
+      _locationError = _hasPosition
+          ? null
+          : context.strings.order_location_required;
+    });
+
+    // Show inline errors and scroll to the first invalid field.
+    final fieldsValid = _formKey.currentState?.validate() ?? false;
+    if (!fieldsValid) {
+      _scrollToFirstInvalidField();
       return;
     }
 
@@ -203,9 +243,8 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
       return;
     }
 
-    setState(() {
-      _review = true;
-    });
+    FocusScope.of(context).unfocus();
+    setState(() => _review = true);
   }
 
   Future<void> _confirmSave() async {
@@ -215,20 +254,20 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
     final latitude = _latitude;
     final longitude = _longitude;
 
-    // ======= Validate Address ======= //
-    if (address.isEmpty) {
-      _showMessage(context.strings.order_address_required);
-      return;
-    }
-
-    // ======= Validate Location ======= //
-    if (latitude == null ||
-        longitude == null ||
-        latitude < -90 ||
-        latitude > 90 ||
-        longitude < -180 ||
-        longitude > 180) {
-      _showMessage(context.strings.order_location_required);
+    // Revalidate immediately before PATCH, even after the review step.
+    final fieldError = _firstFieldError();
+    if (fieldError != null || !_hasPosition) {
+      setState(() {
+        _review = false;
+        _autovalidateMode = AutovalidateMode.always;
+        _locationError = _hasPosition
+            ? null
+            : context.strings.order_location_required;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _scrollToFirstInvalidField();
+      });
+      _showMessage(fieldError ?? context.strings.order_location_required);
       return;
     }
 
@@ -236,8 +275,8 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
 
     final body = UpdateDeliveryLocationBody(
       address: address,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude!,
+      longitude: longitude!,
       phone: _phoneController.text.trim(),
       notes: _notesController.text.trim().isEmpty
           ? null
@@ -299,150 +338,167 @@ class _OrderAddressEditSheetState extends State<OrderAddressEditSheet> {
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
     final height = MediaQuery.sizeOf(context).height * .87;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottomInset),
-        child: SizedBox(
-          height: (height - bottomInset).clamp(350.0, height).toDouble(),
-          child: Column(
-            children: [
-              // ======= Header ======= //
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        context.strings.order_update_address,
-                        style: Styles.textStyle20.copyWith(
-                          color: AppColors.black1,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    IconButton.filledTonal(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-                  ],
-                ),
-              ),
-
-              // ======= Content ======= //
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _review
-                      ? OrderAddressReview(
-                          address: _addressController.text.trim(),
-                          phone: _phoneController.text.trim(),
-                          city: _cityController.text.trim(),
-                          country: _countryController.text.trim(),
-                          notes: _notesController.text.trim(),
-                          latitudeText: _formatCoordinate(_latitude),
-                          longitudeText: _formatCoordinate(_longitude),
-                          accuracy: _accuracy,
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            OrderAddressLocationSection(
-                              location: widget.location,
-                              position: _hasPosition
-                                  ? LatLng(_latitude!, _longitude!)
-                                  : null,
-                              latitudeText: _formatCoordinate(_latitude),
-                              longitudeText: _formatCoordinate(_longitude),
-                              accuracy: _accuracy,
-                              locating: _locating,
-                              onUseCurrentLocation: _useCurrentLocation,
-                              onMapTap: (coordinate) {
-                                setState(() {
-                                  _latitude = coordinate.latitude;
-                                  _longitude = coordinate.longitude;
-                                  // Manual selection has no GPS accuracy value.
-                                  _accuracy = null;
-                                });
-                              },
-                            ),
-                            OrderAddressFields(
-                              addressController: _addressController,
-                              phoneController: _phoneController,
-                              cityController: _cityController,
-                              countryController: _countryController,
-                              notesController: _notesController,
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-
-              // ======= Fixed Actions ======= //
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 62,
-                      child: ElevatedButton.icon(
-                        onPressed: _saving
-                            ? null
-                            : _review
-                            ? _confirmSave
-                            : _goToReview,
-
-                        icon: _saving
-                            ? SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  color: AppColors.white0,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Icon(
-                                _review
-                                    ? Icons.check_circle_outline_rounded
-                                    : Icons.save_outlined,
-                              ),
-
-                        label: Text(
-                          _saving
-                              ? context.strings.order_location_saving
-                              : _review
-                              ? context.strings.order_confirm_save
-                              : context.strings.order_save_address,
-                          style: Styles.textStyle18.copyWith(
-                            color: AppColors.white0,
+    return SafeArea(
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomInset),
+          child: SizedBox(
+            height: (height - bottomInset).clamp(350.0, height).toDouble(),
+            child: Column(
+              children: [
+                // ======= Header ======= //
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.strings.order_update_address,
+                          style: Styles.textStyle20.copyWith(
+                            color: AppColors.black1,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
+                      ),
+                      IconButton.filledTonal(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    ],
+                  ),
+                ),
 
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          disabledBackgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.white0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
+                // ======= Content ======= //
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: _review
+                        ? OrderAddressReview(
+                            address: _addressController.text.trim(),
+                            phone: _phoneController.text.trim(),
+                            city: _cityController.text.trim(),
+                            country: _countryController.text.trim(),
+                            notes: _notesController.text.trim(),
+                            latitudeText: _formatCoordinate(_latitude),
+                            longitudeText: _formatCoordinate(_longitude),
+                            accuracy: _accuracy,
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              OrderAddressLocationSection(
+                                location: widget.location,
+                                position: _hasPosition
+                                    ? LatLng(_latitude!, _longitude!)
+                                    : null,
+                                latitudeText: _formatCoordinate(_latitude),
+                                longitudeText: _formatCoordinate(_longitude),
+                                accuracy: _accuracy,
+                                locating: _locating,
+                                onUseCurrentLocation: _useCurrentLocation,
+                                onMapTap: (coordinate) {
+                                  setState(() {
+                                    _latitude = coordinate.latitude;
+                                    _longitude = coordinate.longitude;
+                                    // Manual selection has no GPS accuracy value.
+                                    _accuracy = null;
+                                    _locationError = null;
+                                  });
+                                },
+                              ),
+                              if (_locationError != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Text(
+                                    _locationError!,
+                                    style: Styles.textStyle14.copyWith(
+                                      color: AppColors.red1,
+                                    ),
+                                  ),
+                                ),
+                              Form(
+                                key: _formKey,
+                                autovalidateMode: _autovalidateMode,
+                                child: OrderAddressFields(
+                                  addressController: _addressController,
+                                  phoneController: _phoneController,
+                                  cityController: _cityController,
+                                  countryController: _countryController,
+                                  notesController: _notesController,
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+
+                // ======= Fixed Actions ======= //
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 62,
+                        child: ElevatedButton.icon(
+                          onPressed: _saving
+                              ? null
+                              : _review
+                              ? _confirmSave
+                              : _goToReview,
+
+                          icon: _saving
+                              ? SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.white0,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Icon(
+                                  _review
+                                      ? Icons.check_circle_outline_rounded
+                                      : Icons.save_outlined,
+                                ),
+
+                          label: Text(
+                            _saving
+                                ? context.strings.order_location_saving
+                                : _review
+                                ? context.strings.order_confirm_save
+                                : context.strings.order_save_address,
+                            style: Styles.textStyle18.copyWith(
+                              color: AppColors.white0,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            disabledBackgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    if (_review)
-                      TextButton(
-                        onPressed: _saving
-                            ? null
-                            : () {
-                                setState(() => _review = false);
-                              },
-                        child: Text(context.strings.order_back_to_edit),
-                      ),
-                  ],
+                      if (_review)
+                        TextButton(
+                          onPressed: _saving
+                              ? null
+                              : () {
+                                  setState(() => _review = false);
+                                },
+                          child: Text(context.strings.order_back_to_edit),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

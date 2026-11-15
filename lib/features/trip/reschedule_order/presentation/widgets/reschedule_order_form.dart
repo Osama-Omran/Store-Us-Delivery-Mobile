@@ -12,6 +12,7 @@ class RescheduleOrderForm extends StatelessWidget {
     required this.dateTimeFields,
     required this.dateIsPast,
     required this.reasonDropdown,
+    required this.showReasonError,
     required this.notesController,
     required this.isLoading,
   });
@@ -22,6 +23,7 @@ class RescheduleOrderForm extends StatelessWidget {
   final Widget dateTimeFields;
   final bool dateIsPast;
   final Widget reasonDropdown;
+  final bool showReasonError;
   final TextEditingController notesController;
   final bool isLoading;
 
@@ -82,6 +84,14 @@ class RescheduleOrderForm extends StatelessWidget {
       const SizedBox(height: 12),
 
       reasonDropdown,
+
+      if (showReasonError) ...[
+        const SizedBox(height: 6),
+        Text(
+          context.strings.delivery_reasons_select,
+          style: Styles.textStyle12.copyWith(color: AppColors.red1),
+        ),
+      ],
 
       const SizedBox(height: 22),
 

@@ -11,10 +11,8 @@ import 'package:storeus_delivery/features/trip/deliver_order/presentation/cubit/
 class RescheduleOrderSubmitButton extends StatelessWidget {
   const RescheduleOrderSubmitButton({
     super.key,
-    required this.canSubmit,
     required this.onSubmit,
   });
-  final ValueGetter<bool> canSubmit;
   final VoidCallback onSubmit;
   @override
   Widget build(BuildContext context) =>
@@ -34,7 +32,7 @@ class RescheduleOrderSubmitButton extends StatelessWidget {
                     height: 66,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: canSubmit() && !isLoading ? onSubmit : null,
+                      onPressed: isLoading ? null : onSubmit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         disabledBackgroundColor: AppColors.blue0,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
+import 'package:storeus_delivery/features/trip/order_details/presentation/utils/order_address_validation.dart';
 
 class OrderAddressFields extends StatelessWidget {
   const OrderAddressFields({
@@ -34,8 +35,9 @@ class OrderAddressFields extends StatelessWidget {
 
       const SizedBox(height: 8),
 
-      TextField(
+      TextFormField(
         controller: addressController,
+        validator: (value) => OrderAddressValidation.address(context, value),
         textDirection: TextDirection.rtl,
         maxLines: 3,
         minLines: 2,
@@ -55,8 +57,9 @@ class OrderAddressFields extends StatelessWidget {
 
       const SizedBox(height: 8),
 
-      TextField(
+      TextFormField(
         controller: phoneController,
+        validator: (value) => OrderAddressValidation.phone(context, value),
         keyboardType: TextInputType.phone,
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.right,
@@ -78,8 +81,9 @@ class OrderAddressFields extends StatelessWidget {
 
       const SizedBox(height: 8),
 
-      TextField(
+      TextFormField(
         controller: cityController,
+        validator: (value) => OrderAddressValidation.city(context, value),
         textDirection: TextDirection.rtl,
         decoration: _inputDecoration().copyWith(
           hintText: context.strings.order_delivery_city_hint,
@@ -99,8 +103,9 @@ class OrderAddressFields extends StatelessWidget {
 
       const SizedBox(height: 8),
 
-      TextField(
+      TextFormField(
         controller: countryController,
+        validator: (value) => OrderAddressValidation.country(context, value),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.right,
         decoration: _inputDecoration().copyWith(
@@ -120,8 +125,9 @@ class OrderAddressFields extends StatelessWidget {
 
       const SizedBox(height: 8),
 
-      TextField(
+      TextFormField(
         controller: notesController,
+        validator: (value) => OrderAddressValidation.notes(context, value),
         textDirection: TextDirection.rtl,
         minLines: 2,
         maxLines: 3,
@@ -144,6 +150,14 @@ class OrderAddressFields extends StatelessWidget {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(22),
         borderSide: BorderSide(color: AppColors.grey3),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(22),
+        borderSide: BorderSide(color: AppColors.red1),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(22),
+        borderSide: BorderSide(color: AppColors.red1, width: 2),
       ),
     );
   }
