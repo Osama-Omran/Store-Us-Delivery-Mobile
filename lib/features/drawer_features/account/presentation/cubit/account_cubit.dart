@@ -23,11 +23,11 @@ class AccountCubit extends Cubit<AccountState> {
   final ChangePasswordUsecase _changePasswordUsecase;
 
   AccountCubit(
-      this._getMeUsecase,
-      this._logoutUsecase,
-      this._updateProfileUsecase,
-      this._changePasswordUsecase,
-      ) : super(AccountInitial());
+    this._getMeUsecase,
+    this._logoutUsecase,
+    this._updateProfileUsecase,
+    this._changePasswordUsecase,
+  ) : super(AccountInitial());
 
   static AccountCubit get(BuildContext context) =>
       BlocProvider.of<AccountCubit>(context);
@@ -60,6 +60,10 @@ class AccountCubit extends Cubit<AccountState> {
     }
 
     if (current is AccountPasswordChangingState) {
+      return current.user;
+    }
+
+    if (current is AccountPasswordChangeSuccessState) {
       return current.user;
     }
 
@@ -97,28 +101,18 @@ class AccountCubit extends Cubit<AccountState> {
 
           emit(AccountSuccessState(user));
         } else {
-          emit(
-            AccountFailureState(
-              response.message ?? 'account_load_failed',
-            ),
-          );
+          emit(AccountFailureState(response.message ?? 'account_load_failed'));
         }
       },
       failure: (error) {
-        emit(
-          AccountFailureState(
-            error.apiErrorModel.message,
-          ),
-        );
+        emit(AccountFailureState(error.apiErrorModel.message));
       },
     );
   }
 
   //======= Update Profile =======//
 
-  Future<void> updateProfile(
-      UpdateProfileRequestBody body,
-      ) async {
+  Future<void> updateProfile(UpdateProfileRequestBody body) async {
     if (isClosed ||
         state is AccountProfileUpdatingState ||
         state is AccountPasswordChangingState ||
@@ -167,13 +161,12 @@ class AccountCubit extends Cubit<AccountState> {
       return;
     }
 
-    if (profileResponse is Map &&
-        profileResponse['success'] == false) {
+    if (profileResponse is Map && profileResponse['success'] == false) {
       emit(
         AccountProfileUpdateFailureState(
           user: user,
           errorMessage:
-          profileResponse['message']?.toString() ??
+              profileResponse['message']?.toString() ??
               'account_profile_update_failed',
         ),
       );
@@ -210,16 +203,12 @@ class AccountCubit extends Cubit<AccountState> {
 
     PreferencesHelper.saveUserName(updatedUser!.name);
 
-    emit(
-      AccountProfileUpdateSuccessState(updatedUser!),
-    );
+    emit(AccountProfileUpdateSuccessState(updatedUser!));
   }
 
   //======= Change Password =======//
 
-  Future<void> changePassword(
-      ChangePasswordRequestBody body,
-      ) async {
+  Future<void> changePassword(ChangePasswordRequestBody body) async {
     if (isClosed ||
         state is AccountPasswordChangingState ||
         state is AccountProfileUpdatingState ||
@@ -288,21 +277,27 @@ class AccountCubit extends Cubit<AccountState> {
       return;
     }
 
-    final success = response is Map &&
-        response['success'] == true;
+    final success = response is Map && response['success'] == true;
 
     final data = response is Map ? response['data'] : null;
 
-    final requiresLogin = data is Map &&
-        data['requires_login'] == true;
+    final requiresLogin = data is Map && data['requires_login'] == true;
 
-    if (!success || !requiresLogin) {
+    if (!success) {
       emit(
         AccountPasswordChangeFailureState(
           user: user,
-          errorMessage: 'account_password_change_failed',
+          errorMessage: response is Map
+              ? response['message']?.toString() ??
+                    'account_password_change_failed'
+              : 'account_password_change_failed',
         ),
       );
+      return;
+    }
+
+    if (!requiresLogin) {
+      emit(AccountPasswordChangeSuccessState(user));
       return;
     }
 
@@ -348,8 +343,7 @@ class AccountCubit extends Cubit<AccountState> {
       success: (response) {
         if (response is Map && response['success'] == false) {
           failureMessage =
-              response['message']?.toString() ??
-                  'account_logout_failed';
+              response['message']?.toString() ?? 'account_logout_failed';
         } else {
           succeeded = true;
         }

@@ -33,6 +33,7 @@ class CurrentTripData {
   final TripDriver? driver;
   final TripAcceptance? acceptance;
   final TripOrdersSummary? ordersSummary;
+  final num? totalCollected;
 
   const CurrentTripData({
     required this.id,
@@ -43,6 +44,7 @@ class CurrentTripData {
     this.driver,
     this.acceptance,
     this.ordersSummary,
+    this.totalCollected,
   });
 
   factory CurrentTripData.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class CurrentTripData {
       id: (json['id'] as num).toInt(),
       number: json['number'] as String,
       status: json['status'] as String,
+      totalCollected: num.tryParse(json['total_collected']?.toString() ?? ''),
       warehouse: json['warehouse'] is Map
           ? TripWarehouse.fromJson(
               Map<String, dynamic>.from(json['warehouse'] as Map),
@@ -87,6 +90,7 @@ class CurrentTripData {
     'driver': driver?.toJson(),
     'acceptance': acceptance?.toJson(),
     'orders_summary': ordersSummary?.toJson(),
+    'total_collected': totalCollected,
   };
 }
 

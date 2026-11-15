@@ -42,6 +42,17 @@ class DeliverySummaryBar extends StatelessWidget {
       salesOrder: detailsState.order.salesOrder,
       customerName: customer.name,
       originalTotal: detailsState.order.originalTotal,
+      extraItems: [
+        for (final product in draft.selectedExtraProducts)
+          DeliveryFlowExtraItem(
+            itemCode: product.itemCode,
+            itemName: product.itemName,
+            uom: product.uom,
+            selectedQty: draft.extraQtyFor(product),
+            availableQty: product.availableQuantity,
+            rateMinor: product.rateMinor,
+          ),
+      ],
       items: [
         for (int i = 0; i < draft.items.length; i++)
           DeliveryFlowItem(
@@ -67,7 +78,7 @@ class DeliverySummaryBar extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        final estimatedValue = state.estimatedItemsValue;
+        final estimatedValue = state.estimatedTotal;
 
         final statusText = !state.hasSelectedItems
             ? context.strings.delivery_no_items_selected
@@ -105,12 +116,12 @@ class DeliverySummaryBar extends StatelessWidget {
                           _SummaryRow(
                             label:
                                 context.strings.delivery_selected_items_value,
-                            amount: estimatedValue,
+                            amount: state.estimatedItemsValue,
                           ),
 
                           _SummaryRow(
                             label: context.strings.delivery_extra_products,
-                            amount: 0,
+                            amount: state.estimatedExtraProductsValue,
                           ),
 
                           Divider(color: AppColors.grey3, height: 1),
@@ -204,7 +215,10 @@ class DeliverySummaryBar extends StatelessWidget {
                       minWidth: double.infinity,
                     ),
                     child: ElevatedButton(
-                      onPressed: !state.hasSelectedItems
+                      onPressed: !state.hasSelectedItems ||
+                                  !state.extraQuantitiesValid ||
+                                  estimatedValue == null ||
+                                  estimatedValue <= 0
                           ? null
                           : () => _openDeliveryResult(context, state),
                       style: ElevatedButton.styleFrom(

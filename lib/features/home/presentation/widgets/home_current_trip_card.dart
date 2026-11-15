@@ -4,6 +4,7 @@ import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_cubit.dart';
 import 'package:storeus_delivery/features/home/presentation/cubit/home_state.dart';
 import 'package:storeus_delivery/features/layout/presentation/cubit/layout_cubit.dart';
+import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
 
 import 'home_order_statistics.dart';
 
@@ -140,11 +141,18 @@ class HomeCurrentTripCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  '—',
-                  style: Styles.textStyle21.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.black1,
+                Flexible(
+                  child: Text(
+                    trip.totalCollected == null
+                        ? '—'
+                        : formatTripAmount(context, trip.totalCollected!),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: Styles.textStyle21.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.black1,
+                    ),
                   ),
                 ),
               ],

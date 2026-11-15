@@ -34,7 +34,7 @@ class DeliverySuccessDetailsCard extends StatelessWidget {
           value: flow.customerName,
         ),
         _SuccessRow(
-          label: context.strings.delivery_selected_items_value,
+          label: context.strings.delivery_estimated_total,
           value: flow.estimatedTotal == null
               ? '—'
               : formatTripAmount(context, flow.estimatedTotal!),

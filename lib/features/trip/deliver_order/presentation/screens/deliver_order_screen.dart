@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/utils/setup_get.dart';
+import 'package:storeus_delivery/features/drawer_features/direct_sale/domain/usecases/get_vehicle_stock_usecase.dart';
 import 'package:storeus_delivery/features/trip/order_details/presentation/cubit/order_details_cubit.dart';
 
 import '../cubit/delivery_draft_cubit.dart';
@@ -29,7 +30,9 @@ class DeliverOrderScreen extends StatelessWidget {
         ),
 
         // ======= Local Delivery Draft ======= //
-        BlocProvider<DeliveryDraftCubit>(create: (_) => DeliveryDraftCubit()),
+        BlocProvider<DeliveryDraftCubit>(
+          create: (_) => DeliveryDraftCubit(getIt<GetVehicleStockUsecase>()),
+        ),
         BlocProvider<DeliveryOutcomeCubit>(
           create: (_) => getIt<DeliveryOutcomeCubit>(),
         ),

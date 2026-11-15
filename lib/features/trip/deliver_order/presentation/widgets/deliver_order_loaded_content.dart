@@ -60,7 +60,7 @@ class DeliverOrderLoadedContent extends StatelessWidget {
           const SizedBox(height: 28),
 
           // ======= Additional Items ======= //
-          const DeliveryExtraProductsSection(),
+          DeliveryExtraProductsSection(tripId: tripId),
 
           const SizedBox(height: 20),
         ],

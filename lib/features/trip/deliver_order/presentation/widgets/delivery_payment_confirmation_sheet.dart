@@ -68,6 +68,15 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
                 value: expectedAmountText,
               ),
 
+              if (flow.extraItems.isNotEmpty) ...[
+                DeliveryPaymentReviewRow(
+                  label: strings.delivery_extra_products,
+                  value: flow.extraItems
+                      .map((item) => '${item.itemName} × ${item.selectedQty}')
+                      .join('، '),
+                ),
+              ],
+
               // ======= Mandatory Cash Collection ======= //
               DeliveryPaymentReviewRow(
                 label: strings.delivery_collected_amount,

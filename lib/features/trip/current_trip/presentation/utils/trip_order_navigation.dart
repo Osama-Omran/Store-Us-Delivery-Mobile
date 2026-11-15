@@ -34,8 +34,8 @@ Future<void> openTripOrderDetails(
     return;
   }
 
-  // ======= Refresh Orders After Returning ======= //
-  await tripCubit.getTripOrders();
+  // Refresh both the collected total and the orders after returning.
+  await tripCubit.getCurrentTrip(forceRefresh: true);
 }
 
 bool hasValidOrderPhone(String phone) {

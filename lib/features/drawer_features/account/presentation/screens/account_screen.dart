@@ -12,10 +12,7 @@ import 'package:storeus_delivery/features/drawer_features/account/presentation/c
 import 'package:storeus_delivery/features/drawer_features/account/presentation/widgets/account_body.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({
-    super.key,
-    this.isOnTrip = false,
-  });
+  const AccountScreen({super.key, this.isOnTrip = false});
 
   final bool isOnTrip;
 
@@ -24,8 +21,7 @@ class AccountScreen extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         BlocListener<AccountCubit, AccountState>(
-          listenWhen: (_, state) =>
-          state is AccountLoggedOutState,
+          listenWhen: (_, state) => state is AccountLoggedOutState,
           listener: (context, state) {
             GoRouter.of(context).go(RoutesNames.login);
           },
@@ -33,8 +29,9 @@ class AccountScreen extends StatelessWidget {
 
         BlocListener<AccountCubit, AccountState>(
           listenWhen: (_, state) =>
-          state is AccountProfileUpdateSuccessState ||
+              state is AccountProfileUpdateSuccessState ||
               state is AccountProfileUpdateFailureState ||
+              state is AccountPasswordChangeSuccessState ||
               state is AccountPasswordChangeFailureState,
           listener: (context, state) {
             String message;
@@ -43,14 +40,14 @@ class AccountScreen extends StatelessWidget {
             if (state is AccountProfileUpdateSuccessState) {
               message = 'تم تحديث بيانات الحساب بنجاح';
               isSuccess = true;
+            } else if (state is AccountPasswordChangeSuccessState) {
+              message = 'تم تغيير كلمة المرور بنجاح';
+              isSuccess = true;
             } else if (state is AccountProfileUpdateFailureState) {
-              message = context.localizedErrorMessage(
-                state.errorMessage,
-              );
+              message = context.localizedErrorMessage(state.errorMessage);
             } else {
               message = context.localizedErrorMessage(
-                (state as AccountPasswordChangeFailureState)
-                    .errorMessage,
+                (state as AccountPasswordChangeFailureState).errorMessage,
               );
             }
 

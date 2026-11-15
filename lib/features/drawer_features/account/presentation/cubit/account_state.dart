@@ -30,10 +30,7 @@ final class AccountLogoutFailureState extends AccountState {
   final AccountUser? user;
   final String errorMessage;
 
-  AccountLogoutFailureState({
-    required this.user,
-    required this.errorMessage,
-  });
+  AccountLogoutFailureState({required this.user, required this.errorMessage});
 }
 
 final class AccountLoggedOutState extends AccountState {}
@@ -68,6 +65,12 @@ final class AccountPasswordChangingState extends AccountState {
   final AccountUser? user;
 
   AccountPasswordChangingState(this.user);
+}
+
+final class AccountPasswordChangeSuccessState extends AccountState {
+  final AccountUser? user;
+
+  AccountPasswordChangeSuccessState(this.user);
 }
 
 final class AccountPasswordChangeFailureState extends AccountState {

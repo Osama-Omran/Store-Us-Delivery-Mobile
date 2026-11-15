@@ -28,6 +28,8 @@ class DeliveryPaymentListener extends StatelessWidget {
           'delivery_payment_not_supported' =>
             context.strings.delivery_payment_not_supported,
           'delivery_confirm_failed' => context.strings.delivery_confirm_failed,
+          'delivery_confirm_retry_original' =>
+            context.strings.delivery_confirm_failed,
           final message => message,
         };
 

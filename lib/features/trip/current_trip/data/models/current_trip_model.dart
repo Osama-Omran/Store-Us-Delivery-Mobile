@@ -38,8 +38,7 @@ class CurrentTripModel {
 
       handledOrders: orders?.where((order) => order.isHandled).length,
 
-      // The orders API does not return collected amounts.
-      collectedAmount: null,
+      collectedAmount: trip.totalCollected,
     );
   }
 

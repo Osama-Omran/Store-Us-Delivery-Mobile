@@ -67,9 +67,18 @@ class OrderAddressValidation {
     return null;
   }
 
+
   static String? city(BuildContext context, String? value) {
     final text = (value ?? '').trim();
-    if (text.isEmpty) return null;
+
+    if (text.isEmpty) {
+      return _message(
+        context,
+        ar: 'اسم المدينة مطلوب.',
+        en: 'City name is required.',
+      );
+    }
+
     if (text.length < 2 || text.length > 100) {
       return _message(
         context,
@@ -77,8 +86,10 @@ class OrderAddressValidation {
         en: 'City must contain between 2 and 100 characters.',
       );
     }
+
     return null;
   }
+
 
   static String? country(BuildContext context, String? value) {
     final text = (value ?? '').trim();

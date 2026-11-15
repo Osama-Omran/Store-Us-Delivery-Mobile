@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 import 'package:storeus_delivery/core/helpers/apis/api_constants.dart';
 import 'package:storeus_delivery/features/login/data/models/login_request_body.dart';
@@ -25,18 +25,24 @@ abstract class AuthApiService {
   Future<dynamic> logout(@Header('Authorization') String authorization);
 
   @PATCH(ApiConstants.profile)
+  @Headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
   Future<dynamic> updateProfile(
     @Header('Authorization') String authorization,
     @Body() Map<String, dynamic> body,
   );
 
   @POST(ApiConstants.profile)
+  @Headers({
+    'Accept': 'application/json',
+    'Content-Type': 'multipart/form-data',
+  })
   Future<dynamic> updateProfileWithPhoto(
     @Header('Authorization') String authorization,
     @Body() FormData body,
   );
 
   @POST(ApiConstants.profilePassword)
+  @Headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
   Future<dynamic> changePassword(
     @Header('Authorization') String authorization,
     @Body() Map<String, dynamic> body,

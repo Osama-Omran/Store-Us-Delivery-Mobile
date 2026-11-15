@@ -1,3 +1,5 @@
+import 'package:storeus_delivery/core/helpers/functions/collection_amount.dart';
+
 String normalizeDirectSaleDigits(String value) {
   const arabic = '٠١٢٣٤٥٦٧٨٩';
   const persian = '۰۱۲۳۴۵۶۷۸۹';
@@ -10,16 +12,4 @@ String normalizeDirectSaleDigits(String value) {
 bool isValidDirectSalePhone(String value) =>
     RegExp(r'^01\d{9}$').hasMatch(normalizeDirectSaleDigits(value));
 
-int? directSaleAmountMinor(String value) {
-  final normalized = normalizeDirectSaleDigits(value)
-      .replaceAll('٫', '.')
-      .replaceAll(',', '.');
-  if (!RegExp(r'^\d+(\.\d{1,2})?$').hasMatch(normalized)) return null;
-  final parts = normalized.split('.');
-  final whole = int.tryParse(parts.first);
-  if (whole == null) return null;
-  final decimal = parts.length == 1
-      ? 0
-      : int.parse(parts.last.padRight(2, '0'));
-  return whole * 100 + decimal;
-}
+int? directSaleAmountMinor(String value) => parseCollectionAmountMinor(value);

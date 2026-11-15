@@ -578,7 +578,7 @@ class DirectSaleCubit extends Cubit<DirectSaleState> {
                   ),
                 )
                 .toList(growable: false),
-            amountMinor: state.totalMinor,
+            amountMinor: state.enteredAmountMinor!,
           );
     } catch (_) {
       emit(state.copyWith(posSubmitError: 'direct_sale_pos_invalid'));

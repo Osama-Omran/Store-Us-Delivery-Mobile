@@ -86,6 +86,22 @@ class _DeliveryResultFormState extends State<DeliveryResultForm> {
                     estimated: amount,
                   ),
 
+                  if (flow.extraItems.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      context.strings.delivery_extra_products,
+                      style: Styles.textStyle17.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    for (final item in flow.extraItems)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(item.itemName),
+                        subtitle: Text(item.itemCode),
+                        trailing: Text('${item.selectedQty} ${item.uom}'),
+                      ),
+                  ],
                   const SizedBox(height: 20),
 
                   // ======= Partial Delivery Reason ======= //

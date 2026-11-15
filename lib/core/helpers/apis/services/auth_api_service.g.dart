@@ -105,12 +105,21 @@ class _AuthApiService implements AuthApiService {
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Accept': 'application/json',
+      r'Content-Type': 'application/json',
+      r'Authorization': authorization,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _options = _setStreamType<dynamic>(
-      Options(method: 'PATCH', headers: _headers, extra: _extra)
+      Options(
+            method: 'PATCH',
+            headers: _headers,
+            extra: _extra,
+            contentType: 'application/json',
+          )
           .compose(
             _dio.options,
             '/profile',
@@ -131,11 +140,20 @@ class _AuthApiService implements AuthApiService {
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Accept': 'application/json',
+      r'Content-Type': 'multipart/form-data',
+      r'Authorization': authorization,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = body;
     final _options = _setStreamType<dynamic>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(
+            method: 'POST',
+            headers: _headers,
+            extra: _extra,
+            contentType: 'multipart/form-data',
+          )
           .compose(
             _dio.options,
             '/profile',
@@ -156,12 +174,21 @@ class _AuthApiService implements AuthApiService {
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Accept': 'application/json',
+      r'Content-Type': 'application/json',
+      r'Authorization': authorization,
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
     final _options = _setStreamType<dynamic>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(
+            method: 'POST',
+            headers: _headers,
+            extra: _extra,
+            contentType: 'application/json',
+          )
           .compose(
             _dio.options,
             '/profile/password',

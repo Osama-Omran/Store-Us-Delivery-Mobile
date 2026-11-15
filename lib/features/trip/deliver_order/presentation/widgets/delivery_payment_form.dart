@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/helpers/functions/collection_amount.dart';
 import 'package:storeus_delivery/core/routing/routes_names.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
@@ -30,18 +31,11 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
   final _amountController = TextEditingController();
   XFile? _receiptPhoto;
   bool _isPickingReceipt = false;
+  bool _isReviewing = false;
+  num? _submittedAmount;
 
   // Only supported payment method in this application flow.
   static const String _paymentMethod = 'cash';
-
-  @override
-  void initState() {
-    super.initState();
-    final expected = widget.flow.estimatedTotal;
-    if (expected != null && expected.isFinite && expected > 0) {
-      _amountController.text = expected.toString();
-    }
-  }
 
   Future<void> _chooseReceipt() async {
     if (_isPickingReceipt) return;
@@ -95,109 +89,87 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
     super.dispose();
   }
 
-  double? get _enteredAmount {
-    String value = _amountController.text.trim();
-
-    if (value.isEmpty) return null;
-
-    // ======= Convert Arabic Digits To English ======= //
-    const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
-    const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
-
-    for (int i = 0; i < 10; i++) {
-      value = value.replaceAll(arabicDigits[i], '$i');
-      value = value.replaceAll(persianDigits[i], '$i');
-    }
-
-    // ======= Normalize Decimal Separator ======= //
-    value = value.replaceAll('٫', '.');
-    value = value.replaceAll(',', '.');
-
-    // ======= Validate Numeric Value ======= //
-    final validAmount = RegExp(r'^\d+(\.\d{1,2})?$');
-
-    if (!validAmount.hasMatch(value)) {
-      return null;
-    }
-
-    return double.tryParse(value);
-  }
+  int? get _enteredAmountMinor =>
+      parseCollectionAmountMinor(_amountController.text);
 
   num? get _expectedAmount => widget.flow.estimatedTotal;
 
-  bool get _amountMatches {
-    final entered = _enteredAmount;
-    final expected = _expectedAmount;
-
-    if (entered == null || expected == null || expected <= 0) return false;
-
-    return entered > 0 &&
-        ((entered * 100).round() - (expected * 100).round()).abs() == 0;
-  }
+  bool get _amountMatches =>
+      collectionAmountMatches(_enteredAmountMinor, _expectedAmount);
 
   bool get _canConfirm {
-    if (widget.flow.hasMissingLineIds || widget.flow.apiItems.isEmpty) {
+    if (widget.flow.hasMissingLineIds ||
+        widget.flow.hasInvalidExtraItems ||
+        widget.flow.apiItems.isEmpty) {
       return false;
     }
 
     // Full cash collection is required, never optional.
-    return _amountMatches &&
-        _enteredAmount != null &&
-        _enteredAmount! > 0 &&
-        _paymentMethod == 'cash';
+    return !_isReviewing && _amountMatches && _paymentMethod == 'cash';
   }
 
   // ======= Review Bottom Sheet ======= //
   Future<void> _reviewDelivery() async {
     if (!_canConfirm) return;
 
-    // Keep the same selected receipt for the review and the API request.
-    // Null means the optional receipt_photo field will be omitted.
+    // Review and send the same manually entered amount and delivery snapshot.
+    final reviewedFlow = widget.flow;
+    final enteredMinor = _enteredAmountMinor!;
+    final enteredAmount = enteredMinor / 100;
+    final expectedAmount = _expectedAmount!;
     final selectedReceiptPhotoPath = _receiptPhoto?.path;
+    setState(() => _isReviewing = true);
+    try {
+      final confirmed = await showModalBottomSheet<bool>(
+        context: context,
+        useSafeArea: true,
+        isScrollControlled: true,
+        backgroundColor: AppColors.white0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        ),
+        builder: (sheetContext) {
+          return DeliveryPaymentConfirmationSheet(
+            flow: reviewedFlow,
+            strings: context.strings,
+            expectedAmountText: formatTripAmount(context, expectedAmount),
+            enteredAmountText: formatTripAmount(context, enteredAmount),
+            hasReceipt: selectedReceiptPhotoPath != null,
+          );
+        },
+      );
 
-    final confirmed = await showModalBottomSheet<bool>(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true,
-      backgroundColor: AppColors.white0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      builder: (sheetContext) {
-        return DeliveryPaymentConfirmationSheet(
-          flow: widget.flow,
-          strings: context.strings,
-          expectedAmountText: _expectedAmount == null
-              ? '—'
-              : formatTripAmount(context, _expectedAmount!),
-          enteredAmountText: formatTripAmount(context, _enteredAmount!),
-          hasReceipt: selectedReceiptPhotoPath != null,
-        );
-      },
-    );
+      if (!mounted ||
+          confirmed != true ||
+          widget.flow != reviewedFlow ||
+          _enteredAmountMinor != enteredMinor) {
+        return;
+      }
 
-    if (!mounted || confirmed != true) return;
-
-    context.read<ConfirmDeliveryCubit>().confirmDelivery(
-      tripId: widget.flow.tripId,
-      orderId: widget.flow.orderId,
-      items: widget.flow.apiItems,
-      collectedAmount: _enteredAmount!,
-      expectedAmount: _expectedAmount!,
-      receiptPhotoPath: selectedReceiptPhotoPath,
-    );
+      _submittedAmount = enteredAmount;
+      await context.read<ConfirmDeliveryCubit>().confirmDelivery(
+        tripId: reviewedFlow.tripId,
+        orderId: reviewedFlow.orderId,
+        items: reviewedFlow.apiItems,
+        extraItems: reviewedFlow.apiExtraItems,
+        collectedAmount: enteredAmount,
+        expectedAmount: expectedAmount,
+        receiptPhotoPath: selectedReceiptPhotoPath,
+      );
+    } finally {
+      if (mounted) setState(() => _isReviewing = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final expected = _expectedAmount;
-    final entered = _enteredAmount;
     return DeliveryPaymentListener(
       onConfirmed: () => context.pushReplacementNamed(
         RoutesNames.deliverySuccess,
         extra: {
           'flow': widget.flow,
-          'collected_amount': _enteredAmount!,
+          'collected_amount': _submittedAmount!,
           'payment_method': _paymentMethod,
         },
       ),
@@ -228,10 +200,11 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
                                 flow: widget.flow,
                                 expected: expected,
                                 amountController: _amountController,
-                                isLoading: isLoading,
+                                isLoading: isLoading || _isReviewing,
                                 amountMatches: _amountMatches,
                                 showMismatch:
-                                    entered != null && !_amountMatches,
+                                    _amountController.text.trim().isNotEmpty &&
+                                    !_amountMatches,
                                 onAmountChanged: (_) => setState(() {}),
                                 receiptPhoto: _receiptPhoto,
                                 onChooseReceipt: _chooseReceipt,
@@ -244,7 +217,7 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
               ),
             ),
             bottomNavigationBar: DeliveryPaymentSubmitButton(
-              isPickingReceipt: _isPickingReceipt,
+              isPickingReceipt: _isPickingReceipt || _isReviewing,
               canConfirm: _canConfirm,
               onReview: _reviewDelivery,
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/services.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
@@ -40,9 +39,6 @@ class DirectSaleAmountField extends StatelessWidget {
             textDirection: TextDirection.ltr,
             textAlign: TextAlign.right,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp('[0-9٠-٩۰-۹.,٫]')),
-            ],
             textInputAction: TextInputAction.done,
             style: Styles.textStyle24.copyWith(color: AppColors.black1),
             decoration: InputDecoration(

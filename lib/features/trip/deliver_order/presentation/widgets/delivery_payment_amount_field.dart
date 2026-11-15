@@ -21,6 +21,7 @@ class DeliveryPaymentAmountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TextField(
+    key: const ValueKey('delivery-collection-amount'),
     controller: controller,
     enabled: !isLoading,
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -29,6 +30,7 @@ class DeliveryPaymentAmountField extends StatelessWidget {
     onChanged: onChanged,
     decoration: InputDecoration(
       hintText: '0',
+      helperText: context.strings.direct_sale_amount_hint,
       suffixText: context.strings.egp_currency,
       filled: true,
       fillColor: AppColors.white0,

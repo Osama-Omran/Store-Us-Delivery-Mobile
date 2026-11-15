@@ -47,6 +47,20 @@ class DeliveryPaymentContent extends StatelessWidget {
         originalTotal: flow.originalTotal,
         expected: expected,
       ),
+      if (flow.extraItems.isNotEmpty) ...[
+        const SizedBox(height: 14),
+        Text(
+          context.strings.delivery_extra_products,
+          style: Styles.textStyle17.copyWith(fontWeight: FontWeight.w800),
+        ),
+        for (final item in flow.extraItems)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(item.itemName),
+            subtitle: Text(item.itemCode),
+            trailing: Text('${item.selectedQty} ${item.uom}'),
+          ),
+      ],
       const SizedBox(height: 24),
       Text(
         context.strings.delivery_collected_amount,
@@ -75,6 +89,13 @@ class DeliveryPaymentContent extends StatelessWidget {
         const SizedBox(height: 12),
         _StatusMessage(
           message: context.strings.delivery_missing_line_ids,
+          success: false,
+        ),
+      ],
+      if (flow.hasInvalidExtraItems) ...[
+        const SizedBox(height: 12),
+        _StatusMessage(
+          message: context.strings.delivery_invalid_items,
           success: false,
         ),
       ],

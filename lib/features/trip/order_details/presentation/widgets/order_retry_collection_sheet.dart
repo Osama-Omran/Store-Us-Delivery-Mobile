@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
+import 'package:storeus_delivery/core/helpers/functions/collection_amount.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_orders_response.dart';
 import 'package:storeus_delivery/features/trip/current_trip/presentation/utils/trip_amount_formatter.dart';
@@ -29,13 +30,16 @@ class OrderRetryCollectionSheet extends StatefulWidget {
 }
 
 class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
+  final _amountController = TextEditingController();
   final _notesController = TextEditingController();
+  bool _reviewing = false;
   bool _submitting = false;
   bool _mustRefreshBeforeRetry = false;
   String? _error;
 
   @override
   void dispose() {
+    _amountController.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -58,55 +62,85 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
     }).toList();
   }
 
+  int? get _enteredAmountMinor =>
+      parseCollectionAmountMinor(_amountController.text);
+
+  bool get _amountMatches =>
+      collectionAmountMatches(_enteredAmountMinor, _requiredAmount);
+
   bool get _canCollect =>
       widget.order.canRetryCollection &&
       OrderCollectionPolicy.showCollectButton(widget.order.paymentStatus) &&
       _requiredAmount != null &&
-      _pendingOperations.length == 1;
+      _pendingOperations.length == 1 &&
+      _amountMatches;
 
   Future<void> _send() async {
-    if (_submitting || _mustRefreshBeforeRetry || !_canCollect) return;
+    if (_submitting || _reviewing || _mustRefreshBeforeRetry || !_canCollect) {
+      return;
+    }
     final requiredAmount = _requiredAmount!;
+    final enteredMinor = _enteredAmountMinor!;
+    final enteredAmount = enteredMinor / 100;
+    final notes = _notesController.text.trim();
     final operationId = _pendingOperations.single.clientOperationId.trim();
 
-    final approved = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(context.strings.retry_collection_confirm_full_amount),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.strings.order_number_label(widget.salesOrder)),
-            const SizedBox(height: 8),
-            Text(
-              context.strings.order_required_amount_label(
-                formatTripAmount(context, requiredAmount),
+    setState(() => _reviewing = true);
+    bool? approved;
+    try {
+      approved = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(context.strings.retry_collection_confirm_full_amount),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(context.strings.order_number_label(widget.salesOrder)),
+              const SizedBox(height: 8),
+              Text(
+                context.strings.order_required_amount_label(
+                  formatTripAmount(context, requiredAmount),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              context.strings.payment_method_label(
-                context.strings.delivery_cash,
+              const SizedBox(height: 8),
+              Text(
+                context.strings.label_with_colon(
+                  context.strings.delivery_collected_amount,
+                ),
               ),
+              Text(formatTripAmount(context, enteredAmount)),
+              const SizedBox(height: 8),
+              Text(
+                context.strings.payment_method_label(
+                  context.strings.delivery_cash,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(context.strings.retry_collection_confirm_notice),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(context.strings.retry_collection_cancel),
             ),
-            const SizedBox(height: 12),
-            Text(context.strings.retry_collection_confirm_notice),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(context.strings.retry_collection_confirm),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(context.strings.retry_collection_cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(context.strings.retry_collection_confirm),
-          ),
-        ],
-      ),
-    );
-    if (!mounted || approved != true) return;
+      );
+    } finally {
+      if (mounted) setState(() => _reviewing = false);
+    }
+    if (!mounted ||
+        approved != true ||
+        !_canCollect ||
+        _enteredAmountMinor != enteredMinor) {
+      return;
+    }
 
     setState(() {
       _submitting = true;
@@ -116,8 +150,8 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
       tripId: widget.tripId,
       orderId: widget.order.id,
       clientOperationId: operationId,
-      collectedAmount: requiredAmount,
-      notes: _notesController.text.trim(),
+      collectedAmount: enteredAmount,
+      notes: notes,
     );
     if (!mounted) return;
 
@@ -140,7 +174,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: PopScope(
-        canPop: !_submitting,
+        canPop: !_submitting && !_reviewing,
         child: Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.viewInsetsOf(context).bottom,
@@ -175,7 +209,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                   Align(
                     alignment: AlignmentDirectional.centerEnd,
                     child: TextButton(
-                      onPressed: _submitting
+                      onPressed: _submitting || _reviewing
                           ? null
                           : () => Navigator.of(context)
                                 .pop(_mustRefreshBeforeRetry ? false : null),
@@ -261,6 +295,34 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                     ),
                   ],
                   const SizedBox(height: 20),
+                  TextField(
+                    key: const ValueKey('retry-collection-amount'),
+                    controller: _amountController,
+                    enabled:
+                        !_submitting && !_reviewing && !_mustRefreshBeforeRetry,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.right,
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(
+                      labelText: context.strings.delivery_collected_amount,
+                      helperText: context.strings.direct_sale_amount_hint,
+                      suffixText: context.strings.egp_currency,
+                      errorText:
+                          _amountController.text.trim().isNotEmpty &&
+                              !_amountMatches
+                          ? context.strings.delivery_amount_mismatch
+                          : null,
+                      filled: true,
+                      fillColor: AppColors.white0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     context.strings.delivery_payment_method,
                     style: Styles.textStyle17.copyWith(
@@ -301,7 +363,8 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: _notesController,
-                    enabled: !_submitting && !_mustRefreshBeforeRetry,
+                    enabled:
+                        !_submitting && !_reviewing && !_mustRefreshBeforeRetry,
                     minLines: 2,
                     maxLines: 3,
                     maxLength: 400,
@@ -337,7 +400,7 @@ class _OrderRetryCollectionSheetState extends State<OrderRetryCollectionSheet> {
                     child: ElevatedButton(
                       onPressed: _mustRefreshBeforeRetry
                           ? () => Navigator.of(context).pop(false)
-                          : _submitting || !_canCollect
+                          : _submitting || _reviewing || !_canCollect
                           ? null
                           : _send,
                       style: ElevatedButton.styleFrom(
