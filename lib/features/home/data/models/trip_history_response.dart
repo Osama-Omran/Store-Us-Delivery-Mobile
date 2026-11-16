@@ -83,7 +83,8 @@ class TripHistoryItem {
       normalizedStatus == 'COMPLETED' || normalizedStatus == 'CANCELLED';
 
   bool isOnDate(DateTime date) {
-    final value = tripDate;
+    // A trip can start on an earlier day and finish today.
+    final value = completedAt?.toLocal() ?? tripDate;
 
     return value != null &&
         value.year == date.year &&

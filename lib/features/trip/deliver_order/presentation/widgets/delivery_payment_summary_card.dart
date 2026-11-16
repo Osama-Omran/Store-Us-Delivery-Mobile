@@ -16,7 +16,8 @@ class DeliveryPaymentSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showOriginal = originalTotal != null &&
+    final showOriginal =
+        originalTotal != null &&
         expected != null &&
         ((originalTotal! * 100).round() != (expected! * 100).round());
 
@@ -39,13 +40,38 @@ class DeliveryPaymentSummaryCard extends StatelessWidget {
           ],
           DeliveryPaymentReviewRow(
             label: context.strings.delivery_required_amount,
-            value: expected == null ? '—' : formatTripAmount(context, expected!),
+            value: expected == null
+                ? '—'
+                : formatTripAmount(context, expected!),
             highlighted: true,
           ),
         ],
       ),
     );
   }
+}
+
+/// Keeps the required amount visible while the payment list scrolls above the
+/// keyboard, without reserving space for the full order summary.
+class DeliveryPaymentRequiredAmountBar extends StatelessWidget {
+  const DeliveryPaymentRequiredAmountBar({super.key, required this.expected});
+
+  final num? expected;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    key: const ValueKey('delivery-required-amount-bar'),
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: BoxDecoration(
+      color: AppColors.white0,
+      border: Border(bottom: BorderSide(color: AppColors.grey3)),
+    ),
+    child: DeliveryPaymentReviewRow(
+      label: context.strings.delivery_required_amount,
+      value: expected == null ? '—' : formatTripAmount(context, expected!),
+      highlighted: true,
+    ),
+  );
 }
 
 class DeliveryPaymentReviewRow extends StatelessWidget {

@@ -17,6 +17,7 @@ import 'delivery_payment_content.dart';
 
 import 'delivery_payment_listener.dart';
 import 'delivery_payment_submit_button.dart';
+import 'delivery_payment_summary_card.dart';
 
 class DeliveryPaymentForm extends StatefulWidget {
   const DeliveryPaymentForm({super.key, required this.flow});
@@ -169,6 +170,7 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
   @override
   Widget build(BuildContext context) {
     final expected = _expectedAmount;
+    final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
     return DeliveryPaymentListener(
       onConfirmed: () => context.pushReplacementNamed(
         RoutesNames.deliverySuccess,
@@ -192,7 +194,10 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
                     subtitle:
                         '${widget.flow.salesOrder} \u2022 ${widget.flow.customerName}',
                   ),
+                  if (keyboardVisible)
+                    DeliveryPaymentRequiredAmountBar(expected: expected),
                   Expanded(
+                    key: const ValueKey('delivery-payment-content'),
                     child:
                         BlocSelector<
                           ConfirmDeliveryCubit,
