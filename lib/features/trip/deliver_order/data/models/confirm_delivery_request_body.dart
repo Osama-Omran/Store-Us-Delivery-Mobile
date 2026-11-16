@@ -8,6 +8,7 @@ class ConfirmDeliveryRequestBody {
     required this.items,
     required this.extraItems,
     required this.collectedAmount,
+    this.partialDeliveryReason,
     this.receiptPhoto,
   });
 
@@ -15,6 +16,10 @@ class ConfirmDeliveryRequestBody {
   final List<ConfirmDeliveryItem> items;
   final List<ConfirmDeliveryExtraItem> extraItems;
   final num collectedAmount;
+
+  /// Required by the API for partial deliveries. Preserve the original
+  /// server-provided value (including whitespace) when serializing.
+  final String? partialDeliveryReason;
 
   // Optional receipt photo
   final File? receiptPhoto;
@@ -25,6 +30,9 @@ class ConfirmDeliveryRequestBody {
     'extra_items': extraItems.map((e) => e.toJson()).toList(),
     'collected_amount': collectedAmount,
     'payment_method': 'cash',
+    if (partialDeliveryReason != null &&
+        partialDeliveryReason!.trim().isNotEmpty)
+      'partial_delivery_reason': partialDeliveryReason,
   };
 
   Future<FormData> toFormData() async {
@@ -35,6 +43,13 @@ class ConfirmDeliveryRequestBody {
       MapEntry('collected_amount', collectedAmount.toString()),
       const MapEntry('payment_method', 'cash'),
     ]);
+
+    if (partialDeliveryReason != null &&
+        partialDeliveryReason!.trim().isNotEmpty) {
+      formData.fields.add(
+        MapEntry('partial_delivery_reason', partialDeliveryReason!),
+      );
+    }
 
     for (var i = 0; i < items.length; i++) {
       for (final entry in items[i].toJson().entries) {

@@ -100,7 +100,10 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
   bool get _canConfirm {
     if (widget.flow.hasMissingLineIds ||
         widget.flow.hasInvalidExtraItems ||
-        widget.flow.apiItems.isEmpty) {
+        widget.flow.apiItems.isEmpty ||
+        (widget.flow.isPartial &&
+            (widget.flow.partialReason == null ||
+                widget.flow.partialReason!.trim().isEmpty))) {
       return false;
     }
 
@@ -154,6 +157,8 @@ class _DeliveryPaymentFormState extends State<DeliveryPaymentForm> {
         extraItems: reviewedFlow.apiExtraItems,
         collectedAmount: enteredAmount,
         expectedAmount: expectedAmount,
+        isPartial: reviewedFlow.isPartial,
+        partialDeliveryReason: reviewedFlow.partialReason,
         receiptPhotoPath: selectedReceiptPhotoPath,
       );
     } finally {

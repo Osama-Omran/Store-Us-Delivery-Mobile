@@ -61,6 +61,22 @@ class DeliveryPaymentContent extends StatelessWidget {
             trailing: Text('${item.selectedQty} ${item.uom}'),
           ),
       ],
+      if (flow.isPartial) ...[
+        const SizedBox(height: 14),
+        if (flow.partialReason != null &&
+            flow.partialReason!.trim().isNotEmpty)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.info_outline, color: AppColors.primary),
+            title: Text(context.strings.delivery_partial_reason_required),
+            subtitle: Text(flow.partialReason!),
+          )
+        else
+          _StatusMessage(
+            message: context.strings.delivery_partial_reason_required,
+            success: false,
+          ),
+      ],
       const SizedBox(height: 24),
       Text(
         context.strings.delivery_collected_amount,

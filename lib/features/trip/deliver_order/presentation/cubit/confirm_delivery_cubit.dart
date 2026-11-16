@@ -52,6 +52,8 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
     List<ConfirmDeliveryExtraItem> extraItems = const [],
     required num collectedAmount,
     required num expectedAmount,
+    bool isPartial = false,
+    String? partialDeliveryReason,
     String? receiptPhotoPath,
   }) async {
     if (isClosed || state is ConfirmDeliveryLoading ||
@@ -66,6 +68,15 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
         extraItems.map((item) => item.itemCode).toSet().length !=
             extraItems.length) {
       emit(ConfirmDeliveryFailure('delivery_invalid_items'));
+      return;
+    }
+
+    // The backend requires the exact selected reason for partial delivery.
+    // Never send a partial confirmation without it.
+    if (isPartial &&
+        (partialDeliveryReason == null ||
+            partialDeliveryReason.trim().isEmpty)) {
+      emit(ConfirmDeliveryFailure('delivery_partial_reason_required'));
       return;
     }
 
@@ -86,6 +97,7 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
       items: List.unmodifiable(items),
       extraItems: List.unmodifiable(extraItems),
       collectedAmount: collectedAmount,
+      partialDeliveryReason: isPartial ? partialDeliveryReason : null,
       receiptPhoto: receiptPhoto,
     );
 

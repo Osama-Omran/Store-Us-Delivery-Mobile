@@ -25,6 +25,8 @@ class DeliveryPaymentListener extends StatelessWidget {
         final message = switch (state.message) {
           'delivery_invalid_items' => context.strings.delivery_invalid_items,
           'delivery_invalid_amount' => context.strings.delivery_invalid_amount,
+          'delivery_partial_reason_required' =>
+            context.strings.delivery_partial_reason_required,
           'delivery_payment_not_supported' =>
             context.strings.delivery_payment_not_supported,
           'delivery_confirm_failed' => context.strings.delivery_confirm_failed,

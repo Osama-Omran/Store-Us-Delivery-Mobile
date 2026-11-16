@@ -62,6 +62,15 @@ class DeliveryPaymentConfirmationSheet extends StatelessWidget {
                     : strings.delivery_full_draft,
               ),
 
+              // ======= Partial Delivery Reason ======= //
+              if (flow.isPartial &&
+                  flow.partialReason != null &&
+                  flow.partialReason!.trim().isNotEmpty)
+                DeliveryPaymentReviewRow(
+                  label: strings.delivery_partial_reason_required,
+                  value: flow.partialReason!,
+                ),
+
               // ======= Delivered Items Value ======= //
               DeliveryPaymentReviewRow(
                 label: strings.delivery_selected_items_value,
