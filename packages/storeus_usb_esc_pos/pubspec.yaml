@@ -1,0 +1,19 @@
+name: storeus_usb_esc_pos
+description: Local Android USB host ESC/POS printer bridge for Store Us Delivery.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.storeus.usb_esc_pos
+        pluginClass: UsbEscPosPrinterPlugin

@@ -65,6 +65,7 @@ dependencies:
   path_provider: ^2.1.6
   shimmer: ^4.0.0
   material_ui: ^1.11.0
+  share_plus: ^13.3.1
 
 dev_dependencies:
   change_app_package_name: ^1.5.0
@@ -117,3 +118,6 @@ flutter:
         - asset: assets/fonts/cairo/Cairo-Regular.ttf
         - asset: assets/fonts/cairo/Cairo-SemiBold.ttf
         - asset: assets/fonts/cairo/Cairo-VariableFont_slnt,wght.ttf
+
+storeus_usb_esc_pos:
+  path: packages/storeus_usb_esc_pos

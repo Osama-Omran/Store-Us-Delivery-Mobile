@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:storeus_delivery/core/printing/receipt_print_button.dart';
+import 'package:storeus_delivery/core/printing/storeus_receipt_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -54,6 +56,13 @@ class CurrentTripHeader extends StatelessWidget {
     final displayTripNumber = context.select<TripTabCubit, String?>((cubit) {
       final state = cubit.state;
       return state is TripTabSuccessState ? state.trip.number : null;
+    });
+    // Rebuild when orders finish loading or an order status changes.
+    final hasHandledOrders = context.select<TripTabCubit, bool>((cubit) {
+      final state = cubit.state;
+      return state is TripTabSuccessState &&
+          state.ordersStatus == TripOrdersStatus.success &&
+          state.orders.any((order) => order.isHandled);
     });
     if (displayTripNumber == null) return const SizedBox.shrink();
 
@@ -112,6 +121,29 @@ class CurrentTripHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
+          // Hide trip printing until at least one order has been handled.
+          // Keep the report content unchanged (all trip orders, no UI filter).
+          if (hasHandledOrders) ...[
+            ReceiptPrintButton(
+              compact: true,
+              tooltip: Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'طباعة كشف الرحلة عبر RawBT'
+                  : 'Print trip report via RawBT',
+              receiptBuilder: () async {
+                final state = context.read<TripTabCubit>().state;
+                if (state is! TripTabSuccessState ||
+                    state.ordersStatus != TripOrdersStatus.success ||
+                    !state.orders.any((order) => order.isHandled)) {
+                  throw StateError('لا توجد أوردرات تم اتخاذ إجراء عليها للطباعة');
+                }
+                return StoreusReceiptBuilder.trip(
+                  tripNumber: state.trip.number,
+                  orders: state.orders,
+                );
+              },
+            ),
+            const SizedBox(width: 4),
+          ],
           Material(
             color: AppColors.blue4,
             borderRadius: BorderRadius.circular(15),

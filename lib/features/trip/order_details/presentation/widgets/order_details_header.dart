@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:storeus_delivery/core/printing/receipt_print_button.dart';
+import 'package:storeus_delivery/core/printing/usb_esc_pos_printer.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 
 class OrderDetailsHeader extends StatelessWidget {
-  const OrderDetailsHeader({super.key, this.subtitle, required this.onBack});
+  const OrderDetailsHeader({
+    super.key,
+    this.subtitle,
+    required this.onBack,
+    this.receiptBuilder,
+  });
 
   final String? subtitle;
   final VoidCallback onBack;
+  final Future<ReceiptDocument> Function()? receiptBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +54,14 @@ class OrderDetailsHeader extends StatelessWidget {
             ),
           ),
 
+          if (receiptBuilder != null)
+            PositionedDirectional(
+              end: 12,
+              child: ReceiptPrintButton(
+                compact: true,
+                receiptBuilder: receiptBuilder,
+              ),
+            ),
           PositionedDirectional(
             start: 20,
             child: Material(

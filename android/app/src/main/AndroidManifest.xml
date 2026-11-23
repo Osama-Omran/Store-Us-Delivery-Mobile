@@ -40,6 +40,19 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDoebikbF2QahLU3ME-_rbJtL-4F8k9Oh8" />
+
+
+        <provider
+            android:name="com.storeus.storeusDelivery.StoreUsRawBtFileProvider"
+            android:authorities="${applicationId}.storeus_rawbt_app_files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/storeus_rawbt_app_file_paths" />
+
+        </provider>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

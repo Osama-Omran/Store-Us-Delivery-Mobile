@@ -50,7 +50,16 @@ class TripOrderModel {
 
   bool get isPending => status == TripOrderStatus.pending;
 
-  bool get isHandled => switch (status) {
+  /// Only orders with a completed delivery action can be printed.
+  bool get isHandled => _isHandledStatus(status);
+
+  /// Reuse the same print eligibility rule for the order-details API.
+  static bool isHandledDeliveryStatus(String? deliveryStatus) {
+    final normalized = (deliveryStatus ?? '').trim().toUpperCase();
+    return _isHandledStatus(_mapDeliveryStatus(normalized));
+  }
+
+  static bool _isHandledStatus(TripOrderStatus status) => switch (status) {
     TripOrderStatus.delivered ||
     TripOrderStatus.partiallyDelivered ||
     TripOrderStatus.rescheduled ||

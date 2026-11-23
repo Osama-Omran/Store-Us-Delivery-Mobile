@@ -1,0 +1,19 @@
+name: storeus_rawbt_direct_share
+description: Android direct ACTION_SEND image/png integration for RawBT Print.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.storeus.rawbt_direct_share
+        pluginClass: RawBtDirectSharePlugin

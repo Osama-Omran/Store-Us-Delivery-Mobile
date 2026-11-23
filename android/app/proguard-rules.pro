@@ -1,0 +1,2 @@
+-keep class io.flutter.plugins.GeneratedPluginRegistrant { *; }
+-keep class com.storeus.rawbt_direct_share.RawBtDirectSharePlugin { *; }

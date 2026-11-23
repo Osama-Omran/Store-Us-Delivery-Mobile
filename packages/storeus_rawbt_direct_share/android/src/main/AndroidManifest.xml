@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 11+ package visibility: we only target RawBT. -->
+    <queries>
+        <package android:name="ru.a402d.rawbtprinter" />
+    </queries>
+
+    <application>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.storeus_rawbt_files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/storeus_rawbt_file_paths" />
+        </provider>
+    </application>
+</manifest>

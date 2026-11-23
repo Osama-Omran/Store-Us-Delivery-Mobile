@@ -46,6 +46,12 @@ android {
         }
     }
 
+//    buildTypes {
+//        getByName("debug") {
+//            signingConfig = signingConfigs.getByName("debug")
+//        }
+//    }
+
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
@@ -57,6 +63,7 @@ dependencies {
     coreLibraryDesugaring(
         "com.android.tools:desugar_jdk_libs:2.1.4"
     )
+    implementation("androidx.core:core:1.15.0")
 }
 
 kotlin {

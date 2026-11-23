@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:storeus_delivery/core/printing/order_receipt_loader.dart';
+import 'package:storeus_delivery/core/printing/receipt_print_button.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
@@ -222,6 +224,20 @@ class TripOrderCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                     ),
+                  ),
+                ),
+              ),
+            ),
+          // Do not show print action before a delivery action is taken.
+          if (order.isHandled && order.apiId != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: SizedBox(
+                width: double.infinity,
+                child: ReceiptPrintButton(
+                  receiptBuilder: () => OrderReceiptLoader.load(
+                    tripId: tripID,
+                    orderId: order.apiId!,
                   ),
                 ),
               ),
