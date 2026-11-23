@@ -54,7 +54,7 @@ class OrderDetailsBody extends StatelessWidget {
                 subtitle: order?.salesOrder,
                 onBack: onBack,
                 receiptBuilder: canPrint
-                    ? () async => StoreusReceiptBuilder.order(order!)
+                    ? () async => StoreusReceiptBuilder.order(order)
                     : null,
               );
             },
