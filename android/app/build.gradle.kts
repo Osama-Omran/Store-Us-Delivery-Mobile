@@ -46,17 +46,17 @@ android {
         }
     }
 
-//    buildTypes {
-//        getByName("debug") {
-//            signingConfig = signingConfigs.getByName("debug")
-//        }
-//    }
-
     buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+//    buildTypes {
+//        getByName("release") {
+//            signingConfig = signingConfigs.getByName("release")
+//        }
+//    }
 }
 
 dependencies {
