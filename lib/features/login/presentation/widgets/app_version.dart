@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:storeus_delivery/core/theme/text_styles.dart';
 import 'package:storeus_delivery/core/widgets/custom_text.dart';

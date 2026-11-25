@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:storeus_delivery/core/printing/rawbt_receipt_printer.dart';
@@ -74,7 +73,8 @@ class _ReceiptPrintButtonState extends State<ReceiptPrintButton> {
     final enabled = widget.receiptBuilder != null && !_busy;
     final onTap = enabled ? _onPrint : null;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    final label = widget.label ?? (isArabic ? 'طباعة الفاتورة' : 'Print receipt');
+    final label =
+        widget.label ?? (isArabic ? 'طباعة الفاتورة' : 'Print receipt');
 
     if (widget.compact) {
       return Tooltip(
@@ -109,9 +109,7 @@ class _ReceiptPrintButtonState extends State<ReceiptPrintButton> {
         decoration: BoxDecoration(
           color: AppColors.blue5,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.16),
-          ),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.16)),
         ),
         child: InkWell(
           onTap: onTap,
@@ -179,7 +177,9 @@ class _ReceiptPrintButtonState extends State<ReceiptPrintButton> {
     return Icon(
       Icons.print_rounded,
       size: size,
-      color: widget.receiptBuilder == null ? AppColors.grey4 : AppColors.primary,
+      color: widget.receiptBuilder == null
+          ? AppColors.grey4
+          : AppColors.primary,
     );
   }
 }

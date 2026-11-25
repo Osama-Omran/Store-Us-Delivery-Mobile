@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as math;
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/services.dart';
@@ -18,7 +17,9 @@ class RawBtReceiptPrinter {
   static const double _padding = 26;
   static const double _contentWidth = _widthPx - _padding * 2;
   static const int _maxHeightPx = 10000;
-  static const MethodChannel _channel = MethodChannel('storeus/rawbt_direct_share');
+  static const MethodChannel _channel = MethodChannel(
+    'storeus/rawbt_direct_share',
+  );
 
   static Future<void> print(ReceiptDocument receipt) async {
     if (!Platform.isAndroid) {
@@ -28,7 +29,9 @@ class RawBtReceiptPrinter {
 
     final png = await _renderPng(receipt.lines);
     final temp = await getTemporaryDirectory();
-    final dir = Directory('${temp.path}${Platform.pathSeparator}rawbt_receipts');
+    final dir = Directory(
+      '${temp.path}${Platform.pathSeparator}rawbt_receipts',
+    );
     await dir.create(recursive: true);
     final file = File(
       '${dir.path}${Platform.pathSeparator}'
@@ -46,13 +49,16 @@ class RawBtReceiptPrinter {
   static Future<void> share(ReceiptDocument receipt) => print(receipt);
 
   static Future<Uint8List> _renderPng(List<ReceiptLine> lines) async {
-    final height = (_padding * 2 +
-            lines.fold<double>(0, (sum, line) => sum + _lineHeight(line)) +
-            38)
-        .ceil();
+    final height =
+        (_padding * 2 +
+                lines.fold<double>(0, (sum, line) => sum + _lineHeight(line)) +
+                38)
+            .ceil();
 
     if (height > _maxHeightPx) {
-      throw StateError('كشف الرحلة طويل جدًا لصورة واحدة. يلزم تقسيمه إلى صفحات.');
+      throw StateError(
+        'كشف الرحلة طويل جدًا لصورة واحدة. يلزم تقسيمه إلى صفحات.',
+      );
     }
 
     final recorder = ui.PictureRecorder();
@@ -169,7 +175,10 @@ class RawBtReceiptPrinter {
           ..strokeWidth = 1.5,
       );
       final painter = _linePainter(line, maxWidth: _contentWidth - 26);
-      painter.paint(canvas, ui.Offset(_padding + 13, y + (height - painter.height) / 2 - 1));
+      painter.paint(
+        canvas,
+        ui.Offset(_padding + 13, y + (height - painter.height) / 2 - 1),
+      );
       painter.dispose();
       return;
     }
@@ -244,10 +253,7 @@ class RawBtReceiptPrinter {
       final inset = total ? 18.0 : 6.0;
       final contentHeight = math.max(label.height, value.height);
       final top = y + (height - contentHeight) / 2;
-      label.paint(
-        canvas,
-        ui.Offset(_padding + _pairValueWidth + 12, top),
-      );
+      label.paint(canvas, ui.Offset(_padding + _pairValueWidth + 12, top));
       value.paint(canvas, ui.Offset(_padding + (total ? inset : 0), top));
       label.dispose();
       value.dispose();
@@ -259,8 +265,12 @@ class RawBtReceiptPrinter {
     painter.dispose();
   }
 
-  static TextPainter _linePainter(ReceiptLine line, {double maxWidth = _contentWidth}) {
-    final muted = line.kind == 'note' ||
+  static TextPainter _linePainter(
+    ReceiptLine line, {
+    double maxWidth = _contentWidth,
+  }) {
+    final muted =
+        line.kind == 'note' ||
         line.kind == 'caption' ||
         line.kind == 'eyebrow' ||
         line.kind == 'footer';
@@ -270,7 +280,9 @@ class RawBtReceiptPrinter {
       bold: line.bold || line.kind == 'brand' || line.kind == 'title',
       color: muted ? _muted : _ink,
       maxWidth: maxWidth,
-      direction: line.direction == 'ltr' ? TextDirection.ltr : TextDirection.rtl,
+      direction: line.direction == 'ltr'
+          ? TextDirection.ltr
+          : TextDirection.rtl,
       align: switch (line.align) {
         'center' => TextAlign.center,
         'left' => TextAlign.left,

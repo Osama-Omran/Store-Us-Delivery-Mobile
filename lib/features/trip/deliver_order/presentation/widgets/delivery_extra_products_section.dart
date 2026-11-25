@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -23,7 +23,10 @@ class DeliveryExtraProductsSection extends StatelessWidget {
     if (!context.mounted) return;
     final state = cubit.state;
     if (state is! DeliveryDraftReady ||
-        state.extraProductsError != null || !state.extraProductsLoaded) return;
+        state.extraProductsError != null ||
+        !state.extraProductsLoaded) {
+      return;
+    }
 
     await showModalBottomSheet<void>(
       context: context,
@@ -78,25 +81,31 @@ class DeliveryExtraProductsSection extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text('${state.extraQtyFor(product)} ${product.uom}'),
                       const SizedBox(width: 8),
-                      Text(formatTripAmount(
-                        context,
-                        state.extraQtyFor(product) * product.rate,
-                      )),
+                      Text(
+                        formatTripAmount(
+                          context,
+                          state.extraQtyFor(product) * product.rate,
+                        ),
+                      ),
                     ],
                   ),
                 if (state.hasExtraProducts) ...[
                   Divider(color: AppColors.blue3),
                   Row(
                     children: [
-                      Expanded(child: Text(
-                        context.strings.delivery_extra_products,
-                        style: Styles.textStyle14,
-                      )),
+                      Expanded(
+                        child: Text(
+                          context.strings.delivery_extra_products,
+                          style: Styles.textStyle14,
+                        ),
+                      ),
                       Text(
                         state.estimatedExtraProductsValue == null
                             ? '—'
                             : formatTripAmount(
-                                context, state.estimatedExtraProductsValue!),
+                                context,
+                                state.estimatedExtraProductsValue!,
+                              ),
                         style: Styles.textStyle17.copyWith(
                           fontWeight: FontWeight.w800,
                         ),

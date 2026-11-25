@@ -1,7 +1,6 @@
+import 'package:material_ui/material_ui.dart';
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:storeus_delivery/core/helpers/localization/gen_l10n/app_localizations.dart';
 import 'package:storeus_delivery/core/helpers/localization/l10n.dart';
@@ -33,9 +32,7 @@ class AppBuilder extends StatelessWidget {
               supportedLocales: L10n.all,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
+                ...GlobalMaterialLocalizations.delegates,
               ],
               routerConfig: AppRouter.routes,
             ),

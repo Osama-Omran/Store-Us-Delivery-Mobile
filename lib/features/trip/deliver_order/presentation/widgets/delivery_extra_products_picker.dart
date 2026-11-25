@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/functions/extensions.dart';
@@ -65,8 +65,11 @@ class _DeliveryExtraProductsPickerState
     };
     for (final entry in _quantities.entries) {
       final product = byCode[entry.key];
-      if (product == null || entry.value < 0 ||
-          entry.value > product.availableQuantity) return false;
+      if (product == null ||
+          entry.value < 0 ||
+          entry.value > product.availableQuantity) {
+        return false;
+      }
     }
     return true;
   }
@@ -81,18 +84,21 @@ class _DeliveryExtraProductsPickerState
 
   void _confirm() {
     if (!_valid) return;
-    final saved = context.read<DeliveryDraftCubit>()
-        .setExtraQuantities(_quantities);
+    final saved = context.read<DeliveryDraftCubit>().setExtraQuantities(
+      _quantities,
+    );
     if (saved) Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final filtered = widget.products.where((product) {
-      if (_query.isEmpty) return true;
-      final text = '${product.itemName} ${product.itemCode}'.toLowerCase();
-      return text.contains(_query);
-    }).toList(growable: false);
+    final filtered = widget.products
+        .where((product) {
+          if (_query.isEmpty) return true;
+          final text = '${product.itemName} ${product.itemCode}'.toLowerCase();
+          return text.contains(_query);
+        })
+        .toList(growable: false);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -131,9 +137,8 @@ class _DeliveryExtraProductsPickerState
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: TextField(
                     controller: _searchController,
-                    onChanged: (value) => setState(
-                      () => _query = value.trim().toLowerCase(),
-                    ),
+                    onChanged: (value) =>
+                        setState(() => _query = value.trim().toLowerCase()),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       hintText: context.strings.direct_sale_choose_products,
@@ -150,7 +155,7 @@ class _DeliveryExtraProductsPickerState
                       : ListView.separated(
                           padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
                           itemCount: filtered.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 8),
+                          separatorBuilder: (_, _) => const SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             final product = filtered[index];
                             final quantity = _quantity(product);
@@ -191,12 +196,18 @@ class _DeliveryExtraProductsPickerState
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       IconButton(
-                                        tooltip: context.strings.direct_sale_decrease,
+                                        tooltip: context
+                                            .strings
+                                            .direct_sale_decrease,
                                         onPressed: quantity > 0
                                             ? () => _changeQuantity(
-                                                product, quantity - 1)
+                                                product,
+                                                quantity - 1,
+                                              )
                                             : null,
-                                        icon: const Icon(Icons.remove_circle_outline),
+                                        icon: const Icon(
+                                          Icons.remove_circle_outline,
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 42,
@@ -207,12 +218,19 @@ class _DeliveryExtraProductsPickerState
                                         ),
                                       ),
                                       IconButton(
-                                        tooltip: context.strings.direct_sale_increase,
-                                        onPressed: quantity < product.availableQuantity
+                                        tooltip: context
+                                            .strings
+                                            .direct_sale_increase,
+                                        onPressed:
+                                            quantity < product.availableQuantity
                                             ? () => _changeQuantity(
-                                                product, quantity + 1)
+                                                product,
+                                                quantity + 1,
+                                              )
                                             : null,
-                                        icon: const Icon(Icons.add_circle_outline),
+                                        icon: const Icon(
+                                          Icons.add_circle_outline,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -234,7 +252,9 @@ class _DeliveryExtraProductsPickerState
                       Row(
                         children: [
                           Expanded(
-                            child: Text(context.strings.delivery_extra_products),
+                            child: Text(
+                              context.strings.delivery_extra_products,
+                            ),
                           ),
                           Text(
                             formatTripAmount(context, _total),

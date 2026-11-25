@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../widgets/direct_sale_page.dart';
 import '../widgets/direct_sale_footer_buttons.dart';

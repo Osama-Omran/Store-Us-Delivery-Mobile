@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeus_delivery/core/helpers/localization/gen_l10n/app_localizations.dart';
 import 'package:storeus_delivery/core/routing/app_router.dart';

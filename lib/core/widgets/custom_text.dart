@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText(this.data, {super.key, this.style});

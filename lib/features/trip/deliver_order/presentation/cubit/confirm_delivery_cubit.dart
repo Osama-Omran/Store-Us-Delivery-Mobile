@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:storeus_delivery/core/helpers/apis/api_result.dart';
@@ -42,7 +42,8 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
   bool _isSameRequest(
     ConfirmDeliveryRequestBody old,
     ConfirmDeliveryRequestBody next,
-  ) => jsonEncode(old.toJson()) == jsonEncode(next.toJson()) &&
+  ) =>
+      jsonEncode(old.toJson()) == jsonEncode(next.toJson()) &&
       old.receiptPhoto?.path == next.receiptPhoto?.path;
 
   Future<void> confirmDelivery({
@@ -56,15 +57,26 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
     String? partialDeliveryReason,
     String? receiptPhotoPath,
   }) async {
-    if (isClosed || state is ConfirmDeliveryLoading ||
-        state is ConfirmDeliverySuccess) return;
+    if (isClosed ||
+        state is ConfirmDeliveryLoading ||
+        state is ConfirmDeliverySuccess) {
+      return;
+    }
 
     if (items.isEmpty ||
-        items.any((item) => item.lineId.trim().isEmpty ||
-            item.itemCode.trim().isEmpty || item.qty <= 0 ||
-            !item.qty.isFinite) ||
-        extraItems.any((item) => item.itemCode.trim().isEmpty ||
-            item.qty <= 0 || !item.qty.isFinite) ||
+        items.any(
+          (item) =>
+              item.lineId.trim().isEmpty ||
+              item.itemCode.trim().isEmpty ||
+              item.qty <= 0 ||
+              !item.qty.isFinite,
+        ) ||
+        extraItems.any(
+          (item) =>
+              item.itemCode.trim().isEmpty ||
+              item.qty <= 0 ||
+              !item.qty.isFinite,
+        ) ||
         extraItems.map((item) => item.itemCode).toSet().length !=
             extraItems.length) {
       emit(ConfirmDeliveryFailure('delivery_invalid_items'));
@@ -81,10 +93,11 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
     }
 
     // Cash only: collect the original selected items PLUS all extra items.
-    if (!expectedAmount.isFinite || expectedAmount <= 0 ||
-        !collectedAmount.isFinite || collectedAmount <= 0 ||
-        (collectedAmount * 100).round() !=
-            (expectedAmount * 100).round()) {
+    if (!expectedAmount.isFinite ||
+        expectedAmount <= 0 ||
+        !collectedAmount.isFinite ||
+        collectedAmount <= 0 ||
+        (collectedAmount * 100).round() != (expectedAmount * 100).round()) {
       emit(ConfirmDeliveryFailure('delivery_invalid_amount'));
       return;
     }
@@ -124,9 +137,11 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
           if (response is Map && response['success'] == false) {
             // Explicit business rejection: allow corrected new operation.
             _clearOperation();
-            emit(ConfirmDeliveryFailure(
-              response['message']?.toString() ?? 'delivery_confirm_failed',
-            ));
+            emit(
+              ConfirmDeliveryFailure(
+                response['message']?.toString() ?? 'delivery_confirm_failed',
+              ),
+            );
             return;
           }
           _clearOperation();
@@ -134,14 +149,18 @@ class ConfirmDeliveryCubit extends Cubit<ConfirmDeliveryState> {
         },
         failure: (error) {
           final status = error.apiErrorModel.errorCode;
-          final definiteRejection = status != null &&
-              status >= 400 && status < 500 &&
+          final definiteRejection =
+              status != null &&
+              status >= 400 &&
+              status < 500 &&
               !const {408, 409, 425, 429}.contains(status);
           if (definiteRejection) _clearOperation();
           final message = error.apiErrorModel.message;
-          emit(ConfirmDeliveryFailure(
-            message.trim().isNotEmpty ? message : 'delivery_confirm_failed',
-          ));
+          emit(
+            ConfirmDeliveryFailure(
+              message.trim().isNotEmpty ? message : 'delivery_confirm_failed',
+            ),
+          );
         },
       );
     } catch (_) {

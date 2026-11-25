@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeus_delivery/core/printing/storeus_receipt_builder.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
