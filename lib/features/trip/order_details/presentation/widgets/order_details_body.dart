@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storeus_delivery/core/printing/storeus_receipt_builder.dart';
+import 'package:storeus_delivery/core/printing/order_receipt_loader.dart';
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_order_model.dart';
 import 'package:storeus_delivery/core/theme/app_colors.dart';
@@ -54,7 +54,10 @@ class OrderDetailsBody extends StatelessWidget {
                 subtitle: order?.salesOrder,
                 onBack: onBack,
                 receiptBuilder: canPrint
-                    ? () async => StoreusReceiptBuilder.order(order)
+                    ? () => OrderReceiptLoader.load(
+                        tripId: tripId,
+                        orderId: orderId,
+                      )
                     : null,
               );
             },

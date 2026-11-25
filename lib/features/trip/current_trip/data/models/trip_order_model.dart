@@ -23,8 +23,10 @@ class TripOrderModel {
     this.longitude,
     this.paymentStatus,
     this.rawDeliveryStatus,
-    this.collectedAmount = 0,
-  });
+    num? collectedAmount,
+    this.deliveredAmount,
+    this.currency = 'EGP',
+  }) : reportedCollectedAmount = collectedAmount;
 
   // Sales Order number displayed on the card.
   final String id;
@@ -45,8 +47,15 @@ class TripOrderModel {
   final double? latitude;
   final double? longitude;
 
-  // Only for flows where a collected amount is actually known.
-  final num collectedAmount;
+  // Null means the server did not report a collection amount.
+  final num? reportedCollectedAmount;
+  final num? deliveredAmount;
+  final String currency;
+
+  // Preserve the existing non-nullable getter for legacy callers.
+  num get collectedAmount => reportedCollectedAmount ?? 0;
+
+  bool get hasCollectedAmount => collectedAmount > 0;
 
   bool get isPending => status == TripOrderStatus.pending;
 
@@ -96,6 +105,11 @@ class TripOrderModel {
       address: data.address?.trim() ?? '',
       phoneNumber: data.customer?.phone?.trim() ?? '',
       orderAmount: data.orderTotal,
+      collectedAmount: data.collectedAmount,
+      deliveredAmount: data.deliveredAmount,
+      currency: data.currency?.trim().isNotEmpty == true
+          ? data.currency!.trim().toUpperCase()
+          : 'EGP',
       status: _mapDeliveryStatus(rawStatus),
       rawDeliveryStatus: rawStatus,
       paymentStatus: data.paymentStatus,

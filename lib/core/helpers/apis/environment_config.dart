@@ -2,7 +2,7 @@ class EnvironmentConfig {
   static AppEnvironment environment = AppEnvironment.development;
   static String? _remoteConfigBaseUrl;
 
-  static String get baseUrl => /*_remoteConfigBaseUrl ??*/ environment.baseUrl;
+  static String get baseUrl => _remoteConfigBaseUrl ?? environment.baseUrl;
 
   static void setRemoteConfigBaseUrl(String? baseUrl) {
     final value = baseUrl?.trim();

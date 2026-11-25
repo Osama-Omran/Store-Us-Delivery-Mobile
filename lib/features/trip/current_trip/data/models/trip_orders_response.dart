@@ -38,6 +38,9 @@ class TripOrderData {
   final double? latitude;
   final double? longitude;
   final num? orderTotal;
+  final num? collectedAmount;
+  final num? deliveredAmount;
+  final String? currency;
   final String deliveryStatus;
   final String paymentStatus;
   final String operationStatus;
@@ -56,6 +59,9 @@ class TripOrderData {
     this.latitude,
     this.longitude,
     this.orderTotal,
+    this.collectedAmount,
+    this.deliveredAmount,
+    this.currency,
     required this.deliveryStatus,
     required this.paymentStatus,
     this.operationStatus = '',
@@ -80,6 +86,9 @@ class TripOrderData {
       latitude: _toNum(json['latitude'])?.toDouble(),
       longitude: _toNum(json['longitude'])?.toDouble(),
       orderTotal: _toNum(json['order_total']),
+      collectedAmount: _toNum(json['collected_amount']),
+      deliveredAmount: _toNum(json['delivered_amount']),
+      currency: json['currency']?.toString(),
       deliveryStatus: json['delivery_status']?.toString() ?? '',
       paymentStatus: json['payment_status']?.toString() ?? '',
       operationStatus: json['operation_status']?.toString() ?? '',
@@ -107,6 +116,9 @@ class TripOrderData {
     'latitude': latitude,
     'longitude': longitude,
     'order_total': orderTotal,
+    'collected_amount': collectedAmount,
+    'delivered_amount': deliveredAmount,
+    'currency': currency,
     'delivery_status': deliveryStatus,
     'payment_status': paymentStatus,
     'operation_status': operationStatus,
@@ -165,7 +177,10 @@ class TripOrderCustomer {
 }
 
 num? _toNum(dynamic value) {
-  if (value is num) return value;
-  if (value is String) return num.tryParse(value);
-  return null;
+  final number = value is num
+      ? value
+      : value is String
+          ? num.tryParse(value.trim())
+          : null;
+  return number != null && number.isFinite ? number : null;
 }

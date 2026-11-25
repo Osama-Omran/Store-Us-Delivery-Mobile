@@ -3,17 +3,22 @@ import 'package:storeus_delivery/features/trip/current_trip/data/models/trip_ord
 import 'package:storeus_delivery/features/trip/order_details/data/models/order_details_response.dart';
 
 /// Presentation-only receipts based on the existing order/trip APIs.
-/// These are NOT tax invoices or confirmations of actual cash collection.
+/// These are NOT tax invoices. Collection amounts are reported by the API.
 class StoreusReceiptBuilder {
   const StoreusReceiptBuilder._();
 
-  static ReceiptDocument order(OrderDetailsData order) {
+  static ReceiptDocument order(
+    OrderDetailsData order, {
+    TripOrderModel? summary,
+  }) {
+    final currency = summary?.currency ?? 'EGP';
+    final originalTotal = summary == null ? order.originalTotal : summary.orderAmount;
     final lines = <ReceiptLine>[
       ..._header('بيان الطلب', 'غير معتمد كفاتورة ضريبية'),
       ReceiptLine(order.salesOrder, kind: 'code', size: 22, bold: true, align: 'center', direction: 'ltr'),
       ReceiptLine.pair('تاريخ الطباعة', _printedAt()),
-      if (order.deliveryStatus.trim().isNotEmpty)
-        ReceiptLine.pair('حالة التسليم', _orderStatus(order.deliveryStatus)),
+      if ((summary?.rawDeliveryStatus ?? order.deliveryStatus).trim().isNotEmpty)
+        ReceiptLine.pair('حالة التسليم', _orderStatus(summary?.rawDeliveryStatus ?? order.deliveryStatus)),
       if (order.deliveryReason?.trim().isNotEmpty == true)
         ReceiptLine.pair('سبب حالة التسليم', order.deliveryReason!.trim()),
       const ReceiptLine('بيانات العميل', kind: 'section', bold: true),
@@ -45,10 +50,10 @@ class StoreusReceiptBuilder {
           '${_qty(item.orderedQty)} ${item.uom}'.trim(),
         ));
         if (item.rate != null) {
-          lines.add(ReceiptLine.pair('سعر الوحدة', '${_money(item.rate!)} ج.م'));
+          lines.add(ReceiptLine.pair('سعر الوحدة', _amount(item.rate!, currency)));
           if (item.orderedQty != null) {
             final lineValue = item.orderedQty! * item.rate!;
-            lines.add(ReceiptLine.pair('قيمة الصنف المحسوبة', '${_money(lineValue)} ج.م', bold: true));
+            lines.add(ReceiptLine.pair('قيمة الصنف المحسوبة', _amount(lineValue, currency), bold: true));
           }
         }
         if (index < order.items.length - 1) {
@@ -60,8 +65,9 @@ class StoreusReceiptBuilder {
     lines.add(const ReceiptLine('ملخص قيمة الطلب', kind: 'section', bold: true));
     lines.add(ReceiptLine.total(
       'القيمة الأصلية',
-      order.originalTotal == null ? 'غير متاحة' : '${_money(order.originalTotal!)} ج.م',
+      originalTotal == null ? 'غير متاحة' : _amount(originalTotal, currency),
     ));
+    if (summary != null) _appendCollectedAmount(lines, summary);
     lines.addAll(const <ReceiptLine>[
       ReceiptLine.spacer(),
       ReceiptLine('المبالغ والكميات النهائية للتسليم قد تختلف', kind: 'note', size: 18, align: 'center'),
@@ -107,29 +113,80 @@ class StoreusReceiptBuilder {
       lines.add(ReceiptLine.pair('حالة التسليم', _status(order.status)));
       lines.add(ReceiptLine.pair(
         'القيمة الأصلية',
-        order.orderAmount == null ? 'غير متاحة' : '${_money(order.orderAmount!)} ج.م',
+        order.orderAmount == null
+            ? 'غير متاحة'
+            : _amount(order.orderAmount!, order.currency),
       ));
+      _appendCollectedAmount(lines, order);
       if (index < sorted.length - 1) lines.add(const ReceiptLine.divider());
     }
 
-    final knownTotal = sorted.fold<double>(
-      0,
-      (sum, order) => sum + (order.orderAmount?.toDouble() ?? 0),
-    );
-    final complete = sorted.every((order) => order.orderAmount != null);
     lines.add(const ReceiptLine('ملخص القيم', kind: 'section', bold: true));
-    lines.add(ReceiptLine.total(
-      complete ? 'إجمالي القيم الأصلية' : 'مجموع القيم المتاحة فقط',
-      '${_money(knownTotal)} ج.م',
-    ));
+    // Never combine different currencies or treat absent amounts as zero.
+    final currencies = sorted.map((order) => order.currency).toSet();
+    for (final currency in currencies) {
+      final group = sorted.where((order) => order.currency == currency).toList();
+      _appendTotal(
+        lines,
+        amounts: group.map((order) => order.orderAmount),
+        currency: currency,
+        completeLabel: 'إجمالي القيم الأصلية',
+        incompleteLabel: 'مجموع القيم المتاحة فقط',
+      );
+      _appendTotal(
+        lines,
+        amounts: group.map((order) => order.reportedCollectedAmount),
+        currency: currency,
+        completeLabel: 'إجمالي المحصل فعليًا',
+        incompleteLabel: 'مجموع التحصيل المتاح فقط',
+      );
+    }
     lines.addAll(const <ReceiptLine>[
       ReceiptLine.spacer(),
-      ReceiptLine('الإجمالي ليس إجمالي التحصيل الفعلي', kind: 'note', size: 18, align: 'center'),
+      ReceiptLine('القيم الأصلية منفصلة عن التحصيل الفعلي', kind: 'note', size: 18, align: 'center'),
       ReceiptLine('الكشف يشمل جميع أوردرات الرحلة', kind: 'note', size: 18, align: 'center'),
       ReceiptLine('STORE US  •  DELIVERY', kind: 'footer', align: 'center', direction: 'ltr', size: 18),
     ]);
     return ReceiptDocument(lines);
   }
+
+  static void _appendCollectedAmount(
+    List<ReceiptLine> lines,
+    TripOrderModel order,
+  ) {
+    final amount = order.reportedCollectedAmount;
+    if (amount == null) {
+      lines.add(ReceiptLine.pair('المحصل فعليًا', 'غير متاح'));
+    } else if (amount > 0) {
+      lines.add(ReceiptLine.pair(
+        'المحصل فعليًا',
+        _amount(amount, order.currency),
+        bold: true,
+      ));
+    }
+  }
+
+  static void _appendTotal(
+    List<ReceiptLine> lines, {
+    required Iterable<num?> amounts,
+    required String currency,
+    required String completeLabel,
+    required String incompleteLabel,
+  }) {
+    final known = amounts.whereType<num>().toList();
+    if (known.isEmpty) {
+      lines.add(ReceiptLine.pair(completeLabel, 'غير متاح ($currency)'));
+      return;
+    }
+    final total = known.fold<num>(0, (sum, amount) => sum + amount);
+    lines.add(ReceiptLine.total(
+      known.length == amounts.length ? completeLabel : incompleteLabel,
+      _amount(total, currency),
+    ));
+  }
+
+  static String _amount(num value, String currency) =>
+      '${_money(value)} ${currency == 'EGP' ? 'ج.م' : currency}';
 
   static List<ReceiptLine> _header(String title, String disclaimer) => [
         const ReceiptLine('STORE US', kind: 'brand', size: 37, bold: true, align: 'center', direction: 'ltr'),

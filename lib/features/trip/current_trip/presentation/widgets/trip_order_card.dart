@@ -165,7 +165,11 @@ class TripOrderCard extends StatelessWidget {
                           Text(
                             order.orderAmount == null
                                 ? '—'
-                                : formatTripAmount(context, order.orderAmount!),
+                                : formatTripAmount(
+                                    context,
+                                    order.orderAmount!,
+                                    currency: order.currency,
+                                  ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Styles.textStyle22.copyWith(
@@ -187,6 +191,10 @@ class TripOrderCard extends StatelessWidget {
                     ],
                   ],
                 ),
+                if (order.hasCollectedAmount) ...[
+                  const SizedBox(height: 10),
+                  _CollectedAmountRow(order: order),
+                ],
               ],
             ),
           ),
@@ -242,6 +250,52 @@ class TripOrderCard extends StatelessWidget {
                 ),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Show the actual server-reported amount, regardless of payment status.
+class _CollectedAmountRow extends StatelessWidget {
+  const _CollectedAmountRow({required this.order});
+
+  final TripOrderModel order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.green1,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.payments_outlined, color: AppColors.green0, size: 19),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              context.strings.collected_so_far,
+              style: Styles.textStyle12.copyWith(color: AppColors.green0),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              formatTripAmount(
+                context,
+                order.collectedAmount,
+                currency: order.currency,
+              ),
+              textAlign: TextAlign.end,
+              style: Styles.textStyle17.copyWith(
+                color: AppColors.green0,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
         ],
       ),
     );
